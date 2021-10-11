@@ -1,0 +1,39 @@
+{
+  "name": "ore-ui-meta-repo",
+  "private": true,
+  "workspaces": [
+    "packages/**/*",
+    "docs",
+    "examples"
+  ],
+  "scripts": {
+    "start": "yarn workspace docs start",
+    "examples": "yarn workspace examples start",
+    "format": "prettier --write \"**/*.@(json|js|css|mdx|md|tsx|ts)\"",
+    "build": "yarn workspaces foreach --topological --verbose run build",
+    "test": "cross-env NODE_ENV=test jest --coverage",
+    "package": "yarn workspaces foreach --topological --verbose pack --out=%s-%v.tgz && ts-node ./scripts/moveAllPackagedToArtifacts.ts"
+  },
+  "devDependencies": {
+    "@babel/core": "7.13.16",
+    "@babel/plugin-transform-modules-commonjs": "7.13.8",
+    "@babel/plugin-transform-react-jsx": "7.13.12",
+    "@babel/preset-typescript": "7.13.0",
+    "@jest/core": "26.6.3",
+    "@testing-library/dom": "7.30.4",
+    "@testing-library/jest-dom": "5.12.0",
+    "@types/fs-extra": "^9.0.12",
+    "@types/glob": "^7",
+    "@types/prettier": "^2",
+    "babel-jest": "^26.0.1",
+    "chalk": "^4.1.2",
+    "cross-env": "^7.0.3",
+    "fs-extra": "^10.0.0",
+    "glob": "^7.1.7",
+    "jest": "^26.1.0",
+    "jest-junit-reporter": "^1.1.0",
+    "jest-sonar-reporter": "2.0.0",
+    "prettier": "^2.3.2",
+    "ts-node": "^10.2.0"
+  }
+}

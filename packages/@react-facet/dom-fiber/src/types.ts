@@ -1,0 +1,170 @@
+import { FacetProp, Unsubscribe } from '@react-facet/core'
+import { FiberRoot, Reconciler } from 'react-reconciler'
+import { Key, MutableRefObject, ReactText } from 'react'
+
+export type FacetFiberRoot = FiberRoot
+
+export type Type =
+  | 'fast-a'
+  | 'fast-div'
+  | 'fast-span'
+  | 'fast-p'
+  | 'fast-img'
+  | 'fast-textarea'
+  | 'fast-input'
+  | 'fast-text'
+  | 'a'
+  | 'div'
+  | 'p'
+  | 'img'
+  | 'textarea'
+  | 'input'
+  | 'style'
+
+export type InputType = 'text' | 'button' | 'password' | 'checkbox' | 'radio' | 'number'
+
+export interface Style {
+  [key: string]: FacetProp<string | number | undefined>
+}
+
+export interface Callback {
+  (): void
+}
+
+export interface NoTimeout {
+  (): void
+}
+
+export type FocusCallback = (e: FocusEvent) => void
+export type TouchCallback = (e: TouchEvent) => void
+export type MouseCallback = (event: MouseEvent) => void
+
+export interface PointerEvents {
+  onClick?: MouseCallback
+  onMouseDown?: MouseCallback
+  onMouseUp?: MouseCallback
+  onTouchStart?: TouchCallback
+  onTouchMove?: TouchCallback
+  onTouchEnd?: TouchCallback
+  onMouseEnter?: MouseCallback
+  onMouseLeave?: MouseCallback
+}
+
+export interface FocusEvents {
+  onFocus?: FocusCallback
+  onBlur?: FocusCallback
+}
+
+export type KeyboardCallback = (event: KeyboardEvent) => void
+
+export interface KeyboardEvents {
+  onKeyPress?: KeyboardCallback
+  onKeyDown?: KeyboardCallback
+  onKeyUp?: KeyboardCallback
+}
+
+interface StrictReactElement<P = unknown, T extends string = string> {
+  type: T
+  props: P
+  key: Key | null
+}
+
+/**
+ * More strict type than default React.ReactNode
+ *
+ * It prevents passing a function as a Node. This allow us to catch accidental passing of facets as children.
+ */
+export type StrictReactNode = StrictReactElement | ReactText | Array<StrictReactNode> | boolean | null | undefined
+
+export type ElementProps<T> = PointerEvents &
+  FocusEvents &
+  KeyboardEvents & {
+    key?: string | number
+
+    /**
+     * More strict children that doesn't support passing facets
+     */
+    children?: StrictReactNode
+
+    className?: FacetProp<string | undefined>
+    ['data-droppable']?: FacetProp<boolean | undefined>
+    ['data-testid']?: FacetProp<string | undefined>
+    ['data-x-ray']?: FacetProp<boolean | undefined>
+    style?: Style
+    ref?: React.Ref<T>
+    src?: FacetProp<string | undefined>
+    href?: FacetProp<string | undefined>
+    target?: FacetProp<string | undefined>
+    autoPlay?: FacetProp<boolean | undefined>
+    loop?: FacetProp<boolean | undefined>
+    disabled?: FacetProp<boolean | undefined>
+    maxLength?: FacetProp<number | undefined>
+    rows?: FacetProp<number | undefined>
+    value?: FacetProp<string | undefined>
+    type?: FacetProp<InputType | undefined>
+    dangerouslySetInnerHTML?: { __html: string }
+  }
+
+export type TextProps = {
+  text: FacetProp<string | number>
+}
+
+export type Props<T> = ElementProps<T> & TextProps
+
+export type ValidPropsNames = keyof Props<unknown>
+
+export type ElementContainer = {
+  unsubscribers: Map<ValidPropsNames, Unsubscribe>
+  styleUnsubscribers: Map<string | number, Unsubscribe>
+  element: HTMLElement | Text
+  style?: CSSStyleDeclaration
+}
+
+export type TextContainer = {
+  element: Text
+}
+
+export type Instance = ElementContainer
+export type Container = Instance
+export type TextInstance = TextContainer
+export type HydratableInstance = Instance
+export type PublicInstance = HTMLElement | Text
+
+export type ReactFacetReconciler = Reconciler<Instance, TextInstance, Container, PublicInstance> & {
+  flushPassiveEffects: () => boolean
+  IsThisRendererActing: MutableRefObject<boolean>
+}
+
+export interface HostContext {
+  type?: Type
+}
+
+export type UpdatePayload = boolean
+
+export type FastAProps = ElementProps<HTMLAnchorElement>
+export type FastDivProps = ElementProps<HTMLDivElement>
+export type FastImgProps = ElementProps<HTMLImageElement>
+export type FastTextareaProps = ElementProps<HTMLTextAreaElement>
+export type FastInputProps = ElementProps<HTMLInputElement>
+export type FastPProps = ElementProps<HTMLParagraphElement>
+export type FastSpanProps = ElementProps<HTMLSpanElement>
+export type FastTextProps = TextProps
+
+/**
+ * Extends React global namespace with the "fast" types
+ */
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace JSX {
+    interface IntrinsicElements {
+      'fast-a': FastAProps
+      'fast-div': FastDivProps
+      'fast-img': FastImgProps
+      'fast-textarea': FastTextareaProps
+      'fast-input': FastInputProps
+      'fast-p': FastPProps
+      'fast-span': FastSpanProps
+      'fast-text': FastTextProps
+    }
+  }
+}

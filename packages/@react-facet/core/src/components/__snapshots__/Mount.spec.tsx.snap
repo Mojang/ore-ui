@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`does not render when false 1`] = `null`;
+
+exports[`renders when true 1`] = `
+<div>
+  Hello there
+</div>
+`;

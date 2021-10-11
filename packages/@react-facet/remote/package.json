@@ -1,0 +1,57 @@
+{
+  "name": "@react-facet/remote",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mojang/ore-ui.git",
+    "directory": "packages/@react-facet/remote"
+  },
+  "author": {
+    "name": "Paulo Ragonha",
+    "email": "paulo@ragonha.me"
+  },
+  "contributors": [
+    {
+      "name": "Danila Dergachev",
+      "email": "dderg@protonmail.com"
+    },
+    {
+      "name": "Fernando Via Canel",
+      "email": "fernando.via@gmail.com"
+    },
+    {
+      "name": "Marlon Huber-Smith",
+      "email": "marlonhubersmith@gmail.com"
+    }
+  ],
+  "files": [
+    "dist/**/*"
+  ],
+  "homepage": "https://github.com/Mojang/ore-ui/tree/main/packages/%40react-facet/remote#readme",
+  "bugs": "https://github.com/Mojang/ore-ui/issues",
+  "private": true,
+  "license": "MIT",
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "rimraf dist && tsc"
+  },
+  "peerDependencies": {
+    "@react-facet/core": "0.1.0",
+    "react": "^16.9.0"
+  },
+  "devDependencies": {
+    "@react-facet/core": "0.1.0",
+    "@react-facet/dom-fiber-testing-library": "0.1.0",
+    "@types/react": "^17.0.11",
+    "@types/rimraf": "^3",
+    "cross-env": "^7.0.3",
+    "react": "^16.9.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.3.5"
+  }
+}

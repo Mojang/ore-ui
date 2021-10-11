@@ -1,0 +1,16 @@
+name: build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --immutable
+      - run: yarn build
+      - run: yarn package
+      - name: Archive packages
+        uses: actions/upload-artifact@v2
+        with:
+          name: packages
+          path: artifacts

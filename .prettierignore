@@ -1,0 +1,8 @@
+.vscode/
+node_modules/
+.yarn/
+.pnp.*
+docs/build
+docs/.docusaurus
+coverage
+**/dist/
