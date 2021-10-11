@@ -34,3 +34,4 @@ Open-source building-blocks to construct Game UIs using web-tech from Mojang Stu
 ## Contributors
 
 <a href="https://github.com/pirelenito" target="_blank"><img width="42" height="42" src="https://github.com/pirelenito.png?s=42"></a>
+<a href="https://github.com/Warwolt" target="_blank"><img width="42" height="42" src="https://github.com/Warwolt.png?s=42"></a>
