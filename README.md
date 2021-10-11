@@ -37,3 +37,4 @@ Open-source building-blocks to construct Game UIs using web-tech from Mojang Stu
 <a href="https://github.com/Warwolt" target="_blank"><img width="42" height="42" src="https://github.com/Warwolt.png?s=42"></a>
 <a href="https://github.com/lucaslsf" target="_blank"><img width="42" height="42" src="https://github.com/lucaslsf.png?s=42"></a>
 <a href="https://github.com/volgar" target="_blank"><img width="42" height="42" src="https://github.com/volgar.png?s=42"></a>
+<a href="https://github.com/SleepyWerewolf" target="_blank"><img width="42" height="42" src="https://github.com/SleepyWerewolf.png?s=42"></a>
