@@ -22,6 +22,11 @@ Open-source building-blocks to construct Game UIs using web-tech from Mojang Stu
         <br>
         <a href="https://github.com/marlonicus">Marlon Huber-Smith</a>
       </td>
+      <td align="center" valign="top">
+        <img width="150" height="150" src="https://github.com/prog666.png?s=150">
+        <br>
+        <a href="https://github.com/prog666">Danila Dergachev</a>
+      </td>
      </tr>
   </tbody>
 </table>
