@@ -32,7 +32,7 @@ The purpose of using the custom renderer is to get access to the `fast-*` family
 
 ## Compatibility with `react-dom`
 
-The main drawback of adopting `@react-facet/dom-fiber` is that some features of React DOM are not ported. The reason for not aiming at total compatibility has to do with React Facet's aim: [as a library designed for Game UI development](../game-ui-development), performance is paramount, and whenever there is a trade-off between compatibility and performance, we opted for performance.
+The main drawback of adopting `@react-facet/dom-fiber` is that some features of React DOM are not ported. The reason for not aiming at total compatibility has to do with React Facet's aim: [as a library designed for Game UI development](../game-ui-development/overview), performance is paramount, and whenever there is a trade-off between compatibility and performance, we opted for performance.
 
 In particular, React DOM goes a long way to simplify the native DOM events. Several of the well known React events, such as `onChange`, are actually synthetic events made up for React DOM as a good developer experience / cross browser compatibility layer. This is excellent, but it adds some overhead that is not necessary in the development of Game UIs: in game UIs, the browser environment is [typically well known](../game-ui-development/overview#target-runtimes) and the issue is to deal with a wide range of hardwares, not with different browser engines.
 
