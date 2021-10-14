@@ -1,120 +1,108 @@
-// @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
-
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-
-/** @type {import('@docusaurus/types').Config} */
-const config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
-
-  url: "https://glowing-pancake-951ea524.pages.github.io/",
-  baseUrl: "/",
-  projectName: "ore-ui",
-  organizationName: "Mojang",
-
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
-
-  presets: [
-    [
-      '@docusaurus/preset-classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
-        docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          editUrl: 'https://github.com/facebook/docusaurus/edit/main/website/',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/main/website/blog/',
-        },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      }),
-    ],
-  ],
-
-  themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({
-      navbar: {
-        title: 'My Site',
-        logo: {
-          alt: 'My Site Logo',
-          src: 'img/logo.svg',
-        },
-        items: [
-          {
-            type: 'doc',
-            docId: 'intro',
-            position: 'left',
-            label: 'Tutorial',
-          },
-          {to: '/blog', label: 'Blog', position: 'left'},
-          {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
-            position: 'right',
-          },
-        ],
-      },
-      footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Tutorial',
-                to: '/docs/intro',
-              },
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
-              },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
-      },
-      prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
-      },
-    }),
-};
-
-module.exports = config;
+/** @type {import('@docusaurus/types').DocusaurusConfig} */
+module.exports = {
+	title: '@react-facet',
+	tagline: 'Observable-based state management for performant game UIs built in React',
+	url: 'https://react-facet.js.org',
+	baseUrl: '/',
+	onBrokenLinks: 'throw',
+	onBrokenMarkdownLinks: 'warn',
+	favicon: 'img/proto-logo2.png',
+	organizationName: 'Mojang', // Usually your GitHub org/user name.
+	projectName: 'react-facet', // Usually your repo name.
+	themeConfig: {
+		colorMode: {
+			defaultMode: 'dark',
+			disableSwitch: true,
+			respectPrefersColorScheme: false,
+		},
+		navbar: {
+			style: 'primary',
+			title: '@react-facet',
+			logo: {
+				alt: '@react-facet Logo',
+				src: 'img/proto-logo2.png',
+			},
+			items: [
+				{
+					type: 'doc',
+					docId: 'getting-started',
+					position: 'left',
+					label: 'Getting started',
+				},
+				{
+					type: 'doc',
+					docId: 'rendering/overview',
+					position: 'left',
+					label: 'Rendering',
+				},
+				{
+					type: 'doc',
+					docId: 'api/overview',
+					position: 'left',
+					label: 'API',
+				},
+				{
+					href: 'https://github.com/mojang/react-facet',
+					label: 'GitHub',
+					position: 'right',
+				},
+			],
+		},
+		footer: {
+			style: 'dark',
+			links: [
+				{
+					title: 'Docs',
+					items: [
+						{
+							label: 'Goals',
+							to: '/docs/goals',
+						},
+						{
+							label: 'Getting started',
+							to: '/docs/getting-started',
+						},
+						{
+							label: 'Rendering',
+							to: '/docs/rendering/overview',
+						},
+						{
+							label: 'API',
+							to: '/docs/api/overview',
+						},
+					],
+				},
+				{
+					title: 'Community',
+					items: [
+						{
+							label: 'Github',
+							to: 'https://github.com/mojang/ore-ui',
+						},
+					],
+				},
+			],
+			copyright: `Copyright © ${new Date().getFullYear()} Mojang AB. Built with Docusaurus.`,
+		},
+	},
+	presets: [
+		[
+			'@docusaurus/preset-classic',
+			{
+				docs: {
+					sidebarPath: require.resolve('./sidebars.js'),
+					// Please change this to your repo.
+					editUrl: 'https://github.com/mojang/ore-ui/edit/main/',
+				},
+				blog: {
+					showReadingTime: true,
+					// Please change this to your repo.
+					editUrl: 'https://github.com/mojang/ore-ui/edit/main/blog/',
+				},
+				theme: {
+					customCss: require.resolve('./src/css/custom.css'),
+				},
+			},
+		],
+	],
+}

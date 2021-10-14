@@ -1,11 +1,8 @@
-.features {
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
-  width: 100%;
-}
+/* stylelint-disable docusaurus/copyright-header */
 
-.featureSvg {
-  height: 200px;
-  width: 200px;
+.features {
+	display: flex;
+	align-items: center;
+	padding: 2rem 0;
+	width: 100%;
 }
