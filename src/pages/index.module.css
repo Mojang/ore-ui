@@ -21,9 +21,17 @@
   color: var(--ifm-color-white);
 }
 
+.logo {
+  width: 30%;
+}
+
 @media screen and (max-width: 966px) {
   .heroBanner {
     padding: 2rem;
+  }
+
+  .logo {
+    width: 60%;
   }
 }
 
