@@ -1,5 +1,7 @@
 # Ore UI meta-repo
 
+<img src="logo.png" width="400px" />
+
 Open-source building-blocks to construct Game UIs using web-tech from Mojang Studios.
 
 ## Packages
