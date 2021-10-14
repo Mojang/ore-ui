@@ -13,27 +13,31 @@ import React, { useCallback, useRef } from 'react'
 import { useFacetEffect, useFacetState } from '@react-facet/core'
 
 const Counter = () => {
-    const [counter, setCounter] = useFacetState(0)
-    const ref = useRef<HTMLSpanElement>(null)
+  const [counter, setCounter] = useFacetState(0)
+  const ref = useRef<HTMLSpanElement>(null)
 
-    useFacetEffect((counterValue) => () => {
-        if (ref.current == null) return
+  useFacetEffect(
+    (counterValue) => () => {
+      if (ref.current == null) return
 
-        ref.current.textContent = `${counterValue}`
-    }, [], counter)
+      ref.current.textContent = `${counterValue}`
+    },
+    [],
+    counter,
+  )
 
-    const handleClick = useCallback(() => {
-        setCounter(counterValue => counterValue + 1)
-    })
-    return (
-        <div>
-            <p>Counter: <span ref={ref} /></p>
+  const handleClick = useCallback(() => {
+    setCounter((counterValue) => counterValue + 1)
+  })
+  return (
+    <div>
+      <p>
+        Counter: <span ref={ref} />
+      </p>
 
-            <button onClick={handleClick}>
-                Increment
-            </button>
-        </div>
-    )
+      <button onClick={handleClick}>Increment</button>
+    </div>
+  )
 }
 ```
 

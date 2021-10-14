@@ -24,30 +24,30 @@ This example illustrates how to use this hook in the common use case of having t
 
 ```tsx
 const Form = ({ onSubmit, initialValue }) => {
-	const [value, setValue] = useFacetState(initialValue)
+  const [value, setValue] = useFacetState(initialValue)
 
-	const handleChange = useCallback(
-		(event) => {
-			setValue(event.target.value)
-		},
-		[setValue],
-	)
+  const handleChange = useCallback(
+    (event) => {
+      setValue(event.target.value)
+    },
+    [setValue],
+  )
 
-	const handleClick = useFacetCallback(
-		(currentValue) => () => {
-			onSubmit(currentValue)
-		},
-		[onSubmit],
-		value,
-	)
+  const handleClick = useFacetCallback(
+    (currentValue) => () => {
+      onSubmit(currentValue)
+    },
+    [onSubmit],
+    value,
+  )
 
-	return (
-		<fast-div>
-			<fast-input onChange={handleChange} value={value} />
+  return (
+    <fast-div>
+      <fast-input onChange={handleChange} value={value} />
 
-			<fast-div onClick={handleClick}>Submit</fast-div>
-		</fast-div>
-	)
+      <fast-div onClick={handleClick}>Submit</fast-div>
+    </fast-div>
+  )
 }
 ```
 
@@ -59,30 +59,30 @@ Say for example that you have a small form, and want to create a handler for the
 
 ```tsx
 const Form = ({ onSubmit, initialValue }) => {
-	const [value, setValue] = useFacetState(initialValue)
+  const [value, setValue] = useFacetState(initialValue)
 
-	const handleChange = useCallback(
-		(event) => {
-			setValue(event.target.value)
-		},
-		[setValue],
-	)
+  const handleChange = useCallback(
+    (event) => {
+      setValue(event.target.value)
+    },
+    [setValue],
+  )
 
-	const handleClick = useFacetCallback(
-		(currentValue) => () => {
-			onSubmit(currentValue)
-		},
-		[onSubmit],
-		value,
-	)
+  const handleClick = useFacetCallback(
+    (currentValue) => () => {
+      onSubmit(currentValue)
+    },
+    [onSubmit],
+    value,
+  )
 
-	return (
-		<fast-div>
-			<fast-input onChange={handleChange} value={value} />
+  return (
+    <fast-div>
+      <fast-input onChange={handleChange} value={value} />
 
-			<fast-div onClick={handleClick}>Submit</fast-div>
-		</fast-div>
-	)
+      <fast-div onClick={handleClick}>Submit</fast-div>
+    </fast-div>
+  )
 }
 ```
 
@@ -94,19 +94,19 @@ Like `useEffect`, `useFacetEffect` takes an effect function to be called when th
 
 ```tsx
 const Logger = ({ shouldLog }) => {
-	const [statusFacet, setStatusFacet] = useFacetState('loading')
+  const [statusFacet, setStatusFacet] = useFacetState('loading')
 
-	useFacetEffect(
-		(newStatus) => {
-			if (shouldLog) {
-				console.log('Status was updated to: ' + newStatus)
-			}
-		},
-		[shouldLog],
-		statusFacet,
-	)
+  useFacetEffect(
+    (newStatus) => {
+      if (shouldLog) {
+        console.log('Status was updated to: ' + newStatus)
+      }
+    },
+    [shouldLog],
+    statusFacet,
+  )
 
-	return <span>{shouldLog ? 'Logger is active' : 'Logger is disabled'}</span>
+  return <span>{shouldLog ? 'Logger is active' : 'Logger is disabled'}</span>
 }
 ```
 
@@ -114,24 +114,24 @@ It also supports a cleanup function that can be returned by the effect function.
 
 ```tsx
 const Logger = ({ shouldLog }) => {
-	const [statusFacet, setStatusFacet] = useFacetState('loading')
+  const [statusFacet, setStatusFacet] = useFacetState('loading')
 
-	useFacetEffect(
-		(newStatus) => {
-			const timerId = setTimeout(() => {
-				if (shouldLog) {
-					console.log('Status was updated to: ' + newStatus)
-				}
-			}, 1000)
+  useFacetEffect(
+    (newStatus) => {
+      const timerId = setTimeout(() => {
+        if (shouldLog) {
+          console.log('Status was updated to: ' + newStatus)
+        }
+      }, 1000)
 
-			// Supports a cleanup function (same as React’s useEffect)
-			return () => clearTimeout(timerId)
-		},
-		[shouldLog],
-		statusFacet,
-	)
+      // Supports a cleanup function (same as React’s useEffect)
+      return () => clearTimeout(timerId)
+    },
+    [shouldLog],
+    statusFacet,
+  )
 
-	return <span>{shouldLog ? 'Logger is active' : 'Logger is disabled'}</span>
+  return <span>{shouldLog ? 'Logger is active' : 'Logger is disabled'}</span>
 }
 ```
 
@@ -143,18 +143,18 @@ This is useful to be able to combine React component props with facet data and t
 
 ```tsx
 const HealthBar = ({ lowHealthThreshold }) => {
-	const [playerFacet, setPlayerFacet] = useFacetState({
-		health: 80,
-		mana: 65,
-	})
+  const [playerFacet, setPlayerFacet] = useFacetState({
+    health: 80,
+    mana: 65,
+  })
 
-	const className = useFacetMap(
-		({ health }) => (health > lowHealthThreshold ? 'healthy' : 'hurt'),
-		[lowHealthThreshold],
-		[playerFacet],
-	)
+  const className = useFacetMap(
+    ({ health }) => (health > lowHealthThreshold ? 'healthy' : 'hurt'),
+    [lowHealthThreshold],
+    [playerFacet],
+  )
 
-	return <fast-div className={className} />
+  return <fast-div className={className} />
 }
 ```
 
@@ -162,17 +162,17 @@ The `useFacetMap` hook supports passing in several facets to listen to, so you c
 
 ```tsx
 const InputField = ({ placeholderFacet, valueFacet }) => {
-	const valueToDisplay = useFacetMap(
-		(placeholder, value) => (value != null ? value : placeholder),
-		[],
-		[placeholderFacet, valueFacet],
-	)
+  const valueToDisplay = useFacetMap(
+    (placeholder, value) => (value != null ? value : placeholder),
+    [],
+    [placeholderFacet, valueFacet],
+  )
 
-	return (
-		<span>
-			<fast-text text={valueToDisplay} />
-		</span>
-	)
+  return (
+    <span>
+      <fast-text text={valueToDisplay} />
+    </span>
+  )
 }
 ```
 
@@ -214,13 +214,13 @@ If the `Facet` is not yet initialized, the `Ref` will contain a `NO_VALUE`
 
 ```tsx
 const LogWhenRendered = () => {
-	const facetRef = useFacetRef(exampleFacet)
+  const facetRef = useFacetRef(exampleFacet)
 
-	useEffect(() => {
-		console.log(`The exampleFacet value at the time of rendering: ${facetRef.current}`)
-	})
+  useEffect(() => {
+    console.log(`The exampleFacet value at the time of rendering: ${facetRef.current}`)
+  })
 
-	return null
+  return null
 }
 ```
 
@@ -232,26 +232,26 @@ To simplify the use case in which a certain variable can hold either a value or 
 
 ```tsx
 type ButtonProps = {
-	isDisabled: FacetProp<boolean>
+  isDisabled: FacetProp<boolean>
 }
 
 const Button = ({ isDisabled }: ButtonProps) => {
-	const isDisabledFacet = useFacetWrap(isDisabled)
-	const className = useFacetMap((isDisabled) => (isDisabled ? 'disabled' : 'active'), [], [isDisabledFacet])
+  const isDisabledFacet = useFacetWrap(isDisabled)
+  const className = useFacetMap((isDisabled) => (isDisabled ? 'disabled' : 'active'), [], [isDisabledFacet])
 
-	return <fast-div className={className} />
+  return <fast-div className={className} />
 }
 
 const Submit = () => {
-	const [isDisabledFacet, setIsDisabledFacet] = useFacetState(false)
+  const [isDisabledFacet, setIsDisabledFacet] = useFacetState(false)
 
-	// It can receive a facet as in the examples before
-	return <Button isDisabled={isDisabledFacet} />
+  // It can receive a facet as in the examples before
+  return <Button isDisabled={isDisabledFacet} />
 }
 
 const Cancel = () => {
-	// But it can also receive a plain value!
-	return <Button isDisabled={false} />
+  // But it can also receive a plain value!
+  return <Button isDisabled={false} />
 }
 ```
 
@@ -267,11 +267,11 @@ For most scenarios, consider using the other hooks or the facet itself directly 
 
 ```tsx
 const HealthBar = ({ lowHealthThreshold }) => {
-	const [playerFacet, setPlayerFacet] = useFacetState({ health: 80, mana: 65 })
+  const [playerFacet, setPlayerFacet] = useFacetState({ health: 80, mana: 65 })
 
-	const health = useFacetUnwrap(useFacetMap(({ health }) => health, [], [playerFacet]))
-	const className = health > lowHealthThreshold ? 'healthy' : 'hurt'
+  const health = useFacetUnwrap(useFacetMap(({ health }) => health, [], [playerFacet]))
+  const className = health > lowHealthThreshold ? 'healthy' : 'hurt'
 
-	return <div className={className} />
+  return <div className={className} />
 }
 ```

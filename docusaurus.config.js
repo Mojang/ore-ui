@@ -1,15 +1,19 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-	title: '@react-facet',
-	tagline: 'Observable-based state management for performant game UIs built in React',
-	url: 'https://react-facet.js.org',
-	baseUrl: '/',
-	onBrokenLinks: 'throw',
-	onBrokenMarkdownLinks: 'warn',
-	favicon: 'img/favicon-facet.svg',
-	organizationName: 'Mojang', // Usually your GitHub org/user name.
-	projectName: 'react-facet', // Usually your repo name.
-	themeConfig: {
+  title: '@react-facet',
+  tagline: 'Observable-based state management for performant game UIs built in React',
+
+  url: 'https://glowing-pancake-951ea524.pages.github.io/',
+  baseUrl: '/',
+  projectName: 'ore-ui',
+  organizationName: 'Mojang',
+
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
+
+  favicon: 'img/favicon-facet.svg',
+
+  themeConfig: {
 		colorMode: {
 			defaultMode: 'dark',
 			disableSwitch: true,
@@ -42,7 +46,7 @@ module.exports = {
 					label: 'API',
 				},
 				{
-					href: 'https://github.com/mojang/react-facet',
+					href: 'https://github.com/mojang/ore-ui',
 					label: 'GitHub',
 					position: 'right',
 				},

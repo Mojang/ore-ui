@@ -10,13 +10,13 @@ Remote Facets are defined using the string identifier and an optional initial va
 
 ```ts
 export interface UserFacet {
-	username: string
-	signOut(): void
+  username: string
+  signOut(): void
 }
 
 export const userFacet = remoteFacet<UserFacet>('data.user', {
-	username: 'Alex',
-	signOut() {},
+  username: 'Alex',
+  signOut() {},
 })
 ```
 
@@ -28,17 +28,17 @@ Selectors allow to narrow data from an upstream remote facet:
 
 ```ts
 interface UserFacet {
-	user: {
-		name: string
-		lastname: string
-	}
+  user: {
+    name: string
+    lastname: string
+  }
 }
 
 const profileFacet = remoteFacet<UserFacet>('data.user', {
-	user: {
-		name: 'Jane',
-		lastname: 'Doe',
-	},
+  user: {
+    name: 'Jane',
+    lastname: 'Doe',
+  },
 })
 
 const userNameSelector = remoteSelector([profileFacet], ({ user }) => user.name)
@@ -48,12 +48,12 @@ When consuming this new user name selector it will return just the name out of t
 
 ```tsx
 const UserData = () => {
-	// This will print Jane
-	return (
-		<span>
-			<fast-text text={userNameSelector} />
-		</span>
-	)
+  // This will print Jane
+  return (
+    <span>
+      <fast-text text={userNameSelector} />
+    </span>
+  )
 }
 ```
 
@@ -75,22 +75,22 @@ Dynamic Selectors can take a parameter. The typical example of this is an index 
 
 ```ts
 interface MessagesFacet {
-	messages: ReadonlyArray<{
-		content: string
-		timestamp: number
-	}>
+  messages: ReadonlyArray<{
+    content: string
+    timestamp: number
+  }>
 }
 
 const chatFacet = remoteFacet<MessagesFacet>('data.messages', {
-	messages: [
-		{ content: 'Hello', timestamp: 0 },
-		{ content: 'Are you free?', timestamp: 12 },
-	],
+  messages: [
+    { content: 'Hello', timestamp: 0 },
+    { content: 'Are you free?', timestamp: 12 },
+  ],
 })
 
 const messageContentSelector = remoteDynamicSelector((index: number) => ({
-	dependencies: [chatFacet],
-	get: ({ messages }) => messages[index].content,
+  dependencies: [chatFacet],
+  get: ({ messages }) => messages[index].content,
 }))
 ```
 
@@ -98,12 +98,12 @@ When consuming this the content of the particular message will be returned:
 
 ```tsx
 const Message = ({ index }: { index: number }) => {
-	// For index 0, this will be "Hello"
-	return (
-		<span>
-			<fast-text text={messageContentSelector(index)} />
-		</span>
-	)
+  // For index 0, this will be "Hello"
+  return (
+    <span>
+      <fast-text text={messageContentSelector(index)} />
+    </span>
+  )
 }
 ```
 
@@ -111,11 +111,11 @@ As with the regular selector, you can specify an equality check function and an 
 
 ```ts
 const messageContentSelector = remoteDynamicSelector(
-	(index: number) => ({
-		dependencies: [chatFacet],
-		get: ({ messages }) => messages[index].content,
-	}),
-	{ equalityCheck: (a, b) => a === b, initialValue: 'Lorem Ipsum' },
+  (index: number) => ({
+    dependencies: [chatFacet],
+    get: ({ messages }) => messages[index].content,
+  }),
+  { equalityCheck: (a, b) => a === b, initialValue: 'Lorem Ipsum' },
 )
 ```
 
