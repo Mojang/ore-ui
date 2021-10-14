@@ -6,7 +6,7 @@ module.exports = {
 	baseUrl: '/',
 	onBrokenLinks: 'throw',
 	onBrokenMarkdownLinks: 'warn',
-	favicon: 'img/proto-logo2.png',
+	favicon: 'img/favicon-facet.svg',
 	organizationName: 'Mojang', // Usually your GitHub org/user name.
 	projectName: 'react-facet', // Usually your repo name.
 	themeConfig: {
@@ -20,7 +20,7 @@ module.exports = {
 			title: '@react-facet',
 			logo: {
 				alt: '@react-facet Logo',
-				src: 'img/proto-logo2.png',
+				src: 'img/logo.svg',
 			},
 			items: [
 				{
