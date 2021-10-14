@@ -35,3 +35,6 @@ dist/
 # Artifacts to share to other repos
 *.tgz
 artifacts/
+
+# From the documentation branch
+.docusaurus
