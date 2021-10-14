@@ -53,7 +53,7 @@ Instead, these events address the native events in the DOM directly, as implemen
 
 ### `a` / `fast-a` / `fast.a`
 
--	`href`
+- `href`
 - `target`
 
 ### `input` / `fast-input` / `fast.input`

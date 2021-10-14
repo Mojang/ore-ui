@@ -7,29 +7,29 @@ import styles from './index.module.css'
 import HomepageFeatures from '../components/HomepageFeatures'
 
 function HomepageHeader() {
-	const { siteConfig } = useDocusaurusContext()
-	return (
-		<header className={clsx('hero hero--primary', styles.heroBanner)}>
-			<div className="container">
-				<h1 className={clsx('hero__title', styles.heroTitle)}>{siteConfig.title}</h1>
-				<p className={clsx('hero__subtitle', styles.heroSubtitle)}>{siteConfig.tagline}</p>
-				<div className={styles.buttons}>
-					<Link className="button button--secondary button--lg" to="/docs/getting-started">
-						Dig more
-					</Link>
-				</div>
-			</div>
-		</header>
-	)
+  const { siteConfig } = useDocusaurusContext()
+  return (
+    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+      <div className="container">
+        <h1 className={clsx('hero__title', styles.heroTitle)}>{siteConfig.title}</h1>
+        <p className={clsx('hero__subtitle', styles.heroSubtitle)}>{siteConfig.tagline}</p>
+        <div className={styles.buttons}>
+          <Link className="button button--secondary button--lg" to="/docs/getting-started">
+            Dig more
+          </Link>
+        </div>
+      </div>
+    </header>
+  )
 }
 
 export default function Home() {
-	return (
-		<Layout description="Description will go into a meta tag in <head />">
-			<HomepageHeader />
-			<main>
-				<HomepageFeatures />
-			</main>
-		</Layout>
-	)
+  return (
+    <Layout description="Description will go into a meta tag in <head />">
+      <HomepageHeader />
+      <main>
+        <HomepageFeatures />
+      </main>
+    </Layout>
+  )
 }

@@ -12,21 +12,20 @@ For example:
 import { fast } from '@react-facet/dom-components'
 
 const Example = () => {
-	const [themeFacet, setTheme] = useFacetState('dark')
+  const [themeFacet, setTheme] = useFacetState('dark')
 
-	const handleToggleTheme = useCallback(() => {
-		setTheme(theme => theme === 'dark' ? 'light' : 'dark')
-	}, [setTheme])
+  const handleToggleTheme = useCallback(() => {
+    setTheme((theme) => (theme === 'dark' ? 'light' : 'dark'))
+  }, [setTheme])
 
-	const classNameFacet = useFacetMap(theme => `container ${theme}`, [], [themeFacet])
+  const classNameFacet = useFacetMap((theme) => `container ${theme}`, [], [themeFacet])
 
-	return (
-		<fast.div className={classNameFacet}>
-			Current mode: <fast.text text={themeFacet} />
-
-			<button onClick={handleToggleTheme}>Toggle theme mode</button>
-		</fast.div>
-	)
+  return (
+    <fast.div className={classNameFacet}>
+      Current mode: <fast.text text={themeFacet} />
+      <button onClick={handleToggleTheme}>Toggle theme mode</button>
+    </fast.div>
+  )
 }
 ```
 

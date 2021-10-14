@@ -14,15 +14,19 @@ import { render } from '@react-facet/dom-fiber'
 import { useFacetState } from '@react-facet/core'
 
 const Counter = () => {
-	const [counter, setCounter] = useFacetState(0)
+  const [counter, setCounter] = useFacetState(0)
 
-	const handleIncrement = useCallback(() => setCounter(counter => counter + 1), [])
-	const handleDecrement = useCallback(() => setCounter(counter => counter - 1), [])
+  const handleIncrement = useCallback(() => setCounter((counter) => counter + 1), [])
+  const handleDecrement = useCallback(() => setCounter((counter) => counter - 1), [])
 
-	return <div>
-		<p>Counter: <fast-text text={counter} /></p>
-		<button onClick={handleIncrement}>Increment</button> <button onClick={handleDecrement}>Decrement</button>
-	</div>
+  return (
+    <div>
+      <p>
+        Counter: <fast-text text={counter} />
+      </p>
+      <button onClick={handleIncrement}>Increment</button> <button onClick={handleDecrement}>Decrement</button>
+    </div>
+  )
 }
 ```
 

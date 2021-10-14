@@ -12,24 +12,23 @@ import { useFacetState } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
 
 const Counter = () => {
-	const [counter, setCounter] = useFacetState(0)
+  const [counter, setCounter] = useFacetState(0)
 
-	const handleClick = useCallback(() => {
-		setCounter(counter => counter + 1)
-	}, [setCounter])
+  const handleClick = useCallback(() => {
+    setCounter((counter) => counter + 1)
+  }, [setCounter])
 
-	return (
-		<div>
-			<p>Current count: <fast-text text={counter} /></p>
-			<button onClick={handleClick}>Increment</button>
-		</div>
-	)
+  return (
+    <div>
+      <p>
+        Current count: <fast-text text={counter} />
+      </p>
+      <button onClick={handleClick}>Increment</button>
+    </div>
+  )
 }
 
-render(
-	<Counter />,
-	document.getElementById('root')
-)
+render(<Counter />, document.getElementById('root'))
 ```
 
 ### Fastest path
@@ -45,14 +44,14 @@ import { useFacetState } from '@react-facet/core'
 import { Div, Text } from '@react-facet/dom-components'
 
 const HelloWorld = () => {
-	const [className, setClassName] = useFacetState('root')
-	const [text, setText] = useFacetState('Hello World!')
+  const [className, setClassName] = useFacetState('root')
+  const [text, setText] = useFacetState('Hello World!')
 
-	return (
-		<Div className={className}>
-			<Text text={text} />
-		</Div>
-	)
+  return (
+    <Div className={className}>
+      <Text text={text} />
+    </Div>
+  )
 }
 ```
 
@@ -93,8 +92,8 @@ Facets are just JavaScript objects that update over time. An example of a facet 
 
 ```tsx
 export interface UserFacet {
-	username: string
-	signOut(): void
+  username: string
+  signOut(): void
 }
 ```
 
@@ -102,54 +101,54 @@ They can be initialized by using Hooks provided in `@react-facet/core`, and can 
 
 ```tsx
 interface TemporaryValuesFacet {
-	username: string
-	password: string
+  username: string
+  password: string
 }
 
 const UpdateLogin = ({ onSubmit }) => {
-	const [temporaryValues, updateValues] = useFacetState<TemporaryValuesFacet>({
-		username: '',
-		password: '',
-	})
-	const username = useFacetMap((values) => values.username, [], [temporaryValues])
-	const password = useFacetMap((values) => values.password, [], [temporaryValues])
-	const handleClick = useFacetCallback(
-		(values) => () => {
-			onSubmit(values)
-		},
-		[onSubmit],
-		temporaryValues,
-	)
+  const [temporaryValues, updateValues] = useFacetState<TemporaryValuesFacet>({
+    username: '',
+    password: '',
+  })
+  const username = useFacetMap((values) => values.username, [], [temporaryValues])
+  const password = useFacetMap((values) => values.password, [], [temporaryValues])
+  const handleClick = useFacetCallback(
+    (values) => () => {
+      onSubmit(values)
+    },
+    [onSubmit],
+    temporaryValues,
+  )
 
-	return (
-		<div>
-			<p>User name</p>
-			<fast-input
-				type="text"
-				value={username}
-				onChange={(event) => {
-					updateValues((values) => {
-						values.username = event.target.value
-						return values
-					})
-				}}
-			/>
+  return (
+    <div>
+      <p>User name</p>
+      <fast-input
+        type="text"
+        value={username}
+        onChange={(event) => {
+          updateValues((values) => {
+            values.username = event.target.value
+            return values
+          })
+        }}
+      />
 
-			<p>Password</p>
-			<fast-input
-				type="text"
-				value={password}
-				onChange={(event) => {
-					updateValues((values) => {
-						values.password = event.target.value
-						return values
-					})
-				}}
-			/>
+      <p>Password</p>
+      <fast-input
+        type="text"
+        value={password}
+        onChange={(event) => {
+          updateValues((values) => {
+            values.password = event.target.value
+            return values
+          })
+        }}
+      />
 
-			<button onClick={handleClick}>Submit</button>
-		</div>
-	)
+      <button onClick={handleClick}>Submit</button>
+    </div>
+  )
 }
 ```
 
@@ -166,21 +165,21 @@ To use remote facets, you must wrap your React application inside `RemoteFacetDr
 
 ```ts
 const remoteFacetDriver = (facetName, update) => {
-	// register a listener
-	engine.on(`facet:updated:${facetName}`, update)
+  // register a listener
+  engine.on(`facet:updated:${facetName}`, update)
 
-	// trigger an event to notify C++ we want to listen for updates
-	engine.trigger('facet:request', facetName)
+  // trigger an event to notify C++ we want to listen for updates
+  engine.trigger('facet:request', facetName)
 
-	// returns a cleanup function once no more components need the facet data
-	return () => {
-		engine.off(`facet:updated:${facetName}`, update)
-		engine.trigger('facet:discard', facetName)
-	}
+  // returns a cleanup function once no more components need the facet data
+  return () => {
+    engine.off(`facet:updated:${facetName}`, update)
+    engine.trigger('facet:discard', facetName)
+  }
 }
 
 const App = () => {
-	return <RemoteFacetDriverProvider value={remoteFacetDriver}>...</RemoteFacetDriverProvider>
+  return <RemoteFacetDriverProvider value={remoteFacetDriver}>...</RemoteFacetDriverProvider>
 }
 ```
 

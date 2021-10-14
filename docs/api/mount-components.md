@@ -16,13 +16,13 @@ Example:
 
 ```tsx
 const Example = () => {
-	const [displayFacet, setDisplayFacet] = useFacetState(true)
+  const [displayFacet, setDisplayFacet] = useFacetState(true)
 
-	return (
-		<Mount when={displayFacet}>
-			<div>Hello there</div>
-		</Mount>
-	)
+  return (
+    <Mount when={displayFacet}>
+      <div>Hello there</div>
+    </Mount>
+  )
 }
 ```
 
@@ -51,21 +51,18 @@ Example:
 
 ```tsx
 const Example = () => {
-	const [arrayFacet, setArrayFacet] = useFacetState([
-		{ value: '1' },
-		{ value: '2' },
-		{ value: '3' },
-		{ value: '4' },
-		{ value: '5' },
-	])
+  const [arrayFacet, setArrayFacet] = useFacetState([
+    { value: '1' },
+    { value: '2' },
+    { value: '3' },
+    { value: '4' },
+    { value: '5' },
+  ])
 
-	return (
-		<Map
-			array={arrayFacet}
-			equalityCheck={shallowObjectEqualityCheck}
-		>
-			{(item) => <PrintItem item={item} />}
-		</Map>
-	)
+  return (
+    <Map array={arrayFacet} equalityCheck={shallowObjectEqualityCheck}>
+      {(item) => <PrintItem item={item} />}
+    </Map>
+  )
 }
 ```

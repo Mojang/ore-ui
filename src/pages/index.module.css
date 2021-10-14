@@ -6,29 +6,29 @@
  */
 
 .heroBanner {
-	padding: 4rem 0;
-	text-align: center;
-	position: relative;
-	overflow: hidden;
-	background-color: var(--ifm-color-black);
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--ifm-color-black);
 }
 
 .heroTitle {
-	color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
 }
 
 .heroSubtitle {
-	color: var(--ifm-color-white);
+  color: var(--ifm-color-white);
 }
 
 @media screen and (max-width: 966px) {
-	.heroBanner {
-		padding: 2rem;
-	}
+  .heroBanner {
+    padding: 2rem;
+  }
 }
 
 .buttons {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -29,7 +29,7 @@ On top of these, a special case of a `fast-*` component that does not have any c
 
 ```tsx
 <fast-span>
-	<fast-text text={useFacetWrap('lorem ipsum')} />
+  <fast-text text={useFacetWrap('lorem ipsum')} />
 </fast-span>
 ```
 
