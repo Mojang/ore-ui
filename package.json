@@ -2,13 +2,10 @@
   "name": "ore-ui-meta-repo",
   "private": true,
   "workspaces": [
-    "packages/**/*",
-    "docs",
-    "examples"
+    "examples/**/*",
+    "packages/**/*"
   ],
   "scripts": {
-    "start": "yarn workspace docs start",
-    "examples": "yarn workspace examples start",
     "format": "prettier --write \"**/*.@(json|js|css|mdx|md|tsx|ts)\"",
     "build": "yarn workspaces foreach --topological --verbose run build",
     "publish": "yarn workspaces foreach --topological --no-private npm publish --tolerate-republish --access public",
@@ -34,7 +31,6 @@
     "jest": "^26.1.0",
     "jest-junit-reporter": "^1.1.0",
     "jest-sonar-reporter": "2.0.0",
-    "prettier": "^2.3.2",
-    "ts-node": "^10.2.0"
+    "prettier": "^2.3.2"
   }
 }
