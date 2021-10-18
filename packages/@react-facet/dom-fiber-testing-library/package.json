@@ -28,7 +28,6 @@
   ],
   "homepage": "https://github.com/Mojang/ore-ui#readme",
   "bugs": "https://github.com/Mojang/ore-ui/issues",
-  "private": true,
   "license": "MIT",
   "version": "0.1.0",
   "main": "src/index.ts",
