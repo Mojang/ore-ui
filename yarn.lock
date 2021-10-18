@@ -881,6 +881,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@react-facet/dev-tools@workspace:packages/@react-facet/dev-tools":
+  version: 0.0.0-use.local
+  resolution: "@react-facet/dev-tools@workspace:packages/@react-facet/dev-tools"
+  languageName: unknown
+  linkType: soft
+
 "@react-facet/dom-components@workspace:packages/@react-facet/dom-components":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-components@workspace:packages/@react-facet/dom-components"

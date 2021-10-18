@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react'
+import { ReactFacetDevTools } from '@react-facet/dev-tools'
 import { NoValue } from '..'
 import { Facet, NO_VALUE, Option } from '../types'
 import { useFacetEffect } from './useFacetEffect'
@@ -21,6 +22,10 @@ export function useFacetCallback<V, T>(
   dependencies: any[],
   facet: Facet<V>,
 ) {
+  if (process.env.NODE_ENV !== 'production') {
+    ;(global.__REACT_FACET_DEV_TOOLS__ as ReactFacetDevTools).send({ hookName: 'useFacetCallback', facets: [facet] })
+  }
+
   const facetRef = useRef<Option<V>>(facet.get())
 
   useFacetEffect(
