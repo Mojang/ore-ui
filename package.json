@@ -11,7 +11,7 @@
     "examples": "yarn workspace examples start",
     "format": "prettier --write \"**/*.@(json|js|css|mdx|md|tsx|ts)\"",
     "build": "yarn workspaces foreach --topological --verbose run build",
-    "publish": "yarn workspaces foreach --topological --verbose run publish",
+    "publish": "yarn workspaces foreach npm publish --tolerate-republish",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "package": "yarn workspaces foreach --topological --verbose pack --out=%s-%v.tgz && ts-node ./scripts/moveAllPackagedToArtifacts.ts"
   },
