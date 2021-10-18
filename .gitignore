@@ -36,5 +36,5 @@ dist/
 *.tgz
 artifacts/
 
-# From the documentation branch
 .docusaurus
+build/

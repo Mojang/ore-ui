@@ -1,6 +1,12 @@
 # Ore UI meta-repo
 
+<img src="logo.png" width="400px" />
+
 Open-source building-blocks to construct Game UIs using web-tech from Mojang Studios.
+
+## Packages
+
+- [`@react-facet`](packages/@react-facet): Observable-based state management for performant game UIs built in React
 
 ## Team
 
