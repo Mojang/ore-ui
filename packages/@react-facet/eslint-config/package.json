@@ -24,7 +24,7 @@
     }
   ],
   "files": [
-    "dist/**/*"
+    "src/**/*"
   ],
   "homepage": "https://github.com/Mojang/ore-ui#readme",
   "bugs": "https://github.com/Mojang/ore-ui/issues",

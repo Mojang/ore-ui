@@ -38,7 +38,8 @@
   },
   "sideEffects": false,
   "scripts": {
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "prepublish": "yarn build"
   },
   "peerDependencies": {
     "@react-facet/core": "0.0.13",
