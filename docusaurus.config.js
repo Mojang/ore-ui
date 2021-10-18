@@ -3,7 +3,7 @@ module.exports = {
   title: '@react-facet',
   tagline: 'Observable-based state management for performant game UIs built in React',
 
-  url: 'https://glowing-pancake-951ea524.pages.github.io/',
+  url: 'https://jolly-stone-0d2f00e03.azurestaticapps.net',
   baseUrl: '/',
   projectName: 'ore-ui',
   organizationName: 'Mojang',
