@@ -1,0 +1,41 @@
+{
+  "name": "@react-facet/eslint-config",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mojang/ore-ui.git",
+    "directory": "packages/@react-facet/eslint-config"
+  },
+  "author": {
+    "name": "Paulo Ragonha",
+    "email": "paulo@ragonha.me"
+  },
+  "contributors": [
+    {
+      "name": "Danila Dergachev",
+      "email": "dderg@protonmail.com"
+    },
+    {
+      "name": "Fernando Via Canel",
+      "email": "fernando.via@gmail.com"
+    },
+    {
+      "name": "Marlon Huber-Smith",
+      "email": "marlonhubersmith@gmail.com"
+    }
+  ],
+  "files": [
+    "src/**/*"
+  ],
+  "homepage": "https://github.com/Mojang/ore-ui#readme",
+  "bugs": "https://github.com/Mojang/ore-ui/issues",
+  "license": "MIT",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "sideEffects": false,
+  "peerDependencies": {
+    "eslint": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0"
+  },
+  "dependencies": {
+    "eslint-plugin-react-hooks": "^4.2.0"
+  }
+}

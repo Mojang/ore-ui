@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders all items in a Facet of array 1`] = `
+<div>
+  <span>
+    1
+  </span>
+  <span>
+    2
+  </span>
+  <span>
+    3
+  </span>
+  <span>
+    4
+  </span>
+  <span>
+    5
+  </span>
+</div>
+`;
+
+exports[`unmounts components when the array reduces in size 1`] = `
+<div>
+  <span>
+    1
+  </span>
+  <span>
+    2
+  </span>
+  <span>
+    3
+  </span>
+  <span>
+    4
+  </span>
+  <span>
+    5
+  </span>
+</div>
+`;
+
+exports[`unmounts components when the array reduces in size 2`] = `
+<div>
+  <span>
+    1
+  </span>
+  <span>
+    2
+  </span>
+</div>
+`;

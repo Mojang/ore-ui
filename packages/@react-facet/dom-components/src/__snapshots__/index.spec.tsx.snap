@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders several fast components properly 1`] = `
+<div
+  class="some-class-name"
+  style="background-color: red;"
+>
+  <p
+    class="some-class-name"
+    style="background-color: red;"
+  >
+    <span
+      class="some-class-name"
+      style="background-color: red;"
+    >
+      <span
+        class=""
+      >
+        lorem ipsum
+      </span>
+      <span
+        class=""
+      >
+        1
+      </span>
+    </span>
+  </p>
+  <input
+    class="some-class-name"
+    style="background-color: red;"
+    value="placeholder"
+  />
+  <textarea
+    class="some-class-name"
+    disabled=""
+    style="background-color: red;"
+    value="placeholder"
+  />
+  <img
+    class="some-class-name"
+    src="about:blank"
+    style="background-color: red;"
+  />
+</div>
+`;
