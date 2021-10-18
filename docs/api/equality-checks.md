@@ -13,25 +13,88 @@ These are the equality checks currently available:
 
 ## `strictEqualityCheck`
 
-Checks that the current value is exactly the same as the other previous one. Accepts value of type function, number, boolean, string, undefined or null
+Checks that the current value is exactly the same as the other previous one. Accepts value of type function, number, boolean, string, undefined or null.
+
+```tsx
+import { strictEqualityCheck } from '@react-facet/equality-checks'
+
+const equalityCheck = strictEqualityCheck()
+
+equalityCheck(0)
+
+console.log(equalityCheck(0)) // true
+console.log(equalityCheck(1)) // false
+console.log(equalityCheck(1)) // true
+```
 
 ## `shallowObjectEqualityCheck`
 
 Equality check that verifies the values of each key of an object.
 Each value must be a primitive (boolean, number or string)
 
+```tsx
+import { shallowObjectEqualityCheck } from '@react-facet/equality-checks'
+
+const equalityCheck = shallowObjectEqualityCheck()
+
+equalityCheck({ name: 'Alex', height: 2 })
+
+console.log(equalityCheck({ name: 'Alex', height: 2 })) // true
+console.log(equalityCheck({ name: 'Steve', height: 2 })) // false
+console.log(equalityCheck({ name: 'Steve', height: 2 })) // true
+```
+
 ## `shallowObjectArrayEqualityCheck`
 
 Does a shallow object equality check for each element in an array
+
+```tsx
+import { shallowObjectArrayEqualityCheck } from '@react-facet/equality-checks'
+
+const equalityCheck = shallowObjectArrayEqualityCheck()
+
+equalityCheck([{ name: 'Alex' }, { name: 'Steve' }])
+
+console.log(equalityCheck([{ name: 'Alex' }, { name: 'Steve' }])) // true
+console.log(equalityCheck([{ name: 'Alex' }])) // false
+console.log(equalityCheck([{ name: 'Alex' }])) // true
+console.log(equalityCheck([{ name: 'Steve' }])) // false
+```
 
 ## `shallowArrayEqualityCheck`
 
 Shallow equality check of primitives in an array
 
+```tsx
+import { shallowArrayEqualityCheck } from '@react-facet/equality-checks'
+
+const equalityCheck = shallowArrayEqualityCheck()
+
+equalityCheck([0, 1, 2])
+
+console.log(equalityCheck([0, 1, 2])) // true
+console.log(equalityCheck([0, 1, 2, 3])) // false
+console.log(equalityCheck([0, 1, 2, 3])) // true
+console.log(equalityCheck([0, 1, 3])) // false
+console.log(equalityCheck([0, 1, 3])) // true
+```
+
 ## `defaultEqualityCheck`
 
 - The default equality check that assumes data can be mutated.
 - It is used internally by default, so there is no need to provide it.
+
+```tsx
+import { defaultEqualityCheck } from '@react-facet/equality-checks'
+
+const equalityCheck = defaultEqualityCheck()
+
+equalityCheck(0)
+
+console.log(equalityCheck(0)) // true
+console.log(equalityCheck(1)) // false
+console.log(equalityCheck(1)) // true
+```
 
 ## `createUniformObjectEqualityCheck`
 
@@ -40,11 +103,47 @@ haven't changed.
 
 The comparison used for the value of the properties is passed to it as an argument.
 
+```tsx
+import { createUniformObjectEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/equality-checks'
+
+const equalityCheck = createUniformObjectEqualityCheck(shallowArrayEqualityCheck)
+
+equalityCheck({
+  a: [1, 2],
+  b: [3],
+})
+
+console.log(equalityCheck({
+  a: [1, 2],
+  b: [3],
+})) // true
+console.log(equalityCheck({
+  a: [1, 5],
+  b: [3],
+})) // false
+console.log(equalityCheck({
+  a: [1, 5],
+  b: [3],
+})) // true
+```
+
 ## `createUniformArrayEqualityCheck`
 
 Creates an equality check that tests that the items in an array haven't changed.
 
 The comparison used for the individual items is passed to it as an argument.
+
+```tsx
+import { createUniformArrayEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/equality-checks'
+
+const equalityCheck = createUniformArrayEqualityCheck(shallowArrayEqualityCheck)
+
+equalityCheck([[1, 2], [3]])
+
+console.log(equalityCheck([[1, 2], [3]])) // true
+console.log(equalityCheck([[1, 2], [3, 1]])) // false
+console.log(equalityCheck([[1, 2], [3, 1]])) // true
+```
 
 ## `createObjectWithKeySpecificEqualityCheck`
 
@@ -53,6 +152,39 @@ Each property is tested with a different comparator, so that they can be of diff
 
 The comparator are passed down to it as an object with the same keys as the target object, but
 comparators for each property as values.
+
+```tsx
+import {
+  createObjectWithKeySpecificEqualityCheck,
+  shallowArrayEqualityCheck,
+  strictEqualityCheck,
+} from '@react-facet/equality-checks'
+
+const equalityCheck = createObjectWithKeySpecificEqualityCheck({
+  name: strictEqualityCheck,
+  items: shallowArrayEqualityCheck,
+})
+
+equalityCheck({
+  name: 'Steve',
+  items: [1, 54, 97],
+})
+
+console.log(equalityCheck({
+  name: 'Steve',
+  items: [1, 54, 97],
+})) // true
+
+console.log(equalityCheck({
+  name: 'Alex',
+  items: [1, 54, 97],
+})) // false
+
+console.log(equalityCheck({
+  name: 'Alex',
+  items: [1, 54, 97],
+})) // true
+```
 
 ## `createOptionalValueEqualityCheck`
 
@@ -63,3 +195,20 @@ provided as an argument to this creator.
 
 This creator is useful to be able to make equality checkers for optional properties when you already have
 an equality check for the underlying type.
+
+```tsx
+import {
+  createOptionalValueEqualityCheck,
+  shallowArrayEqualityCheck,
+} from '@react-facet/equality-checks'
+
+const equalityCheck = createOptionalValueEqualityCheck(shallowArrayEqualityCheck)
+
+equalityCheck([1, 2, 3])
+
+console.log(equalityCheck([1, 2, 3])) // true
+
+console.log(equalityCheck(null)) // false
+
+console.log(equalityCheck(null)) // true
+```
