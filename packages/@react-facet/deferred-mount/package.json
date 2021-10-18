@@ -26,7 +26,7 @@
   "files": [
     "dist/**/*"
   ],
-  "homepage": "https://github.com/Mojang/ore-ui/tree/main/packages/%react-facet/deferred-mount#readme",
+  "homepage": "https://github.com/Mojang/ore-ui#readme",
   "bugs": "https://github.com/Mojang/ore-ui/issues",
   "private": true,
   "license": "MIT",
