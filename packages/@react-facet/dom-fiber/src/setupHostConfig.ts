@@ -267,6 +267,8 @@ export const setupHostConfig = (): HostConfig<
         instance.text?.()
         instance.text = setupTextUpdate(newProps.text, textElement)
       }
+
+      return
     }
 
     const element = uncastElement as HTMLElement
