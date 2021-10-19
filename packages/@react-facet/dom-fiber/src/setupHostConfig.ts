@@ -261,9 +261,12 @@ export const setupHostConfig = (): HostConfig<
     const { element: uncastElement, styleUnsubscribers } = instance
 
     if (type === 'fast-text') {
-      instance.text?.()
+      const textElement = uncastElement as Text
 
-      instance.text = setupTextUpdate(newProps.text, uncastElement as Text)
+      if (newProps.text !== oldProps.text) {
+        instance.text?.()
+        instance.text = setupTextUpdate(newProps.text, textElement)
+      }
     }
 
     const element = uncastElement as HTMLElement
