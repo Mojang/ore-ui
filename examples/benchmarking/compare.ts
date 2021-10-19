@@ -3,8 +3,8 @@ import { times } from 'ramda'
 
 const ERROR = 1
 const ITERATIONS = 10
-const MEASURE_TIMEOUT = 2000
-const SAMPLE_SIZE = 100
+const MEASURE_TIMEOUT = 10000
+const SAMPLE_SIZE = 500
 const OFFSET_FRAMES = 2
 
 const compare = async (optionA: string | undefined, optionB: string | undefined, targetRelativePerformance: number) => {
@@ -35,7 +35,7 @@ const compare = async (optionA: string | undefined, optionB: string | undefined,
 
     const { traceEvents } = require(traceFile)
 
-    const events = traceEvents.filter((event: any) => event.name === 'FunctionCall')
+    const events = traceEvents.filter((event: any) => event.name === 'FireAnimationFrame' || event.name === 'MinorGC')
     const sampledEvents = events.slice(OFFSET_FRAMES, SAMPLE_SIZE + OFFSET_FRAMES)
 
     const totalTime = sampledEvents.reduce((total: number, event: any) => total + event.dur, 0)
