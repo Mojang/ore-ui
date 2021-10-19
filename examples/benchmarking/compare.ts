@@ -1,12 +1,15 @@
 import puppeteer from 'puppeteer'
 import { times } from 'ramda'
 import path from 'path'
+import { mkdirpSync } from 'fs-extra'
 
 const ERROR = 1
 const ITERATIONS = 10
 const MEASURE_TIMEOUT = 10000
 const SAMPLE_SIZE = 500
 const OFFSET_FRAMES = 2
+
+mkdirpSync('./tmp')
 
 const compare = async (optionA: string | undefined, optionB: string | undefined, targetRelativePerformance: number) => {
   if (!optionA || !optionB) {

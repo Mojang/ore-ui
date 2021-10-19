@@ -18,8 +18,10 @@
     "react-dom": "^16.9.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.12",
     "@types/puppeteer": "^5.4.4",
     "@types/ramda": "^0",
+    "fs-extra": "^10.0.0",
     "html-webpack-plugin": "^5.3.2",
     "http-server": "^13.0.2",
     "puppeteer": "^10.4.0",
