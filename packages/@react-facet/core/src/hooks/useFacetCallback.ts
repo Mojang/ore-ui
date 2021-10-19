@@ -23,7 +23,11 @@ export function useFacetCallback<V, T>(
   facet: Facet<V>,
 ) {
   if (process.env.NODE_ENV !== 'production') {
-    ;(global.__REACT_FACET_DEV_TOOLS__ as ReactFacetDevTools).send({ hookName: 'useFacetCallback', facets: [facet] })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+      hookName: 'useFacetCallback',
+      facets: [facet],
+    })
   }
 
   const facetRef = useRef<Option<V>>(facet.get())

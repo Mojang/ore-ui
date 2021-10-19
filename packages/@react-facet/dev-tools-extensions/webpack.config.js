@@ -1,7 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.tsx',
+  entry: {
+    index: './src/index.tsx',
+    injectGlobalHook: './src/injectGlobalHook.ts'
+  },
   module: {
     rules: [
       {
@@ -15,7 +18,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: 'main.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'chrome', 'dist'),
   },
 };

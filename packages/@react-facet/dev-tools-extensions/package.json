@@ -41,6 +41,8 @@
     "prepublish": "yarn build"
   },
   "devDependencies": {
+    "@react-facet/dev-tools": "0.1.0",
+    "@types/jsdom": "^16.2.13",
     "@types/rimraf": "^3",
     "rimraf": "^3.0.2",
     "ts-loader": "^9.2.6",

@@ -892,6 +892,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-facet/dev-tools-extensions@workspace:packages/@react-facet/dev-tools-extensions"
   dependencies:
+    "@react-facet/dev-tools": 0.1.0
+    "@types/jsdom": ^16.2.13
     "@types/rimraf": ^3
     rimraf: ^3.0.2
     ts-loader: ^9.2.6
@@ -901,10 +903,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/dev-tools@workspace:packages/@react-facet/dev-tools":
+"@react-facet/dev-tools@0.1.0, @react-facet/dev-tools@workspace:packages/@react-facet/dev-tools":
   version: 0.0.0-use.local
   resolution: "@react-facet/dev-tools@workspace:packages/@react-facet/dev-tools"
   dependencies:
+    "@react-facet/core": 0.1.0
     "@types/rimraf": ^3
     rimraf: ^3.0.2
     typescript: ^4.3.5
@@ -1318,6 +1321,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jsdom@npm:^16.2.13":
+  version: 16.2.13
+  resolution: "@types/jsdom@npm:16.2.13"
+  dependencies:
+    "@types/node": "*"
+    "@types/parse5": "*"
+    "@types/tough-cookie": "*"
+  checksum: 2575d020e345f556a28208dad4d495e317e7364f1de222322c100841f49a815c73c0aa32d32d7a72a05fd7cd33551f4c0effc108fbaaf194ec42ed0f04d877b9
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:*, @types/json-schema@npm:^7.0.8":
   version: 7.0.9
   resolution: "@types/json-schema@npm:7.0.9"
@@ -1343,6 +1357,13 @@ __metadata:
   version: 2.4.1
   resolution: "@types/normalize-package-data@npm:2.4.1"
   checksum: e87bccbf11f95035c89a132b52b79ce69a1e3652fe55962363063c9c0dae0fe2477ebc585e03a9652adc6f381d24ba5589cc5e51849df4ced3d3e004a7d40ed5
+  languageName: node
+  linkType: hard
+
+"@types/parse5@npm:*":
+  version: 6.0.1
+  resolution: "@types/parse5@npm:6.0.1"
+  checksum: 752d4968b03084b783995c50280707f64c149b7e3d59e9fcdaa82c8c54b37dc56023a8b11c7d60dbb359f2277ef165970bfc7d79231863456bf25d102c09b33f
   languageName: node
   linkType: hard
 
@@ -1448,6 +1469,13 @@ __metadata:
     "@types/testing-library__dom": "*"
     pretty-format: ^25.1.0
   checksum: 2fc33f97d17fea35f1215cd1cd5899cbec4be897f2e21b13bf32cbac4234c88ca685517bdd142c1cebc8ee1ff74fa5ce5aff770f907f3bc116dc578e85972685
+  languageName: node
+  linkType: hard
+
+"@types/tough-cookie@npm:*":
+  version: 4.0.1
+  resolution: "@types/tough-cookie@npm:4.0.1"
+  checksum: 7570c1c2d74201f4ead3512cf8e4c99e97d92ab8a02ae2fb987fd720ced0ca1a2baf250c98a861a170b86762606c9bf6d32207675f13dffc5ab75c08c96578d2
   languageName: node
   linkType: hard
 

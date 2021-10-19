@@ -4,6 +4,7 @@
     "outDir": "dist",
     "target": "es6",
     "moduleResolution": "node",
+    "paths": { "*": ["types/*"] },
     "module": "commonjs",
     "allowJs": false,
     "strict": true,
