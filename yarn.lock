@@ -6513,6 +6513,7 @@ __metadata:
     jest-junit-reporter: ^1.1.0
     jest-sonar-reporter: 2.0.0
     prettier: ^2.3.2
+    ts-node: ^10.2.0
   languageName: unknown
   linkType: soft
 
@@ -8292,7 +8293,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^10.3.0":
+"ts-node@npm:^10.2.0, ts-node@npm:^10.3.0":
   version: 10.3.0
   resolution: "ts-node@npm:10.3.0"
   dependencies:
