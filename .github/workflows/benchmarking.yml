@@ -1,0 +1,10 @@
+name: test
+on: [push]
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --immutable
+      - run: cd examples/benchmarking && yarn compare listMemoFacet listMemoState 31
