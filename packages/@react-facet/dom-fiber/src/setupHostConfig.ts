@@ -394,12 +394,13 @@ export const setupHostConfig = (): HostConfig<
 
         // We know for sure here that style will never be null (we created it above)
         const notNullStyle = style as unknown as Record<string, unknown>
+        const notNullStyleUnsubscribers = styleUnsubscribers as unknown as Map<string | number, Unsubscribe>
 
         mapKeys(newProps.style, (key) => {
           const value = newProps.style?.[key]
           if (value != null) {
             if (isFacet(value)) {
-              styleUnsubscribers.set(
+              notNullStyleUnsubscribers.set(
                 key,
                 value.observe((value) => {
                   notNullStyle[key] = value
