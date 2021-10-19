@@ -86,12 +86,15 @@ export type ElementProps<T> = PointerEvents &
      */
     children?: StrictReactNode
 
+    style?: Style
+    ref?: React.Ref<T>
+
+    dangerouslySetInnerHTML?: { __html: string }
+
     className?: FacetProp<string | undefined>
     ['data-droppable']?: FacetProp<boolean | undefined>
     ['data-testid']?: FacetProp<string | undefined>
     ['data-x-ray']?: FacetProp<boolean | undefined>
-    style?: Style
-    ref?: React.Ref<T>
     src?: FacetProp<string | undefined>
     href?: FacetProp<string | undefined>
     target?: FacetProp<string | undefined>
@@ -102,7 +105,6 @@ export type ElementProps<T> = PointerEvents &
     rows?: FacetProp<number | undefined>
     value?: FacetProp<string | undefined>
     type?: FacetProp<InputType | undefined>
-    dangerouslySetInnerHTML?: { __html: string }
   }
 
 export type TextProps = {
@@ -114,10 +116,25 @@ export type Props<T> = ElementProps<T> & TextProps
 export type ValidPropsNames = keyof Props<unknown>
 
 export type ElementContainer = {
-  unsubscribers: Map<ValidPropsNames, Unsubscribe>
   styleUnsubscribers: Map<string | number, Unsubscribe>
   element: HTMLElement | Text
   style?: CSSStyleDeclaration
+
+  className?: Unsubscribe
+  ['data-droppable']?: Unsubscribe
+  ['data-testid']?: Unsubscribe
+  ['data-x-ray']?: Unsubscribe
+  src?: Unsubscribe
+  href?: Unsubscribe
+  target?: Unsubscribe
+  autoPlay?: Unsubscribe
+  loop?: Unsubscribe
+  disabled?: Unsubscribe
+  maxLength?: Unsubscribe
+  rows?: Unsubscribe
+  value?: Unsubscribe
+  type?: Unsubscribe
+  text?: Unsubscribe
 }
 
 export type TextContainer = {

@@ -66,18 +66,11 @@ export const setupHostConfig = (): HostConfig<
   NodeJS.Timeout,
   NoTimeout
 > => {
-  const setupClassUpdate = (
-    className: FacetProp<string | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupClassUpdate = (className: FacetProp<string | undefined>, element: HTMLElement) => {
     if (isFacet(className)) {
-      unsubscribers.set(
-        'className',
-        className.observe((className) => {
-          element.className = className ?? ''
-        }),
-      )
+      return className.observe((className) => {
+        element.className = className ?? ''
+      })
     } else {
       element.className = className ?? ''
     }
@@ -87,22 +80,15 @@ export const setupHostConfig = (): HostConfig<
    * The React prop is called autoPlay (capital P) while the DOM
    * attribute is all lowercase (i.e. autoplay), so we handle that here.
    */
-  const setupAutoPlayUpdate = (
-    autoPlay: FacetProp<boolean | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupAutoPlayUpdate = (autoPlay: FacetProp<boolean | undefined>, element: HTMLElement) => {
     if (isFacet(autoPlay)) {
-      unsubscribers.set(
-        'autoPlay',
-        autoPlay.observe((autoPlay) => {
-          if (autoPlay) {
-            element.setAttribute('autoplay', '')
-          } else {
-            element.removeAttribute('autoplay')
-          }
-        }),
-      )
+      return autoPlay.observe((autoPlay) => {
+        if (autoPlay) {
+          element.setAttribute('autoplay', '')
+        } else {
+          element.removeAttribute('autoplay')
+        }
+      })
     } else {
       if (autoPlay) {
         element.setAttribute('autoplay', '')
@@ -112,22 +98,15 @@ export const setupHostConfig = (): HostConfig<
     }
   }
 
-  const setupDataDroppableUpdate = (
-    dataDroppable: FacetProp<boolean | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupDataDroppableUpdate = (dataDroppable: FacetProp<boolean | undefined>, element: HTMLElement) => {
     if (isFacet(dataDroppable)) {
-      unsubscribers.set(
-        'data-droppable',
-        dataDroppable.observe((dataDroppable) => {
-          if (dataDroppable) {
-            element.setAttribute('data-droppable', '')
-          } else {
-            element.removeAttribute('data-droppable')
-          }
-        }),
-      )
+      return dataDroppable.observe((dataDroppable) => {
+        if (dataDroppable) {
+          element.setAttribute('data-droppable', '')
+        } else {
+          element.removeAttribute('data-droppable')
+        }
+      })
     } else {
       if (dataDroppable) {
         element.setAttribute('data-droppable', '')
@@ -137,22 +116,15 @@ export const setupHostConfig = (): HostConfig<
     }
   }
 
-  const setupDataTestidUpdate = (
-    dataTestid: FacetProp<string | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupDataTestidUpdate = (dataTestid: FacetProp<string | undefined>, element: HTMLElement) => {
     if (isFacet(dataTestid)) {
-      unsubscribers.set(
-        'data-testid',
-        dataTestid.observe((dataTestid) => {
-          if (dataTestid != null) {
-            element.setAttribute('data-testid', dataTestid)
-          } else {
-            element.removeAttribute('data-testid')
-          }
-        }),
-      )
+      return dataTestid.observe((dataTestid) => {
+        if (dataTestid != null) {
+          element.setAttribute('data-testid', dataTestid)
+        } else {
+          element.removeAttribute('data-testid')
+        }
+      })
     } else {
       if (dataTestid != null) {
         element.setAttribute('data-testid', dataTestid)
@@ -162,22 +134,15 @@ export const setupHostConfig = (): HostConfig<
     }
   }
 
-  const setupDataXRayUpdate = (
-    dataXRay: FacetProp<boolean | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupDataXRayUpdate = (dataXRay: FacetProp<boolean | undefined>, element: HTMLElement) => {
     if (isFacet(dataXRay)) {
-      unsubscribers.set(
-        'data-x-ray',
-        dataXRay.observe((dataXRay) => {
-          if (dataXRay) {
-            element.setAttribute('data-x-ray', '')
-          } else {
-            element.removeAttribute('data-x-ray')
-          }
-        }),
-      )
+      return dataXRay.observe((dataXRay) => {
+        if (dataXRay) {
+          element.setAttribute('data-x-ray', '')
+        } else {
+          element.removeAttribute('data-x-ray')
+        }
+      })
     } else {
       if (dataXRay) {
         element.setAttribute('data-x-ray', '')
@@ -187,22 +152,15 @@ export const setupHostConfig = (): HostConfig<
     }
   }
 
-  const setupLoopUpdate = (
-    loop: FacetProp<boolean | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupLoopUpdate = (loop: FacetProp<boolean | undefined>, element: HTMLElement) => {
     if (isFacet(loop)) {
-      unsubscribers.set(
-        'loop',
-        loop.observe((loop) => {
-          if (loop) {
-            element.setAttribute('loop', '')
-          } else {
-            element.removeAttribute('loop')
-          }
-        }),
-      )
+      return loop.observe((loop) => {
+        if (loop) {
+          element.setAttribute('loop', '')
+        } else {
+          element.removeAttribute('loop')
+        }
+      })
     } else {
       if (loop) {
         element.setAttribute('loop', '')
@@ -212,22 +170,15 @@ export const setupHostConfig = (): HostConfig<
     }
   }
 
-  const setupHrefUpdate = (
-    href: FacetProp<string | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupHrefUpdate = (href: FacetProp<string | undefined>, element: HTMLElement) => {
     if (isFacet(href)) {
-      unsubscribers.set(
-        'href',
-        href.observe((href) => {
-          if (href != null) {
-            element.setAttribute('href', href)
-          } else {
-            element.removeAttribute('href')
-          }
-        }),
-      )
+      return href.observe((href) => {
+        if (href != null) {
+          element.setAttribute('href', href)
+        } else {
+          element.removeAttribute('href')
+        }
+      })
     } else {
       if (href != null) {
         element.setAttribute('href', href)
@@ -237,22 +188,15 @@ export const setupHostConfig = (): HostConfig<
     }
   }
 
-  const setupTargetUpdate = (
-    target: FacetProp<string | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupTargetUpdate = (target: FacetProp<string | undefined>, element: HTMLElement) => {
     if (isFacet(target)) {
-      unsubscribers.set(
-        'target',
-        target.observe((target) => {
-          if (target != null) {
-            element.setAttribute('target', target)
-          } else {
-            element.removeAttribute('target')
-          }
-        }),
-      )
+      return target.observe((target) => {
+        if (target != null) {
+          element.setAttribute('target', target)
+        } else {
+          element.removeAttribute('target')
+        }
+      })
     } else {
       if (target != null) {
         element.setAttribute('target', target)
@@ -262,22 +206,15 @@ export const setupHostConfig = (): HostConfig<
     }
   }
 
-  const setupDisabledUpdate = (
-    disabled: FacetProp<boolean | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupDisabledUpdate = (disabled: FacetProp<boolean | undefined>, element: HTMLElement) => {
     if (isFacet(disabled)) {
-      unsubscribers.set(
-        'disabled',
-        disabled.observe((disabled) => {
-          if (disabled) {
-            element.setAttribute('disabled', '')
-          } else {
-            element.removeAttribute('disabled')
-          }
-        }),
-      )
+      return disabled.observe((disabled) => {
+        if (disabled) {
+          element.setAttribute('disabled', '')
+        } else {
+          element.removeAttribute('disabled')
+        }
+      })
     } else {
       if (disabled) {
         element.setAttribute('disabled', '')
@@ -287,60 +224,39 @@ export const setupHostConfig = (): HostConfig<
     }
   }
 
-  const setupMaxLengthUpdate = (
-    maxLength: FacetProp<number | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupMaxLengthUpdate = (maxLength: FacetProp<number | undefined>, element: HTMLElement) => {
     if (isFacet(maxLength)) {
-      unsubscribers.set(
-        'maxLength',
-        maxLength.observe((maxLength) => {
-          const textElement = element as HTMLTextAreaElement
-          textElement.maxLength = maxLength ?? Number.MAX_SAFE_INTEGER
-        }),
-      )
+      return maxLength.observe((maxLength) => {
+        const textElement = element as HTMLTextAreaElement
+        textElement.maxLength = maxLength ?? Number.MAX_SAFE_INTEGER
+      })
     } else {
       const textElement = element as HTMLTextAreaElement
       textElement.maxLength = maxLength ?? Number.MAX_SAFE_INTEGER
     }
   }
 
-  const setupRowsUpdate = (
-    rows: FacetProp<number | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupRowsUpdate = (rows: FacetProp<number | undefined>, element: HTMLElement) => {
     if (isFacet(rows)) {
-      unsubscribers.set(
-        'rows',
-        rows.observe((rows) => {
-          const textElement = element as HTMLTextAreaElement
-          textElement.rows = rows ?? Number.MAX_SAFE_INTEGER
-        }),
-      )
+      return rows.observe((rows) => {
+        const textElement = element as HTMLTextAreaElement
+        textElement.rows = rows ?? Number.MAX_SAFE_INTEGER
+      })
     } else {
       const textElement = element as HTMLTextAreaElement
       textElement.rows = rows ?? Number.MAX_SAFE_INTEGER
     }
   }
 
-  const setupTypeUpdate = (
-    type: FacetProp<string | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupTypeUpdate = (type: FacetProp<string | undefined>, element: HTMLElement) => {
     if (isFacet(type)) {
-      unsubscribers.set(
-        'type',
-        type.observe((type) => {
-          if (type != null) {
-            element.setAttribute('type', type)
-          } else {
-            element.removeAttribute('type')
-          }
-        }),
-      )
+      return type.observe((type) => {
+        if (type != null) {
+          element.setAttribute('type', type)
+        } else {
+          element.removeAttribute('type')
+        }
+      })
     } else {
       if (type != null) {
         element.setAttribute('type', type)
@@ -357,25 +273,18 @@ export const setupHostConfig = (): HostConfig<
    * so we need to set the `value` attribute directly to solve this.
    * ref: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/ReactDOMInput.js
    */
-  const setupValueUpdate = (
-    value: FacetProp<string | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupValueUpdate = (value: FacetProp<string | undefined>, element: HTMLElement) => {
     if (isFacet(value)) {
-      unsubscribers.set(
-        'value',
-        value.observe((value) => {
-          const inputElement = element as HTMLInputElement
-          inputElement.value = value ?? ''
+      return value.observe((value) => {
+        const inputElement = element as HTMLInputElement
+        inputElement.value = value ?? ''
 
-          if (value != null) {
-            inputElement.setAttribute('value', value)
-          } else {
-            inputElement.removeAttribute('value')
-          }
-        }),
-      )
+        if (value != null) {
+          inputElement.setAttribute('value', value)
+        } else {
+          inputElement.removeAttribute('value')
+        }
+      })
     } else {
       const inputElement = element as HTMLInputElement
       inputElement.value = value ?? ''
@@ -388,38 +297,24 @@ export const setupHostConfig = (): HostConfig<
     }
   }
 
-  const setupSrcUpdate = (
-    src: FacetProp<string | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: HTMLElement,
-  ) => {
+  const setupSrcUpdate = (src: FacetProp<string | undefined>, element: HTMLElement) => {
     if (isFacet(src)) {
-      unsubscribers.set(
-        'src',
-        src.observe((src) => {
-          const textElement = element as HTMLImageElement
-          textElement.src = src ?? ''
-        }),
-      )
+      return src.observe((src) => {
+        const textElement = element as HTMLImageElement
+        textElement.src = src ?? ''
+      })
     } else {
       const textElement = element as HTMLImageElement
       textElement.src = src ?? ''
     }
   }
 
-  const setupTextUpdate = (
-    text: FacetProp<string | number | undefined>,
-    unsubscribers: Map<ValidPropsNames, Unsubscribe>,
-    element: Text,
-  ) => {
+  const setupTextUpdate = (text: FacetProp<string | number | undefined>, element: Text) => {
     if (isFacet(text)) {
-      unsubscribers.set(
-        'text',
-        text.observe((text) => {
-          const textElement = element as Text
-          textElement.nodeValue = (text ?? '') as string
-        }),
-      )
+      return text.observe((text) => {
+        const textElement = element as Text
+        textElement.nodeValue = (text ?? '') as string
+      })
     } else {
       const textElement = element as Text
       textElement.nodeValue = (text ?? '') as string
@@ -478,18 +373,15 @@ export const setupHostConfig = (): HostConfig<
       }
     },
     createInstance: function (externalType, newProps) {
-      const unsubscribers = new Map()
       const styleUnsubscribers = new Map()
 
       if (externalType === 'fast-text') {
         const element = document.createTextNode('')
 
-        setupTextUpdate(newProps.text, unsubscribers, element)
-
         return {
           element,
-          unsubscribers,
           styleUnsubscribers,
+          text: setupTextUpdate(newProps.text, element),
         }
       }
 
@@ -521,62 +413,6 @@ export const setupHostConfig = (): HostConfig<
 
       if (newProps.dangerouslySetInnerHTML != null) {
         element.innerHTML = newProps.dangerouslySetInnerHTML.__html
-      }
-
-      if (newProps.className != null) {
-        setupClassUpdate(newProps.className, unsubscribers, element)
-      }
-
-      if (newProps.autoPlay != null) {
-        setupAutoPlayUpdate(newProps.autoPlay, unsubscribers, element)
-      }
-
-      if (newProps['data-droppable'] != null) {
-        setupDataDroppableUpdate(newProps['data-droppable'], unsubscribers, element)
-      }
-
-      if (newProps['data-testid'] != null) {
-        setupDataTestidUpdate(newProps['data-testid'], unsubscribers, element)
-      }
-
-      if (newProps['data-x-ray'] != null) {
-        setupDataXRayUpdate(newProps['data-x-ray'], unsubscribers, element)
-      }
-
-      if (newProps.loop != null) {
-        setupLoopUpdate(newProps.loop, unsubscribers, element)
-      }
-
-      if (newProps.href != null) {
-        setupHrefUpdate(newProps.href, unsubscribers, element)
-      }
-
-      if (newProps.target != null) {
-        setupTargetUpdate(newProps.target, unsubscribers, element)
-      }
-
-      if (newProps.disabled != null) {
-        setupDisabledUpdate(newProps.disabled, unsubscribers, element)
-      }
-
-      if (newProps.maxLength != null) {
-        setupMaxLengthUpdate(newProps.maxLength, unsubscribers, element)
-      }
-
-      if (newProps.rows != null) {
-        setupRowsUpdate(newProps.rows, unsubscribers, element)
-      }
-
-      if (newProps.type != null) {
-        setupTypeUpdate(newProps.type, unsubscribers, element)
-      }
-
-      if (newProps.value != null) {
-        setupValueUpdate(newProps.value, unsubscribers, element)
-      }
-
-      if (newProps.src != null) {
-        setupSrcUpdate(newProps.src, unsubscribers, element)
       }
 
       if (newProps.onClick) {
@@ -633,9 +469,31 @@ export const setupHostConfig = (): HostConfig<
 
       return {
         element,
-        unsubscribers,
         styleUnsubscribers,
         style,
+
+        className: newProps.className != null ? setupClassUpdate(newProps.className, element) : undefined,
+        autoPlay: newProps.autoPlay != null ? setupAutoPlayUpdate(newProps.autoPlay, element) : undefined,
+        loop: newProps.loop != null ? setupLoopUpdate(newProps.loop, element) : undefined,
+        href: newProps.href != null ? setupHrefUpdate(newProps.href, element) : undefined,
+        target: newProps.target != null ? setupTargetUpdate(newProps.target, element) : undefined,
+        disabled: newProps.disabled != null ? setupDisabledUpdate(newProps.disabled, element) : undefined,
+        maxLength: newProps.maxLength != null ? setupMaxLengthUpdate(newProps.maxLength, element) : undefined,
+        rows: newProps.rows != null ? setupRowsUpdate(newProps.rows, element) : undefined,
+        type: newProps.type != null ? setupTypeUpdate(newProps.type, element) : undefined,
+        value: newProps.value != null ? setupValueUpdate(newProps.value, element) : undefined,
+        src: newProps.src != null ? setupSrcUpdate(newProps.src, element) : undefined,
+
+        ['data-droppable']:
+          newProps['data-droppable'] != null
+            ? setupDataDroppableUpdate(newProps['data-droppable'], element)
+            : undefined,
+
+        ['data-testid']:
+          newProps['data-testid'] != null ? setupDataTestidUpdate(newProps['data-testid'], element) : undefined,
+
+        ['data-x-ray']:
+          newProps['data-x-ray'] != null ? setupDataXRayUpdate(newProps['data-x-ray'], element) : undefined,
       }
     },
     appendInitialChild: function (parent, child) {
@@ -659,14 +517,14 @@ export const setupHostConfig = (): HostConfig<
       return true
     },
     commitUpdate: function (instance, updatePayload, type, oldProps, newProps) {
-      const { element: uncastElement, unsubscribers, styleUnsubscribers } = instance
+      const { element: uncastElement, styleUnsubscribers } = instance
 
       if (type === 'fast-text') {
         if (isFacet(oldProps.text)) {
-          unsubscribers.get('text')?.()
+          instance.text?.()
         }
 
-        setupTextUpdate(newProps.text, unsubscribers, uncastElement as Text)
+        instance.text = setupTextUpdate(newProps.text, uncastElement as Text)
       }
 
       const element = uncastElement as HTMLElement
@@ -722,174 +580,174 @@ export const setupHostConfig = (): HostConfig<
 
       if (newProps.autoPlay !== oldProps.autoPlay) {
         if (isFacet(oldProps.autoPlay)) {
-          unsubscribers.get('autoPlay')?.()
+          instance.autoPlay?.()
         }
 
         if (newProps.autoPlay == null) {
           element.removeAttribute('autoplay')
         } else {
-          setupAutoPlayUpdate(newProps.autoPlay, unsubscribers, element)
+          instance.autoPlay = setupAutoPlayUpdate(newProps.autoPlay, element)
         }
       }
 
       if (newProps.className !== oldProps.className) {
         if (isFacet(oldProps.className)) {
-          unsubscribers.get('className')?.()
+          instance.className?.()
         }
 
         if (newProps.className == null) {
           element.className = ''
         } else {
-          setupClassUpdate(newProps.className, unsubscribers, element)
+          instance.className = setupClassUpdate(newProps.className, element)
         }
       }
 
       if (newProps['data-droppable'] !== oldProps['data-droppable']) {
         if (isFacet(oldProps['data-droppable'])) {
-          unsubscribers.get('data-droppable')?.()
+          instance['data-droppable']?.()
         }
 
         if (newProps['data-droppable'] == null) {
           element.removeAttribute('data-droppable')
         } else {
-          setupDataDroppableUpdate(newProps['data-droppable'], unsubscribers, element)
+          instance['data-droppable'] = setupDataDroppableUpdate(newProps['data-droppable'], element)
         }
       }
 
       if (newProps['data-testid'] !== oldProps['data-testid']) {
         if (isFacet(oldProps['data-testid'])) {
-          unsubscribers.get('data-testid')?.()
+          instance['data-testid']?.()
         }
 
         if (newProps['data-testid'] == null) {
           element.removeAttribute('data-testid')
         } else {
-          setupDataTestidUpdate(newProps['data-testid'], unsubscribers, element)
+          instance['data-testid'] = setupDataTestidUpdate(newProps['data-testid'], element)
         }
       }
 
       if (newProps['data-x-ray'] !== oldProps['data-x-ray']) {
         if (isFacet(oldProps['data-x-ray'])) {
-          unsubscribers.get('data-x-ray')?.()
+          instance['data-x-ray']?.()
         }
 
         if (newProps['data-x-ray'] == null) {
           element.removeAttribute('data-x-ray')
         } else {
-          setupDataXRayUpdate(newProps['data-x-ray'], unsubscribers, element)
+          instance['data-x-ray'] = setupDataXRayUpdate(newProps['data-x-ray'], element)
         }
       }
 
       if (newProps.loop !== oldProps.loop) {
         if (isFacet(oldProps.loop)) {
-          unsubscribers.get('loop')?.()
+          instance.loop?.()
         }
 
         if (newProps.loop == null) {
           element.removeAttribute('loop')
         } else {
-          setupLoopUpdate(newProps.loop, unsubscribers, element)
+          instance.loop = setupLoopUpdate(newProps.loop, element)
         }
       }
 
       if (newProps.href !== oldProps.href) {
         if (isFacet(oldProps.href)) {
-          unsubscribers.get('href')?.()
+          instance.href?.()
         }
 
         if (newProps.href == null) {
           element.removeAttribute('href')
         } else {
-          setupHrefUpdate(newProps.href, unsubscribers, element)
+          instance.href = setupHrefUpdate(newProps.href, element)
         }
       }
 
       if (newProps.target !== oldProps.target) {
         if (isFacet(oldProps.target)) {
-          unsubscribers.get('target')?.()
+          instance.target?.()
         }
 
         if (newProps.target == null) {
           element.removeAttribute('target')
         } else {
-          setupTargetUpdate(newProps.target, unsubscribers, element)
+          instance.target = setupTargetUpdate(newProps.target, element)
         }
       }
 
       if (newProps.disabled !== oldProps.disabled) {
         if (isFacet(oldProps.disabled)) {
-          unsubscribers.get('disabled')?.()
+          instance.disabled?.()
         }
 
         if (newProps.disabled == null) {
           element.removeAttribute('disabled')
         } else {
-          setupDisabledUpdate(newProps.disabled, unsubscribers, element)
+          instance.disabled = setupDisabledUpdate(newProps.disabled, element)
         }
       }
 
       if (newProps.maxLength !== oldProps.maxLength) {
         if (isFacet(oldProps.maxLength)) {
-          unsubscribers.get('maxLength')?.()
+          instance.maxLength?.()
         }
 
         if (newProps.maxLength == null) {
           const textElement = element as HTMLTextAreaElement
           textElement.removeAttribute('maxlength')
         } else {
-          setupMaxLengthUpdate(newProps.maxLength, unsubscribers, element)
+          instance.maxLength = setupMaxLengthUpdate(newProps.maxLength, element)
         }
       }
 
       if (newProps.rows !== oldProps.rows) {
         if (isFacet(oldProps.rows)) {
-          unsubscribers.get('rows')?.()
+          instance.rows?.()
         }
 
         if (newProps.rows == null) {
           const textElement = element as HTMLTextAreaElement
           textElement.removeAttribute('rows')
         } else {
-          setupRowsUpdate(newProps.rows, unsubscribers, element)
+          instance.rows = setupRowsUpdate(newProps.rows, element)
         }
       }
 
       if (newProps.type !== oldProps.type) {
         if (isFacet(oldProps.type)) {
-          unsubscribers.get('type')?.()
+          instance.type?.()
         }
 
         if (newProps.type == null) {
           const textElement = element as HTMLTextAreaElement
           textElement.removeAttribute('type')
         } else {
-          setupTypeUpdate(newProps.type, unsubscribers, element)
+          instance.type = setupTypeUpdate(newProps.type, element)
         }
       }
 
       if (newProps.value !== oldProps.value) {
         if (isFacet(oldProps.value)) {
-          unsubscribers.get('value')?.()
+          instance.value?.()
         }
 
         if (newProps.value == null) {
           const textElement = element as HTMLTextAreaElement
           textElement.removeAttribute('value')
         } else {
-          setupValueUpdate(newProps.value, unsubscribers, element)
+          instance.value = setupValueUpdate(newProps.value, element)
         }
       }
 
       if (newProps.src !== oldProps.src) {
         if (isFacet(oldProps.src)) {
-          unsubscribers.get('src')?.()
+          instance.src?.()
         }
 
         if (newProps.src == null) {
           const textElement = element as HTMLTextAreaElement
           textElement.removeAttribute('src')
         } else {
-          setupSrcUpdate(newProps.src, unsubscribers, element)
+          instance.src = setupSrcUpdate(newProps.src, element)
         }
       }
 
