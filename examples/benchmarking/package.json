@@ -1,0 +1,35 @@
+{
+  "name": "benchmarking",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve --port 8081",
+    "build": "NODE_ENV=production webpack",
+    "serve": "http-server dist -c-1 --port 8080",
+    "compare": "ts-node compare.ts"
+  },
+  "dependencies": {
+    "@react-facet/core": "0.1.0",
+    "@react-facet/dom-fiber": "0.1.0",
+    "@react-facet/remote": "0.1.0",
+    "@react-facet/spring": "0.1.0",
+    "ramda": "^0.27.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.12",
+    "@types/puppeteer": "^5.4.4",
+    "@types/ramda": "^0",
+    "fs-extra": "^10.0.0",
+    "html-webpack-plugin": "^5.3.2",
+    "http-server": "^13.0.2",
+    "puppeteer": "^10.4.0",
+    "ts-loader": "^9.2.5",
+    "ts-node": "^10.3.0",
+    "typescript": "^4.3.5",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.0.0"
+  }
+}

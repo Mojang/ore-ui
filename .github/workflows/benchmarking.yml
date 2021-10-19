@@ -1,0 +1,52 @@
+name: benchmarking
+on: [push]
+
+jobs:
+  listMemo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --immutable
+      - run: cd examples/benchmarking && yarn build && yarn compare listMemoFacet listMemoState 48
+
+  marker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --immutable
+      - run: cd examples/benchmarking && yarn build && yarn compare markerFacet markerState 88 18000
+
+  mount:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --immutable
+      - run: cd examples/benchmarking && yarn build && yarn compare mountFacetDomFiber mountReactDom 90
+
+  overhead:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --immutable
+      - run: cd examples/benchmarking && yarn build && yarn compare overheadFacet overheadState 53
+
+  progressBar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --immutable
+      - run: cd examples/benchmarking && yarn build && yarn compare progressBarFacet progressBarState 51
+
+  toggleRealisticClass:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --immutable
+      - run: cd examples/benchmarking && yarn build && yarn compare toggleRealisticClassFacet toggleRealisticClassState 45
+
+  toggleSimpleClass:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --immutable
+      - run: cd examples/benchmarking && yarn build && yarn compare toggleSimpleClassFacet toggleSimpleClassState 59
