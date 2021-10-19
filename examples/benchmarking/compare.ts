@@ -5,13 +5,12 @@ import { mkdirpSync } from 'fs-extra'
 
 const ERROR = 10
 const ITERATIONS = 10
-const MEASURE_TIMEOUT = 10000
-const SAMPLE_SIZE = 400
+const SAMPLE_SIZE = 500
 const OFFSET_FRAMES = 2
 
 mkdirpSync('./tmp')
 
-const compare = async (optionA: string | undefined, optionB: string | undefined, targetRelativePerformance: number) => {
+const compare = async (optionA: string, optionB: string, targetRelativePerformance: number, measureTimeout: number) => {
   if (!optionA || !optionB) {
     console.log('Missing options to compare.')
     process.exit(1)
@@ -34,7 +33,7 @@ const compare = async (optionA: string | undefined, optionB: string | undefined,
 
     await page.tracing.start({ path: traceFile })
 
-    await timeout(MEASURE_TIMEOUT)
+    await timeout(measureTimeout)
 
     await page.tracing.stop()
 
@@ -92,9 +91,9 @@ const calculateRelativePerformance = ([a, b]: [number, number]) => (a / b) * 100
 
 const timeout = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-if (process.argv.length !== 5) {
+if (process.argv.length < 5) {
   console.log('Missing arguments. Ex: yarn compare toggleRealisticClassFacet toggleRealisticClassState 20')
   process.exit(1)
 }
 
-compare(process.argv[2], process.argv[3], parseInt(process.argv[4], 10))
+compare(process.argv[2], process.argv[3], parseInt(process.argv[4], 10), parseInt(process.argv[5], 10) || 10000)
