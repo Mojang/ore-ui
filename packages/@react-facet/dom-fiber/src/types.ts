@@ -116,9 +116,10 @@ export type Props<T> = ElementProps<T> & TextProps
 export type ValidPropsNames = keyof Props<unknown>
 
 export type ElementContainer = {
-  styleUnsubscribers: Map<string | number, Unsubscribe>
   element: HTMLElement | Text
+
   style?: CSSStyleDeclaration
+  styleUnsubscribers?: Map<string | number, Unsubscribe>
 
   className?: Unsubscribe
   ['data-droppable']?: Unsubscribe

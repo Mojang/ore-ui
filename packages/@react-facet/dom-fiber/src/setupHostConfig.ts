@@ -373,14 +373,11 @@ export const setupHostConfig = (): HostConfig<
       }
     },
     createInstance: function (externalType, newProps) {
-      const styleUnsubscribers = new Map()
-
       if (externalType === 'fast-text') {
         const element = document.createTextNode('')
 
         return {
           element,
-          styleUnsubscribers,
           text: setupTextUpdate(newProps.text, element),
         }
       }
@@ -388,9 +385,13 @@ export const setupHostConfig = (): HostConfig<
       const type = fastTypeMap[externalType] ?? externalType
       const element = document.createElement(type)
 
-      const style = newProps.style != null ? element.style : undefined
+      let style: CSSStyleDeclaration | undefined
+      let styleUnsubscribers: Map<string | number, Unsubscribe> | undefined
 
       if (newProps.style != null) {
+        style = element.style
+        styleUnsubscribers = new Map()
+
         // We know for sure here that style will never be null (we created it above)
         const notNullStyle = style as unknown as Record<string, unknown>
 
@@ -527,14 +528,12 @@ export const setupHostConfig = (): HostConfig<
 
       const element = uncastElement as HTMLElement
 
-      let style = instance.style
-
       if (newProps.style !== oldProps.style) {
-        // if it is null, we need to get it
-        if (style == null) {
-          instance.style = element.style
-          style = instance.style
-        }
+        const style = instance.style || element.style
+        const styleUnsubscribers = instance.styleUnsubscribers || new Map()
+
+        instance.style = style
+        instance.styleUnsubscribers = styleUnsubscribers
 
         const notNullStyle = style as unknown as Record<string, unknown>
 
