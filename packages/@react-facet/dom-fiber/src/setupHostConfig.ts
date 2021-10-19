@@ -520,9 +520,7 @@ export const setupHostConfig = (): HostConfig<
       const { element: uncastElement, styleUnsubscribers } = instance
 
       if (type === 'fast-text') {
-        if (isFacet(oldProps.text)) {
-          instance.text?.()
-        }
+        instance.text?.()
 
         instance.text = setupTextUpdate(newProps.text, uncastElement as Text)
       }
@@ -579,9 +577,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.autoPlay !== oldProps.autoPlay) {
-        if (isFacet(oldProps.autoPlay)) {
-          instance.autoPlay?.()
-        }
+        instance.autoPlay?.()
 
         if (newProps.autoPlay == null) {
           element.removeAttribute('autoplay')
@@ -591,9 +587,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.className !== oldProps.className) {
-        if (isFacet(oldProps.className)) {
-          instance.className?.()
-        }
+        instance.className?.()
 
         if (newProps.className == null) {
           element.className = ''
@@ -603,9 +597,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps['data-droppable'] !== oldProps['data-droppable']) {
-        if (isFacet(oldProps['data-droppable'])) {
-          instance['data-droppable']?.()
-        }
+        instance['data-droppable']?.()
 
         if (newProps['data-droppable'] == null) {
           element.removeAttribute('data-droppable')
@@ -615,9 +607,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps['data-testid'] !== oldProps['data-testid']) {
-        if (isFacet(oldProps['data-testid'])) {
-          instance['data-testid']?.()
-        }
+        instance['data-testid']?.()
 
         if (newProps['data-testid'] == null) {
           element.removeAttribute('data-testid')
@@ -627,9 +617,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps['data-x-ray'] !== oldProps['data-x-ray']) {
-        if (isFacet(oldProps['data-x-ray'])) {
-          instance['data-x-ray']?.()
-        }
+        instance['data-x-ray']?.()
 
         if (newProps['data-x-ray'] == null) {
           element.removeAttribute('data-x-ray')
@@ -639,9 +627,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.loop !== oldProps.loop) {
-        if (isFacet(oldProps.loop)) {
-          instance.loop?.()
-        }
+        instance.loop?.()
 
         if (newProps.loop == null) {
           element.removeAttribute('loop')
@@ -651,9 +637,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.href !== oldProps.href) {
-        if (isFacet(oldProps.href)) {
-          instance.href?.()
-        }
+        instance.href?.()
 
         if (newProps.href == null) {
           element.removeAttribute('href')
@@ -663,9 +647,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.target !== oldProps.target) {
-        if (isFacet(oldProps.target)) {
-          instance.target?.()
-        }
+        instance.target?.()
 
         if (newProps.target == null) {
           element.removeAttribute('target')
@@ -675,9 +657,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.disabled !== oldProps.disabled) {
-        if (isFacet(oldProps.disabled)) {
-          instance.disabled?.()
-        }
+        instance.disabled?.()
 
         if (newProps.disabled == null) {
           element.removeAttribute('disabled')
@@ -687,9 +667,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.maxLength !== oldProps.maxLength) {
-        if (isFacet(oldProps.maxLength)) {
-          instance.maxLength?.()
-        }
+        instance.maxLength?.()
 
         if (newProps.maxLength == null) {
           const textElement = element as HTMLTextAreaElement
@@ -700,9 +678,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.rows !== oldProps.rows) {
-        if (isFacet(oldProps.rows)) {
-          instance.rows?.()
-        }
+        instance.rows?.()
 
         if (newProps.rows == null) {
           const textElement = element as HTMLTextAreaElement
@@ -713,9 +689,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.type !== oldProps.type) {
-        if (isFacet(oldProps.type)) {
-          instance.type?.()
-        }
+        instance.type?.()
 
         if (newProps.type == null) {
           const textElement = element as HTMLTextAreaElement
@@ -726,9 +700,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.value !== oldProps.value) {
-        if (isFacet(oldProps.value)) {
-          instance.value?.()
-        }
+        instance.value?.()
 
         if (newProps.value == null) {
           const textElement = element as HTMLTextAreaElement
@@ -739,9 +711,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newProps.src !== oldProps.src) {
-        if (isFacet(oldProps.src)) {
-          instance.src?.()
-        }
+        instance.src?.()
 
         if (newProps.src == null) {
           const textElement = element as HTMLTextAreaElement
