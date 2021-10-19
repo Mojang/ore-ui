@@ -111,7 +111,6 @@ export const setupHostConfig = (): HostConfig<
   createTextInstance: function (newText) {
     return {
       element: document.createTextNode(newText),
-      unsubscribers: new Map(),
     }
   },
   createInstance: function (externalType, newProps) {
