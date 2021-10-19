@@ -3,10 +3,10 @@ import { times } from 'ramda'
 import path from 'path'
 import { mkdirpSync } from 'fs-extra'
 
-const ERROR = 2
+const ERROR = 10
 const ITERATIONS = 10
 const MEASURE_TIMEOUT = 10000
-const SAMPLE_SIZE = 500
+const SAMPLE_SIZE = 400
 const OFFSET_FRAMES = 2
 
 mkdirpSync('./tmp')
