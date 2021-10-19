@@ -1,8 +1,8 @@
-name: test
+name: benchmarking
 on: [push]
 
 jobs:
-  unit:
+  listMemo:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
