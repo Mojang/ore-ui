@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer'
 import { times } from 'ramda'
+import path from 'path'
 
 const ERROR = 1
 const ITERATIONS = 10
@@ -23,7 +24,8 @@ const compare = async (optionA: string | undefined, optionB: string | undefined,
   const runExample = async (example: string, iteration: number): Promise<number> => {
     const traceFile = `./tmp/${example}-${iteration}.json`
     const page = await browser.newPage()
-    await page.goto(`http://0.0.0.0:8080/${example}.html`)
+    const filename = path.join(__dirname, './dist', `${example}.html`)
+    await page.goto(`file://${filename}`)
 
     await timeout(100)
 
