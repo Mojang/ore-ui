@@ -4,10 +4,26 @@
 
 Open-source building-blocks to construct Game UIs using web-tech from Mojang Studios.
 
+## What is this?
+
+Minecraft Bedrock Edition is migrating its UI system to a solution based on "web standards". This repository contains some infrastructure bits used internally, but that can also be shared across other Game Studios and general purpose web applications.
+
+The new system is based on:
+
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+
 ## Packages
 
 - [`@react-facet`](packages/@react-facet): Observable-based state management for performant game UIs built in React
 - `@mojang/react-gamepad`: Declarative Gamepad focus navigation (**coming soon**)
+- ... more coming soon
+
+## Documentation
+
+We currently only have one package that is open-source, and its documentation is available at https://react-facet.mojang.com/.
+
+The source of the documentation (for contributions) is available at the [documentation branch](https://github.com/Mojang/ore-ui/tree/documentation).
 
 ## Team
 
