@@ -6,7 +6,7 @@ Open-source building-blocks to construct Game UIs using web-tech from Mojang Stu
 
 ## What is this?
 
-Minecraft Bedrock Edition is migrating its UI system to a solution based on "web standards". This repository contains some infrastructure bits used internally, but that can also be shared across other Game Studios and general purpose web applications.
+Minecraft Bedrock Edition is migrating its UI system to a solution based on [web standards](https://coherent-labs.com/products/coherent-gameface/). This repository contains some infrastructure bits used internally, but that can also be shared across other Game Studios and general purpose web applications.
 
 The new system is based on:
 
