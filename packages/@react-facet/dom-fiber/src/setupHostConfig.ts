@@ -9,39 +9,15 @@ import {
   HostContext,
   UpdatePayload,
   NoTimeout,
-  ValidPropsNames,
 } from './types'
 import { HostConfig } from 'react-reconciler'
 import { FacetProp, isFacet, Unsubscribe } from '@react-facet/core'
 
-const noop = () => {}
-
-const EMPTY = {}
-
-const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap> = {
-  'fast-a': 'a',
-  'fast-div': 'div',
-  'fast-p': 'p',
-  'fast-img': 'img',
-  'fast-textarea': 'textarea',
-  'fast-input': 'input',
-  'fast-span': 'span',
-
-  // TODO: fix weird map
-  'fast-text': 'span',
-  a: 'a',
-  div: 'div',
-  p: 'p',
-  img: 'img',
-  textarea: 'textarea',
-  input: 'input',
-  style: 'style',
-}
-
 /**
- * Custom React Renderer created for Gameface
+ * Custom React Renderer with support for Facets
  *
- * based on https://blog.atulr.com/react-custom-renderer-1/
+ * Based on https://blog.atulr.com/react-custom-renderer-1/
+ * For more information check the official docs: https://github.com/facebook/react/tree/main/packages/react-reconciler
  */
 export const setupHostConfig = (): HostConfig<
   Type,
@@ -818,4 +794,28 @@ const setupTextUpdate = (text: FacetProp<string | number | undefined>, element: 
     const textElement = element as Text
     textElement.nodeValue = (text ?? '') as string
   }
+}
+
+const noop = () => {}
+
+const EMPTY = {}
+
+const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap> = {
+  'fast-a': 'a',
+  'fast-div': 'div',
+  'fast-p': 'p',
+  'fast-img': 'img',
+  'fast-textarea': 'textarea',
+  'fast-input': 'input',
+  'fast-span': 'span',
+
+  // TODO: fix weird map
+  'fast-text': 'span',
+  a: 'a',
+  div: 'div',
+  p: 'p',
+  img: 'img',
+  textarea: 'textarea',
+  input: 'input',
+  style: 'style',
 }
