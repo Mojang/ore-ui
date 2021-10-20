@@ -7,6 +7,7 @@ Open-source building-blocks to construct Game UIs using web-tech from Mojang Stu
 ## Packages
 
 - [`@react-facet`](packages/@react-facet): Observable-based state management for performant game UIs built in React
+- `@mojang/react-gamepad`: Declarative Gamepad focus navigation (**coming soon**)
 
 ## Team
 
@@ -39,7 +40,6 @@ Open-source building-blocks to construct Game UIs using web-tech from Mojang Stu
 
 ## Contributors
 
-<a href="https://github.com/pirelenito" target="_blank"><img width="42" height="42" src="https://github.com/pirelenito.png?s=42"></a>
 <a href="https://github.com/Warwolt" target="_blank"><img width="42" height="42" src="https://github.com/Warwolt.png?s=42"></a>
 <a href="https://github.com/lucaslsf" target="_blank"><img width="42" height="42" src="https://github.com/lucaslsf.png?s=42"></a>
 <a href="https://github.com/volgar" target="_blank"><img width="42" height="42" src="https://github.com/volgar.png?s=42"></a>
