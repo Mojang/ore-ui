@@ -1,0 +1,15 @@
+{
+  "name": "ore-ui-meta-repo",
+  "private": true,
+  "workspaces": [
+    "ore-ui",
+    "react-facet"
+  ],
+  "scripts": {
+    "format": "prettier --write \"**/*.@(json|js|css|mdx|md|tsx|ts)\""
+  },
+  "devDependencies": {
+    "prettier": "^2.3.2"
+  },
+  "packageManager": "yarn@3.0.2"
+}
