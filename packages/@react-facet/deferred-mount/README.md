@@ -2,7 +2,7 @@
 
 React Facet is a state management for performant game UIs. For more information on how to use this package check the official documentation available at https://react-facet.mojang.com/.
 
-This package allows deferring mounting a component to the next frame. It can be used wrapping components on a big list to keep the frame time low while everything is mounted.
+This package allows you to defer the mounting of a component to the next frame. By wrapping components on a big list you can keep the frame time low while everything is mounted.
 
 When the `DeferredMountProvider` is used, it requires that there is at least one descendent as a `DeferredMount`, otherwise it will wait forever as `deferring`.
 
