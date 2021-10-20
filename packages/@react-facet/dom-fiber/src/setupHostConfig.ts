@@ -18,15 +18,6 @@ const noop = () => {}
 
 const EMPTY = {}
 
-const mapKeys = <T extends Record<string, unknown>, V>(x: T, callback: (v: keyof T) => V): V[] => {
-  const a = []
-  let b: keyof T
-  for (b in x) {
-    a.push(callback(b))
-  }
-  return a
-}
-
 const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap> = {
   'fast-a': 'a',
   'fast-div': 'div',
@@ -137,8 +128,11 @@ export const setupHostConfig = (): HostConfig<
       const notNullStyle = style as unknown as Record<string, unknown>
       const notNullStyleUnsubscribers = styleUnsubscribers as unknown as Map<string | number, Unsubscribe>
 
-      mapKeys(newProps.style, (key) => {
-        const value = newProps.style?.[key]
+      const styleProp = newProps.style
+
+      for (let key in styleProp) {
+        const value = styleProp[key]
+
         if (value != null) {
           if (isFacet(value)) {
             notNullStyleUnsubscribers.set(
@@ -151,7 +145,7 @@ export const setupHostConfig = (): HostConfig<
             notNullStyle[key] = value
           }
         }
-      })
+      }
     }
 
     if (newProps.dangerouslySetInnerHTML != null) {
@@ -280,21 +274,24 @@ export const setupHostConfig = (): HostConfig<
       instance.styleUnsubscribers = styleUnsubscribers
 
       const notNullStyle = style as unknown as Record<string, unknown>
+      const oldStyleProp = oldProps.style
+      const newStyleProp = newProps.style
 
-      if (oldProps.style != null) {
-        mapKeys(oldProps.style, (key) => {
-          const value = oldProps.style?.[key]
+      if (oldStyleProp != null) {
+        for (let key in oldStyleProp) {
+          const oldValue = oldStyleProp[key]
+          const newValue = newStyleProp?.[key]
 
-          if (newProps.style?.[key] == null || newProps.style?.[key] != value) {
-            if (isFacet(value)) {
+          if (oldValue !== newValue || newStyleProp == null) {
+            if (isFacet(oldValue)) {
               styleUnsubscribers.get(key)?.()
             }
           }
-        })
+        }
       }
 
-      if (newProps.style != null) {
-        mapKeys(newProps.style, (key) => {
+      if (newStyleProp != null) {
+        for (let key in newStyleProp) {
           const value = newProps.style?.[key]
 
           if (isFacet(value)) {
@@ -307,7 +304,7 @@ export const setupHostConfig = (): HostConfig<
           } else {
             notNullStyle[key] = value
           }
-        })
+        }
       }
     }
 
