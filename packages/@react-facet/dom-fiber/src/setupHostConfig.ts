@@ -69,17 +69,21 @@ export const setupHostConfig = (): HostConfig<
   getRootHostContext: function () {
     return EMPTY
   },
+
   getChildHostContext: function () {
     return EMPTY
   },
+
   shouldSetTextContent: function () {
     return false
   },
+
   createTextInstance: function (newText) {
     return {
       element: document.createTextNode(newText),
     }
   },
+
   createInstance: function (externalType, newProps) {
     if (externalType === 'fast-text') {
       const element = document.createTextNode('')
@@ -206,17 +210,23 @@ export const setupHostConfig = (): HostConfig<
       ['data-x-ray']: newProps['data-x-ray'] != null ? setupDataXRayUpdate(newProps['data-x-ray'], element) : undefined,
     }
   },
+
   appendInitialChild: function (parent, child) {
     if (parent.element == null || child.element == null) return
 
     parent.element.appendChild(child.element)
   },
+
   finalizeInitialChildren: function () {
     return false
   },
+
   prepareForCommit: function () {},
+
   resetAfterCommit: function () {},
+
   commitMount: function () {},
+
   appendChildToContainer: function (parent, child) {
     if (parent.element == null || child.element == null) return
 
@@ -226,6 +236,7 @@ export const setupHostConfig = (): HostConfig<
   prepareUpdate: function () {
     return true
   },
+
   commitUpdate: function (instance, updatePayload, type, oldProps, newProps) {
     const { element: uncastElement, styleUnsubscribers } = instance
 
@@ -512,30 +523,39 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.onKeyUp) element.addEventListener('keyup', newProps.onKeyUp)
     }
   },
+
   commitTextUpdate: function (textInstance, oldText, newText) {
     textInstance.element.nodeValue = newText
   },
+
   appendChild: function (parentInstance, child) {
     parentInstance.element.appendChild(child.element)
   },
+
   insertBefore: function (parentInstance, child, beforeChild) {
     parentInstance.element.insertBefore(child.element, beforeChild.element)
   },
+
   removeChild: function (parentInstance, child) {
     parentInstance.element.removeChild(child.element)
   },
+
   insertInContainerBefore: function (container, child, beforeChild) {
     container.element.insertBefore(child.element, beforeChild.element)
   },
+
   removeChildFromContainer: function (container, child) {
     container.element.removeChild(child.element)
   },
+
   resetTextContent: function (instance) {
     instance.element.textContent = ''
   },
+
   shouldDeprioritizeSubtree: function () {
     return false
   },
+
   getPublicInstance: function (instance) {
     return instance.element
   },
