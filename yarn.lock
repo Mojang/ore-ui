@@ -7041,23 +7041,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"docs@workspace:react-facet":
-  version: 0.0.0-use.local
-  resolution: "docs@workspace:react-facet"
-  dependencies:
-    "@docusaurus/core": 2.0.0-alpha.73
-    "@docusaurus/preset-classic": 2.0.0-alpha.73
-    "@mdx-js/react": ^1.6.21
-    "@types/rimraf": ^3
-    clsx: ^1.1.1
-    cross-env: ^7.0.3
-    prettier: ^2.4.1
-    react: ^16.9.0
-    react-dom: ^16.9.0
-    rimraf: ^3.0.2
-  languageName: unknown
-  linkType: soft
-
 "doctrine@npm:^2.1.0":
   version: 2.1.0
   resolution: "doctrine@npm:2.1.0"
@@ -14915,6 +14898,23 @@ fsevents@^1.2.7:
   checksum: 695853bc885e798008a00c10d8d94e5ac91626e8130802fea37345f9c037f41b80104345db2ee87f225feb4a4ef71b0df572b17c378a6d397b6815f6d4a84293
   languageName: node
   linkType: hard
+
+"react-facet@workspace:react-facet":
+  version: 0.0.0-use.local
+  resolution: "react-facet@workspace:react-facet"
+  dependencies:
+    "@docusaurus/core": 2.0.0-alpha.73
+    "@docusaurus/preset-classic": 2.0.0-alpha.73
+    "@mdx-js/react": ^1.6.21
+    "@types/rimraf": ^3
+    clsx: ^1.1.1
+    cross-env: ^7.0.3
+    prettier: ^2.4.1
+    react: ^16.9.0
+    react-dom: ^16.9.0
+    rimraf: ^3.0.2
+  languageName: unknown
+  linkType: soft
 
 "react-fast-compare@npm:^3.1.1":
   version: 3.2.0
