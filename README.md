@@ -54,6 +54,10 @@ The source of the documentation (for contributions) is available at the [documen
   </tbody>
 </table>
 
+## Logo
+
+**React Facet** and **Ore UI** logos designed by [Nekofresa](https://twitter.com/nekofresa).
+
 ## Contributors
 
 <a href="https://github.com/Warwolt" target="_blank"><img width="42" height="42" src="https://github.com/Warwolt.png?s=42"></a>
