@@ -113,18 +113,24 @@ equalityCheck({
   b: [3],
 })
 
-console.log(equalityCheck({
-  a: [1, 2],
-  b: [3],
-})) // true
-console.log(equalityCheck({
-  a: [1, 5],
-  b: [3],
-})) // false
-console.log(equalityCheck({
-  a: [1, 5],
-  b: [3],
-})) // true
+console.log(
+  equalityCheck({
+    a: [1, 2],
+    b: [3],
+  }),
+) // true
+console.log(
+  equalityCheck({
+    a: [1, 5],
+    b: [3],
+  }),
+) // false
+console.log(
+  equalityCheck({
+    a: [1, 5],
+    b: [3],
+  }),
+) // true
 ```
 
 ## `createUniformArrayEqualityCheck`
@@ -141,8 +147,18 @@ const equalityCheck = createUniformArrayEqualityCheck(shallowArrayEqualityCheck)
 equalityCheck([[1, 2], [3]])
 
 console.log(equalityCheck([[1, 2], [3]])) // true
-console.log(equalityCheck([[1, 2], [3, 1]])) // false
-console.log(equalityCheck([[1, 2], [3, 1]])) // true
+console.log(
+  equalityCheck([
+    [1, 2],
+    [3, 1],
+  ]),
+) // false
+console.log(
+  equalityCheck([
+    [1, 2],
+    [3, 1],
+  ]),
+) // true
 ```
 
 ## `createObjectWithKeySpecificEqualityCheck`
@@ -170,20 +186,26 @@ equalityCheck({
   items: [1, 54, 97],
 })
 
-console.log(equalityCheck({
-  name: 'Steve',
-  items: [1, 54, 97],
-})) // true
+console.log(
+  equalityCheck({
+    name: 'Steve',
+    items: [1, 54, 97],
+  }),
+) // true
 
-console.log(equalityCheck({
-  name: 'Alex',
-  items: [1, 54, 97],
-})) // false
+console.log(
+  equalityCheck({
+    name: 'Alex',
+    items: [1, 54, 97],
+  }),
+) // false
 
-console.log(equalityCheck({
-  name: 'Alex',
-  items: [1, 54, 97],
-})) // true
+console.log(
+  equalityCheck({
+    name: 'Alex',
+    items: [1, 54, 97],
+  }),
+) // true
 ```
 
 ## `createOptionalValueEqualityCheck`
@@ -197,10 +219,7 @@ This creator is useful to be able to make equality checkers for optional propert
 an equality check for the underlying type.
 
 ```tsx
-import {
-  createOptionalValueEqualityCheck,
-  shallowArrayEqualityCheck,
-} from '@react-facet/equality-checks'
+import { createOptionalValueEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/equality-checks'
 
 const equalityCheck = createOptionalValueEqualityCheck(shallowArrayEqualityCheck)
 
