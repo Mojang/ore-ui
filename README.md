@@ -2,11 +2,11 @@
 
 <img src="logo.png" width="400px" />
 
-Open-source building-blocks to construct Game UIs using web-tech from Mojang Studios.
+Open-source building blocks from Mojang Studios to construct game UIs using web tech.
 
 ## What is this?
 
-Minecraft Bedrock Edition is migrating its UI system to a solution based on [web standards](https://coherent-labs.com/products/coherent-gameface/). This repository contains some infrastructure bits used internally, but that can also be shared across other Game Studios and general purpose web applications.
+Minecraft Bedrock Edition is migrating its UI system to a solution based on [web standards](https://coherent-labs.com/products/coherent-gameface/). This repository contains some infrastructure bits used internally, but that can also be shared across other game studios and general-purpose web applications.
 
 The new system is based on:
 
@@ -17,7 +17,7 @@ The new system is based on:
 
 - [`@react-facet`](packages/@react-facet): Observable-based state management for performant game UIs built in React
 - `@mojang/react-gamepad`: Declarative Gamepad focus navigation (**coming soon**)
-- ... more coming soon
+- ... more also coming soon
 
 ## Documentation
 
