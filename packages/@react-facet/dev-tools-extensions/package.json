@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@react-facet/dev-tools": "0.1.0",
+    "@types/chrome": "^0.0.159",
     "@types/jsdom": "^16.2.13",
     "@types/rimraf": "^3",
     "rimraf": "^3.0.2",

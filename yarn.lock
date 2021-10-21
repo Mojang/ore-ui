@@ -893,6 +893,7 @@ __metadata:
   resolution: "@react-facet/dev-tools-extensions@workspace:packages/@react-facet/dev-tools-extensions"
   dependencies:
     "@react-facet/dev-tools": 0.1.0
+    "@types/chrome": ^0.0.159
     "@types/jsdom": ^16.2.13
     "@types/rimraf": ^3
     rimraf: ^3.0.2
@@ -1221,6 +1222,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/chrome@npm:^0.0.159":
+  version: 0.0.159
+  resolution: "@types/chrome@npm:0.0.159"
+  dependencies:
+    "@types/filesystem": "*"
+    "@types/har-format": "*"
+  checksum: 4da826d8f7755333e7519b6e1d8c691d1aba0eb84d4ec93e854650cf09a40c0ce6cefcaecde71b1c0af74d538a6f2e1721cfc4deeab0c8db6cb392214eb030b4
+  languageName: node
+  linkType: hard
+
 "@types/eslint-scope@npm:^3.7.0":
   version: 3.7.1
   resolution: "@types/eslint-scope@npm:3.7.1"
@@ -1245,6 +1256,22 @@ __metadata:
   version: 0.0.50
   resolution: "@types/estree@npm:0.0.50"
   checksum: 9a2b6a4a8c117f34d08fbda5e8f69b1dfb109f7d149b60b00fd7a9fb6ac545c078bc590aa4ec2f0a256d680cf72c88b3b28b60c326ee38a7bc8ee1ee95624922
+  languageName: node
+  linkType: hard
+
+"@types/filesystem@npm:*":
+  version: 0.0.32
+  resolution: "@types/filesystem@npm:0.0.32"
+  dependencies:
+    "@types/filewriter": "*"
+  checksum: 4b9079d200a3b241722b90e1c5806c4b32c4dac87d42a1c7ef76a2c0dafdbe7d5f1a379b873ad5de73622b44de6599e1522908f67b938d54e785bd1c36e302a0
+  languageName: node
+  linkType: hard
+
+"@types/filewriter@npm:*":
+  version: 0.0.29
+  resolution: "@types/filewriter@npm:0.0.29"
+  checksum: 0c58aa875c2c245be7dbc42b20212f3203e13d11ec013a4a5cd0febf0e8b87214be5882c05ff9d7bdf0398f145a4fdbc24b7e6cf7b094e134a3b4c7a0598502f
   languageName: node
   linkType: hard
 
@@ -1273,6 +1300,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: d076bb61f45d0fc42dee496ef8b1c2f8742e15d5e47e90e20d0243386e426c04d4efd408a48875ab432f7960b4ce3414db20ed0fbbfc7bcc89d84e574f6e045a
+  languageName: node
+  linkType: hard
+
+"@types/har-format@npm:*":
+  version: 1.2.7
+  resolution: "@types/har-format@npm:1.2.7"
+  checksum: a2fd4a4d180c995ee0d4461a88141c4dd40368bde6b0b97244c6628da0d179466732be8fea947c971f336df00c6a794df0d802d26117a785b17b7c78f0e2b189
   languageName: node
   linkType: hard
 

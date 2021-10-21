@@ -43,3 +43,5 @@ function installHook(target: Window) {
 if ('text/html' === document.contentType) {
   injectCode(';(' + installHook.toString() + '(window));')
 }
+
+console.log(chrome.runtime.id)
