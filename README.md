@@ -17,7 +17,7 @@ The new system is based on:
 
 - [`@react-facet`](packages/@react-facet): Observable-based state management for performant game UIs built in React
 - `@mojang/react-gamepad`: Declarative Gamepad focus navigation (**coming soon**)
-- ... more also coming soon
+- More to come!
 
 ## Documentation
 
