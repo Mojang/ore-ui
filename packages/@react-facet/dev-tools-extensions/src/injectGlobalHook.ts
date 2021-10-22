@@ -44,4 +44,15 @@ if ('text/html' === document.contentType) {
   injectCode(';(' + installHook.toString() + '(window));')
 }
 
+const port = chrome.runtime.connect({ name: 'knockknock' })
+
+console.log('IT CONNECTED', port)
+
+port.postMessage({ joke: 'Knock knock' })
+port.onMessage.addListener(function (msg) {
+  console.log('MESSAGE IN CONTENT SCRIPT', msg)
+  if (msg.question === "Who's there?") port.postMessage({ answer: 'Madame' })
+  else if (msg.question === 'Madame who?') port.postMessage({ answer: 'Madame... Bovary' })
+})
+
 console.log(chrome.runtime.id)
