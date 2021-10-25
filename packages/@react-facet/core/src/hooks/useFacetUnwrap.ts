@@ -1,3 +1,4 @@
+import { ReactFacetDevTools } from '@react-facet/dev-tools'
 import { useLayoutEffect, useState } from 'react'
 import { NoValue } from '..'
 import { FacetProp, isFacet, NO_VALUE, Value } from '../types'
@@ -51,6 +52,14 @@ export function useFacetUnwrap<T extends Value>(prop: FacetProp<T>): T | NoValue
       })
     }
   }, [prop])
+
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+      hookName: 'useFacetUnwrap',
+      facets: isFacet(prop) ? [prop] : [],
+    })
+  }
 
   return isFacet(prop) ? state.value : prop
 }

@@ -21,6 +21,7 @@ function installHook(target: Window) {
     return {
       send: ({ hookName, facets, newFacet }) => {
         hooks.push({ hookName, facets, newFacet })
+        console.log({ hooks })
       },
     }
   }

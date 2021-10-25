@@ -2,6 +2,7 @@ import { Reducer, Dispatch, useCallback } from 'react'
 import { Option, Facet, EqualityCheck } from '../types'
 import { defaultEqualityCheck } from '../equalityChecks'
 import { useFacetState } from './useFacetState'
+import { ReactFacetDevTools } from '@react-facet/dev-tools'
 
 /**
  * Provides a parallel to React's useReducer, but instead returns a facet as the value
@@ -24,6 +25,14 @@ export const useFacetReducer = <S, A = string>(
     },
     [reducer, setState],
   )
+
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+      hookName: 'useFacetReducer',
+      newFacet: state,
+    })
+  }
 
   return [state, dispatch]
 }

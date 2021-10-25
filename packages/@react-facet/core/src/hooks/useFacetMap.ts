@@ -1,3 +1,4 @@
+import { ReactFacetDevTools } from '@react-facet/dev-tools'
 import { useCallback, useMemo } from 'react'
 import { defaultEqualityCheck } from '../equalityChecks'
 import { mapFacetsLightweight } from '../mapFacets'
@@ -121,6 +122,15 @@ export function useFacetMap<M extends Value>(
     // of the effect. We do this to avoid re-running this effect when passing a new array with the same facets.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectorMemoized, equalityCheck, ...facets])
+
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+      hookName: 'useFacetCallback',
+      facets,
+      newFacet: facetComposition,
+    })
+  }
 
   return facetComposition
 }

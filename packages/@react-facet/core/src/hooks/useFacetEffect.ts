@@ -1,3 +1,4 @@
+import { ReactFacetDevTools } from '@react-facet/dev-tools'
 import { useCallback, useLayoutEffect } from 'react'
 import { Facet, Effect } from '../types'
 
@@ -17,6 +18,13 @@ export function useFacetEffect<V>(
   dependencies: any[],
   facet: Facet<V>,
 ) {
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+      hookName: 'useFacetEffect',
+      facets: [facet],
+    })
+  }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const effectMemoized = useCallback(effect, dependencies)
   useLayoutEffect(() => facet.observe(effectMemoized), [facet, effectMemoized])
