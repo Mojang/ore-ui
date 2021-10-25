@@ -2,11 +2,28 @@
 
 <img src="logo.png" width="400px" />
 
-Open-source building-blocks to construct Game UIs using web-tech from Mojang Studios.
+Open-source building blocks from Mojang Studios to construct game UIs using web tech.
+
+## What is this?
+
+Minecraft Bedrock Edition is migrating its UI system to a solution based on [web standards](https://coherent-labs.com/products/coherent-gameface/). This repository contains some infrastructure bits used internally, but that can also be shared across other game studios and general-purpose web applications.
+
+The new system is based on:
+
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
 
 ## Packages
 
 - [`@react-facet`](packages/@react-facet): Observable-based state management for performant game UIs built in React
+- `@mojang/react-gamepad`: Declarative Gamepad focus navigation (**coming soon**)
+- More to come!
+
+## Documentation
+
+We currently only have one package that is open-source, and its documentation is available at https://react-facet.mojang.com/.
+
+The source of the documentation (for contributions) is available at the [documentation branch](https://github.com/Mojang/ore-ui/tree/documentation).
 
 ## Team
 
@@ -37,9 +54,12 @@ Open-source building-blocks to construct Game UIs using web-tech from Mojang Stu
   </tbody>
 </table>
 
+## Logo
+
+**React Facet** and **Ore UI** logos designed by [Nekofresa](https://twitter.com/nekofresa).
+
 ## Contributors
 
-<a href="https://github.com/pirelenito" target="_blank"><img width="42" height="42" src="https://github.com/pirelenito.png?s=42"></a>
 <a href="https://github.com/Warwolt" target="_blank"><img width="42" height="42" src="https://github.com/Warwolt.png?s=42"></a>
 <a href="https://github.com/lucaslsf" target="_blank"><img width="42" height="42" src="https://github.com/lucaslsf.png?s=42"></a>
 <a href="https://github.com/volgar" target="_blank"><img width="42" height="42" src="https://github.com/volgar.png?s=42"></a>

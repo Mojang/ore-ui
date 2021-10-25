@@ -9,7 +9,6 @@ export const createFiberRoot =
     reconciler.createContainer(
       {
         element: container,
-        unsubscribers: new Map(),
         styleUnsubscribers: new Map(),
         style: container.style,
       },

@@ -6,3 +6,6 @@ docs/build
 docs/.docusaurus
 coverage
 **/dist/
+build
+.docusaurus
+tmp

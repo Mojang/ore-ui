@@ -4,4 +4,4 @@
 
 Observable-based state management for performant game UIs built in React
 
-- Read more in the [Documentation Site](https://react-facet.js.org/)
+- Read more in the [Documentation Site](https://react-facet.mojang.com/)

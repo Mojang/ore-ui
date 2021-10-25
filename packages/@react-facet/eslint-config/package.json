@@ -26,10 +26,10 @@
   "files": [
     "src/**/*"
   ],
-  "homepage": "https://github.com/Mojang/ore-ui#readme",
+  "homepage": "https://react-facet.mojang.com/",
   "bugs": "https://github.com/Mojang/ore-ui/issues",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "src/index.js",
   "sideEffects": false,
   "peerDependencies": {
