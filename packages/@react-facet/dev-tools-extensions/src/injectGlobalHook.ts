@@ -27,6 +27,8 @@ function installHook(target: Window) {
 
   const hook = setupReactFacetDevTools()
 
+  setTimeout(() => window.postMessage({ type: 'FROM_PAGE', text: 'Hello from the webpage!' }, '*'), 1000)
+
   Object.defineProperty(target, '__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__', {
     // This property needs to be configurable for the test environment,
     // else we won't be able to delete and recreate it between tests.
@@ -41,7 +43,7 @@ function installHook(target: Window) {
 }
 
 if ('text/html' === document.contentType) {
-  injectCode(';(' + installHook.toString() + '(window));')
+  injectCode(';(' + installHook.toString() + `(window, '${chrome.runtime.id})');`)
 }
 
 const port = chrome.runtime.connect({ name: 'knockknock' })
@@ -54,5 +56,23 @@ port.onMessage.addListener(function (msg) {
   if (msg.question === "Who's there?") port.postMessage({ answer: 'Madame' })
   else if (msg.question === 'Madame who?') port.postMessage({ answer: 'Madame... Bovary' })
 })
+
+window.addEventListener(
+  'message',
+  (event) => {
+    // We only accept messages from ourselves
+    if (event.source != window) {
+      return
+    }
+
+    console.log('RECEIVED POST MESSAGE', event)
+
+    // if (event.data.type && (event.data.type == "FROM_PAGE")) {
+    //   console.log("Content script received: " + event.data.text);
+    //   port.postMessage(event.data.text);
+    // }
+  },
+  false,
+)
 
 console.log(chrome.runtime.id)
