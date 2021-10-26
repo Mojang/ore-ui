@@ -25,7 +25,7 @@ export const useFacetState = <V>(
   if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
-      hookName: 'useFacetCallback',
+      hookName: 'useFacetState',
       newFacet: inlineFacet,
     })
   }

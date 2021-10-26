@@ -12,6 +12,7 @@ import {
 } from './types'
 import { HostConfig } from 'react-reconciler'
 import { FacetProp, isFacet, Unsubscribe } from '@react-facet/core'
+import { ReactFacetDevTools } from '@react-facet/dev-tools'
 
 /**
  * Custom React Renderer with support for Facets
@@ -115,6 +116,15 @@ export const setupHostConfig = (): HostConfig<
 
         if (value != null) {
           if (isFacet(value)) {
+            if (process.env.NODE_ENV !== 'production') {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+                hookName: 'style',
+                styleName: key,
+                typeName: type,
+                facets: [value],
+              })
+            }
             notNullStyleUnsubscribers.set(
               key,
               value.observe((value) => {
@@ -563,6 +573,14 @@ export const setupHostConfig = (): HostConfig<
 
 const setupClassUpdate = (className: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(className)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'className',
+        typeName: element.tagName,
+        facets: [className],
+      })
+    }
     return className.observe((className) => {
       element.className = className ?? ''
     })
@@ -577,6 +595,14 @@ const setupClassUpdate = (className: FacetProp<string | undefined>, element: HTM
  */
 const setupAutoPlayUpdate = (autoPlay: FacetProp<boolean | undefined>, element: HTMLElement) => {
   if (isFacet(autoPlay)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'autoPlay',
+        typeName: element.tagName,
+        facets: [autoPlay],
+      })
+    }
     return autoPlay.observe((autoPlay) => {
       if (autoPlay) {
         element.setAttribute('autoplay', '')
@@ -595,6 +621,14 @@ const setupAutoPlayUpdate = (autoPlay: FacetProp<boolean | undefined>, element: 
 
 const setupDataDroppableUpdate = (dataDroppable: FacetProp<boolean | undefined>, element: HTMLElement) => {
   if (isFacet(dataDroppable)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'dataDroppable',
+        typeName: element.tagName,
+        facets: [dataDroppable],
+      })
+    }
     return dataDroppable.observe((dataDroppable) => {
       if (dataDroppable) {
         element.setAttribute('data-droppable', '')
@@ -613,6 +647,14 @@ const setupDataDroppableUpdate = (dataDroppable: FacetProp<boolean | undefined>,
 
 const setupDataTestidUpdate = (dataTestid: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(dataTestid)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'dataTestid',
+        typeName: element.tagName,
+        facets: [dataTestid],
+      })
+    }
     return dataTestid.observe((dataTestid) => {
       if (dataTestid != null) {
         element.setAttribute('data-testid', dataTestid)
@@ -631,6 +673,14 @@ const setupDataTestidUpdate = (dataTestid: FacetProp<string | undefined>, elemen
 
 const setupDataXRayUpdate = (dataXRay: FacetProp<boolean | undefined>, element: HTMLElement) => {
   if (isFacet(dataXRay)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'dataXRay',
+        typeName: element.tagName,
+        facets: [dataXRay],
+      })
+    }
     return dataXRay.observe((dataXRay) => {
       if (dataXRay) {
         element.setAttribute('data-x-ray', '')
@@ -649,6 +699,14 @@ const setupDataXRayUpdate = (dataXRay: FacetProp<boolean | undefined>, element: 
 
 const setupLoopUpdate = (loop: FacetProp<boolean | undefined>, element: HTMLElement) => {
   if (isFacet(loop)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'loop',
+        typeName: element.tagName,
+        facets: [loop],
+      })
+    }
     return loop.observe((loop) => {
       if (loop) {
         element.setAttribute('loop', '')
@@ -667,6 +725,14 @@ const setupLoopUpdate = (loop: FacetProp<boolean | undefined>, element: HTMLElem
 
 const setupHrefUpdate = (href: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(href)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'href',
+        typeName: element.tagName,
+        facets: [href],
+      })
+    }
     return href.observe((href) => {
       if (href != null) {
         element.setAttribute('href', href)
@@ -685,6 +751,14 @@ const setupHrefUpdate = (href: FacetProp<string | undefined>, element: HTMLEleme
 
 const setupTargetUpdate = (target: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(target)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'target',
+        typeName: element.tagName,
+        facets: [target],
+      })
+    }
     return target.observe((target) => {
       if (target != null) {
         element.setAttribute('target', target)
@@ -703,6 +777,14 @@ const setupTargetUpdate = (target: FacetProp<string | undefined>, element: HTMLE
 
 const setupDisabledUpdate = (disabled: FacetProp<boolean | undefined>, element: HTMLElement) => {
   if (isFacet(disabled)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'disabled',
+        typeName: element.tagName,
+        facets: [disabled],
+      })
+    }
     return disabled.observe((disabled) => {
       if (disabled) {
         element.setAttribute('disabled', '')
@@ -721,6 +803,14 @@ const setupDisabledUpdate = (disabled: FacetProp<boolean | undefined>, element: 
 
 const setupMaxLengthUpdate = (maxLength: FacetProp<number | undefined>, element: HTMLElement) => {
   if (isFacet(maxLength)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'maxLength',
+        typeName: element.tagName,
+        facets: [maxLength],
+      })
+    }
     return maxLength.observe((maxLength) => {
       const textElement = element as HTMLTextAreaElement
       textElement.maxLength = maxLength ?? Number.MAX_SAFE_INTEGER
@@ -733,6 +823,14 @@ const setupMaxLengthUpdate = (maxLength: FacetProp<number | undefined>, element:
 
 const setupRowsUpdate = (rows: FacetProp<number | undefined>, element: HTMLElement) => {
   if (isFacet(rows)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'rows',
+        typeName: element.tagName,
+        facets: [rows],
+      })
+    }
     return rows.observe((rows) => {
       const textElement = element as HTMLTextAreaElement
       textElement.rows = rows ?? Number.MAX_SAFE_INTEGER
@@ -745,6 +843,14 @@ const setupRowsUpdate = (rows: FacetProp<number | undefined>, element: HTMLEleme
 
 const setupTypeUpdate = (type: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(type)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'type',
+        typeName: element.tagName,
+        facets: [type],
+      })
+    }
     return type.observe((type) => {
       if (type != null) {
         element.setAttribute('type', type)
@@ -770,6 +876,14 @@ const setupTypeUpdate = (type: FacetProp<string | undefined>, element: HTMLEleme
  */
 const setupValueUpdate = (value: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(value)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'value',
+        typeName: element.tagName,
+        facets: [value],
+      })
+    }
     return value.observe((value) => {
       const inputElement = element as HTMLInputElement
       inputElement.value = value ?? ''
@@ -794,6 +908,14 @@ const setupValueUpdate = (value: FacetProp<string | undefined>, element: HTMLEle
 
 const setupSrcUpdate = (src: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(src)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'src',
+        typeName: element.tagName,
+        facets: [src],
+      })
+    }
     return src.observe((src) => {
       const textElement = element as HTMLImageElement
       textElement.src = src ?? ''
@@ -806,6 +928,14 @@ const setupSrcUpdate = (src: FacetProp<string | undefined>, element: HTMLElement
 
 const setupTextUpdate = (text: FacetProp<string | number | undefined>, element: Text) => {
   if (isFacet(text)) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((global as any).__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__ as ReactFacetDevTools).send({
+        hookName: 'text',
+        typeName: 'text',
+        facets: [text],
+      })
+    }
     return text.observe((text) => {
       const textElement = element as Text
       textElement.nodeValue = (text ?? '') as string

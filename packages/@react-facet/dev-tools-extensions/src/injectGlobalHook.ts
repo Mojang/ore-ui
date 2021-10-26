@@ -1,3 +1,4 @@
+import { Facet } from '@react-facet/core'
 import { ReactFacetDevTools } from '@react-facet/dev-tools'
 
 function injectCode(code: string) {
@@ -7,7 +8,21 @@ function injectCode(code: string) {
   // This script runs before the <head> element is created,
   // so we add the script to <html> instead.
   document.documentElement?.appendChild(script)
-  script.parentNode?.removeChild(script)
+  // script.parentNode?.removeChild(script)
+}
+
+type ReactFacetHookEntry = {
+  hookName: string
+  styleName?: string
+  typeName?: string
+  facets?: Facet<unknown>[]
+  newFacet?: Facet<unknown>
+}
+
+type Descendants = number[]
+type Event = {
+  source: 'react-facet-devtools-content-script'
+  payload: { symbol: Symbol }
 }
 
 function installHook(target: Window) {
@@ -15,20 +30,47 @@ function installHook(target: Window) {
     return null
   }
 
+  const getRelationships = (hooks: ReactFacetHookEntry[]) => {
+    const relationships: { [key: string]: Descendants } = {}
+    for (let sourceIndex = 0; sourceIndex < hooks.length; sourceIndex++) {
+      const currentFacet = hooks[sourceIndex]?.newFacet
+      if (currentFacet != null) {
+        relationships[sourceIndex] = []
+
+        for (let targetIndex = 0; targetIndex < hooks.length; targetIndex++) {
+          if (hooks[targetIndex]?.facets?.includes(currentFacet)) {
+            relationships[sourceIndex].push(targetIndex)
+          }
+        }
+      }
+    }
+
+    return relationships
+  }
+
+  const hooksWithoutFacetReferences = (hooks: ReactFacetHookEntry[]) => {
+    return hooks.map(({ hookName, styleName, typeName }) => ({ hookName, styleName, typeName }))
+  }
+
   const setupReactFacetDevTools = (): ReactFacetDevTools => {
-    const hooks = []
+    const hooks: ReactFacetHookEntry[] = []
 
     return {
-      send: ({ hookName, facets, newFacet }) => {
-        hooks.push({ hookName, facets, newFacet })
-        console.log({ hooks })
+      send: ({ hookName, facets, newFacet, styleName, typeName }) => {
+        hooks.push({ hookName, facets, newFacet, styleName, typeName })
+        const currentRelationships = getRelationships(hooks)
+        window.postMessage(
+          {
+            source: 'react-facet-devtools-content-script',
+            payload: { hooks: hooksWithoutFacetReferences(hooks), currentRelationships },
+          },
+          '*',
+        )
       },
     }
   }
 
   const hook = setupReactFacetDevTools()
-
-  setTimeout(() => window.postMessage({ type: 'FROM_PAGE', text: 'Hello from the webpage!' }, '*'), 1000)
 
   Object.defineProperty(target, '__REACT_FACET_DEVTOOLS_GLOBAL_HOOK__', {
     // This property needs to be configurable for the test environment,
@@ -44,36 +86,20 @@ function installHook(target: Window) {
 }
 
 if ('text/html' === document.contentType) {
-  injectCode(';(' + installHook.toString() + `(window, '${chrome.runtime.id})');`)
+  injectCode(';(' + installHook.toString() + `(window));`)
 }
 
-const port = chrome.runtime.connect({ name: 'knockknock' })
-
-console.log('IT CONNECTED', port)
-
-port.postMessage({ joke: 'Knock knock' })
-port.onMessage.addListener(function (msg) {
-  console.log('MESSAGE IN CONTENT SCRIPT', msg)
-  if (msg.question === "Who's there?") port.postMessage({ answer: 'Madame' })
-  else if (msg.question === 'Madame who?') port.postMessage({ answer: 'Madame... Bovary' })
-})
+const port = chrome.runtime.connect({ name: 'react-facet-devtools' })
 
 window.addEventListener(
   'message',
-  (event) => {
+  (event: MessageEvent<Event>) => {
     // We only accept messages from ourselves
-    if (event.source != window) {
+    if (event.source != window || event.data.source !== 'react-facet-devtools-content-script') {
       return
     }
 
-    console.log('RECEIVED POST MESSAGE', event)
-
-    // if (event.data.type && (event.data.type == "FROM_PAGE")) {
-    //   console.log("Content script received: " + event.data.text);
-    //   port.postMessage(event.data.text);
-    // }
+    port.postMessage(event.data)
   },
   false,
 )
-
-console.log(chrome.runtime.id)
