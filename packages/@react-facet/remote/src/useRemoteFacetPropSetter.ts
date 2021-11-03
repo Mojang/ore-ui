@@ -23,7 +23,7 @@ export function useRemoteFacetPropSetter<T extends Record<string, any>, Prop ext
     (facet) => (newValue: T[Prop]) => {
       facet[prop] = newValue
     },
-    [],
+    [prop],
     remoteFacet,
   )
 }

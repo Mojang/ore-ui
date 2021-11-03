@@ -105,7 +105,7 @@ export function DeferredMountProvider({
         window.cancelAnimationFrame(frameId)
       }
     },
-    [frameTimeBudget],
+    [frameTimeBudget, setIsDeferring, setRequestingToRun],
     requestingToRun,
   )
 

@@ -11,7 +11,7 @@ import { EqualityCheck } from './types'
 export const createUniformObjectEqualityCheck =
   <T>(comparator: EqualityCheck<T[Extract<keyof T, string>]>) =>
   () => {
-    let previous: Partial<{ [K in keyof T]: ReturnType<typeof comparator> }> = {}
+    const previous: Partial<{ [K in keyof T]: ReturnType<typeof comparator> }> = {}
     let previousKeys: Set<keyof T> = new Set()
     let initialized = false
 
@@ -27,14 +27,14 @@ export const createUniformObjectEqualityCheck =
         previousKeys.delete(key)
       }
       if (previousKeys.size > 0) {
-        for (let key of previousKeys) {
+        for (const key of previousKeys) {
           delete previous[key]
         }
         isEquals = false
       }
 
       previousKeys = new Set()
-      for (let key in current) {
+      for (const key in current) {
         previousKeys.add(key)
       }
 
@@ -58,7 +58,7 @@ export const createUniformObjectEqualityCheck =
 export const createUniformArrayEqualityCheck =
   <T>(comparator: EqualityCheck<T>) =>
   () => {
-    let previous: ReturnType<typeof comparator>[] = []
+    const previous: ReturnType<typeof comparator>[] = []
     let initialized = false
 
     return (current: T[]) => {

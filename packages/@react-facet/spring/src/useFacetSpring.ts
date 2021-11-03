@@ -52,7 +52,7 @@ export function useFacetSpring(targetFacet: Facet<number>, options?: UseFacetSpr
 
       return () => cancelAnimationFrame(frameID)
     },
-    [damping, stiffness, precision],
+    [damping, stiffness, precision, setState],
     targetFacet,
   )
 
