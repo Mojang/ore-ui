@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+build/
+artifacts/
+.github/
+.vscode/
+.yarn/
+tsconfig.eslint.json
