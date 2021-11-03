@@ -76,10 +76,7 @@ const compare = async (optionA: string, optionB: string, targetRelativePerforman
 
   console.log(`Relative performance ${optionA}/${optionB}:`, relativePerformance.toFixed(2))
 
-  if (
-    relativePerformance > targetRelativePerformance + ERROR ||
-    relativePerformance < targetRelativePerformance - ERROR
-  ) {
+  if (relativePerformance > targetRelativePerformance + ERROR) {
     console.log('Unable to reach target performance number.')
     process.exit(1)
   }
