@@ -6,4 +6,4 @@ artifacts/
 .github/
 .vscode/
 .yarn/
-tsconfig.eslint.json
+.eslintrc.js

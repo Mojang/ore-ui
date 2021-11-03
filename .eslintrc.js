@@ -1,25 +1,38 @@
 /* eslint-env node */
 
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  extends: ['plugin:prettier/recommended', 'prettier/@typescript-eslint'],
+  extends: ['plugin:prettier/recommended', 'prettier/@typescript-eslint', '@react-facet/eslint-config'],
+  plugins: ['react', 'require-in-package', 'react-hooks', 'prettier'],
+
   root: true,
+
   env: {
     es6: true,
     browser: true,
     jest: true,
   },
+
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true,
-      impliedStrict: true,
-    },
+    tsconfigRootDir: './',
+    project: './tsconfig.json',
   },
+
+  rules: {
+    'no-unreachable': 'error',
+    'no-undef': 'error',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
+    'react/jsx-uses-react': 'error',
+    'react/jsx-uses-vars': 'error',
+    'require-in-package/require-in-package': 2,
+  },
+
   overrides: [
     {
       files: ['./**/*.{ts,tsx}'],
-      extends: ['plugin:@typescript-eslint/recommended', '@react-facet/eslint-config'],
+      plugins: ['@typescript-eslint'],
+      extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
         '@typescript-eslint/prefer-interface': 0,
         '@typescript-eslint/explicit-function-return-type': 0,
@@ -49,21 +62,6 @@ module.exports = {
           },
         ],
       },
-      parser: '@typescript-eslint/parser',
-      parserOptions: {
-        tsconfigRootDir: './',
-        project: './tsconfig.json',
-      },
     },
   ],
-  plugins: ['@typescript-eslint', 'react', 'require-in-package', 'react-hooks', 'prettier'],
-  rules: {
-    'no-unreachable': 'error',
-    'no-undef': 'error',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'error',
-    'react/jsx-uses-react': 'error',
-    'react/jsx-uses-vars': 'error',
-    'require-in-package/require-in-package': 2,
-  },
 }

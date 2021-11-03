@@ -10,7 +10,7 @@
     "build": "yarn workspaces foreach --topological --verbose run build",
     "publish": "yarn workspaces foreach --topological --no-private npm publish --tolerate-republish --access public",
     "test": "cross-env NODE_ENV=test jest --coverage",
-    "lint": "eslint --ext .ts --ext .tsx --ext js .",
+    "lint": "eslint .",
     "package": "yarn workspaces foreach --topological --verbose pack --out=%s-%v.tgz && ts-node ./scripts/moveAllPackagedToArtifacts.ts"
   },
   "devDependencies": {
