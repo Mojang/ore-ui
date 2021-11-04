@@ -66,7 +66,7 @@ export const createUniformArrayEqualityCheck =
 
       let isEquals = true
       for (let i = 0; i < longestLength; i++) {
-        if (!previous[i]) {
+        if (previous[i] == null) {
           previous[i] = comparator()
         }
         if (!previous[i](current[i])) {
