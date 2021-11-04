@@ -279,17 +279,20 @@ export const setupHostConfig = (): HostConfig<
 
       if (newStyleProp != null) {
         for (const key in newStyleProp) {
-          const value = newProps.style?.[key]
+          const oldValue = oldStyleProp?.[key]
+          const newValue = newStyleProp[key]
 
-          if (isFacet(value)) {
-            styleUnsubscribers.set(
-              key,
-              value.observe((value) => {
-                notNullStyle[key] = value
-              }),
-            )
-          } else {
-            notNullStyle[key] = value
+          if (oldValue !== newValue || oldStyleProp == null) {
+            if (isFacet(newValue)) {
+              styleUnsubscribers.set(
+                key,
+                newValue.observe((value) => {
+                  notNullStyle[key] = value
+                }),
+              )
+            } else {
+              notNullStyle[key] = newValue
+            }
           }
         }
       }
