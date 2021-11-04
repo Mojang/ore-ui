@@ -902,6 +902,81 @@ describe('update', () => {
 })
 
 describe('commitUpdate', () => {
+  it('subscribes when updating from null', () => {
+    const hostConfig = setupHostConfig()
+    const instance: ElementContainer = {
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map(),
+    }
+
+    const oldProps: ElementProps<HTMLDivElement> = {
+      style: {
+        color: undefined,
+      },
+    }
+
+    const newColorFacet: Facet<string> = {
+      get: () => 'blue',
+      observe: jest.fn(),
+    }
+
+    const newProps: ElementProps<HTMLDivElement> = {
+      style: {
+        color: newColorFacet,
+      },
+    }
+
+    hostConfig.commitUpdate?.(
+      instance,
+      true,
+      'fast-div',
+      oldProps as Props<HTMLDivElement>,
+      newProps as Props<HTMLDivElement>,
+      null as unknown as Fiber,
+    )
+
+    // Adds a new subscription to the new Facet
+    expect(newColorFacet.observe).toHaveBeenCalledTimes(1)
+  })
+
+  it('unsubscribes when updating to null', () => {
+    const colorUnsubscriber = jest.fn()
+
+    const hostConfig = setupHostConfig()
+    const instance: ElementContainer = {
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map([['color', colorUnsubscriber]]),
+    }
+
+    const oldColorFacet: Facet<string> = {
+      get: () => 'blue',
+      observe: jest.fn(),
+    }
+
+    const oldProps: ElementProps<HTMLDivElement> = {
+      style: {
+        color: oldColorFacet,
+      },
+    }
+
+    const newProps: ElementProps<HTMLDivElement> = {
+      style: {
+        color: undefined,
+      },
+    }
+
+    hostConfig.commitUpdate?.(
+      instance,
+      true,
+      'fast-div',
+      oldProps as Props<HTMLDivElement>,
+      newProps as Props<HTMLDivElement>,
+      null as unknown as Fiber,
+    )
+
+    expect(colorUnsubscriber).toHaveBeenCalledTimes(1)
+  })
+
   it('unsubscribes from previous facet when changing to a primitive value', () => {
     const colorUnsubscriber = jest.fn()
 
