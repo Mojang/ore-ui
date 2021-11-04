@@ -901,7 +901,7 @@ describe('update', () => {
   })
 })
 
-describe('commitUpdate', () => {
+describe('commitUpdate style prop', () => {
   it('subscribes when updating from null', () => {
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
