@@ -935,6 +935,53 @@ describe('commitUpdate', () => {
     expect(colorUnsubscriber).toHaveBeenCalledTimes(1)
   })
 
+  it('unsubscribes from previous facet when changing to a new facet', () => {
+    const colorUnsubscriber = jest.fn()
+
+    const hostConfig = setupHostConfig()
+    const instance: ElementContainer = {
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map([['color', colorUnsubscriber]]),
+    }
+
+    const oldColorFacet: Facet<string> = {
+      get: () => 'blue',
+      observe: jest.fn(),
+    }
+
+    const oldProps: ElementProps<HTMLDivElement> = {
+      style: {
+        color: oldColorFacet,
+      },
+    }
+
+    const newColorFacet: Facet<string> = {
+      get: () => 'blue',
+      observe: jest.fn(),
+    }
+
+    const newProps: ElementProps<HTMLDivElement> = {
+      style: {
+        color: newColorFacet,
+      },
+    }
+
+    hostConfig.commitUpdate?.(
+      instance,
+      true,
+      'fast-div',
+      oldProps as Props<HTMLDivElement>,
+      newProps as Props<HTMLDivElement>,
+      null as unknown as Fiber,
+    )
+
+    // Unsubscribes from the old subscription, since it is a new Facet
+    expect(colorUnsubscriber).toHaveBeenCalledTimes(1)
+
+    // Adds a new subscription to the new Facet
+    expect(newColorFacet.observe).toHaveBeenCalledTimes(1)
+  })
+
   it('keeps the same subscription when updating with the same facet', () => {
     const colorUnsubscriber = jest.fn()
 
