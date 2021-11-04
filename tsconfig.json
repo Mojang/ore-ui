@@ -14,5 +14,5 @@
     "sourceMap": true,
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "packages/@react-facet/remote/src/*.spec.ts*"]
+  "exclude": ["node_modules"]
 }

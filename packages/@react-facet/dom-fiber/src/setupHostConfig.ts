@@ -110,7 +110,7 @@ export const setupHostConfig = (): HostConfig<
 
       const styleProp = newProps.style
 
-      for (let key in styleProp) {
+      for (const key in styleProp) {
         const value = styleProp[key]
 
         if (value != null) {
@@ -238,7 +238,7 @@ export const setupHostConfig = (): HostConfig<
   },
 
   commitUpdate: function (instance, updatePayload, type, oldProps, newProps) {
-    const { element: uncastElement, styleUnsubscribers } = instance
+    const { element: uncastElement } = instance
 
     if (type === 'fast-text') {
       const textElement = uncastElement as Text
@@ -265,7 +265,7 @@ export const setupHostConfig = (): HostConfig<
       const newStyleProp = newProps.style
 
       if (oldStyleProp != null) {
-        for (let key in oldStyleProp) {
+        for (const key in oldStyleProp) {
           const oldValue = oldStyleProp[key]
           const newValue = newStyleProp?.[key]
 
@@ -278,7 +278,7 @@ export const setupHostConfig = (): HostConfig<
       }
 
       if (newStyleProp != null) {
-        for (let key in newStyleProp) {
+        for (const key in newStyleProp) {
           const value = newProps.style?.[key]
 
           if (isFacet(value)) {

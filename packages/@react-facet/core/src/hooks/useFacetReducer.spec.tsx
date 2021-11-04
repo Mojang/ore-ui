@@ -1,5 +1,5 @@
 import React from 'react'
-import { act, render, fireEvent } from '@react-facet/dom-fiber-testing-library'
+import { render, fireEvent } from '@react-facet/dom-fiber-testing-library'
 import { Option, NO_VALUE } from '../types'
 import { useFacetReducer } from './useFacetReducer'
 

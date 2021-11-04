@@ -22,7 +22,7 @@ it('captures the current value of the facet in a function that can be used as ha
       (value) => (event) => {
         cb(value, dependency, event)
       },
-      [dependency],
+      [dependency, cb],
       demoFacet,
     )
 
@@ -97,7 +97,7 @@ it('should work with uninitialized values', () => {
       (value) => () => {
         cb(value)
       },
-      [],
+      [cb],
       internalDemoFacet,
     )
 

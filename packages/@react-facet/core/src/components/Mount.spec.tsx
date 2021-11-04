@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from '@react-facet/dom-fiber-testing-library'
 import { Mount } from '.'
 import { createFacet } from '../facet'
+import { NO_VALUE } from '../types'
 
 it('renders when true', () => {
   const display = createFacet({ initialValue: true })
@@ -47,8 +48,31 @@ it('does not render when false', () => {
 
   const scenario = <Example />
 
-  const { container } = render(scenario)
+  render(scenario)
 
   expect(rendered).not.toHaveBeenCalled()
-  expect(container.firstChild).toMatchSnapshot()
+})
+
+it('does not render facet has no value', () => {
+  const display = createFacet<boolean>({ initialValue: NO_VALUE })
+  const rendered = jest.fn()
+
+  const Content = () => {
+    rendered()
+    return <div>Hello there</div>
+  }
+
+  const Example = () => {
+    return (
+      <Mount when={display}>
+        <Content />
+      </Mount>
+    )
+  }
+
+  const scenario = <Example />
+
+  render(scenario)
+
+  expect(rendered).not.toHaveBeenCalled()
 })

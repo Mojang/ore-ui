@@ -20,6 +20,7 @@ export interface FacetFactory<T> {
   factory: typeof FACET_FACTORY
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ExcludeFacetFactory<T> = T extends FacetFactory<any> ? never : T
 
 export interface Listener<T> {

@@ -5,6 +5,7 @@ import { ObjectWithImmutables, Immutable, Option, NO_VALUE } from './types'
  * Checks that the current value is exactly the same as the other previous one. Accepts value of type
  * function, number, boolean, string, undefined or null
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const strictEqualityCheck = <T extends Immutable | Function>() => {
   let previous: Option<T> = NO_VALUE
   return (current: T) => {
