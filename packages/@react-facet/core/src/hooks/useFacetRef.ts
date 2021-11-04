@@ -1,4 +1,4 @@
-import { Facet, NO_VALUE } from '../types'
+import { Facet } from '../types'
 import { useRef } from 'react'
 import { useFacetEffect } from './useFacetEffect'
 import { NoValue } from '..'

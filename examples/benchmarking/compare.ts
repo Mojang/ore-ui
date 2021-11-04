@@ -23,6 +23,11 @@ const compare = async (optionA: string, optionB: string, targetRelativePerforman
 
   const browser = await puppeteer.launch()
 
+  interface TraceEvent {
+    name: string
+    dur: number
+  }
+
   const runExample = async (example: string, iteration: number): Promise<number> => {
     const traceFile = `./tmp/${example}-${iteration}.json`
     const page = await browser.newPage()
@@ -39,10 +44,12 @@ const compare = async (optionA: string, optionB: string, targetRelativePerforman
 
     const { traceEvents } = require(traceFile)
 
-    const events = traceEvents.filter((event: any) => event.name === 'FireAnimationFrame' || event.name === 'MinorGC')
+    const events = traceEvents.filter(
+      (event: TraceEvent) => event.name === 'FireAnimationFrame' || event.name === 'MinorGC',
+    )
     const sampledEvents = events.slice(OFFSET_FRAMES, SAMPLE_SIZE + OFFSET_FRAMES)
 
-    const totalTime = sampledEvents.reduce((total: number, event: any) => total + event.dur, 0)
+    const totalTime = sampledEvents.reduce((total: number, event: TraceEvent) => total + event.dur, 0)
 
     if (sampledEvents.length !== SAMPLE_SIZE) {
       console.log(`Not enough samples. Measured "${events.length}" of target "${SAMPLE_SIZE}".`)

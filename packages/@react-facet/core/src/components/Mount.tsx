@@ -9,5 +9,5 @@ type MountProps = {
 
 export const Mount = ({ when, children }: MountProps) => {
   const whenValue = useFacetUnwrap(when)
-  return whenValue ? children : null
+  return whenValue === true ? children : null
 }

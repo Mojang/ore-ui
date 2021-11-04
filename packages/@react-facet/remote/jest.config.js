@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 const baseConfig = require('../../../jest.base.config')
 const projectName = require('./package.json').name
 
