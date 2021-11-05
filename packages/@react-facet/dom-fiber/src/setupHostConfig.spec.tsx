@@ -901,6 +901,77 @@ describe('update', () => {
   })
 })
 
+describe('umnount', () => {
+  it('unsubscribe from facets when a component is unmounted', () => {
+    const unsubscribe = jest.fn()
+
+    const facet: Facet<string> = {
+      get: () => 'text',
+      observe: jest.fn().mockReturnValue(unsubscribe),
+    }
+
+    render(<fast-text text={facet} />)
+    expect(facet.observe).toHaveBeenCalledTimes(1)
+
+    render(<></>)
+    expect(unsubscribe).toHaveBeenCalledTimes(1)
+  })
+
+  it('unsubscribe from facets when the parent of a component is unmounted', () => {
+    const unsubscribe = jest.fn()
+
+    const facet: Facet<string> = {
+      get: () => 'text',
+      observe: jest.fn().mockReturnValue(unsubscribe),
+    }
+
+    render(
+      <div>
+        <fast-text text={facet} />
+      </div>,
+    )
+    expect(facet.observe).toHaveBeenCalledTimes(1)
+
+    render(<></>)
+    expect(unsubscribe).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps the subscription of facets when moving in a keyed list', () => {
+    const unsubscribeA = jest.fn()
+
+    const facetA: Facet<string> = {
+      get: () => 'text',
+      observe: jest.fn().mockReturnValue(unsubscribeA),
+    }
+
+    const unsubscribeB = jest.fn()
+
+    const facetB: Facet<string> = {
+      get: () => 'text',
+      observe: jest.fn().mockReturnValue(unsubscribeB),
+    }
+
+    console.log('before')
+
+    render(<div>{[<fast-div key={'A'} className={facetA} />, <fast-div key={'B'} className={facetB} />]}</div>)
+    expect(facetA.observe).toHaveBeenCalledTimes(1)
+    expect(facetB.observe).toHaveBeenCalledTimes(1)
+
+    console.log('mount done')
+
+    render(<div>{[<fast-div key={'B'} className={facetB} />, <fast-div key={'A'} className={facetA} />]}</div>)
+
+    console.log('after re-render')
+
+    expect(facetA.observe).toHaveBeenCalledTimes(1)
+    expect(facetB.observe).toHaveBeenCalledTimes(1)
+    expect(unsubscribeA).not.toHaveBeenCalled()
+    expect(unsubscribeB).not.toHaveBeenCalled()
+
+    // TODO: https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
+  })
+})
+
 describe('commitUpdate style prop', () => {
   it('subscribes when updating from null', () => {
     const hostConfig = setupHostConfig()

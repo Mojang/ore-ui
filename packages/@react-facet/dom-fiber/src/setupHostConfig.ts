@@ -2,6 +2,7 @@ import {
   Props,
   Type,
   Container,
+  ElementContainer,
   Instance,
   TextInstance,
   HydratableInstance,
@@ -85,6 +86,8 @@ export const setupHostConfig = (): HostConfig<
   },
 
   createInstance: function (externalType, newProps) {
+    console.log('createInstance')
+
     if (externalType === 'fast-text') {
       const element = document.createTextNode('')
 
@@ -532,22 +535,31 @@ export const setupHostConfig = (): HostConfig<
   },
 
   appendChild: function (parentInstance, child) {
+    console.log('appendChild')
     parentInstance.element.appendChild(child.element)
   },
 
   insertBefore: function (parentInstance, child, beforeChild) {
+    console.log('insertBefore')
     parentInstance.element.insertBefore(child.element, beforeChild.element)
   },
 
   removeChild: function (parentInstance, child) {
+    console.log('removeChild')
+
+    cleanupInstance(child)
     parentInstance.element.removeChild(child.element)
   },
 
   insertInContainerBefore: function (container, child, beforeChild) {
+    console.log('insertInContainerBefore')
     container.element.insertBefore(child.element, beforeChild.element)
   },
 
   removeChildFromContainer: function (container, child) {
+    console.log('removeChildFromContainer')
+
+    cleanupInstance(child)
     container.element.removeChild(child.element)
   },
 
@@ -563,6 +575,26 @@ export const setupHostConfig = (): HostConfig<
     return instance.element
   },
 })
+
+const cleanupInstance = (instance: ElementContainer) => {
+  instance.styleUnsubscribers?.forEach((unsubscribe) => unsubscribe())
+
+  instance.className?.()
+  instance['data-droppable']?.()
+  instance['data-testid']?.()
+  instance['data-x-ray']?.()
+  instance.src?.()
+  instance.href?.()
+  instance.target?.()
+  instance.autoPlay?.()
+  instance.loop?.()
+  instance.disabled?.()
+  instance.maxLength?.()
+  instance.rows?.()
+  instance.value?.()
+  instance.type?.()
+  instance.text?.()
+}
 
 const setupClassUpdate = (className: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(className)) {
