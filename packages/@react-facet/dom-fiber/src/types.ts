@@ -140,8 +140,8 @@ export type ElementContainer = {
   text?: Unsubscribe
 }
 
-export const isElementContainer = (value: unknown): value is ElementContainer => {
-  return value != null && (value as ElementContainer).children != null
+export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {
+  return value != null && 'children' in value
 }
 
 export type TextContainer = {
