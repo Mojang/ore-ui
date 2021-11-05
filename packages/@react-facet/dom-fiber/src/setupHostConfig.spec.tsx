@@ -931,8 +931,9 @@ describe('umnount', () => {
       </div>,
     )
     expect(facet.observe).toHaveBeenCalledTimes(1)
+    expect(unsubscribe).toHaveBeenCalledTimes(0)
 
-    render(<></>)
+    render(<span />)
     expect(unsubscribe).toHaveBeenCalledTimes(1)
   })
 
@@ -968,6 +969,7 @@ describe('commitUpdate style prop', () => {
   it('subscribes when updating from null', () => {
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
+      children: new Set(),
       element: document.createElement('div'),
       styleUnsubscribers: new Map(),
     }
@@ -1007,6 +1009,7 @@ describe('commitUpdate style prop', () => {
 
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
+      children: new Set(),
       element: document.createElement('div'),
       styleUnsubscribers: new Map([['color', colorUnsubscriber]]),
     }
@@ -1045,6 +1048,7 @@ describe('commitUpdate style prop', () => {
 
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
+      children: new Set(),
       element: document.createElement('div'),
       styleUnsubscribers: new Map([['color', colorUnsubscriber]]),
     }
@@ -1078,6 +1082,7 @@ describe('commitUpdate style prop', () => {
 
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
+      children: new Set(),
       element: document.createElement('div'),
       styleUnsubscribers: new Map([['color', colorUnsubscriber]]),
     }
@@ -1125,6 +1130,7 @@ describe('commitUpdate style prop', () => {
 
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
+      children: new Set(),
       element: document.createElement('div'),
       styleUnsubscribers: new Map([['color', colorUnsubscriber]]),
     }

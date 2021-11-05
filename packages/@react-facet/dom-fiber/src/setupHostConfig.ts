@@ -10,6 +10,7 @@ import {
   HostContext,
   UpdatePayload,
   NoTimeout,
+  isElementContainer,
 } from './types'
 import { HostConfig } from 'react-reconciler'
 import { FacetProp, isFacet, Unsubscribe } from '@react-facet/core'
@@ -90,6 +91,7 @@ export const setupHostConfig = (): HostConfig<
       const element = document.createTextNode('')
 
       return {
+        children: new Set(),
         element,
         text: setupTextUpdate(newProps.text, element),
       }
@@ -189,6 +191,7 @@ export const setupHostConfig = (): HostConfig<
       element,
       styleUnsubscribers,
       style,
+      children: new Set(),
 
       className: newProps.className != null ? setupClassUpdate(newProps.className, element) : undefined,
       autoPlay: newProps.autoPlay != null ? setupAutoPlayUpdate(newProps.autoPlay, element) : undefined,
@@ -212,12 +215,6 @@ export const setupHostConfig = (): HostConfig<
     }
   },
 
-  appendInitialChild: function (parent, child) {
-    if (parent.element == null || child.element == null) return
-
-    parent.element.appendChild(child.element)
-  },
-
   finalizeInitialChildren: function () {
     return false
   },
@@ -227,12 +224,6 @@ export const setupHostConfig = (): HostConfig<
   resetAfterCommit: function () {},
 
   commitMount: function () {},
-
-  appendChildToContainer: function (parent, child) {
-    if (parent.element == null || child.element == null) return
-
-    parent.element.appendChild(child.element)
-  },
 
   prepareUpdate: function () {
     return true
@@ -532,7 +523,27 @@ export const setupHostConfig = (): HostConfig<
     textInstance.element.nodeValue = newText
   },
 
+  appendInitialChild: function (parent, child) {
+    if (isElementContainer(child)) {
+      parent.children.add(child)
+    }
+
+    parent.element.appendChild(child.element)
+  },
+
+  appendChildToContainer: function (parent, child) {
+    if (isElementContainer(child)) {
+      parent.children.add(child)
+    }
+
+    parent.element.appendChild(child.element)
+  },
+
   appendChild: function (parentInstance, child) {
+    if (isElementContainer(child)) {
+      parentInstance.children.add(child)
+    }
+
     parentInstance.element.appendChild(child.element)
   },
 
@@ -541,7 +552,10 @@ export const setupHostConfig = (): HostConfig<
   },
 
   removeChild: function (parentInstance, child) {
-    cleanupInstance(child)
+    if (isElementContainer(child)) {
+      cleanupElementContainer(child)
+    }
+
     parentInstance.element.removeChild(child.element)
   },
 
@@ -550,7 +564,10 @@ export const setupHostConfig = (): HostConfig<
   },
 
   removeChildFromContainer: function (container, child) {
-    cleanupInstance(child)
+    if (isElementContainer(child)) {
+      cleanupElementContainer(child)
+    }
+
     container.element.removeChild(child.element)
   },
 
@@ -567,8 +584,12 @@ export const setupHostConfig = (): HostConfig<
   },
 })
 
-const cleanupInstance = (instance: ElementContainer) => {
+const cleanupElementContainer = (instance: ElementContainer) => {
   instance.styleUnsubscribers?.forEach((unsubscribe) => unsubscribe())
+  instance.styleUnsubscribers?.clear()
+
+  instance.children.forEach(cleanupElementContainer)
+  instance.children.clear()
 
   instance.className?.()
   instance['data-droppable']?.()
