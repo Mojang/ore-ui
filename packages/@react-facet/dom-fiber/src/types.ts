@@ -116,6 +116,8 @@ export type Props<T> = ElementProps<T> & TextProps
 export type ValidPropsNames = keyof Props<unknown>
 
 export type ElementContainer = {
+  children: Set<ElementContainer>
+
   element: HTMLElement | Text
 
   style?: CSSStyleDeclaration
@@ -136,6 +138,10 @@ export type ElementContainer = {
   value?: Unsubscribe
   type?: Unsubscribe
   text?: Unsubscribe
+}
+
+export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {
+  return value != null && 'children' in value
 }
 
 export type TextContainer = {

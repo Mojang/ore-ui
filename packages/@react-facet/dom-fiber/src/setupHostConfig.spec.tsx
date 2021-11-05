@@ -901,10 +901,111 @@ describe('update', () => {
   })
 })
 
+describe('umnount', () => {
+  it('unsubscribes from all facets when a element component is unmounted', () => {
+    const unsubscribe = jest.fn()
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const facet: Facet<any> = {
+      get: () => 'text',
+      observe: jest.fn().mockReturnValue(unsubscribe),
+    }
+
+    render(
+      <fast-div
+        style={{ background: facet, color: facet }}
+        className={facet}
+        data-droppable={facet}
+        data-testid={facet}
+        data-x-ray={facet}
+        src={facet}
+        href={facet}
+        target={facet}
+        autoPlay={facet}
+        loop={facet}
+        disabled={facet}
+        maxLength={facet}
+        rows={facet}
+        value={facet}
+        type={facet}
+      />,
+    )
+    // on mount, we verify that we have added 16 subscriptions (one for each prop and style above)
+    expect(facet.observe).toHaveBeenCalledTimes(16)
+
+    // on unmount, we check that unsubscribe was called once for each subscription
+    render(<></>)
+    expect(unsubscribe).toHaveBeenCalledTimes(16)
+  })
+
+  it('unsubscribes from the text facet when a fast-text component is unmounted', () => {
+    const unsubscribe = jest.fn()
+
+    const facet: Facet<string> = {
+      get: () => 'text',
+      observe: jest.fn().mockReturnValue(unsubscribe),
+    }
+
+    render(<fast-text text={facet} />)
+    expect(facet.observe).toHaveBeenCalledTimes(1)
+
+    render(<></>)
+    expect(unsubscribe).toHaveBeenCalledTimes(1)
+  })
+
+  it('unsubscribe from facets when the parent of a component is unmounted', () => {
+    const unsubscribe = jest.fn()
+
+    const facet: Facet<string> = {
+      get: () => 'text',
+      observe: jest.fn().mockReturnValue(unsubscribe),
+    }
+
+    render(
+      <div>
+        <fast-text text={facet} />
+      </div>,
+    )
+    expect(facet.observe).toHaveBeenCalledTimes(1)
+    expect(unsubscribe).toHaveBeenCalledTimes(0)
+
+    render(<></>)
+    expect(unsubscribe).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps the subscription of facets when moving in a keyed list', () => {
+    const unsubscribeA = jest.fn()
+
+    const facetA: Facet<string> = {
+      get: () => 'text',
+      observe: jest.fn().mockReturnValue(unsubscribeA),
+    }
+
+    const unsubscribeB = jest.fn()
+
+    const facetB: Facet<string> = {
+      get: () => 'text',
+      observe: jest.fn().mockReturnValue(unsubscribeB),
+    }
+
+    render(<div>{[<fast-div key={'A'} className={facetA} />, <fast-div key={'B'} className={facetB} />]}</div>)
+    expect(facetA.observe).toHaveBeenCalledTimes(1)
+    expect(facetB.observe).toHaveBeenCalledTimes(1)
+
+    render(<div>{[<fast-div key={'B'} className={facetB} />, <fast-div key={'A'} className={facetA} />]}</div>)
+
+    expect(facetA.observe).toHaveBeenCalledTimes(1)
+    expect(facetB.observe).toHaveBeenCalledTimes(1)
+    expect(unsubscribeA).not.toHaveBeenCalled()
+    expect(unsubscribeB).not.toHaveBeenCalled()
+  })
+})
+
 describe('commitUpdate style prop', () => {
   it('subscribes when updating from null', () => {
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
+      children: new Set(),
       element: document.createElement('div'),
       styleUnsubscribers: new Map(),
     }
@@ -944,6 +1045,7 @@ describe('commitUpdate style prop', () => {
 
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
+      children: new Set(),
       element: document.createElement('div'),
       styleUnsubscribers: new Map([['color', colorUnsubscriber]]),
     }
@@ -982,6 +1084,7 @@ describe('commitUpdate style prop', () => {
 
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
+      children: new Set(),
       element: document.createElement('div'),
       styleUnsubscribers: new Map([['color', colorUnsubscriber]]),
     }
@@ -1015,6 +1118,7 @@ describe('commitUpdate style prop', () => {
 
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
+      children: new Set(),
       element: document.createElement('div'),
       styleUnsubscribers: new Map([['color', colorUnsubscriber]]),
     }
@@ -1062,6 +1166,7 @@ describe('commitUpdate style prop', () => {
 
     const hostConfig = setupHostConfig()
     const instance: ElementContainer = {
+      children: new Set(),
       element: document.createElement('div'),
       styleUnsubscribers: new Map([['color', colorUnsubscriber]]),
     }
