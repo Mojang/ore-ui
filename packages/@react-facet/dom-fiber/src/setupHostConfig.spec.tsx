@@ -951,24 +951,16 @@ describe('umnount', () => {
       observe: jest.fn().mockReturnValue(unsubscribeB),
     }
 
-    console.log('before')
-
     render(<div>{[<fast-div key={'A'} className={facetA} />, <fast-div key={'B'} className={facetB} />]}</div>)
     expect(facetA.observe).toHaveBeenCalledTimes(1)
     expect(facetB.observe).toHaveBeenCalledTimes(1)
 
-    console.log('mount done')
-
     render(<div>{[<fast-div key={'B'} className={facetB} />, <fast-div key={'A'} className={facetA} />]}</div>)
-
-    console.log('after re-render')
 
     expect(facetA.observe).toHaveBeenCalledTimes(1)
     expect(facetB.observe).toHaveBeenCalledTimes(1)
     expect(unsubscribeA).not.toHaveBeenCalled()
     expect(unsubscribeB).not.toHaveBeenCalled()
-
-    // TODO: https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
   })
 })
 

@@ -86,8 +86,6 @@ export const setupHostConfig = (): HostConfig<
   },
 
   createInstance: function (externalType, newProps) {
-    console.log('createInstance')
-
     if (externalType === 'fast-text') {
       const element = document.createTextNode('')
 
@@ -535,30 +533,23 @@ export const setupHostConfig = (): HostConfig<
   },
 
   appendChild: function (parentInstance, child) {
-    console.log('appendChild')
     parentInstance.element.appendChild(child.element)
   },
 
   insertBefore: function (parentInstance, child, beforeChild) {
-    console.log('insertBefore')
     parentInstance.element.insertBefore(child.element, beforeChild.element)
   },
 
   removeChild: function (parentInstance, child) {
-    console.log('removeChild')
-
     cleanupInstance(child)
     parentInstance.element.removeChild(child.element)
   },
 
   insertInContainerBefore: function (container, child, beforeChild) {
-    console.log('insertInContainerBefore')
     container.element.insertBefore(child.element, beforeChild.element)
   },
 
   removeChildFromContainer: function (container, child) {
-    console.log('removeChildFromContainer')
-
     cleanupInstance(child)
     container.element.removeChild(child.element)
   },
