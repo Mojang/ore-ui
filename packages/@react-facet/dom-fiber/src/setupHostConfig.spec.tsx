@@ -911,7 +911,6 @@ describe('umnount', () => {
       observe: jest.fn().mockReturnValue(unsubscribe),
     }
 
-    // verify all 14 props have a subscription
     render(
       <fast-div
         style={{ background: facet, color: facet }}
@@ -931,9 +930,10 @@ describe('umnount', () => {
         type={facet}
       />,
     )
+    // on mount, we verify that we have added 16 subscriptions (one for each prop and style above)
     expect(facet.observe).toHaveBeenCalledTimes(16)
 
-    // on unmount, we check that unsubscribe was called once for each prop
+    // on unmount, we check that unsubscribe was called once for each subscription
     render(<></>)
     expect(unsubscribe).toHaveBeenCalledTimes(16)
   })
