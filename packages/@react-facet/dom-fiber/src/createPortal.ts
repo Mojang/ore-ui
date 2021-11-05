@@ -14,8 +14,8 @@ export function createPortal(children: ReactNodeList, container: HTMLElement, ke
     key,
     children,
     containerInfo: {
+      children: new Set(),
       element: container,
-      unsubscribers: new Map(),
       styleUnsubscribers: new Map(),
       style: container.style,
     },
