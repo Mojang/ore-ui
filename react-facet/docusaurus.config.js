@@ -14,6 +14,12 @@ module.exports = {
   favicon: 'img/favicon-facet.svg',
 
   themeConfig: {
+    algolia: {
+      appId: 'BH4D9OD16A',
+      apiKey: '0862b17ffb7d45928afd2add5557b501',
+      indexName: 'react-facet',
+    },
+
     colorMode: {
       defaultMode: 'dark',
       disableSwitch: true,
