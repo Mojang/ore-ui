@@ -1,9 +1,11 @@
 import React from 'react'
-import { render } from '@react-facet/dom-fiber-testing-library'
+import { act, fireEvent, render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetWrap } from './useFacetWrap'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
 import { createFacet } from '../facet'
+import { useFacetCallback } from './useFacetCallback'
+import { NO_VALUE } from '../types'
 
 it('wraps a value, updating the facet when it changes', () => {
   const mock = jest.fn()
@@ -95,4 +97,20 @@ it('updates correctly if the facet instance change (ex: via a useFacetMap)', () 
 
   rerender(<TestingComponent concat="456" />)
   expect(container).toHaveTextContent('value 456')
+})
+
+describe('regressions', () => {
+  it('should not immediately call a function when wrapped', () => {
+    const mock = jest.fn()
+
+    const TestingComponent = () => {
+      const handlerFacet = useFacetWrap(mock)
+      useFacetEffect(() => {}, [], handlerFacet)
+      return null
+    }
+
+    render(<TestingComponent />)
+
+    expect(mock).toHaveBeenCalledTimes(0)
+  })
 })
