@@ -20,6 +20,19 @@ export const useFacetState = <V>(
    */
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const inlineFacet = useMemo(() => createFacet<V>({ initialValue, equalityCheck }), [])
+  const setter: Setter<V> = (setter) => {
+    if (isSetterCallback(setter)) {
+      inlineFacet.setWithCallback(setter)
+    } else {
+      inlineFacet.set(setter)
+    }
+  }
 
-  return [inlineFacet, inlineFacet.set]
+  return [inlineFacet, setter]
+}
+
+const isSetterCallback = <V>(
+  setter: V | ((previousValue: Option<V>) => Option<V>),
+): setter is (previousValue: Option<V>) => Option<V> => {
+  return typeof setter === 'function'
 }

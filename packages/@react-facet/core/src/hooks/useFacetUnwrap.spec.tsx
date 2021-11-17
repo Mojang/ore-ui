@@ -143,7 +143,7 @@ it('re-renders when facet is mutated', () => {
   expect(container.textContent).toBe('foo')
 
   act(() => {
-    demoFacet.set((prev) => {
+    demoFacet.setWithCallback((prev) => {
       if (prev !== NO_VALUE) {
         prev.foo = 'bar'
         return prev
@@ -180,7 +180,7 @@ it('re-renders when facet is mutated to undefined', () => {
   expect(container.textContent).toBe('foo')
 
   act(() => {
-    demoFacet.set((prev) => {
+    demoFacet.setWithCallback((prev) => {
       if (prev !== NO_VALUE) {
         prev.foo = undefined
         return prev

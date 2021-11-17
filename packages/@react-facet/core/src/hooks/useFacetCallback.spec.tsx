@@ -48,7 +48,7 @@ it('captures the current value of the facet in a function that can be used as ha
   callback.mockClear()
 
   // change the facet
-  demoFacet.set(() => 'new value')
+  demoFacet.set('new value')
 
   result.rerender(<ComponentWithFacetCallback cb={callback} dependency="dependency changed" />)
 

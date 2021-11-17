@@ -96,3 +96,19 @@ it('updates correctly if the facet instance change (ex: via a useFacetMap)', () 
   rerender(<TestingComponent concat="456" />)
   expect(container).toHaveTextContent('value 456')
 })
+
+describe('regressions', () => {
+  it('should not immediately call a function when wrapped', () => {
+    const mock = jest.fn()
+
+    const TestingComponent = () => {
+      const handlerFacet = useFacetWrap(mock)
+      useFacetEffect(() => {}, [], handlerFacet)
+      return null
+    }
+
+    render(<TestingComponent />)
+
+    expect(mock).toHaveBeenCalledTimes(0)
+  })
+})

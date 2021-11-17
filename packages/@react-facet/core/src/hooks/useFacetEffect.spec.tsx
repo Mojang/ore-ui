@@ -31,7 +31,7 @@ it('triggers the effect on mount with the initial value and on any update of the
 
   // change the facet
   act(() => {
-    demoFacet.set(() => 'new value')
+    demoFacet.set('new value')
   })
 
   // verify that it was called again, but with the new value
@@ -95,7 +95,7 @@ describe('cleanup', () => {
     expect(cleanup).not.toHaveBeenCalled()
 
     act(() => {
-      demoFacet.set(() => 'new value')
+      demoFacet.set('new value')
     })
 
     // once a new value is triggered we expect that the previous cleanup was called

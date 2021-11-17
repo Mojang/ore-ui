@@ -37,7 +37,8 @@ export interface Facet<T> {
 }
 
 export interface WritableFacet<T> extends Facet<T> {
-  set: Setter<T>
+  set: (value: T) => void
+  setWithCallback: (callback: (previousValue: Option<T>) => Option<T>) => void
 }
 
 export interface Update<V> {
