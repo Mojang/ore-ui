@@ -7,12 +7,6 @@ interface ListenerCleanupEntry {
   listener: Listener<any>
 }
 
-const isSetterCallback = <V>(
-  setter: V | ((previousValue: Option<V>) => Option<V>),
-): setter is (previousValue: Option<V>) => Option<V> => {
-  return typeof setter === 'function'
-}
-
 export interface FacetOptions<V> {
   initialValue: Option<V>
   startSubscription?: StartSubscription<V>
@@ -84,16 +78,14 @@ export function createFacet<V>({ initialValue, startSubscription, equalityCheck 
   }
 
   return {
-    set: (setter) => {
-      if (isSetterCallback(setter)) {
-        const value = setter(currentValue)
-        if (value === NO_VALUE) {
-          updateToNoValue()
-        } else {
-          update(value)
-        }
+    set: update,
+
+    setWithCallback: (setter) => {
+      const value = setter(currentValue)
+      if (value === NO_VALUE) {
+        updateToNoValue()
       } else {
-        update(setter)
+        update(value)
       }
     },
 

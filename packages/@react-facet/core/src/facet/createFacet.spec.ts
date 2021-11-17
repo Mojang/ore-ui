@@ -191,24 +191,26 @@ describe('cleanup', () => {
   })
 })
 
-it('prevents calling listeners if a setter returns NO_VALUE', () => {
-  const facet = createFacet({ initialValue: 10 })
-  const cleanupMock = jest.fn()
-  const listenerMock = jest.fn().mockReturnValue(cleanupMock)
+describe('setWithCallback', () => {
+  it('prevents calling listeners if a setter returns NO_VALUE', () => {
+    const facet = createFacet({ initialValue: 10 })
+    const cleanupMock = jest.fn()
+    const listenerMock = jest.fn().mockReturnValue(cleanupMock)
 
-  facet.observe(listenerMock)
+    facet.observe(listenerMock)
 
-  // after observing it, the listener is called once with the initial value (but not the cleanup)
-  expect(listenerMock).toHaveBeenCalledTimes(1)
-  expect(listenerMock).toHaveBeenCalledWith(10)
-  expect(cleanupMock).not.toHaveBeenCalled()
+    // after observing it, the listener is called once with the initial value (but not the cleanup)
+    expect(listenerMock).toHaveBeenCalledTimes(1)
+    expect(listenerMock).toHaveBeenCalledWith(10)
+    expect(cleanupMock).not.toHaveBeenCalled()
 
-  listenerMock.mockClear()
-  listenerMock.mockClear()
-  cleanupMock.mockClear()
-  facet.set(() => NO_VALUE)
+    listenerMock.mockClear()
+    listenerMock.mockClear()
+    cleanupMock.mockClear()
+    facet.setWithCallback(() => NO_VALUE)
 
-  // after using a setter callback to return NO_VALUE, the previous cleanup should be called, but not the listener again
-  expect(listenerMock).not.toHaveBeenCalled()
-  expect(cleanupMock).toHaveBeenCalledTimes(1)
+    // after using a setter callback to return NO_VALUE, the previous cleanup should be called, but not the listener again
+    expect(listenerMock).not.toHaveBeenCalled()
+    expect(cleanupMock).toHaveBeenCalledTimes(1)
+  })
 })
