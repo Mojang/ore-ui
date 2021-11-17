@@ -1,11 +1,9 @@
 import React from 'react'
-import { act, fireEvent, render } from '@react-facet/dom-fiber-testing-library'
+import { render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetWrap } from './useFacetWrap'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
 import { createFacet } from '../facet'
-import { useFacetCallback } from './useFacetCallback'
-import { NO_VALUE } from '../types'
 
 it('wraps a value, updating the facet when it changes', () => {
   const mock = jest.fn()
