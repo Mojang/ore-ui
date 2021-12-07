@@ -34,6 +34,20 @@ describe('shallowObjectEqualityCheck()', () => {
     expect(equalityCheck({ foo: 'bar', bar: 'baz' })).toBe(false)
     expect(equalityCheck({ foo: 'bar' })).toBe(false)
   })
+
+  it('handles null and undefined', () => {
+    const equalityCheck = shallowObjectEqualityCheck()
+
+    expect(equalityCheck({ foo: 1 })).toBe(false)
+    expect(equalityCheck({ foo: 1 })).toBe(true)
+
+    expect(equalityCheck(null)).toBe(false)
+
+    expect(equalityCheck({ foo: 1 })).toBe(false)
+    expect(equalityCheck({ foo: 1 })).toBe(true)
+
+    expect(equalityCheck(undefined)).toBe(false)
+  })
 })
 
 describe('strictEqualityCheck', () => {
