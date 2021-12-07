@@ -1,4 +1,6 @@
-import { Facet, useFacetCallback, Value } from '@react-facet/core'
+import { useFacetCallback, Value } from '@react-facet/core'
+import { useRemoteFacet } from './context'
+import { RemoteFacet } from './types'
 
 interface PropSetter<T extends Value, Prop extends keyof T> {
   (value: T[Prop]): void
@@ -16,7 +18,7 @@ interface PropSetter<T extends Value, Prop extends keyof T> {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useRemoteFacetPropSetter<T extends Record<string, any>, Prop extends keyof T>(
-  remoteFacet: Facet<T>,
+  remoteFacet: RemoteFacet<T>,
   prop: Prop,
 ): PropSetter<T, Prop> {
   return useFacetCallback(
@@ -24,6 +26,6 @@ export function useRemoteFacetPropSetter<T extends Record<string, any>, Prop ext
       facet[prop] = newValue
     },
     [prop],
-    remoteFacet,
+    [useRemoteFacet(remoteFacet)],
   )
 }
