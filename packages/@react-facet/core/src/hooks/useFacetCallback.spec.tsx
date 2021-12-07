@@ -148,3 +148,33 @@ it('supports multiple facets', () => {
 
   expect(callback).toHaveBeenCalledWith('a', 123, 'dependency', 'event')
 })
+
+it('returns NO_VALUE if any facet has NO_VALUE and skip calling the callback', () => {
+  const facetA = createFacet({ initialValue: 'a' })
+  const facetB = createFacet<number>({ initialValue: NO_VALUE })
+
+  const callback = jest.fn()
+  let handler: (event: string) => void
+
+  const TestComponent = ({ dependency }: { dependency: string }) => {
+    handler = useFacetCallback(
+      (valueA, valueB) => (event: string) => {
+        callback(valueA, valueB, dependency, event)
+      },
+      [dependency],
+      [facetA, facetB],
+    )
+
+    return null
+  }
+
+  render(<TestComponent dependency="dependency" />)
+
+  act(() => {
+    const result = handler('event')
+    // verifies that calling the callback returns NO_VALUE
+    expect(result).toBe(NO_VALUE)
+  })
+
+  expect(callback).not.toHaveBeenCalledWith()
+})
