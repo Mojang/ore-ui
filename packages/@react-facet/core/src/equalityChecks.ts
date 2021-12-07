@@ -1,5 +1,9 @@
-import { createUniformArrayEqualityCheck, createUniformObjectEqualityCheck } from './createEqualityChecks'
-import { ObjectWithImmutables, Immutable, Option, NO_VALUE, NoValue } from './types'
+import {
+  createUniformArrayEqualityCheck,
+  createUniformObjectEqualityCheck,
+  createNullableEqualityCheck,
+} from './createEqualityChecks'
+import { ObjectWithImmutables, Immutable, Option, NO_VALUE } from './types'
 
 /**
  * Checks that the current value is exactly the same as the other previous one. Accepts value of type
@@ -22,35 +26,22 @@ export const strictEqualityCheck = <T extends Immutable | Function>() => {
  * Equality check that verifies the values of each key of an object.
  * Each value must be a primitive (boolean, number or string)
  */
-export const shallowObjectEqualityCheck = () => {
-  const check = createUniformObjectEqualityCheck<ObjectWithImmutables>(strictEqualityCheck)()
-  let previous: ObjectWithImmutables | null | undefined | NoValue = NO_VALUE
-
-  return (value: ObjectWithImmutables | null | undefined) => {
-    if (value == null || previous == null) {
-      if (value != previous) {
-        previous = value
-        return false
-      } else {
-        return true
-      }
-    }
-
-    previous = value
-    return check(value)
-  }
-}
+export const shallowObjectEqualityCheck = () =>
+  createNullableEqualityCheck(createUniformObjectEqualityCheck<ObjectWithImmutables>(strictEqualityCheck))
 
 /**
  * Does a shallow object equality check for each element in an array
  */
-export const shallowObjectArrayEqualityCheck =
-  createUniformArrayEqualityCheck<ObjectWithImmutables>(shallowObjectEqualityCheck)
+export const shallowObjectArrayEqualityCheck = createNullableEqualityCheck(
+  createUniformArrayEqualityCheck<ObjectWithImmutables>(shallowObjectEqualityCheck),
+)
 
 /**
  * Shallow equality check of primitives in an array
  */
-export const shallowArrayEqualityCheck = createUniformArrayEqualityCheck<Immutable>(strictEqualityCheck)
+export const shallowArrayEqualityCheck = createNullableEqualityCheck(
+  createUniformArrayEqualityCheck<Immutable>(strictEqualityCheck),
+)
 
 /**
  * The default equality check that assumes data can be mutated.
