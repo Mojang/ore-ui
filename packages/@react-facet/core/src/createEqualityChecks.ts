@@ -1,4 +1,28 @@
-import { EqualityCheck } from './types'
+import { EqualityCheck, NO_VALUE, NoValue } from './types'
+
+/**
+ * Creates an equality check that accepts null and undefined values
+ *
+ * @param comparator comparator to be wrapped with the null check
+ */
+export const createNullableEqualityCheck = <T>(comparator: EqualityCheck<T>) => {
+  const check = comparator()
+  let previous: T | null | undefined | NoValue = NO_VALUE
+
+  return (value: T | null | undefined) => {
+    if (value == null || previous == null) {
+      if (value != previous) {
+        previous = value
+        return false
+      } else {
+        return true
+      }
+    }
+
+    previous = value
+    return check(value)
+  }
+}
 
 /**
  * Creates an equality check that tests that the values of all the properties in an object
