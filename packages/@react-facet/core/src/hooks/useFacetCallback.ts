@@ -116,11 +116,11 @@ export function useFacetCallback<
  * We pass the dependencies of the callback as the second argument so we can leverage the eslint-plugin-react-hooks option for additionalHooks.
  * Having this as the second argument allows the linter to work.
  */
-export function useFacetCallback<M, C extends (...args: unknown[]) => M | NoValue>(
-  callback: (...args: unknown[]) => C,
+export function useFacetCallback<M>(
+  callback: (...args: unknown[]) => (...args: unknown[]) => M | NoValue,
   dependencies: unknown[],
   facets: Facet<unknown>[],
-): C {
+): (...args: unknown[]) => M | NoValue {
   const facetsRef = useRef<Option<unknown>[]>(facets.map(() => NO_VALUE))
 
   useEffect(() => {
@@ -142,9 +142,8 @@ export function useFacetCallback<M, C extends (...args: unknown[]) => M | NoValu
   const callbackMemoized = useCallback(callback, dependencies)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  return useCallback<C>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((...args: any[]) => {
+  return useCallback(
+    (...args: unknown[]) => {
       const values = facetsRef.current
 
       for (const value of values) {
@@ -152,7 +151,7 @@ export function useFacetCallback<M, C extends (...args: unknown[]) => M | NoValu
       }
 
       return callbackMemoized(...values)(...args)
-    }) as unknown as C,
+    },
     [callbackMemoized, facetsRef],
   )
 }
