@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useLayoutEffect, useRef } from 'react'
 import { NoValue } from '..'
 import { Facet, NO_VALUE, Option } from '../types'
 
@@ -123,7 +123,7 @@ export function useFacetCallback<M>(
 ): (...args: unknown[]) => M | NoValue {
   const facetsRef = useRef<Option<unknown>[]>(facets.map(() => NO_VALUE))
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const unsubscribes = facets.map((facet, index) => {
       return facet.observe((value) => {
         facetsRef.current[index] = value
