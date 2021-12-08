@@ -133,11 +133,11 @@ export function useFacetCallback<M, C extends (...args: unknown[]) => M | NoValu
     return () => {
       unsubscribe.forEach((unsubscribe) => unsubscribe())
     }
-    // We care about each individual facet and if any has a different reference
+    // We care about each individual facet and if any is a different reference
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, facets)
 
-  // We care about each individual dependency and if any has a different reference
+  // We care about each individual dependency and if any is a different reference
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const callbackMemoized = useCallback(callback, dependencies)
 
