@@ -1,4 +1,9 @@
-import { shallowObjectEqualityCheck, strictEqualityCheck, defaultEqualityCheck } from './equalityChecks'
+import {
+  shallowObjectEqualityCheck,
+  strictEqualityCheck,
+  defaultEqualityCheck,
+  nullableShallowObjectEqualityCheck,
+} from './equalityChecks'
 
 describe('shallowObjectEqualityCheck()', () => {
   it('handles matching objects', () => {
@@ -33,6 +38,56 @@ describe('shallowObjectEqualityCheck()', () => {
 
     expect(equalityCheck({ foo: 'bar', bar: 'baz' })).toBe(false)
     expect(equalityCheck({ foo: 'bar' })).toBe(false)
+  })
+})
+
+describe('nullableShallowObjectEqualityCheck()', () => {
+  it('handles matching objects', () => {
+    const equalityCheck = nullableShallowObjectEqualityCheck()
+    expect(equalityCheck({})).toBe(false)
+    expect(equalityCheck({})).toBe(true)
+
+    expect(equalityCheck({ foo: 'bar' })).toBe(false)
+    expect(equalityCheck({ foo: 'bar' })).toBe(true)
+
+    expect(equalityCheck({ foo: 'bar', bar: 'baz' })).toBe(false)
+    expect(equalityCheck({ foo: 'bar', bar: 'baz' })).toBe(true)
+
+    expect(equalityCheck({})).toBe(false)
+    expect(equalityCheck({})).toBe(true)
+
+    expect(equalityCheck({ foo: 'bar' })).toBe(false)
+    expect(equalityCheck({ foo: 'bar' })).toBe(true)
+  })
+
+  it('handles non-matching objects', () => {
+    const equalityCheck = nullableShallowObjectEqualityCheck()
+
+    expect(equalityCheck({ foo: 1 })).toBe(false)
+    expect(equalityCheck({ foo: true })).toBe(false) // Make sure it does a strict type check
+
+    expect(equalityCheck({ foo: 'bar' })).toBe(false)
+    expect(equalityCheck({ foo: 'bars' })).toBe(false)
+
+    expect(equalityCheck({ foo: 'bar', bar: 'baz' })).toBe(false)
+    expect(equalityCheck({ foo: 'baz', bar: undefined })).toBe(false)
+
+    expect(equalityCheck({ foo: 'bar', bar: 'baz' })).toBe(false)
+    expect(equalityCheck({ foo: 'bar' })).toBe(false)
+  })
+
+  it('handles null and undefined', () => {
+    const equalityCheck = nullableShallowObjectEqualityCheck()
+
+    expect(equalityCheck({ foo: 1 })).toBe(false)
+    expect(equalityCheck({ foo: 1 })).toBe(true)
+
+    expect(equalityCheck(null)).toBe(false)
+
+    expect(equalityCheck({ foo: 1 })).toBe(false)
+    expect(equalityCheck({ foo: 1 })).toBe(true)
+
+    expect(equalityCheck(undefined)).toBe(false)
   })
 })
 
