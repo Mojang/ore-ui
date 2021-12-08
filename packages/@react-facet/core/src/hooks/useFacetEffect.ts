@@ -94,6 +94,10 @@ export function useFacetEffect(
   const effectMemoized = useCallback(effect, dependencies)
 
   useLayoutEffect(() => {
+    if (facets.length === 1) {
+      return facets[0].observe(effectMemoized)
+    }
+
     let cleanup: void | Cleanup
     let hasAllDependencies = false
     const unsubscribes: Unsubscribe[] = []
