@@ -76,7 +76,7 @@ export function useFacetEffect<V, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10>(
 ): void
 
 /**
- * Allows using a selector to perform imperative code (manual DOM manipulations)
+ * Allows using a running an effect based on facet updates. Similar to React's useEffect
  *
  * @param effect function that will do the side-effect (ex: update the DOM)
  * @param dependencies variable used by the map that are available in scope (similar as dependencies of useEffect)
