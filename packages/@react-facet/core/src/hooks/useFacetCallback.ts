@@ -124,14 +124,14 @@ export function useFacetCallback<M, C extends (...args: unknown[]) => M | NoValu
   const facetsRef = useRef<Option<unknown>[]>(facets.map(() => NO_VALUE))
 
   useEffect(() => {
-    const unsubscribe = facets.map((facet, index) =>
-      facet.observe((value) => {
+    const unsubscribes = facets.map((facet, index) => {
+      return facet.observe((value) => {
         facetsRef.current[index] = value
-      }),
-    )
+      })
+    })
 
     return () => {
-      unsubscribe.forEach((unsubscribe) => unsubscribe())
+      unsubscribes.forEach((unsubscribe) => unsubscribe())
     }
     // We care about each individual facet and if any is a different reference
     // eslint-disable-next-line react-hooks/exhaustive-deps
