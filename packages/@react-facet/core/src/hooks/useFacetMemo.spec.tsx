@@ -107,7 +107,7 @@ describe('multiple dependencies', () => {
           mock(value.name)
         },
         [],
-        adaptValue,
+        [adaptValue],
       )
 
       return null
@@ -149,7 +149,7 @@ describe('multiple dependencies', () => {
           mock(value)
         },
         [],
-        adaptValue,
+        [adaptValue],
       )
 
       return null
@@ -191,7 +191,7 @@ describe('multiple dependencies', () => {
           mock(value)
         },
         [],
-        adaptValue,
+        [adaptValue],
       )
 
       return null
@@ -233,7 +233,7 @@ describe('multiple dependencies', () => {
           mock(value)
         },
         [],
-        adaptValue,
+        [adaptValue],
       )
 
       return null
@@ -390,7 +390,7 @@ describe('single dependency', () => {
           mock(value.name)
         },
         [],
-        adaptValue,
+        [adaptValue],
       )
 
       return null
@@ -431,7 +431,7 @@ describe('single dependency', () => {
           mock(value)
         },
         [],
-        adaptValue,
+        [adaptValue],
       )
 
       return null
@@ -472,7 +472,7 @@ describe('single dependency', () => {
           mock(value)
         },
         [],
-        adaptValue,
+        [adaptValue],
       )
 
       return null
@@ -513,7 +513,7 @@ describe('single dependency', () => {
           mock(value)
         },
         [],
-        adaptValue,
+        [adaptValue],
       )
 
       return null

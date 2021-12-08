@@ -12,7 +12,7 @@ export const useFacetRef = <T>(facet: Facet<T>) => {
       ref.current = value
     },
     [],
-    facet,
+    [facet],
   )
 
   return ref

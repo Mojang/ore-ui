@@ -230,7 +230,7 @@ describe('rendering with imperative calls from a selector', () => {
         }
       },
       [callbackDependency],
-      useRemoteFacet(barSelector),
+      [useRemoteFacet(barSelector)],
     )
 
     return <div ref={ref} />

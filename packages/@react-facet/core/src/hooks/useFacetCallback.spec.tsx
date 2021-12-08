@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { render } from '@react-facet/dom-fiber-testing-library'
+import { render, act } from '@react-facet/dom-fiber-testing-library'
 import { useFacetCallback } from './useFacetCallback'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
@@ -19,11 +19,11 @@ it('captures the current value of the facet in a function that can be used as ha
 
   const ComponentWithFacetCallback = ({ cb, dependency }: ComponentWithFacetCallbackProps) => {
     const handler = useFacetCallback(
-      (value) => (event) => {
+      (value) => (event: string) => {
         cb(value, dependency, event)
       },
       [dependency, cb],
-      demoFacet,
+      [demoFacet],
     )
 
     useEffect(() => {
@@ -60,7 +60,7 @@ it('properly memoizes the returned facet', () => {
 
   const TestComponent = () => {
     const previousCallbackRef = useRef<() => void | NoValue>()
-    const callback = useFacetCallback(() => () => {}, [], demoFacet)
+    const callback = useFacetCallback(() => () => {}, [], [demoFacet])
 
     // Check if it is a second render
     if (previousCallbackRef.current) {
@@ -98,7 +98,7 @@ it('should work with uninitialized values', () => {
         cb(value)
       },
       [cb],
-      internalDemoFacet,
+      [internalDemoFacet],
     )
 
     useFacetEffect(
@@ -106,7 +106,7 @@ it('should work with uninitialized values', () => {
         handler()
       },
       [handler],
-      internalDemoFacet,
+      [internalDemoFacet],
     )
 
     return null
@@ -119,4 +119,62 @@ it('should work with uninitialized values', () => {
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(callback).toHaveBeenCalledWith('valuevalue')
+})
+
+it('supports multiple facets', () => {
+  const facetA = createFacet({ initialValue: 'a' })
+  const facetB = createFacet({ initialValue: 123 })
+
+  const callback = jest.fn()
+  let handler: (event: string) => void
+
+  const TestComponent = ({ dependency }: { dependency: string }) => {
+    handler = useFacetCallback(
+      (valueA, valueB) => (event: string) => {
+        callback(valueA, valueB, dependency, event)
+      },
+      [dependency],
+      [facetA, facetB],
+    )
+
+    return null
+  }
+
+  render(<TestComponent dependency="dependency" />)
+
+  act(() => {
+    handler('event')
+  })
+
+  expect(callback).toHaveBeenCalledWith('a', 123, 'dependency', 'event')
+})
+
+it('returns NO_VALUE if any facet has NO_VALUE and skip calling the callback', () => {
+  const facetA = createFacet({ initialValue: 'a' })
+  const facetB = createFacet<number>({ initialValue: NO_VALUE })
+
+  const callback = jest.fn()
+  let handler: (event: string) => void
+
+  const TestComponent = ({ dependency }: { dependency: string }) => {
+    handler = useFacetCallback(
+      (valueA, valueB) => (event: string) => {
+        callback(valueA, valueB, dependency, event)
+      },
+      [dependency],
+      [facetA, facetB],
+    )
+
+    return null
+  }
+
+  render(<TestComponent dependency="dependency" />)
+
+  act(() => {
+    const result = handler('event')
+    // verifies that calling the callback returns NO_VALUE
+    expect(result).toBe(NO_VALUE)
+  })
+
+  expect(callback).not.toHaveBeenCalledWith()
 })

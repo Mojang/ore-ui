@@ -25,7 +25,7 @@ function Performance() {
       // and effect that does nothing
     },
     [],
-    value,
+    [value],
   )
 
   return null

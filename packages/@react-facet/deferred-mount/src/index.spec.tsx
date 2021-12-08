@@ -64,7 +64,7 @@ describe('cost is about half of the budget (should mount two per frame)', () => 
 
   const SampleComponent = () => {
     const isDeferringFacet = useIsDeferring()
-    useFacetEffect((isDeferring) => isDeferringValues(isDeferring), [], isDeferringFacet)
+    useFacetEffect((isDeferring) => isDeferringValues(isDeferring), [], [isDeferringFacet])
 
     return (
       <>
@@ -194,7 +194,7 @@ describe('app with just the DeferredMountProvider', () => {
   const SampleComponent = () => {
     const isDeferringFacet = useIsDeferring()
 
-    useFacetEffect((isDeferring) => isDeferringValues(isDeferring), [], isDeferringFacet)
+    useFacetEffect((isDeferring) => isDeferringValues(isDeferring), [], [isDeferringFacet])
 
     return (
       <>

@@ -106,7 +106,7 @@ export function DeferredMountProvider({
       }
     },
     [frameTimeBudget, setIsDeferring, setRequestingToRun],
-    requestingToRun,
+    [requestingToRun],
   )
 
   return (
