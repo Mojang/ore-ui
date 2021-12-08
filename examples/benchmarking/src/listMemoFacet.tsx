@@ -52,7 +52,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
       randomWork(health)
     },
     [],
-    health,
+    [health],
   )
 
   useFacetEffect(
@@ -60,7 +60,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
       randomWork(name)
     },
     [],
-    name,
+    [name],
   )
 
   useFacetEffect(
@@ -68,7 +68,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
       randomWork(name)
     },
     [],
-    name,
+    [name],
   )
 
   useFacetEffect(
@@ -76,7 +76,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
       randomWork(name)
     },
     [],
-    name,
+    [name],
   )
 
   return null

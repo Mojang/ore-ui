@@ -36,7 +36,7 @@ it('should be possible to have value undefined as the first value', () => {
   const ComponentWithFacetEffect = () => {
     const [facet] = useFacetState(undefined)
 
-    useFacetEffect(effect, [], facet)
+    useFacetEffect(effect, [], [facet])
 
     return null
   }

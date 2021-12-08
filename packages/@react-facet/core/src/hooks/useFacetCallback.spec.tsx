@@ -106,7 +106,7 @@ it('should work with uninitialized values', () => {
         handler()
       },
       [handler],
-      internalDemoFacet,
+      [internalDemoFacet],
     )
 
     return null

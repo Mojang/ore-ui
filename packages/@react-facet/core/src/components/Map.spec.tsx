@@ -102,7 +102,7 @@ it('updates only items that have changed', () => {
   const mock = jest.fn()
 
   const ExampleContent = ({ item }: { item: Facet<Input> }) => {
-    useFacetEffect(mock, [], item)
+    useFacetEffect(mock, [], [item])
     return null
   }
 

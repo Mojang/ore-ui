@@ -15,7 +15,7 @@ it('wraps a value, updating the facet when it changes', () => {
         mock(value)
       },
       [],
-      facetifiedValue,
+      [facetifiedValue],
     )
     return <span />
   }
@@ -39,7 +39,7 @@ it('wraps a value, with the default equality check (preventing unnecessary updat
         mock(value)
       },
       [],
-      facetifiedValue,
+      [facetifiedValue],
     )
     return <span />
   }
@@ -63,7 +63,7 @@ it('forwards a facet', () => {
         mock(value)
       },
       [],
-      facetifiedValue,
+      [facetifiedValue],
     )
     return <span />
   }
@@ -103,7 +103,7 @@ describe('regressions', () => {
 
     const TestingComponent = () => {
       const handlerFacet = useFacetWrap(mock)
-      useFacetEffect(() => {}, [], handlerFacet)
+      useFacetEffect(() => {}, [], [handlerFacet])
       return null
     }
 
