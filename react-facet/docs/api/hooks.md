@@ -38,7 +38,7 @@ const Form = ({ onSubmit, initialValue }) => {
       onSubmit(currentValue)
     },
     [onSubmit],
-    value,
+    [value],
   )
 
   return (
@@ -53,7 +53,7 @@ const Form = ({ onSubmit, initialValue }) => {
 
 ## `useFacetCallback`
 
-The `useFacetCallback` hook is similar to React’s `useCallback` in that it allows you to create a memoized callback that will only be updated if some of the explicit dependencies change. On top of that, `useFacetCallback` allows you to pass in a Facet and get the current value of that facet in the callback body.
+The `useFacetCallback` hook is similar to React’s `useCallback` in that it allows you to create a memoized callback that will only be updated if some of the explicit dependencies change. On top of that, `useFacetCallback` allows you to pass one or more Facets and get the current values of those facets in the callback body.
 
 Say for example that you have a small form, and want to create a handler for the Submit action. You need to have access to the current value of a facet that stores the `value` of an input field in order to send that value back to the parent component when the `Submit` button of the form. `useFacetCallback` allows you to create such handler, which will always have access to the current value of the facet.
 
@@ -73,7 +73,7 @@ const Form = ({ onSubmit, initialValue }) => {
       onSubmit(currentValue)
     },
     [onSubmit],
-    value,
+    [value],
   )
 
   return (
@@ -88,9 +88,9 @@ const Form = ({ onSubmit, initialValue }) => {
 
 ## `useFacetEffect`
 
-The `useFacetEffect` hook gives you a way of performing some imperative action (effect) whenever the underlying facet is updated. It is very similar in structure and goal to React’s own `useEffect`.
+The `useFacetEffect` hook gives you a way of performing some imperative action (effect) whenever the underlying facets are updated. It is very similar in structure and goal to React’s own `useEffect`.
 
-Like `useEffect`, `useFacetEffect` takes an effect function to be called when the updates happen, a dependency list, and finally a facet.
+Like `useEffect`, `useFacetEffect` takes an effect function to be called when the updates happen, a dependency list, and finally one or more facets.
 
 ```tsx
 const Logger = ({ shouldLog }) => {
@@ -103,14 +103,14 @@ const Logger = ({ shouldLog }) => {
       }
     },
     [shouldLog],
-    statusFacet,
+    [statusFacet],
   )
 
   return <span>{shouldLog ? 'Logger is active' : 'Logger is disabled'}</span>
 }
 ```
 
-It also supports a cleanup function that can be returned by the effect function. This cleanup is called whenever any of the dependencies or the facet has changed or when the component is unmounted. In short, it behaves exactly like React’s `useEffect`.
+It also supports a cleanup function that can be returned by the effect function. This cleanup is called whenever any of the dependencies or the facets have changed or when the component is unmounted. In short, it behaves exactly like React’s `useEffect`.
 
 ```tsx
 const Logger = ({ shouldLog }) => {
@@ -128,7 +128,7 @@ const Logger = ({ shouldLog }) => {
       return () => clearTimeout(timerId)
     },
     [shouldLog],
-    statusFacet,
+    [statusFacet],
   )
 
   return <span>{shouldLog ? 'Logger is active' : 'Logger is disabled'}</span>

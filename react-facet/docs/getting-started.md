@@ -117,7 +117,7 @@ const UpdateLogin = ({ onSubmit }) => {
       onSubmit(values)
     },
     [onSubmit],
-    temporaryValues,
+    [temporaryValues],
   )
 
   return (

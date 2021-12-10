@@ -23,7 +23,7 @@ const Counter = () => {
       ref.current.textContent = `${counterValue}`
     },
     [],
-    counter,
+    [counter],
   )
 
   const handleClick = useCallback(() => {

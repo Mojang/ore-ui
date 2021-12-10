@@ -27,10 +27,13 @@ console.log(equalityCheck(1)) // false
 console.log(equalityCheck(1)) // true
 ```
 
-## `shallowObjectEqualityCheck`
+## `shallowObjectEqualityCheck` and `nullableShallowObjectEqualityCheck`
 
 Equality check that verifies the values of each key of an object.
-Each value must be a primitive (boolean, number or string)
+
+Each value must be a primitive (boolean, number or string).
+
+There is also a variant that supports "nullable values" (`undefined` and `null`).
 
 ```tsx
 import { shallowObjectEqualityCheck } from '@react-facet/equality-checks'
@@ -44,9 +47,11 @@ console.log(equalityCheck({ name: 'Steve', height: 2 })) // false
 console.log(equalityCheck({ name: 'Steve', height: 2 })) // true
 ```
 
-## `shallowObjectArrayEqualityCheck`
+## `shallowObjectArrayEqualityCheck` and `nullableShallowObjectArrayEqualityCheck`
 
-Does a shallow object equality check for each element in an array
+Does a shallow object equality check for each element in an array.
+
+There is also a variant that supports "nullable values" (`undefined` and `null`).
 
 ```tsx
 import { shallowObjectArrayEqualityCheck } from '@react-facet/equality-checks'
@@ -61,9 +66,11 @@ console.log(equalityCheck([{ name: 'Alex' }])) // true
 console.log(equalityCheck([{ name: 'Steve' }])) // false
 ```
 
-## `shallowArrayEqualityCheck`
+## `shallowArrayEqualityCheck` and `nullableShallowArrayEqualityCheck`
 
-Shallow equality check of primitives in an array
+Shallow equality check of primitives in an array.
+
+There is also a variant that supports "nullable values" (`undefined` and `null`).
 
 ```tsx
 import { shallowArrayEqualityCheck } from '@react-facet/equality-checks'
