@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { FacetProp, Unsubscribe } from '@react-facet/core'
 import { FiberRoot, Reconciler } from 'react-reconciler'
 import { Key, MutableRefObject, ReactText } from 'react'
@@ -35,9 +37,9 @@ export interface NoTimeout {
   (): void
 }
 
-export type FocusCallback = (e: FocusEvent) => void
-export type TouchCallback = (e: TouchEvent) => void
-export type MouseCallback = (event: MouseEvent) => void
+export type FocusCallback = (e: React.FocusEvent) => void
+export type TouchCallback = (e: React.TouchEvent) => void
+export type MouseCallback = (event: React.MouseEvent) => void
 
 export interface PointerEvents {
   onClick?: MouseCallback
@@ -55,7 +57,7 @@ export interface FocusEvents {
   onBlur?: FocusCallback
 }
 
-export type KeyboardCallback = (event: KeyboardEvent) => void
+export type KeyboardCallback = (event: React.KeyboardEvent) => void
 
 export interface KeyboardEvents {
   onKeyPress?: KeyboardCallback
