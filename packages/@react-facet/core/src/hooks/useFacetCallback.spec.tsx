@@ -1,11 +1,11 @@
+import { act, render } from '@react-facet/dom-fiber-testing-library'
 import React, { useEffect, useRef } from 'react'
-import { render, act } from '@react-facet/dom-fiber-testing-library'
+import { NoValue } from '..'
+import { createFacet } from '../facet'
+import { NO_VALUE } from '../types'
 import { useFacetCallback } from './useFacetCallback'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
-import { NO_VALUE } from '../types'
-import { createFacet } from '../facet'
-import { NoValue } from '..'
 
 it('captures the current value of the facet in a function that can be used as handler', () => {
   const demoFacet = createFacet({ initialValue: 'initial value' })
@@ -183,14 +183,14 @@ it('has proper return type with NO_VALUE in it', () => {
 
   const TestComponent = () => {
     const handler = useFacetCallback(
-      (a) => () => {
-        return a
+      (a) => (b: string) => {
+        return a + b
       },
       [],
       [facetA],
     )
 
-    if (handler('event') !== NO_VALUE) {
+    if (handler('string') !== NO_VALUE) {
       throw new Error('Expected NO_VALUE')
     }
     return null
