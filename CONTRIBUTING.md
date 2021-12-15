@@ -2,6 +2,7 @@
 
 Currently the process of updating the version of the packages is mostly manual. Before you start, first you need to make sure you have the permissions to publish the packages.
 
+- Make sure that you are logged in into your `npm` account. Use the command `yarn npm login` on the project folder to do this.
 - While on the `main` branch.
 - Perform a search an replace on all "package.json" files from the old version to the new. (ex `0.1.4` to `0.2.0`).
 - Run `yarn` to update the lockfile.
