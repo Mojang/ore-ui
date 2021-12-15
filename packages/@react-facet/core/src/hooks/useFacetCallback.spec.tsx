@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { render, act } from '@react-facet/dom-fiber-testing-library'
+import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetCallback } from './useFacetCallback'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
@@ -172,9 +172,29 @@ it('returns NO_VALUE if any facet has NO_VALUE and skip calling the callback', (
 
   act(() => {
     const result = handler('event')
-    // verifies that calling the callback returns NO_VALUE
     expect(result).toBe(NO_VALUE)
   })
 
   expect(callback).not.toHaveBeenCalledWith()
+})
+
+it('has proper return type with NO_VALUE in it', () => {
+  const facetA = createFacet({ initialValue: 'a' })
+
+  const TestComponent = () => {
+    const handler = useFacetCallback(
+      (a) => (b: string) => {
+        return a + b
+      },
+      [],
+      [facetA],
+    )
+
+    if (handler('string') !== NO_VALUE) {
+      throw new Error('Expected NO_VALUE')
+    }
+    return null
+  }
+
+  render(<TestComponent />)
 })
