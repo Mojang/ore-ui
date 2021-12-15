@@ -1,11 +1,11 @@
-import { act, render } from '@react-facet/dom-fiber-testing-library'
 import React, { useEffect, useRef } from 'react'
-import { NoValue } from '..'
-import { createFacet } from '../facet'
-import { NO_VALUE } from '../types'
+import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetCallback } from './useFacetCallback'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
+import { NO_VALUE } from '../types'
+import { createFacet } from '../facet'
+import { NoValue } from '..'
 
 it('captures the current value of the facet in a function that can be used as handler', () => {
   const demoFacet = createFacet({ initialValue: 'initial value' })
