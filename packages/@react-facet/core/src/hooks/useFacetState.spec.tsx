@@ -45,3 +45,24 @@ it('should be possible to have value undefined as the first value', () => {
 
   expect(effect).toHaveBeenCalledWith(undefined)
 })
+
+it('memoizes the setter', () => {
+  let setter: Setter<string> = () => {}
+
+  const ComponentWithFacetEffect = () => {
+    const [facet, setFacet] = useFacetState('initial value')
+    setter = setFacet
+
+    return (
+      <span>
+        <fast-text text={facet} />
+      </span>
+    )
+  }
+
+  const rerender = render(<ComponentWithFacetEffect />).rerender
+  const savedSetter = setter
+  rerender(<ComponentWithFacetEffect />)
+
+  expect(setter).toBe(savedSetter)
+})
