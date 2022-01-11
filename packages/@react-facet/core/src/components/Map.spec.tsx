@@ -11,7 +11,7 @@ it('renders all items in a Facet of array', () => {
     initialValue: [{ a: '1' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }],
   })
 
-  const ExampleContent = ({ item }: { item: Facet<Input> }) => {
+  const ExampleContent = ({ item, index }: { item: Facet<Input>, index: number }) => {
     return (
       <span>
         <fast-text text={useFacetMap(({ a }) => a, [], [item])} />
@@ -33,7 +33,7 @@ it('renders all items in a Facet of array', () => {
   const Example = () => {
     return (
       <Map array={data} equalityCheck={inputEqualityCheck}>
-        {(item) => <ExampleContent item={item} />}
+        {(item, index) => <ExampleContent item={item} index={index} />}
       </Map>
     )
   }
@@ -54,7 +54,7 @@ it('unmounts components when the array reduces in size', () => {
     initialValue: [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }],
   })
 
-  const Item = ({ item }: { item: Facet<Item> }) => (
+  const Item = ({ item, index }: { item: Facet<Item>, index: number }) => (
     <span>
       <fast-text text={useFacetMap(({ value }) => value, [], [item])} />
     </span>
@@ -77,7 +77,7 @@ it('unmounts components when the array reduces in size', () => {
   const Example = () => {
     return (
       <Map array={data} equalityCheck={itemEqualityCheck}>
-        {(item) => <Item item={item} />}
+        {(item, index) => <Item item={item} index={index} />}
       </Map>
     )
   }
@@ -101,7 +101,7 @@ it('updates only items that have changed', () => {
 
   const mock = jest.fn()
 
-  const ExampleContent = ({ item }: { item: Facet<Input> }) => {
+  const ExampleContent = ({ item, index}: { item: Facet<Input>, index: number }) => {
     useFacetEffect(mock, [], [item])
     return null
   }
@@ -123,7 +123,7 @@ it('updates only items that have changed', () => {
   const Example = () => {
     return (
       <Map array={data} equalityCheck={inputEqualityCheck}>
-        {(item) => <ExampleContent item={item} />}
+        {(item, index) => <ExampleContent item={item} index={index} />}
       </Map>
     )
   }
