@@ -6,7 +6,7 @@ sidebar_position: 4
 
 Neither `fast-*` components supported by the custom renderer nor the components in `@react-facet/dom-elements` provide a way to mount or unmount children based on the value of a `Facet`.
 
-For that purpose, you can use the [`Mount`](#mount) and [`Map`](#map) components when there is a needed to add or remove nodes in the React tree.
+For that purpose, you can use the [`Mount`](#mount) and [`Map`](#map) components when there is a need to add or remove nodes in the React tree.
 
 ## `Mount`
 
@@ -28,11 +28,11 @@ const Example = () => {
 
 ## `Map`
 
-Mounts a list of components based on a Facet of an array.
+Mounts a list of components based on a facet of an array.
 
-The length of the array passed into the `array` prop will be used to know how many components to mount. The `children` of the `Map` components should be a function, and this function will receive the data of the current item as a facet.
+The length of the array passed into the `array` prop will be used to know how many components to mount. The `children` of the `Map` components should be a function, and this function will receive a facet containing the data and index of the current item.
 
-The `Map` only re-renders if the size of the array changes, so we need to be mindful about changing the size of the array, because it will cause a performance hit. On the other hand, if only data inside the items in the list change, but not the _amount_ of items, there will be no re-render: the facet passed into the `children` function will simply be updated with the latest data.
+The `Map` only re-renders if the size of the array changes, so we need to be mindful about changing the size of the array, as it will cause a performance hit. On the other hand, if only the data inside the items in the list change, but not the _amount_ of items, there will be no re-render: the facet passed into the `children` function will simply be updated with the latest data.
 
 Example:
 
@@ -59,9 +59,18 @@ const Example = () => {
     { value: '5' },
   ])
 
+  const PrintItem = ({ item, index }: { item: Facet<Input>; index: number }) => {
+    return (
+      <span>
+        <fast-text text={useFacetMap(({ a }) => a, [], [item])} />
+        <span>{index}</span>
+      </span>
+    )
+  }
+
   return (
     <Map array={arrayFacet} equalityCheck={shallowObjectEqualityCheck}>
-      {(item) => <PrintItem item={item} />}
+      {(item, index) => <PrintItem item={item} index={index} />}
     </Map>
   )
 }
