@@ -1,7 +1,8 @@
 import React from 'react'
-import { render } from '@react-facet/dom-fiber-testing-library'
+import { render, act, screen } from '@react-facet/dom-fiber-testing-library'
 import { Mount } from '.'
 import { createFacet } from '../facet'
+import { mapFacetsLightweight } from '../mapFacets'
 import { NO_VALUE } from '../types'
 
 it('renders when true', () => {
@@ -53,26 +54,40 @@ it('does not render when false', () => {
   expect(rendered).not.toHaveBeenCalled()
 })
 
-it('does not render facet has no value', () => {
-  const display = createFacet<boolean>({ initialValue: NO_VALUE })
-  const rendered = jest.fn()
+it('can perform conditional rendering', () => {
+  const itemsFacet = createFacet<Array<string>>({ initialValue: NO_VALUE })
+  const hasItemsFacet = mapFacetsLightweight<boolean>([itemsFacet], (x) => Boolean((x as Array<string>).length))
 
-  const Content = () => {
-    rendered()
-    return <div>Hello there</div>
-  }
+  const componentText = 'The component passed the condition and is being rendered'
+  const Component = jest.fn()
+  Component.mockImplementation(() => <div>{componentText}</div>)
 
   const Example = () => {
     return (
-      <Mount when={display}>
-        <Content />
+      <Mount when={hasItemsFacet} condition={false}>
+        <Component />
       </Mount>
     )
   }
 
   const scenario = <Example />
-
   render(scenario)
 
-  expect(rendered).not.toHaveBeenCalled()
+  // It should not render before the facet has produced a value.
+  expect(screen.queryByText(componentText)).not.toBeInTheDocument()
+  expect(Component).not.toHaveBeenCalled()
+
+  act(() => {
+    itemsFacet.set([])
+  })
+
+  expect(screen.queryByText(componentText)).toBeInTheDocument()
+  expect(Component).toHaveBeenCalledTimes(1)
+
+  act(() => {
+    itemsFacet.set(['Lorem ipsum'])
+  })
+
+  expect(screen.queryByText(componentText)).not.toBeInTheDocument()
+  expect(Component).toHaveBeenCalledTimes(1)
 })
