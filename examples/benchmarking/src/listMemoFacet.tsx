@@ -1,4 +1,4 @@
-import { useFacetState, Facet, useFacetMap, useFacetLayoutEffect, NO_VALUE, Map } from '@react-facet/core'
+import { useFacetState, Facet, useFacetMap, useFacetEffect, NO_VALUE, Map } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
 import React, { useEffect } from 'react'
 
@@ -47,7 +47,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
   const health = useFacetMap((item) => item.health, [], [item])
   const name = useFacetMap((item) => item.name, [], [item])
 
-  useFacetLayoutEffect(
+  useFacetEffect(
     (health) => {
       randomWork(health)
     },
@@ -55,7 +55,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
     [health],
   )
 
-  useFacetLayoutEffect(
+  useFacetEffect(
     (name) => {
       randomWork(name)
     },
@@ -63,7 +63,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
     [name],
   )
 
-  useFacetLayoutEffect(
+  useFacetEffect(
     (name) => {
       randomWork(name)
     },
@@ -71,7 +71,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
     [name],
   )
 
-  useFacetLayoutEffect(
+  useFacetEffect(
     (name) => {
       randomWork(name)
     },

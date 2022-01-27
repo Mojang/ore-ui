@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetMap } from './useFacetMap'
 import { NO_VALUE, Facet } from '../types'
-import { useFacetLayoutEffect } from './useFacetLayoutEffect'
+import { useFacetEffect } from './useFacetEffect'
 import { createFacet } from '../facet'
 import { useFacetState } from './useFacetState'
 
@@ -102,7 +102,7 @@ describe('multiple dependencies', () => {
     const ComponentWithFacetEffect = () => {
       const adaptValue = useFacetMap(([a], b) => ({ name: `${a}-${b}` }), [], [facetA, facetB], nameEqualityCheck)
 
-      useFacetLayoutEffect(
+      useFacetEffect(
         (value) => {
           mock(value.name)
         },
@@ -144,7 +144,7 @@ describe('multiple dependencies', () => {
     const ComponentWithFacetEffect = () => {
       const adaptValue = useFacetMap(([a], b) => `${a}-${b}`, [], [facetA, facetB])
 
-      useFacetLayoutEffect(
+      useFacetEffect(
         (value) => {
           mock(value)
         },
@@ -186,7 +186,7 @@ describe('multiple dependencies', () => {
     const ComponentWithFacetEffect = () => {
       const adaptValue = useFacetMap(([a], b) => a + b, [], [facetA, facetB])
 
-      useFacetLayoutEffect(
+      useFacetEffect(
         (value) => {
           mock(value)
         },
@@ -228,7 +228,7 @@ describe('multiple dependencies', () => {
     const ComponentWithFacetEffect = () => {
       const adaptValue = useFacetMap(([a], b) => a && b, [], [facetA, facetB])
 
-      useFacetLayoutEffect(
+      useFacetEffect(
         (value) => {
           mock(value)
         },
@@ -385,7 +385,7 @@ describe('single dependency', () => {
     const ComponentWithFacetEffect = () => {
       const adaptValue = useFacetMap(([a]) => a, [], [facetA], nameEqualityCheck)
 
-      useFacetLayoutEffect(
+      useFacetEffect(
         (value) => {
           mock(value.name)
         },
@@ -426,7 +426,7 @@ describe('single dependency', () => {
     const ComponentWithFacetEffect = () => {
       const adaptValue = useFacetMap(([a]) => a.name, [], [facetA])
 
-      useFacetLayoutEffect(
+      useFacetEffect(
         (value) => {
           mock(value)
         },
@@ -467,7 +467,7 @@ describe('single dependency', () => {
     const ComponentWithFacetEffect = () => {
       const adaptValue = useFacetMap(([a]) => a.name, [], [facetA])
 
-      useFacetLayoutEffect(
+      useFacetEffect(
         (value) => {
           mock(value)
         },
@@ -508,7 +508,7 @@ describe('single dependency', () => {
     const ComponentWithFacetEffect = () => {
       const adaptValue = useFacetMap(([a]) => a.name, [], [facetA])
 
-      useFacetLayoutEffect(
+      useFacetEffect(
         (value) => {
           mock(value)
         },

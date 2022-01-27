@@ -1,5 +1,5 @@
 import { render } from '@react-facet/dom-fiber'
-import { useFacetState, useFacetLayoutEffect } from '@react-facet/core'
+import { useFacetState, useFacetEffect } from '@react-facet/core'
 import React, { useEffect } from 'react'
 
 function Performance() {
@@ -20,7 +20,7 @@ function Performance() {
     }
   }, [setValue])
 
-  useFacetLayoutEffect(
+  useFacetEffect(
     () => {
       // and effect that does nothing
     },

@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetWrap } from './useFacetWrap'
-import { useFacetLayoutEffect } from './useFacetLayoutEffect'
+import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
 import { createFacet } from '../facet'
 
@@ -10,7 +10,7 @@ it('wraps a value, updating the facet when it changes', () => {
 
   const ComponentWithFacetEffect: React.FC<{ value: string }> = ({ value }) => {
     const facetifiedValue = useFacetWrap(value)
-    useFacetLayoutEffect(
+    useFacetEffect(
       (value) => {
         mock(value)
       },
@@ -34,7 +34,7 @@ it('wraps a value, with the default equality check (preventing unnecessary updat
 
   const ComponentWithFacetEffect: React.FC<{ value: string }> = ({ value }) => {
     const facetifiedValue = useFacetWrap(value)
-    useFacetLayoutEffect(
+    useFacetEffect(
       (value) => {
         mock(value)
       },
@@ -58,7 +58,7 @@ it('forwards a facet', () => {
 
   const ComponentWithFacetEffect: React.FC = () => {
     const facetifiedValue = useFacetWrap(demoFacet)
-    useFacetLayoutEffect(
+    useFacetEffect(
       (value) => {
         mock(value)
       },
@@ -103,7 +103,7 @@ describe('regressions', () => {
 
     const TestingComponent = () => {
       const handlerFacet = useFacetWrap(mock)
-      useFacetLayoutEffect(() => {}, [], [handlerFacet])
+      useFacetEffect(() => {}, [], [handlerFacet])
       return null
     }
 

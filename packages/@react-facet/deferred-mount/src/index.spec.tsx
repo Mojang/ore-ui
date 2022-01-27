@@ -1,7 +1,7 @@
 import React from 'react'
 import { DeferredMountProvider, DeferredMount, useIsDeferring } from '.'
 import { render, act } from '@react-facet/dom-fiber-testing-library'
-import { useFacetLayoutEffect, useFacetMap } from '@react-facet/core'
+import { useFacetEffect, useFacetMap } from '@react-facet/core'
 
 let idSeed = 1
 
@@ -64,7 +64,7 @@ describe('cost is about half of the budget (should mount two per frame)', () => 
 
   const SampleComponent = () => {
     const isDeferringFacet = useIsDeferring()
-    useFacetLayoutEffect((isDeferring) => isDeferringValues(isDeferring), [], [isDeferringFacet])
+    useFacetEffect((isDeferring) => isDeferringValues(isDeferring), [], [isDeferringFacet])
 
     return (
       <>
@@ -194,7 +194,7 @@ describe('app with just the DeferredMountProvider', () => {
   const SampleComponent = () => {
     const isDeferringFacet = useIsDeferring()
 
-    useFacetLayoutEffect((isDeferring) => isDeferringValues(isDeferring), [], [isDeferringFacet])
+    useFacetEffect((isDeferring) => isDeferringValues(isDeferring), [], [isDeferringFacet])
 
     return (
       <>

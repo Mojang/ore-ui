@@ -2,7 +2,7 @@ import React from 'react'
 import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { Setter, NO_VALUE } from '../types'
 import { useFacetState } from './useFacetState'
-import { useFacetLayoutEffect } from './useFacetLayoutEffect'
+import { useFacetEffect } from './useFacetEffect'
 
 it('first value is the facet, second is the setter', () => {
   let setAdaptValue: Setter<string>
@@ -36,7 +36,7 @@ it('should be possible to have value undefined as the first value', () => {
   const ComponentWithFacetEffect = () => {
     const [facet] = useFacetState(undefined)
 
-    useFacetLayoutEffect(effect, [], [facet])
+    useFacetEffect(effect, [], [facet])
 
     return null
   }

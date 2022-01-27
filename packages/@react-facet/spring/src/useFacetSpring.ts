@@ -1,4 +1,4 @@
-import { Facet, NO_VALUE, useFacetLayoutEffect, useFacetMap, useFacetState } from '@react-facet/core'
+import { Facet, NO_VALUE, useFacetEffect, useFacetMap, useFacetState } from '@react-facet/core'
 import stepper from './stepper'
 
 type UseFacetSpringOptions = {
@@ -16,7 +16,7 @@ export function useFacetSpring(targetFacet: Facet<number>, options?: UseFacetSpr
   const stiffness = options?.stiffness ?? 170
   const precision = options?.precision ?? 0.01
 
-  useFacetLayoutEffect(
+  useFacetEffect(
     (target) => {
       let frameID: number
       let previousTimestamp: number
