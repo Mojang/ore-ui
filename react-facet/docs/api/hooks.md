@@ -90,7 +90,7 @@ const Form = ({ onSubmit, initialValue }) => {
 
 The `useFacetEffect` hook gives you a way of performing some imperative action (effect) whenever the underlying facets are updated. It is very similar in structure and goal to React’s own `useEffect`.
 
-Like `useEffect`, `useFacetEffect` takes an effect function to be called when the updates happen, a dependency list, and finally one or more facets.
+Like `useEffect`, `useFacetEffect` takes an effect function to be called when the updates happen, a dependency list, and finally an array of facets. If there are more than one facet in the array, then the `useFacetEffect` will only be called when all facets have a value. This is an implementation made to avoid flickering. Once all facets do have a value, the `useFacetEffect` will be called when a value changes in any facet.
 
 ```tsx
 const Logger = ({ shouldLog }) => {
@@ -134,6 +134,10 @@ const Logger = ({ shouldLog }) => {
   return <span>{shouldLog ? 'Logger is active' : 'Logger is disabled'}</span>
 }
 ```
+
+## `useFacetLayoutEffect`
+
+Much like React offers a `useLayoutEffect` as a complement to `useEffect`, so too does `react-facet` offer a `useFacetLayoutEffect`. It takes the exact same input as `useFacetEffect` and has an identical implementation, the sole exception being that it uses React's underlying `useLayoutEffect` instead that fires synchronously after all DOM mutations.
 
 ## `useFacetMap`
 
