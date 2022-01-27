@@ -3,7 +3,7 @@ import { useFacetMap, useFacetUnwrap } from '../hooks'
 import { Facet } from '../types'
 
 type WithProps<T> = {
-  data: Facet<T | undefined>
+  data: Facet<T | null | undefined>
   children: (data: Facet<T>) => ReactElement
 }
 
