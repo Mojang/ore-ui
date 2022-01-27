@@ -1,6 +1,6 @@
 import { ReactElement } from 'react'
 import { useFacetMap, useFacetUnwrap } from '../hooks'
-import { Facet } from '../types'
+import { Facet, NoValue } from '../types'
 
 type WithProps<T> = {
   data: Facet<T | null | undefined>
