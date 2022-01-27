@@ -1,11 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { Facet, Unsubscribe, Cleanup, NO_VALUE } from '../types'
 
-export function useFacetEffect<V>(
-  callback: (v: V) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>],
-): void
+export function useFacetEffect<V>(callback: (v: V) => void | Cleanup, dependencies: unknown[], facet: [Facet<V>]): void
 
 export function useFacetEffect<V, V1>(
   callback: (v: V, v1: V1) => void | Cleanup,
