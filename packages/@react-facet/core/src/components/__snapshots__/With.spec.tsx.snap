@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders when not null, passing down the information 1`] = `
+<div>
+  Hello 
+  Zelda
+</div>
+`;
