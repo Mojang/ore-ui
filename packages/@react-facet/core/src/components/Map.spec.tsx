@@ -2,7 +2,7 @@ import React from 'react'
 import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { createFacet } from '../facet'
 import { Facet } from '../types'
-import { useFacetEffect, useFacetMap } from '../hooks'
+import { useFacetLayoutEffect, useFacetMap } from '../hooks'
 import { Map } from '.'
 
 it('renders all items in a Facet of array', () => {
@@ -104,7 +104,7 @@ it('updates only items that have changed', () => {
   const mock = jest.fn()
 
   const ExampleContent = ({ item }: { item: Facet<Input> }) => {
-    useFacetEffect(mock, [], [item])
+    useFacetLayoutEffect(mock, [], [item])
     return null
   }
 

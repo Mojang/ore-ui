@@ -1,6 +1,6 @@
 import React from 'react'
 import { act, render } from '@react-facet/dom-fiber-testing-library'
-import { useFacetEffect } from './useFacetEffect'
+import { useFacetLayoutEffect } from './useFacetLayoutEffect'
 import { createFacet } from '../facet'
 import { NO_VALUE } from '../types'
 
@@ -10,7 +10,7 @@ it('triggers the effect on mount with the initial value and on any update of the
   const callback = jest.fn()
 
   const ComponentWithFacetEffect = () => {
-    useFacetEffect(
+    useFacetLayoutEffect(
       (value) => {
         callback(value)
       },
@@ -45,7 +45,7 @@ it('triggers the effect when a dependency changes', () => {
   const callback = jest.fn()
 
   const ComponentWithFacetEffect = ({ dependency }: { dependency: number }) => {
-    useFacetEffect(
+    useFacetLayoutEffect(
       (value) => {
         callback(`${value} ${dependency}`)
       },
@@ -77,7 +77,7 @@ describe('cleanup', () => {
     const cleanup = jest.fn()
 
     const ComponentWithFacetEffect = () => {
-      useFacetEffect(
+      useFacetLayoutEffect(
         () => {
           return cleanup
         },
@@ -121,7 +121,7 @@ it('supports multiple facets, only triggering the effect once all facets have a 
   const effect = jest.fn().mockReturnValue(cleanup)
 
   const ComponentWithFacetEffect = () => {
-    useFacetEffect(
+    useFacetLayoutEffect(
       (valueA, valueB) => {
         return effect(valueA, valueB)
       },

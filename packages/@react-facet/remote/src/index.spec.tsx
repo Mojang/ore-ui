@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { useFacetUnwrap, useFacetEffect, NO_VALUE } from '@react-facet/core'
+import { useFacetUnwrap, useFacetLayoutEffect, NO_VALUE } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber-testing-library'
 import { remoteDynamicSelector } from './remoteDynamicSelector'
 import { remoteFacet } from './remoteFacet'
@@ -221,7 +221,7 @@ describe('rendering with imperative calls from a selector', () => {
   const RenderingImperativeSelector = ({ callbackDependency }: { callbackDependency: string }) => {
     const ref = useRef<HTMLDivElement>(null)
 
-    useFacetEffect(
+    useFacetLayoutEffect(
       (value: number) => {
         const element = ref.current
 

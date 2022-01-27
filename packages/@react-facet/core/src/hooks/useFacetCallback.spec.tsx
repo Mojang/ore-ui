@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetCallback } from './useFacetCallback'
-import { useFacetEffect } from './useFacetEffect'
+import { useFacetLayoutEffect } from './useFacetLayoutEffect'
 import { useFacetMap } from './useFacetMap'
 import { NO_VALUE } from '../types'
 import { createFacet } from '../facet'
@@ -101,7 +101,7 @@ it('should work with uninitialized values', () => {
       [internalDemoFacet],
     )
 
-    useFacetEffect(
+    useFacetLayoutEffect(
       () => {
         handler()
       },

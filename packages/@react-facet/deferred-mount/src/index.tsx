@@ -8,7 +8,7 @@ import React, {
   useEffect,
   ReactElement,
 } from 'react'
-import { createFacet, Facet, useFacetEffect, useFacetState } from '@react-facet/core'
+import { createFacet, Facet, useFacetLayoutEffect, useFacetState } from '@react-facet/core'
 
 /**
  * Targeting around 60fps
@@ -60,7 +60,7 @@ export function DeferredMountProvider({
     [setRequestingToRun],
   )
 
-  useFacetEffect(
+  useFacetLayoutEffect(
     (requestingToRun) => {
       // Even if we are not considered to be running, we need to check if there is still
       // work pending to be done. If there is... we still need to run this effect.

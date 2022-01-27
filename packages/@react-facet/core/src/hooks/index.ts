@@ -1,5 +1,5 @@
 export * from './useFacetCallback'
-export * from './useFacetEffect'
+export * from './useFacetLayoutEffect'
 export * from './useFacetMap'
 export * from './useFacetMemo'
 export * from './useFacetPropSetter'
