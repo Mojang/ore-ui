@@ -6,7 +6,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': [
       'error',
       {
-        additionalHooks: '(useFacetEffect|useFacetMap|useFacetMemo|useFacetCallback)',
+        additionalHooks: '(useFacetLayoutEffect|useFacetEffect|useFacetMap|useFacetMemo|useFacetCallback)',
       },
     ],
   },
