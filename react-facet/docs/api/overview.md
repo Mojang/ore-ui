@@ -28,6 +28,7 @@ These are a series of components that can be used together with the `fast-*` com
 
 - [`Mount`](mount-components#mount)
 - [`Map`](mount-components#map)
+- [`With`](mount-components#with)
 
 ## `fast-*` components and their React DOM compatible equivalent
 
