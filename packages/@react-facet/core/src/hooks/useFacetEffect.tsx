@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Facet, Unsubscribe, Cleanup, NO_VALUE } from '../types'
 
 export function useFacetEffect<V>(callback: (v: V) => void | Cleanup, dependencies: unknown[], facet: [Facet<V>]): void
@@ -76,7 +76,7 @@ export function useFacetEffect<V, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10>(
 ): void
 
 /**
- * Allows using a running an effect based on facet updates. Similar to React's useEffect
+ * Allows running an effect based on facet updates. Similar to React's useEffect.
  *
  * @param effect function that will do the side-effect (ex: update the DOM)
  * @param dependencies variable used by the map that are available in scope (similar as dependencies of useEffect)
@@ -93,7 +93,7 @@ export function useFacetEffect(
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const effectMemoized = useCallback(effect, dependencies)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (facets.length === 1) {
       return facets[0].observe(effectMemoized)
     }
