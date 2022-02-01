@@ -75,3 +75,64 @@ const Example = () => {
   )
 }
 ```
+
+## `With`
+
+Mounts its children conditionally. This component is meant to solve an issue with refining types in TypeScript.
+
+Unlike `Mount`, the condition in `With` is that the `Facet` passed in to the `data` prop that should return `null` or `undefined` or an actual value; if the value is nullish it will not mount. When the `data` prop facet contains a value, `With` will call the function passed as `children`, passing the `data` Facet as argument. The type is now refined so that it will not be `null` or `undefined`.
+
+Example:
+
+```tsx
+type UserDataProps = {
+  name: FacetProp<string>
+  middlename?: FacetProp<string | undefined>
+}
+
+const UserData = ({ name, middlename }: UserDataProps) => {
+  const nameFacet = useFacetWrap(name)
+  const middlenameFacet = useFacetWrap(middlename)
+
+  return (
+    <div>
+      <p>
+        Name: <fast-text text={nameFacet} />
+      </p>
+      <With data={middlenameFacet}>
+        {(middlename) => (
+          <p>
+            Middlename: <fast-text text={middlename} />
+          </p>
+        )}
+      </With>
+    </div>
+  )
+}
+```
+
+For contrast, doing this same thing with `Mount` will not allow to type check correctly, since the type of `middlenameFacet` is not refined, and could still contain a `null` or `undefined`:
+
+```tsx
+type UserDataProps = {
+  name: FacetProp<string>
+  middlename?: FacetProp<string | undefined>
+}
+
+const UserData = ({ name, middlename }: UserDataProps) => {
+  const nameFacet = useFacetWrap(name)
+  const middlenameFacet = useFacetWrap(middlename)
+
+  return (
+    <div>
+      <p>Name: <fast-text text={nameFacet} /></p>
+      <Mount data={useFacetMap((middlename) => middlename != null, [],[middlenameFacet])}>
+        <p>Middlename: <fast-text text={middlenameFacet} /></p>
+        {/* Since TypeScript cannot know that `middlenameFacet` now holds a `string` for sure and still thinks that
+            it could be `string | undefined`, it will complain. The only way to fix this is to extract a new component
+            or with a type assertion. Neither is good */}
+      </With>
+    </div>
+  )
+}
+```
