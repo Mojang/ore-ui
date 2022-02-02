@@ -28,11 +28,11 @@ const Example = () => {
 
 ## `Map`
 
-Mounts a list of components based on a facet of an array.
+Mounts a list of components based on a `Facet` of an array.
 
-The length of the array passed into the `array` prop will be used to know how many components to mount. The `children` of the `Map` components should be a function, and this function will receive a facet containing the data and index of the current item.
+The length of the array passed into the `array` prop is used to determine how many components to mount. The `children` of the `Map` components should be a function, and this function will receive a `Facet` containing the data and index of the current item.
 
-The `Map` only re-renders if the size of the array changes, so we need to be mindful about changing the size of the array, as it will cause a performance hit. On the other hand, if only the data inside the items in the list change, but not the _amount_ of items, there will be no re-render: the facet passed into the `children` function will simply be updated with the latest data.
+The `Map` only re-renders if the size of the array changes, so we need to be mindful about changing the size of the array, as it will cause a performance hit. On the other hand, if only the data inside the items in the list change, but not the _amount_ of items, there will be no re-render: the `Facet` passed into the `children` function will simply be updated with the latest data.
 
 Example:
 
@@ -111,7 +111,7 @@ const UserData = ({ name, middlename }: UserDataProps) => {
 }
 ```
 
-For contrast, doing this same thing with `Mount` will not allow to type check correctly, since the type of `middlenameFacet` is not refined, and could still contain a `null` or `undefined`:
+For contrast, attempting to do the same thing with `Mount` will _not_ allow for correct type checking. In this scenario, the type of `middlenameFacet` is not refined and could still contain a `null` or `undefined`:
 
 ```tsx
 type UserDataProps = {
@@ -125,13 +125,17 @@ const UserData = ({ name, middlename }: UserDataProps) => {
 
   return (
     <div>
-      <p>Name: <fast-text text={nameFacet} /></p>
-      <Mount data={useFacetMap((middlename) => middlename != null, [],[middlenameFacet])}>
-        <p>Middlename: <fast-text text={middlenameFacet} /></p>
-        {/* Since TypeScript cannot know that `middlenameFacet` now holds a `string` for sure and still thinks that
-            it could be `string | undefined`, it will complain. The only way to fix this is to extract a new component
-            or with a type assertion. Neither is good */}
-      </With>
+      <p>
+        Name: <fast-text text={nameFacet} />
+      </p>
+      <Mount data={useFacetMap((middlename) => middlename != null, [], [middlenameFacet])}>
+        <p>
+          Middlename: <fast-text text={middlenameFacet} />
+        </p>
+        {/* Since TypeScript cannot know that `middlenameFacet` now holds a `string` for sure and still believes that
+            it could be `string | undefined`, it will complain. The only way to solve this issue is to extract a new component
+            or use a type assertion. Neither is a good option, hence we recommend using `With` instead in this scenario. */}
+      </Mount>
     </div>
   )
 }
