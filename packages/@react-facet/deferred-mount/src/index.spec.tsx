@@ -1,5 +1,11 @@
-import React from 'react'
-import { DeferredMountProvider, DeferredMount, useIsDeferring } from '.'
+import React, { useEffect } from 'react'
+import {
+  DeferredMountProvider,
+  DeferredMount,
+  useIsDeferring,
+  DeferredMountWithCallback,
+  useNotifyMountComplete,
+} from '.'
 import { render, act } from '@react-facet/dom-fiber-testing-library'
 import { useFacetEffect, useFacetMap } from '@react-facet/core'
 
@@ -18,6 +24,113 @@ describe('DeferredMount', () => {
       </DeferredMount>,
     )
     expect(container.firstChild).toContainHTML('<div>Should be rendered</div>')
+  })
+})
+
+describe('DeferredMountWithCallback', () => {
+  it('renders immediately if we dont have a provider', () => {
+    const { container } = render(
+      <DeferredMountWithCallback>
+        <div>Should be rendered</div>
+      </DeferredMountWithCallback>,
+    )
+    expect(container.firstChild).toContainHTML('<div>Should be rendered</div>')
+  })
+
+  it('waits until previous deferred callback finishes', async () => {
+    jest.useFakeTimers()
+
+    const frames: (() => void)[] = []
+    const requestSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((frameRequest) => {
+      const id = idSeed++
+      const cb = () => {
+        frameRequest(id)
+      }
+      frames.push(cb)
+      return id
+    })
+
+    const runRaf = () => {
+      const cb = frames.pop()
+      if (cb != null) act(() => cb())
+    }
+
+    const MOUNT_COMPLETION_DELAY = 1000
+
+    const MockDeferredComponent = ({ index }: { index: number }) => {
+      const triggerMountComplete = useNotifyMountComplete()
+
+      useEffect(() => {
+        const id = setTimeout(triggerMountComplete, MOUNT_COMPLETION_DELAY)
+
+        return () => {
+          clearTimeout(id)
+        }
+      }, [triggerMountComplete, index])
+
+      return <div>Callback{index}</div>
+    }
+
+    const SampleComponent = () => {
+      const isDeferringFacet = useIsDeferring()
+
+      return (
+        <>
+          <fast-text
+            text={useFacetMap((isDeferring) => (isDeferring ? 'deferring' : 'done'), [], [isDeferringFacet])}
+          />
+          <DeferredMountWithCallback>
+            <MockDeferredComponent index={0} />
+          </DeferredMountWithCallback>
+          <DeferredMountWithCallback>
+            <MockDeferredComponent index={1} />
+          </DeferredMountWithCallback>
+          <DeferredMountWithCallback>
+            <MockDeferredComponent index={2} />
+          </DeferredMountWithCallback>
+        </>
+      )
+    }
+
+    const { container } = render(
+      <DeferredMountProvider>
+        <SampleComponent />
+      </DeferredMountProvider>,
+    )
+
+    // Wait a frame for deferred component to render
+    expect(container).toContainHTML('deferring')
+    expect(container).not.toContainHTML('Callback0')
+    expect(container).not.toContainHTML('Callback1')
+    expect(container).not.toContainHTML('Callback2')
+
+    // Initial run, sets renders the first component
+    runRaf()
+    expect(container).toContainHTML('Callback0')
+    expect(container).not.toContainHTML('Callback1')
+    expect(container).not.toContainHTML('Callback2')
+
+    // Wait for component to finish rendering, then advance to the next component render
+    jest.advanceTimersByTime(MOUNT_COMPLETION_DELAY)
+    runRaf()
+    expect(container).toContainHTML('Callback0')
+    expect(container).toContainHTML('Callback1')
+    expect(container).not.toContainHTML('Callback2')
+
+    // Wait for component to finish rendering, then advance to the next component render
+    jest.advanceTimersByTime(MOUNT_COMPLETION_DELAY)
+    runRaf()
+    expect(container).toContainHTML('Callback0')
+    expect(container).toContainHTML('Callback1')
+    expect(container).toContainHTML('Callback2')
+
+    // Wait for final deferred render and expect queue to be finished
+    jest.advanceTimersByTime(MOUNT_COMPLETION_DELAY)
+    runRaf()
+    expect(container).toContainHTML('done')
+
+    jest.useRealTimers()
+    requestSpy.mockRestore()
   })
 })
 

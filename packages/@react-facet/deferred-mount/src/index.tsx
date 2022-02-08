@@ -33,6 +33,7 @@ export function DeferredMountProvider({
 }: DeferredMountProviderProps) {
   const [isDeferring, setIsDeferring] = useFacetState(true)
   const [requestingToRun, setRequestingToRun] = useFacetState(false)
+  const waitingForMountCallback = useRef(false)
 
   const deferredMountsRef = useRef<UpdateFn[]>([])
 
@@ -49,7 +50,7 @@ export function DeferredMountProvider({
        */
       return () => {
         // It is most common that we will be cleaning up after all deferred mounting has been run
-        if (deferredMountsRef.current.length === 0) return
+        if (deferredMountsRef.current.length === 0 && !waitingForMountCallback.current) return
 
         const index = deferredMountsRef.current.indexOf(updateFn)
         if (index !== -1) {
@@ -64,7 +65,7 @@ export function DeferredMountProvider({
     (requestingToRun) => {
       // Even if we are not considered to be running, we need to check if there is still
       // work pending to be done. If there is... we still need to run this effect.
-      if (!requestingToRun && deferredMountsRef.current.length === 0) return
+      if (!requestingToRun && deferredMountsRef.current.length === 0 && !waitingForMountCallback.current) return
 
       const work = (startTimestamp: number) => {
         const deferredMounts = deferredMountsRef.current
@@ -74,26 +75,50 @@ export function DeferredMountProvider({
         // before we have a chance to cancel
         // Its not possible to detect this with unit testing, so verify on the browser
         // after a change here that this function is not executing every frame unnecessarily
-        if (deferredMounts.length > 0) {
+        if (deferredMounts.length > 0 || waitingForMountCallback.current) {
           frameId = window.requestAnimationFrame(work)
+        } else {
+          // Used to check if the requestAnimationFrame has stopped running
+          frameId = -1
         }
 
         let lastUpdateCost = 0
         let now = startTimestamp
 
-        while (deferredMounts.length > 0 && now - startTimestamp + lastUpdateCost < frameTimeBudget) {
+        while (
+          deferredMounts.length > 0 &&
+          now - startTimestamp + lastUpdateCost < frameTimeBudget &&
+          !waitingForMountCallback.current
+        ) {
           const before = now
 
           const updateFn = deferredMounts.shift() as UpdateFn
-          updateFn(false)
+          const result = updateFn(false)
 
           const after = performance.now()
 
           lastUpdateCost = after - before
           now = after
+
+          // Can be a function that takes a callback if using DeferredMountWithCallback
+          const resultTakesCallback = typeof result === 'function'
+
+          if (resultTakesCallback) {
+            waitingForMountCallback.current = true
+
+            result(() => {
+              waitingForMountCallback.current = false
+
+              // If the requestAnimationFrame stops running while waiting for the
+              // callback we need to restart it to process the rest of the queue.
+              if (frameId === -1) {
+                frameId = window.requestAnimationFrame(work)
+              }
+            })
+          }
         }
 
-        if (deferredMounts.length === 0) {
+        if (deferredMounts.length === 0 && !waitingForMountCallback.current) {
           setIsDeferring(false)
           setRequestingToRun(false)
         }
@@ -136,6 +161,51 @@ export function DeferredMount({ children }: DeferredMountProps) {
   return children
 }
 
+interface DeferredMountWithCallbackProps {
+  children: ReactElement
+}
+
+const NotifyMountComplete = createContext(() => {})
+export const useNotifyMountComplete = () => useContext(NotifyMountComplete)
+
+/**
+ * Component that should wrap some mounting that must be deferred to a later frame.
+ * This will wait for a callback from the child component before marking itself as rendered.
+ * @param children component to be mounted deferred
+ */
+export function DeferredMountWithCallback({ children }: DeferredMountWithCallbackProps) {
+  const pushDeferUpdateFunction = useContext(pushDeferUpdateContext)
+  const [deferred, setDeferred] = useState(pushDeferUpdateFunction != null)
+  const resolveMountComplete = useRef<(value: void | PromiseLike<void>) => void>()
+  const mountCompleteBeforeInitialization = useRef(false)
+
+  const onMountComplete = useCallback(() => {
+    if (resolveMountComplete.current != null) {
+      resolveMountComplete.current()
+    } else {
+      mountCompleteBeforeInitialization.current = true
+    }
+  }, [])
+
+  useEffect(() => {
+    if (pushDeferUpdateFunction)
+      pushDeferUpdateFunction((isDeferred) => {
+        return (resolve) => {
+          setDeferred(isDeferred)
+
+          if (mountCompleteBeforeInitialization.current) {
+            resolve()
+          } else {
+            resolveMountComplete.current = resolve
+          }
+        }
+      })
+  }, [pushDeferUpdateFunction, onMountComplete])
+
+  if (deferred) return null
+  return <NotifyMountComplete.Provider value={onMountComplete}>{children}</NotifyMountComplete.Provider>
+}
+
 interface ImmediateMountProps {
   children: ReactElement
 }
@@ -164,7 +234,7 @@ export function ImmediateMount({ children }: ImmediateMountProps) {
 }
 
 interface UpdateFn {
-  (deferred: boolean): void
+  (deferred: boolean): void | ((onMountComplete: () => void) => void)
 }
 
 interface PushDeferUpdateFunction {
