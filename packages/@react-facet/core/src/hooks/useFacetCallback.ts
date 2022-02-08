@@ -2,93 +2,80 @@ import { useCallback, useLayoutEffect, useRef } from 'react'
 import { NoValue } from '..'
 import { Facet, NO_VALUE, Option } from '../types'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFacetCallback<M, V, C extends (...args: any[]) => M | NoValue>(
-  callback: (v: V) => C,
+export function useFacetCallback<M, V, K extends unknown[]>(
+  callback: (v: V) => (...args: K) => M,
   dependencies: unknown[],
   facet: [Facet<V>],
-): C
+): (...args: K) => M | NoValue
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFacetCallback<M, V, V1, C extends (...args: any[]) => M | NoValue>(
-  callback: (v: V, v1: V1) => C,
+export function useFacetCallback<M, V, V1, K extends unknown[]>(
+  callback: (v: V, v1: V1) => (...args: K) => M,
   dependencies: unknown[],
   facet: [Facet<V>, Facet<V1>],
-): C
+): (...args: K) => M | NoValue
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFacetCallback<M, V, V1, V2, C extends (...args: any[]) => M | NoValue>(
-  callback: (v: V, v1: V1, v2: V2) => C,
+export function useFacetCallback<M, V, V1, V2, K extends unknown[]>(
+  callback: (v: V, v1: V1, v2: V2) => (...args: K) => M,
   dependencies: unknown[],
   facet: [Facet<V>, Facet<V1>, Facet<V2>],
-): C
+): (...args: K) => M | NoValue
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFacetCallback<M, V, V1, V2, V3, C extends (...args: any[]) => M | NoValue>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3) => C,
+export function useFacetCallback<M, V, V1, V2, V3, K extends unknown[]>(
+  callback: (v: V, v1: V1, v2: V2, v3: V3) => (...args: K) => M,
   dependencies: unknown[],
   facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>],
-): C
+): (...args: K) => M | NoValue
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFacetCallback<M, V, V1, V2, V3, V4, C extends (...args: any[]) => M | NoValue>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4) => C,
+export function useFacetCallback<M, V, V1, V2, V3, V4, K extends unknown[]>(
+  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4) => (...args: K) => M,
   dependencies: unknown[],
   facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>],
-): C
+): (...args: K) => M | NoValue
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFacetCallback<M, V, V1, V2, V3, V4, V5, C extends (...args: any[]) => M | NoValue>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5) => C,
+export function useFacetCallback<M, V, V1, V2, V3, V4, V5, K extends unknown[]>(
+  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5) => (...args: K) => M,
   dependencies: unknown[],
   facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>, Facet<V5>],
-): C
+): (...args: K) => M | NoValue
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFacetCallback<M, V, V1, V2, V3, V4, V5, V6, C extends (...args: any[]) => M | NoValue>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6) => C,
+export function useFacetCallback<M, V, V1, V2, V3, V4, V5, V6, K extends unknown[]>(
+  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6) => (...args: K) => M,
   dependencies: unknown[],
   facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>, Facet<V5>, Facet<V6>],
-): C
+): (...args: K) => M | NoValue
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFacetCallback<M, V, V1, V2, V3, V4, V5, V6, V7, C extends (...args: any[]) => M | NoValue>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7) => C,
+export function useFacetCallback<M, V, V1, V2, V3, V4, V5, V6, V7, K extends unknown[]>(
+  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7) => (...args: K) => M,
   dependencies: unknown[],
   facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>, Facet<V5>, Facet<V6>, Facet<V7>],
-): C
+): (...args: K) => M | NoValue
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFacetCallback<M, V, V1, V2, V3, V4, V5, V6, V7, V8, C extends (...args: any[]) => M | NoValue>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7, v8: V8) => C,
+export function useFacetCallback<M, V, V1, V2, V3, V4, V5, V6, V7, V8, K extends unknown[]>(
+  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7, v8: V8) => (...args: K) => M,
   dependencies: unknown[],
   facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>, Facet<V5>, Facet<V6>, Facet<V7>, Facet<V8>],
-): C
+): (...args: K) => M | NoValue
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFacetCallback<M, V, V1, V2, V3, V4, V5, V6, V7, V8, V9, C extends (...args: any[]) => M | NoValue>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7, v8: V8, v9: V9) => C,
+export function useFacetCallback<M, V, V1, V2, V3, V4, V5, V6, V7, V8, V9, K extends unknown[]>(
+  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7, v8: V8, v9: V9) => (...args: K) => M,
   dependencies: unknown[],
   facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>, Facet<V5>, Facet<V6>, Facet<V7>, Facet<V8>, Facet<V9>],
-): C
+): (...args: K) => M | NoValue
 
-export function useFacetCallback<
-  M,
-  V,
-  V1,
-  V2,
-  V3,
-  V4,
-  V5,
-  V6,
-  V7,
-  V8,
-  V9,
-  V10,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  C extends (...args: any[]) => M | NoValue,
->(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7, v8: V8, v9: V9, v10: V10) => C,
+export function useFacetCallback<M, V, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, K extends unknown[]>(
+  callback: (
+    v: V,
+    v1: V1,
+    v2: V2,
+    v3: V3,
+    v4: V4,
+    v5: V5,
+    v6: V6,
+    v7: V7,
+    v8: V8,
+    v9: V9,
+    v10: V10,
+  ) => (...args: K) => M,
   dependencies: unknown[],
   facet: [
     Facet<V>,
@@ -103,7 +90,7 @@ export function useFacetCallback<
     Facet<V9>,
     Facet<V10>,
   ],
-): C
+): (...args: K) => M | NoValue
 
 /**
  * Creates a callback that depends on the value of a facet.
@@ -117,7 +104,7 @@ export function useFacetCallback<
  * Having this as the second argument allows the linter to work.
  */
 export function useFacetCallback<M>(
-  callback: (...args: unknown[]) => (...args: unknown[]) => M | NoValue,
+  callback: (...args: unknown[]) => (...args: unknown[]) => M,
   dependencies: unknown[],
   facets: Facet<unknown>[],
 ): (...args: unknown[]) => M | NoValue {
