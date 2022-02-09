@@ -1,83 +1,5 @@
 import { useCallback, useLayoutEffect } from 'react'
-import { Facet, Unsubscribe, Cleanup, NO_VALUE } from '../types'
-
-export function useFacetLayoutEffect<V>(
-  callback: (v: V) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>],
-): void
-
-export function useFacetLayoutEffect<V, V1>(
-  callback: (v: V, v1: V1) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>, Facet<V1>],
-): void
-
-export function useFacetLayoutEffect<V, V1, V2>(
-  callback: (v: V, v1: V1, v2: V2) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>, Facet<V1>, Facet<V2>],
-): void
-
-export function useFacetLayoutEffect<V, V1, V2, V3>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>],
-): void
-
-export function useFacetLayoutEffect<V, V1, V2, V3, V4>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>],
-): void
-
-export function useFacetLayoutEffect<V, V1, V2, V3, V4, V5>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>, Facet<V5>],
-): void
-
-export function useFacetLayoutEffect<V, V1, V2, V3, V4, V5, V6>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>, Facet<V5>, Facet<V6>],
-): void
-
-export function useFacetLayoutEffect<V, V1, V2, V3, V4, V5, V6, V7>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>, Facet<V5>, Facet<V6>, Facet<V7>],
-): void
-
-export function useFacetLayoutEffect<V, V1, V2, V3, V4, V5, V6, V7, V8>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7, v8: V8) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>, Facet<V5>, Facet<V6>, Facet<V7>, Facet<V8>],
-): void
-
-export function useFacetLayoutEffect<V, V1, V2, V3, V4, V5, V6, V7, V8, V9>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7, v8: V8, v9: V9) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [Facet<V>, Facet<V1>, Facet<V2>, Facet<V3>, Facet<V4>, Facet<V5>, Facet<V6>, Facet<V7>, Facet<V8>, Facet<V9>],
-): void
-
-export function useFacetLayoutEffect<V, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10>(
-  callback: (v: V, v1: V1, v2: V2, v3: V3, v4: V4, v5: V5, v6: V6, v7: V7, v8: V8, v9: V9, v10: V10) => void | Cleanup,
-  dependencies: unknown[],
-  facet: [
-    Facet<V>,
-    Facet<V1>,
-    Facet<V2>,
-    Facet<V3>,
-    Facet<V4>,
-    Facet<V5>,
-    Facet<V6>,
-    Facet<V7>,
-    Facet<V8>,
-    Facet<V9>,
-    Facet<V10>,
-  ],
-): void
+import { Facet, Unsubscribe, Cleanup, NO_VALUE, ExtractFacetValues } from '../types'
 
 /**
  * Allows running an effect based on facet updates. Similar to React's useLayoutEffect.
@@ -89,13 +11,13 @@ export function useFacetLayoutEffect<V, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10>
  * We pass the dependencies of the callback as the second argument so we can leverage the eslint-plugin-react-hooks option for additionalHooks.
  * Having this as the second argument allows the linter to work.
  */
-export function useFacetLayoutEffect(
-  effect: (...args: unknown[]) => void | Cleanup,
+export function useFacetLayoutEffect<Y extends Facet<unknown>[], T extends [...Y]>(
+  effect: (...args: ExtractFacetValues<T>) => void | Cleanup,
   dependencies: unknown[],
-  facets: Facet<unknown>[],
+  facets: T,
 ) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const effectMemoized = useCallback(effect, dependencies)
+  const effectMemoized = useCallback(effect as (...args: unknown[]) => ReturnType<typeof effect>, dependencies)
 
   useLayoutEffect(() => {
     if (facets.length === 1) {
@@ -117,7 +39,7 @@ export function useFacetLayoutEffect(
             cleanup()
           }
 
-          cleanup = effect(...values)
+          cleanup = effect(...(values as ExtractFacetValues<T>))
         }
       })
     })
