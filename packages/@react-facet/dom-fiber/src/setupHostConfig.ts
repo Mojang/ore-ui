@@ -194,6 +194,7 @@ export const setupHostConfig = (): HostConfig<
       children: new Set(),
 
       className: newProps.className != null ? setupClassUpdate(newProps.className, element) : undefined,
+      id: newProps.id != null ? setupIdUpdate(newProps.id, element) : undefined,
       autoPlay: newProps.autoPlay != null ? setupAutoPlayUpdate(newProps.autoPlay, element) : undefined,
       loop: newProps.loop != null ? setupLoopUpdate(newProps.loop, element) : undefined,
       href: newProps.href != null ? setupHrefUpdate(newProps.href, element) : undefined,
@@ -345,6 +346,16 @@ export const setupHostConfig = (): HostConfig<
         element.removeAttribute('data-x-ray')
       } else {
         instance['data-x-ray'] = setupDataXRayUpdate(newProps['data-x-ray'], element)
+      }
+    }
+
+    if (newProps.id !== oldProps.id) {
+      instance.id?.()
+
+      if (newProps.id == null) {
+        element.id = ''
+      } else {
+        instance.id = setupIdUpdate(newProps.id, element)
       }
     }
 
@@ -595,6 +606,7 @@ const cleanupElementContainer = (instance: ElementContainer) => {
   instance['data-droppable']?.()
   instance['data-testid']?.()
   instance['data-x-ray']?.()
+  instance.id?.()
   instance.src?.()
   instance.href?.()
   instance.target?.()
@@ -615,6 +627,16 @@ const setupClassUpdate = (className: FacetProp<string | undefined>, element: HTM
     })
   } else {
     element.className = className ?? ''
+  }
+}
+
+const setupIdUpdate = (id: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(id)) {
+    return id.observe((id) => {
+      element.id = id ?? ''
+    })
+  } else {
+    element.id = id ?? ''
   }
 }
 

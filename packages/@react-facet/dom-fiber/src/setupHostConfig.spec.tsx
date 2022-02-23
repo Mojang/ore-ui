@@ -39,6 +39,11 @@ describe('mount', () => {
       expect(root).toContainHTML('<div id="root"><div class="testing">Hello World</div></div>')
     })
 
+    it('sets the id', () => {
+      render(<div id="testing">Hello World</div>)
+      expect(root).toContainHTML('<div id="root"><div id="testing">Hello World</div></div>')
+    })
+
     it('sets the style', () => {
       render(<div style={{ background: 'red' }}>Hello World</div>)
       expect(root).toContainHTML('<div id="root"><div style="background: red;">Hello World</div></div>')
@@ -112,6 +117,16 @@ describe('mount', () => {
 
       classNameFacet.set('updated testing')
       expect(root).toContainHTML('<div id="root"><div class="updated testing">Hello World</div></div>')
+    })
+
+    it('sets the id', () => {
+      const idFacet = createFacet({ initialValue: 'testing' })
+
+      render(<fast-div id={idFacet}>Hello World</fast-div>)
+      expect(root).toContainHTML('<div id="root"><div id="testing">Hello World</div></div>')
+
+      idFacet.set('updated testing')
+      expect(root).toContainHTML('<div id="root"><div id="updated testing">Hello World</div></div>')
     })
 
     it('sets the style', () => {
@@ -428,6 +443,26 @@ describe('update', () => {
 
     jest.runAllTimers()
     expect(root).toContainHTML('<div id="root"><div class="hello">Hello World</div></div>')
+  })
+
+  it('updates id', () => {
+    function TestComponent() {
+      const [hello, setHello] = useState(false)
+
+      useEffect(() => {
+        setTimeout(() => {
+          setHello(true)
+        }, 1000)
+      }, [])
+
+      return <div id={hello ? 'hello' : 'goodbye'}>Hello World</div>
+    }
+
+    render(<TestComponent />)
+    expect(root).toContainHTML('<div id="root"><div id="goodbye">Hello World</div></div>')
+
+    jest.runAllTimers()
+    expect(root).toContainHTML('<div id="root"><div id="hello">Hello World</div></div>')
   })
 
   it('updates style', () => {
