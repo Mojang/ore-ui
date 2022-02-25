@@ -16,7 +16,7 @@ React Facet aims to address this issue by turning state management into a parall
 
 The explosive growth of web application development in the last decades caused a lot of knowledge and tooling on how to do great UIs to have been accumulated within the web community. In turn, this led to the adoption of web-inspired technologies into non-web platforms, such as the integration of JavaScript engines as part of iOS development libraries, and many efforts to make mobile application development look like web development to drive developers into the mobile platforms.
 
-Games have started integrating web engines into their platform to be able to make use of the talent pool and tooling already available for UI development. In particular, [Coherent Lab's Gameface](https://coherent-labs.com/products/coherent-gameface/) provides a web browser environment that can be directly integrated into a C++ codebase, with plugins to Unreal Engine and Unity. The [Chromium Embedded Framework](https://en.wikipedia.org/wiki/Chromium_Embedded_Framework) provides a very similar option for game developers in many popular environments.
+Games have started integrating web engines into their platform to be able to make use of the talent pool and tooling already available for UI development. In particular, [Coherent Lab's Gameface](https://coherent-labs.com/products/coherent-gameface/) provides a web browser environment that can be directly integrated into a C++ codebase, with plugins to Unreal Engine and Unity. Other similar options are the [Chromium Embedded Framework](https://en.wikipedia.org/wiki/Chromium_Embedded_Framework), [Ultralight](https://ultralig.ht/) and [Cobalt](https://cobalt.foo/).
 
 ## UI state management within Game Engines
 
