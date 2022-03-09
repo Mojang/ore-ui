@@ -52,15 +52,15 @@ Additionally, the `Mount` component takes an optional prop called `conditional`.
 
 ```tsx
 const Example = () => {
-  const [shouldDisplayIsTrueElementFacet, setShouldDisplayIsTrueElementFacet] = useFacetState(true)
+  const [isSignedInFacet, setIsSignedInFacet] = useFacetState(true)
 
   return (
     <>
-      <Mount when={shouldDisplayIsTrueElementFacet}>
-        <div>It's true!</div>
+      <Mount when={isSignedInFacet}>
+        <div>You are logged in!</div>
       </Mount>
-      <Mount when={shouldDisplayIsTrueElementFacet} condition={false}>
-        <div>It's false!</div>
+      <Mount when={isSignedInFacet} condition={false}>
+        <div>Create an account.</div>
       </Mount>
     </>
   )
