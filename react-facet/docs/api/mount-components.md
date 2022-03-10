@@ -4,13 +4,13 @@ sidebar_position: 4
 
 # Mount Components
 
-Neither `fast-*` components supported by the custom renderer nor the components in `@react-facet/dom-elements` provide a way to mount or unmount children based on the value of a `Facet`.
+Neither the `fast-*` components supported by the custom renderer nor the components in `@react-facet/dom-elements` provide a way to mount or unmount children based on the value of a `Facet`.
 
-For that purpose, you can use the [`Mount`](#mount) and [`Map`](#map) components when there is a need to add or remove nodes in the React tree.
+For that purpose, you can use the [`Mount`](#mount), [`Map`](#map), and [`With`](#with) components. They allow you to add or remove nodes in the React tree.
 
 ## `Mount`
 
-Mounts its children conditionally. The condition is a `Facet` passed in to the `when` prop that should contain a boolean or be `undefined` (which will be interpreted as `false`).
+Mounts its children conditionally. The mandatory prop `when` should be a `Facet<boolean | undefined>`. The component's children will be mounted when value contained within the `Facet` is `true`.
 
 Example:
 
@@ -26,6 +26,47 @@ const Example = () => {
 }
 ```
 
+The `Mount` component is commonly used together with `useFacetMap`. For example, imagine that you have a search bar and a search results component. You might only want to show the search results component if the search bar has a value. That can be accomplished like so:
+
+```tsx
+const Example = () => {
+  const [valueFacet, setValueFacet] = useFacetState('')
+
+  const isValueNotNullOrEmptyFacet = useFacetMap(
+    (value) => {
+      return value != null && value.length > 0
+    },
+    [],
+    [valueFacet],
+  )
+
+  return (
+    <Mount when={isValueNotNullOrEmptyFacet}>
+      <SomeComponent />
+    </Mount>
+  )
+}
+```
+
+Additionally, the `Mount` component takes an optional prop called `conditional`. This will default to `true`. When set to `false`, it will mount its children when when the value contained within the `Facet` is `false`.
+
+```tsx
+const Example = () => {
+  const [isSignedInFacet, setIsSignedInFacet] = useFacetState(true)
+
+  return (
+    <>
+      <Mount when={isSignedInFacet}>
+        <div>You are logged in!</div>
+      </Mount>
+      <Mount when={isSignedInFacet} condition={false}>
+        <div>Create an account.</div>
+      </Mount>
+    </>
+  )
+}
+```
+
 ## `Map`
 
 Mounts a list of components based on a `Facet` of an array.
@@ -37,11 +78,18 @@ The `Map` only re-renders if the size of the array changes, so we need to be min
 Example:
 
 ```tsx
-
 const Example = () => {
-	const [arrayFacet, setArrayFacet] = useFacetState(['1', '2', '3', '4', '5']])
+  const [arrayFacet, setArrayFacet] = useFacetState(['1', '2', '3', '4', '5'])
 
-	return <Map array={arrayFacet}>{(item) => <span><fast-text text={item} /></span>}</Map>
+  return (
+    <Map array={arrayFacet}>
+      {(item) => (
+        <span>
+          <fast-text text={item} />
+        </span>
+      )}
+    </Map>
+  )
 }
 ```
 
@@ -78,9 +126,9 @@ const Example = () => {
 
 ## `With`
 
-Mounts its children conditionally. This component is meant to solve an issue with refining types in TypeScript.
+Mounts its children conditionally. The mandatory prop `data` should be a Facet of any type (`Facet<T | null | undefined>`). The component's children will be mounted when value contained within the `Facet` is not `null` or `undefined`.
 
-Unlike `Mount`, the condition in `With` is that the `Facet` passed in to the `data` prop that should return `null` or `undefined` or an actual value; if the value is nullish it will not mount. When the `data` prop facet contains a value, `With` will call the function passed as `children`, passing the `data` Facet as argument. The type is now refined so that it will not be `null` or `undefined`.
+This component is meant to solve an issue with refining types in TypeScript. When the `data` prop facet contains a value, `With` will call the function passed as `children`, passing the `data` Facet as an argument. The type becomes refined so that it will not be `null` or `undefined`.
 
 Example:
 
@@ -111,7 +159,7 @@ const UserData = ({ name, middlename }: UserDataProps) => {
 }
 ```
 
-For contrast, attempting to do the same thing with `Mount` will _not_ allow for correct type checking. In this scenario, the type of `middlenameFacet` is not refined and could still contain a `null` or `undefined`:
+For contrast, attempting to do the same thing with `Mount` will _not_ allow for correct type checking. In this scenario, the type of `middlenameFacet` is not refined and could still contain a `null` or `undefined`.
 
 ```tsx
 type UserDataProps = {
@@ -132,9 +180,9 @@ const UserData = ({ name, middlename }: UserDataProps) => {
         <p>
           Middlename: <fast-text text={middlenameFacet} />
         </p>
-        {/* Since TypeScript cannot know that `middlenameFacet` now holds a `string` for sure and still believes that
-            it could be `string | undefined`, it will complain. The only way to solve this issue is to extract a new component
-            or use a type assertion. Neither is a good option, hence we recommend using `With` instead in this scenario. */}
+        {/* Since TypeScript cannot know that `middlenameFacet` now holds a `string` for sure, it will still believe that
+            it could be `string | undefined`. The only way to solve this issue is to extract a new component or use a type
+            assertion. Neither is a good option, hence we recommend using `With` instead in this scenario. */}
       </Mount>
     </div>
   )
