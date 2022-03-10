@@ -6,6 +6,7 @@ import { PointerEvents, FocusEvents, KeyboardEvents } from './types'
 
 export type TextAreaProps = {
   className?: FacetProp<string | undefined>
+  id?: FacetProp<string | undefined>
   style?: FacetCSSStyleDeclaration
   value?: FacetProp<string | undefined>
   disabled?: FacetProp<boolean | undefined>
@@ -19,6 +20,7 @@ export type TextAreaProps = {
 export const TextArea = ({
   style,
   className,
+  id,
   value,
   maxLength,
   disabled,
@@ -32,6 +34,11 @@ export const TextArea = ({
   useSetProp(className, (value) => {
     if (ref.current == null) return
     ref.current.className = value ?? ''
+  })
+
+  useSetProp(id, (value) => {
+    if (ref.current == null) return
+    ref.current.id = value ?? ''
   })
 
   useSetProp(value, (value) => {
