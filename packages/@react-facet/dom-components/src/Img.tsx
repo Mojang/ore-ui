@@ -6,18 +6,24 @@ import { useSetStyle } from './useSetStyle'
 
 export interface ImgProps extends PointerEvents<HTMLImageElement> {
   className?: FacetProp<string | undefined>
+  id?: FacetProp<string | undefined>
   style?: FacetCSSStyleDeclaration
   src: FacetProp<string | undefined>
   innerRef?: RefObject<HTMLImageElement>
 }
 
-export const Img = ({ style, className, src, innerRef, ...handlers }: ImgProps) => {
+export const Img = ({ style, className, id, src, innerRef, ...handlers }: ImgProps) => {
   const defaultRef = useRef<HTMLImageElement>(null)
   const ref = innerRef ?? defaultRef
 
   useSetProp(className, (value) => {
     if (ref.current == null) return
     ref.current.className = value ?? ''
+  })
+
+  useSetProp(id, (value) => {
+    if (ref.current == null) return
+    ref.current.id = value ?? ''
   })
 
   useSetProp(src, (value) => {

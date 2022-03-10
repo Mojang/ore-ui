@@ -8,6 +8,7 @@ export type InputType = 'text' | 'button' | 'password' | 'checkbox' | 'radio' | 
 
 export type InputProps = {
   className?: FacetProp<string | undefined>
+  id?: FacetProp<string | undefined>
   style?: FacetCSSStyleDeclaration
   value?: FacetProp<string | undefined>
   disabled?: FacetProp<boolean | undefined>
@@ -18,13 +19,28 @@ export type InputProps = {
   KeyboardEvents<HTMLInputElement> &
   PointerEvents<HTMLInputElement>
 
-export const Input = ({ style, className, value, maxLength, disabled, innerRef, type, ...handlers }: InputProps) => {
+export const Input = ({
+  style,
+  className,
+  id,
+  value,
+  maxLength,
+  disabled,
+  innerRef,
+  type,
+  ...handlers
+}: InputProps) => {
   const defaultRef = useRef<HTMLInputElement>(null)
   const ref = innerRef ?? defaultRef
 
   useSetProp(className, (value) => {
     if (ref.current == null) return
     ref.current.className = value ?? ''
+  })
+
+  useSetProp(id, (value) => {
+    if (ref.current == null) return
+    ref.current.id = value ?? ''
   })
 
   useSetProp(value, (value) => {

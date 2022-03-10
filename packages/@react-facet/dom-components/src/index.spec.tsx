@@ -4,6 +4,7 @@ import { fast } from '.'
 import { createFacet } from '@react-facet/core'
 
 it('renders several fast components properly', () => {
+  const idFacet = createFacet({ initialValue: 'some-id-name' })
   const classNameFacet = createFacet({ initialValue: 'some-class-name' })
   const textFacet = createFacet({ initialValue: 'lorem ipsum' })
   const imgSrcFacet = createFacet({ initialValue: 'about:blank' })
@@ -13,22 +14,33 @@ it('renders several fast components properly', () => {
 
   const Example = () => {
     return (
-      <fast.div className={classNameFacet} style={{ backgroundColor: backgroundColorFacet }}>
-        <fast.p className={classNameFacet} style={{ backgroundColor: backgroundColorFacet }}>
-          <fast.span className={classNameFacet} style={{ backgroundColor: backgroundColorFacet }}>
-            <fast.text text={textFacet} />
+      <fast.div id={idFacet} className={classNameFacet} style={{ backgroundColor: backgroundColorFacet }}>
+        <fast.p id={idFacet} className={classNameFacet} style={{ backgroundColor: backgroundColorFacet }}>
+          <fast.span id={idFacet} className={classNameFacet} style={{ backgroundColor: backgroundColorFacet }}>
+            <fast.text id={idFacet} text={textFacet} />
             <fast.text text={numberFacet} />
           </fast.span>
         </fast.p>
 
-        <fast.input className={classNameFacet} value={valueFacet} style={{ backgroundColor: backgroundColorFacet }} />
+        <fast.input
+          id={idFacet}
+          className={classNameFacet}
+          value={valueFacet}
+          style={{ backgroundColor: backgroundColorFacet }}
+        />
         <fast.textarea
+          id={idFacet}
           className={classNameFacet}
           value={valueFacet}
           style={{ backgroundColor: backgroundColorFacet }}
         />
 
-        <fast.img className={classNameFacet} src={imgSrcFacet} style={{ backgroundColor: backgroundColorFacet }} />
+        <fast.img
+          id={idFacet}
+          className={classNameFacet}
+          src={imgSrcFacet}
+          style={{ backgroundColor: backgroundColorFacet }}
+        />
       </fast.div>
     )
   }

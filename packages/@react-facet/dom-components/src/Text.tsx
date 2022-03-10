@@ -5,6 +5,7 @@ import { useSetStyle } from './useSetStyle'
 
 interface TextBaseProps {
   className?: FacetProp<string | undefined>
+  id?: FacetProp<string | undefined>
   style?: FacetCSSStyleDeclaration
   text: FacetProp<string | number>
 }
@@ -26,13 +27,18 @@ export type TextParagraphProps = TextBaseProps & {
 
 export type TextProps = TextDivProps | TextSpanProps | TextParagraphProps
 
-export const Text = ({ style, className, text, innerRef, tag = 'span' }: TextProps) => {
+export const Text = ({ style, className, id, text, innerRef, tag = 'span' }: TextProps) => {
   const defaultRef: typeof innerRef = useRef(null)
   const ref = innerRef ?? defaultRef
 
   useSetProp(className, (value) => {
     if (ref.current == null) return
     ref.current.className = value ?? ''
+  })
+
+  useSetProp(id, (value) => {
+    if (ref.current == null) return
+    ref.current.id = value ?? ''
   })
 
   useSetProp(text, (value) => {

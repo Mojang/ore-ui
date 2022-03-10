@@ -3,23 +3,28 @@
 exports[`renders several fast components properly 1`] = `
 <div
   class="some-class-name"
+  id="some-id-name"
   style="background-color: red;"
 >
   <p
     class="some-class-name"
+    id="some-id-name"
     style="background-color: red;"
   >
     <span
       class="some-class-name"
+      id="some-id-name"
       style="background-color: red;"
     >
       <span
         class=""
+        id="some-id-name"
       >
         lorem ipsum
       </span>
       <span
         class=""
+        id=""
       >
         1
       </span>
@@ -27,17 +32,20 @@ exports[`renders several fast components properly 1`] = `
   </p>
   <input
     class="some-class-name"
+    id="some-id-name"
     style="background-color: red;"
     value="placeholder"
   />
   <textarea
     class="some-class-name"
     disabled=""
+    id="some-id-name"
     style="background-color: red;"
     value="placeholder"
   />
   <img
     class="some-class-name"
+    id="some-id-name"
     src="about:blank"
     style="background-color: red;"
   />

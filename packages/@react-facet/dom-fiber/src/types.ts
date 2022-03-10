@@ -95,6 +95,7 @@ export type ElementProps<T> = PointerEvents &
     ['data-droppable']?: FacetProp<boolean | undefined>
     ['data-testid']?: FacetProp<string | undefined>
     ['data-x-ray']?: FacetProp<boolean | undefined>
+    id?: FacetProp<string | undefined>
     src?: FacetProp<string | undefined>
     href?: FacetProp<string | undefined>
     target?: FacetProp<string | undefined>
@@ -127,6 +128,7 @@ export type ElementContainer = {
   ['data-droppable']?: Unsubscribe
   ['data-testid']?: Unsubscribe
   ['data-x-ray']?: Unsubscribe
+  id?: Unsubscribe
   src?: Unsubscribe
   href?: Unsubscribe
   target?: Unsubscribe
