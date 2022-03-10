@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+		"paths": {
+			"@react-facet/core": ["packages/@react-facet/core/*"],
+			"@react-facet/dom-fiber": ["packages/@react-facet/dom-fiber/*"],
+			"@react-facet/dom-fiber-testing-library": ["packages/@react-facet/dom-fiber-testing-library/*"]
+		},
     "outDir": "dist",
     "target": "es6",
     "moduleResolution": "node",
