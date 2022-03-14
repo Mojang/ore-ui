@@ -39,7 +39,7 @@ The packages of React Facet are grouped under the `@react-facet` scope on npm. T
 yarn add @react-facet/core @react-facet/dom-fiber
 ```
 
-Note that if you want to use the [DOM Components](api/dom-components) you will need to install those separately:
+Note that if you want to use other [packages](api/packages), such as the [DOM Components](api/dom-components), you will need to install them separately:
 
 ```sh
 yarn add @react-facet/dom-components
