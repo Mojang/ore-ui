@@ -31,6 +31,22 @@ const Counter = () => {
 render(<Counter />, document.getElementById('root'))
 ```
 
+## Installation
+
+The packages of React Facet are grouped under the `@react-facet` scope on npm. To install the packages for the example above, run:
+
+```sh
+yarn add @react-facet/core @react-facet/dom-fiber
+```
+
+Note that if you want to use other [packages](api/packages), such as the [DOM Components](api/dom-components), you will need to install them separately:
+
+```sh
+yarn add @react-facet/dom-components
+```
+
+…and so on for any other required package.
+
 ### Fastest path
 
 Use the components provided in [`@react-facets/dom-components`](api/dom-components) wherever you need to render using `Facet`s. There are components that serve as drop-in replacements for most of the heavily used HTML elements.
