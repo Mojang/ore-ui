@@ -15,5 +15,5 @@ jobs:
           name: packages
           path: artifacts
       - uses: microsoft/RichCodeNavIndexer@v0.1
-          with:
-            repo-token: ${{ github.token }}
+        with:
+          repo-token: ${{ github.token }}
