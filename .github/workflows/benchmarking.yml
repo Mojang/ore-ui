@@ -1,5 +1,5 @@
 name: benchmarking
-on: [push]
+on: [push, pr]
 
 jobs:
   listMemo:
