@@ -1,5 +1,8 @@
 name: benchmarking
-on: [push, pr]
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
   listMemo:
