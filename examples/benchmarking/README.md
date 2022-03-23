@@ -29,3 +29,5 @@ There is a compare script that runs the comparison automatically using Chrome. S
 ```
 yarn compare progressBarFacet progressBarState 74
 ```
+
+Moe was here ^^
