@@ -41,7 +41,7 @@ const profileFacet = remoteFacet<UserFacet>('data.user', {
   },
 })
 
-const userNameFacet = remoteSelector([profileFacet], ({ user }) => user.name)
+const userNameFacet = remoteSelector(({ user }) => user.name, [profileFacet])
 ```
 
 The user name facet will only hold the user name as data and can be consumed like this:
@@ -60,13 +60,7 @@ const UserData = () => {
 To avoid re-renders, you can specify an equality check function, so that if the original facet updates but the value of the data returned by the selector remains the same, listeners to the new facet will not get triggered pointlessly:
 
 ```ts
-const userNameFacet = remoteSelector([profileFacet], ({ user }) => user.name, { equalityCheck: (a, b) => a === b })
-```
-
-If you want to make sure the new facet always holds a value, even if the original facet does not, you can specify an initial value for it:
-
-```ts
-const userNameFacet = remoteSelector([profileFacet], ({ user }) => user.name, { initialValue: 'Anonymous' })
+const userNameFacet = remoteSelector(({ user }) => user.name, [profileFacet], (a, b) => a === b)
 ```
 
 ## Dynamic Selectors
@@ -108,7 +102,7 @@ const Message = ({ index }: { index: number }) => {
 }
 ```
 
-As with the regular selector, you can specify an equality check function and an initial value:
+As with the regular selector, you can specify an equality check function:
 
 ```ts
 const messageContentSelector = remoteDynamicSelector(
@@ -116,7 +110,7 @@ const messageContentSelector = remoteDynamicSelector(
     dependencies: [chatFacet],
     get: ({ messages }) => messages[index].content,
   }),
-  { equalityCheck: (a, b) => a === b, initialValue: 'Lorem Ipsum' },
+  (a, b) => a === b,
 )
 ```
 
