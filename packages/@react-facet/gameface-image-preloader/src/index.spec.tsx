@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from '@react-facet/dom-fiber-testing-library'
-import { createFacet } from '../facet'
-import { ImagePreloader } from './ImagePreloader'
+import { createFacet } from '@react-facet/core'
+import { ImagePreloader } from './index'
 
 let rafSpy: jest.SpyInstance
 let cancelRafSpy: jest.SpyInstance
@@ -62,6 +62,8 @@ it('invokes the callback when all images have loaded', () => {
   // The Array.prototype.every function exits early when the predicate doesn't pass.
   // That means that we should see two more calls to the getBoundingClientRect stub this frame.
   expect(getBoundingClientRectStub).toHaveBeenCalledTimes(6)
-  // All image nodes are now returning a width and height. Lets make sure that we've invoked the callback.
+  // All image nodes are now returning a width and height. Lets make sure that we've invoked
+  // the callback on the next animation frame.
+  jest.advanceTimersByTime(REQUEST_ANIMATION_FRAME_TIMEOUT_MS)
   expect(callback).toHaveBeenCalledTimes(1)
 })

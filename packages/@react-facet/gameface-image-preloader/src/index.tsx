@@ -1,9 +1,13 @@
-import React, { useRef } from 'react'
-import { FacetProp } from '../types'
-import { useFacetCallback, useFacetLayoutEffect, useFacetState, useFacetWrap } from '../hooks'
-
-import { Mount } from './Mount'
-import { Map } from './Map'
+import {
+  FacetProp,
+  Mount,
+  Map,
+  useFacetCallback,
+  useFacetLayoutEffect,
+  useFacetState,
+  useFacetWrap,
+} from '@react-facet/core'
+import React, { useCallback, useRef } from 'react'
 
 function elementHasWidthAndHeight(element: HTMLElement): boolean {
   const domRect = element.getBoundingClientRect()
@@ -24,19 +28,13 @@ export function ImagePreloader({ imageUrls, onImagesLoaded }: ImagePreloaderProp
 
   // Store a reference to all image nodes
   const imageRefs = useRef([] as Array<HTMLImageElement>)
-  const imageRefCallback = useFacetCallback(
-    (images) => (element: HTMLImageElement | null, index: number) => {
-      // If the element is null it means that the component is dismounting. Lets clear the array for good measure.
-      if (element == null) {
-        return delete imageRefs.current[index]
-      }
-      // This is essentially the same way we set the src in the fast-img
-      element.setAttribute('src', images[index])
-      imageRefs.current[index] = element
-    },
-    [],
-    [images],
-  )
+  const imageRefCallback = useCallback((element: HTMLImageElement | null, index: number) => {
+    // If the element is null it means that the component is dismounting. Lets clear the array for good measure.
+    if (element == null) {
+      return delete imageRefs.current[index]
+    }
+    imageRefs.current[index] = element
+  }, [])
 
   // This check will continue to run on each animation frame until all of the images have been drawn out.
   const animationFrameRef = useRef<number | null>(null)
@@ -56,9 +54,12 @@ export function ImagePreloader({ imageUrls, onImagesLoaded }: ImagePreloaderProp
         return
       }
 
-      // If we reach here it means that all the images have loaded.
-      setHasLoadedAllImages(true)
-      onImagesLoaded()
+      // If we reach here it means that all the images have loaded so we'll invoke the callback
+      // on the next animation frame.
+      animationFrameRef.current = window.requestAnimationFrame(() => {
+        setHasLoadedAllImages(true)
+        onImagesLoaded()
+      })
     },
     [onImagesLoaded, setHasLoadedAllImages],
     [images],
@@ -78,7 +79,9 @@ export function ImagePreloader({ imageUrls, onImagesLoaded }: ImagePreloaderProp
   return (
     <Mount when={hasLoadedAllImages} condition={false}>
       <div style={{ visibility: 'hidden' }}>
-        <Map array={images}>{(_, index) => <img ref={(element) => imageRefCallback(element, index)} />}</Map>
+        <Map array={images}>
+          {(image, index) => <fast-img src={image} ref={(element) => imageRefCallback(element, index)} />}
+        </Map>
       </div>
     </Mount>
   )

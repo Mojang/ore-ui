@@ -1,0 +1,46 @@
+{
+  "name": "@react-facet/gameface-image-preloader",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mojang/ore-ui.git",
+    "directory": "packages/@react-facet/gameface-image-preloader"
+  },
+  "contributors": [
+    {
+      "name": "Victor Conner",
+      "email": "hello@creativecreature.com"
+    },
+    {
+      "name": "Anna Päärni",
+      "email": "annpaa91@gmail.com"
+    }
+  ],
+  "files": [
+    "dist/**/*"
+  ],
+  "homepage": "https://react-facet.mojang.com/",
+  "bugs": "https://github.com/Mojang/ore-ui/issues",
+  "license": "MIT",
+  "version": "0.2.3",
+  "main": "src/index.tsx",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "prepublish": "yarn build"
+  },
+  "peerDependencies": {
+    "@react-facet/core": "0.2.3",
+    "@react-facet/dom-components": "0.2.3",
+    "react": "^16.9.0"
+  },
+  "devDependencies": {
+    "@react-facet/dom-fiber-testing-library": "0.2.3",
+    "react": "^16.9.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.3.5"
+  }
+}
