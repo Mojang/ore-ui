@@ -113,7 +113,7 @@ The comparison used for the value of the properties is passed to it as an argume
 ```tsx
 import { createUniformObjectEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/equality-checks'
 
-const equalityCheck = createUniformObjectEqualityCheck(shallowArrayEqualityCheck)
+const equalityCheck = createUniformObjectEqualityCheck(shallowArrayEqualityCheck)()
 
 equalityCheck({
   a: [1, 2],
@@ -149,7 +149,7 @@ The comparison used for the individual items is passed to it as an argument.
 ```tsx
 import { createUniformArrayEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/equality-checks'
 
-const equalityCheck = createUniformArrayEqualityCheck(shallowArrayEqualityCheck)
+const equalityCheck = createUniformArrayEqualityCheck(shallowArrayEqualityCheck)()
 
 equalityCheck([[1, 2], [3]])
 
@@ -186,7 +186,7 @@ import {
 const equalityCheck = createObjectWithKeySpecificEqualityCheck({
   name: strictEqualityCheck,
   items: shallowArrayEqualityCheck,
-})
+})()
 
 equalityCheck({
   name: 'Steve',
@@ -228,7 +228,7 @@ an equality check for the underlying type.
 ```tsx
 import { createOptionalValueEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/equality-checks'
 
-const equalityCheck = createOptionalValueEqualityCheck(shallowArrayEqualityCheck)
+const equalityCheck = createOptionalValueEqualityCheck(shallowArrayEqualityCheck)()
 
 equalityCheck([1, 2, 3])
 
