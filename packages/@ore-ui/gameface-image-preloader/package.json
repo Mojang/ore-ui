@@ -1,9 +1,9 @@
 {
-  "name": "@react-facet/gameface-image-preloader",
+  "name": "@ore-ui/gameface-image-preloader",
   "repository": {
     "type": "git",
     "url": "https://github.com/Mojang/ore-ui.git",
-    "directory": "packages/@react-facet/gameface-image-preloader"
+    "directory": "packages/@ore-ui/gameface-image-preloader"
   },
   "contributors": [
     {
@@ -18,7 +18,7 @@
   "files": [
     "dist/**/*"
   ],
-  "homepage": "https://react-facet.mojang.com/",
+  "homepage": "https://github.com/Mojang/ore-ui",
   "bugs": "https://github.com/Mojang/ore-ui/issues",
   "license": "MIT",
   "version": "0.2.3",
@@ -34,7 +34,7 @@
   },
   "peerDependencies": {
     "@react-facet/core": "0.2.3",
-    "@react-facet/dom-components": "0.2.3",
+    "@react-facet/dom-fiber": "0.2.3",
     "react": "^16.9.0"
   },
   "devDependencies": {

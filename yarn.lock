@@ -939,6 +939,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ore-ui/gameface-image-preloader@workspace:packages/@ore-ui/gameface-image-preloader":
+  version: 0.0.0-use.local
+  resolution: "@ore-ui/gameface-image-preloader@workspace:packages/@ore-ui/gameface-image-preloader"
+  dependencies:
+    "@react-facet/dom-fiber-testing-library": 0.2.3
+    react: ^16.9.0
+    rimraf: ^3.0.2
+    typescript: ^4.3.5
+  peerDependencies:
+    "@react-facet/core": 0.2.3
+    "@react-facet/dom-fiber": 0.2.3
+    react: ^16.9.0
+  languageName: unknown
+  linkType: soft
+
 "@react-facet/core@0.2.3, @react-facet/core@workspace:packages/@react-facet/core":
   version: 0.0.0-use.local
   resolution: "@react-facet/core@workspace:packages/@react-facet/core"
@@ -1033,21 +1048,6 @@ __metadata:
     eslint-plugin-react-hooks: ^4.2.0
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
-  languageName: unknown
-  linkType: soft
-
-"@react-facet/gameface-image-preloader@workspace:packages/@react-facet/gameface-image-preloader":
-  version: 0.0.0-use.local
-  resolution: "@react-facet/gameface-image-preloader@workspace:packages/@react-facet/gameface-image-preloader"
-  dependencies:
-    "@react-facet/dom-fiber-testing-library": 0.2.3
-    react: ^16.9.0
-    rimraf: ^3.0.2
-    typescript: ^4.3.5
-  peerDependencies:
-    "@react-facet/core": 0.2.3
-    "@react-facet/dom-components": 0.2.3
-    react: ^16.9.0
   languageName: unknown
   linkType: soft
 

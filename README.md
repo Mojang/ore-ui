@@ -16,6 +16,7 @@ The new system is based on:
 ## Packages
 
 - [`@react-facet`](packages/@react-facet): Observable-based state management for performant game UIs built in React
+- [`@ore-ui`](packages/@ore-ui): Standalone packages that are not part of a bigger family (like @react-facet).
 - `@mojang/react-gamepad`: Declarative Gamepad focus navigation (**coming soon**)
 - More to come!
 
