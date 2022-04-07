@@ -3,7 +3,7 @@ import { NoValue } from '..'
 import { FacetProp, isFacet, Value } from '../types'
 
 /**
- * Hook that allows consuming values from a facet (local or remote), selector or dynamicSelector
+ * Hook that allows consuming values from a Facet
  * It acts as a regular react state, triggering a re-render of the component
  *
  * @param facet
