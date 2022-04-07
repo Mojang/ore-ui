@@ -168,19 +168,19 @@ const UpdateLogin = ({ onSubmit }) => {
 }
 ```
 
-## Interfacing with the game engine (Remote Facets)
+## Interfacing with the game engine (Shared Facets)
 
-[Remote facets](game-ui-development/remote) are facets that come from the "backend" game engine, usually implemented in C++. They are largely used the same way as "local" facets, except for a couple key differences:
+[Shared facets](game-ui-development/shared) are facets that come from the "backend" game engine, usually implemented in C++. They are largely used the same way as "local" facets, except for a couple key differences:
 
 1. They **cannot** be mutated directly by JavaScript
 2. They are available globally
-3. They must be initialized using `remoteFacet`
-4. They must be consumed in a React Component with `useRemoteFacet`
+3. They must be initialized using `sharedFacet`
+4. They must be consumed in a React Component with `useSharedFacet`
 
-To use remote facets, you must wrap your React application inside `RemoteFacetDriverProvider`. You must also provide a `remoteFacetDriver`, which takes care of requesting the facet from a C++ backend and registering a listener to be notified about updates. Below you can find a pseudo-code of a how an implementation would look like using an `engine` that implements `EventEmitter`
+To use shared facets, you must wrap your React application inside `SharedFacetDriverProvider`. You must also provide a `sharedFacetDriver`, which takes care of requesting the facet from a C++ backend and registering a listener to be notified about updates. Below you can find a pseudo-code of a how an implementation would look like using an `engine` that implements `EventEmitter`
 
 ```ts
-const remoteFacetDriver = (facetName, update) => {
+const sharedFacetDriver = (facetName, update) => {
   // register a listener
   engine.on(`facet:updated:${facetName}`, update)
 
@@ -195,11 +195,11 @@ const remoteFacetDriver = (facetName, update) => {
 }
 
 const App = () => {
-  return <RemoteFacetDriverProvider value={remoteFacetDriver}>...</RemoteFacetDriverProvider>
+  return <SharedFacetDriverProvider value={sharedFacetDriver}>...</SharedFacetDriverProvider>
 }
 ```
 
-An example of defining and consuming a remote facet:
+An example of defining and consuming a shared facet:
 
 ```tsx
 interface UserFacet {
@@ -207,15 +207,15 @@ interface UserFacet {
 	signOut(): void
 }
 
-const userFacet = remoteFacet<UserFacet>('data.user', {
+const userFacet = sharedFacet<UserFacet>('data.user', {
 	username: 'Alex',
 	signOut() {},
 })
 
-const usernameSelector = remoteSelector([userFacet], (value) => value.username);
+const usernameSelector = sharedSelector([userFacet], (value) => value.username);
 
 export const CurrentUser = () => {
-	const username = useRemoteFacet(usernameSelector)
+	const username = useSharedFacet(usernameSelector)
 
 	return <fast-p>
 		<fast-text text={username}>
