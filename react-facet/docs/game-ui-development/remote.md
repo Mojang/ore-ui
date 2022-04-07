@@ -41,37 +41,31 @@ const profileFacet = remoteFacet<UserFacet>('data.user', {
   },
 })
 
-const userNameSelector = remoteSelector([profileFacet], ({ user }) => user.name)
+const userNameFacet = remoteSelector(({ user }) => user.name, [profileFacet])
 ```
 
-When consuming this new user name selector it will return just the name out of the original facet data:
+The user name facet will only hold the user name as data and can be consumed like this:
 
 ```tsx
 const UserData = () => {
   // This will print Jane
   return (
     <span>
-      <fast-text text={userNameSelector} />
+      <fast-text text={userNameFacet} />
     </span>
   )
 }
 ```
 
-To avoid re-renders, you can specify an equality check function in the selector, so that if the facet updates but the value of the data returned by the selector remains the same, listeners to the selector will not get triggered pointlessly:
+To avoid re-renders, you can specify an equality check function, so that if the original facet updates but the value of the data returned by the selector remains the same, listeners to the new facet will not get triggered pointlessly:
 
 ```ts
-const userNameSelector = remoteSelector([profileFacet], ({ user }) => user.name, { equalityCheck: (a, b) => a === b })
-```
-
-If you want to make sure this selector always has a value, even if the facet does not, you can specify an initial value for it:
-
-```ts
-const userNameSelector = remoteSelector([profileFacet], ({ user }) => user.name, { initialValue: 'Anonymous' })
+const userNameFacet = remoteSelector(({ user }) => user.name, [profileFacet], (a, b) => a === b)
 ```
 
 ## Dynamic Selectors
 
-Dynamic Selectors can take a parameter. The typical example of this is an index for a particular element on a list.
+Dynamic Selectors creates a selector that returns a facet based on a parameter. The typical use case of this is an index for a particular element on a list.
 
 ```ts
 interface MessagesFacet {
@@ -94,7 +88,8 @@ const messageContentSelector = remoteDynamicSelector((index: number) => ({
 }))
 ```
 
-When consuming this the content of the particular message will be returned:
+The selector will return a facet that holds the content of the particular message:
+
 
 ```tsx
 const Message = ({ index }: { index: number }) => {
@@ -107,7 +102,7 @@ const Message = ({ index }: { index: number }) => {
 }
 ```
 
-As with the regular selector, you can specify an equality check function and an initial value:
+As with the regular selector, you can specify an equality check function:
 
 ```ts
 const messageContentSelector = remoteDynamicSelector(
@@ -115,7 +110,7 @@ const messageContentSelector = remoteDynamicSelector(
     dependencies: [chatFacet],
     get: ({ messages }) => messages[index].content,
   }),
-  { equalityCheck: (a, b) => a === b, initialValue: 'Lorem Ipsum' },
+  (a, b) => a === b,
 )
 ```
 

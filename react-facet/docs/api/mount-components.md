@@ -110,7 +110,7 @@ const Example = () => {
   const PrintItem = ({ item, index }: { item: Facet<Input>; index: number }) => {
     return (
       <span>
-        <fast-text text={useFacetMap(({ a }) => a, [], [item])} />
+        <fast-text text={useFacetMap(({ value }) => value, [], [item])} />
         <span>{index}</span>
       </span>
     )
@@ -148,9 +148,9 @@ const UserData = ({ name, middlename }: UserDataProps) => {
         Name: <fast-text text={nameFacet} />
       </p>
       <With data={middlenameFacet}>
-        {(middlename) => (
+        {(middlenameFacetWithData) => (
           <p>
-            Middlename: <fast-text text={middlename} />
+            Middlename: <fast-text text={middlenameFacetWithData} />
           </p>
         )}
       </With>
