@@ -170,7 +170,7 @@ const UpdateLogin = ({ onSubmit }) => {
 
 ## Interfacing with the game engine (Shared Facets)
 
-[Shared facets](game-ui-development/shared) are facets that come from the "backend" game engine, usually implemented in C++. They are largely used the same way as "local" facets, except for a couple key differences:
+[Shared facets](game-ui-development/shared-facet) are facets that come from the "backend" game engine, usually implemented in C++. They are largely used the same way as "local" facets, except for a couple key differences:
 
 1. They **cannot** be mutated directly by JavaScript
 2. They are available globally

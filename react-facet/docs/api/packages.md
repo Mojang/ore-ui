@@ -20,7 +20,7 @@ sidebar_position: 9
 - React components that have an identical API surface to `fast-*` components, but not reliant on the custom Renderer.
 - Useful for teams looking to progressively adopt `Facet`s
 
-`@react-facet/shared` includes:
+`@react-facet/shared-facet` includes:
 
 - Custom `Facet` designed to interface directly with game engines that use Gameface
 - Custom `Context` component for driving communication between React and the game engine
