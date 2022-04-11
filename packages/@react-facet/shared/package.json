@@ -1,9 +1,9 @@
 {
-  "name": "@react-facet/remote",
+  "name": "@react-facet/shared",
   "repository": {
     "type": "git",
     "url": "https://github.com/Mojang/ore-ui.git",
-    "directory": "packages/@react-facet/remote"
+    "directory": "packages/@react-facet/shared"
   },
   "author": {
     "name": "Paulo Ragonha",

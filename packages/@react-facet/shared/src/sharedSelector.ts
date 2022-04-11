@@ -1,8 +1,8 @@
 import memoize from './memoize'
 import { EqualityCheck, defaultEqualityCheck, Value, mapFacetsCached, FACET_FACTORY, NoValue } from '@react-facet/core'
-import { RemoteFacetDriver, RemoteFacet } from './types'
+import { SharedFacetDriver, SharedFacet } from './types'
 
-export function remoteSelector<
+export function sharedSelector<
   V,
   T1 extends Value,
   T2 extends Value,
@@ -28,21 +28,21 @@ export function remoteSelector<
     facet10: T10,
   ) => V | NoValue,
   facets: [
-    RemoteFacet<T1>,
-    RemoteFacet<T2>,
-    RemoteFacet<T3>,
-    RemoteFacet<T4>,
-    RemoteFacet<T5>,
-    RemoteFacet<T6>,
-    RemoteFacet<T7>,
-    RemoteFacet<T8>,
-    RemoteFacet<T9>,
-    RemoteFacet<T10>,
+    SharedFacet<T1>,
+    SharedFacet<T2>,
+    SharedFacet<T3>,
+    SharedFacet<T4>,
+    SharedFacet<T5>,
+    SharedFacet<T6>,
+    SharedFacet<T7>,
+    SharedFacet<T8>,
+    SharedFacet<T9>,
+    SharedFacet<T10>,
   ],
   equalityCheck?: EqualityCheck<V>,
-): RemoteFacet<V>
+): SharedFacet<V>
 
-export function remoteSelector<
+export function sharedSelector<
   V,
   T1 extends Value,
   T2 extends Value,
@@ -66,20 +66,20 @@ export function remoteSelector<
     facet9: T9,
   ) => V | NoValue,
   facets: [
-    RemoteFacet<T1>,
-    RemoteFacet<T2>,
-    RemoteFacet<T3>,
-    RemoteFacet<T4>,
-    RemoteFacet<T5>,
-    RemoteFacet<T6>,
-    RemoteFacet<T7>,
-    RemoteFacet<T8>,
-    RemoteFacet<T9>,
+    SharedFacet<T1>,
+    SharedFacet<T2>,
+    SharedFacet<T3>,
+    SharedFacet<T4>,
+    SharedFacet<T5>,
+    SharedFacet<T6>,
+    SharedFacet<T7>,
+    SharedFacet<T8>,
+    SharedFacet<T9>,
   ],
   equalityCheck?: EqualityCheck<V>,
-): RemoteFacet<V>
+): SharedFacet<V>
 
-export function remoteSelector<
+export function sharedSelector<
   V,
   T1 extends Value,
   T2 extends Value,
@@ -101,19 +101,19 @@ export function remoteSelector<
     facet8: T8,
   ) => V | NoValue,
   facets: [
-    RemoteFacet<T1>,
-    RemoteFacet<T2>,
-    RemoteFacet<T3>,
-    RemoteFacet<T4>,
-    RemoteFacet<T5>,
-    RemoteFacet<T6>,
-    RemoteFacet<T7>,
-    RemoteFacet<T8>,
+    SharedFacet<T1>,
+    SharedFacet<T2>,
+    SharedFacet<T3>,
+    SharedFacet<T4>,
+    SharedFacet<T5>,
+    SharedFacet<T6>,
+    SharedFacet<T7>,
+    SharedFacet<T8>,
   ],
   equalityCheck?: EqualityCheck<V>,
-): RemoteFacet<V>
+): SharedFacet<V>
 
-export function remoteSelector<
+export function sharedSelector<
   V,
   T1 extends Value,
   T2 extends Value,
@@ -125,18 +125,18 @@ export function remoteSelector<
 >(
   selector: (facet1: T1, facet2: T2, facet3: T3, facet4: T4, facet5: T5, facet6: T6, facet7: T7) => V | NoValue,
   facets: [
-    RemoteFacet<T1>,
-    RemoteFacet<T2>,
-    RemoteFacet<T3>,
-    RemoteFacet<T4>,
-    RemoteFacet<T5>,
-    RemoteFacet<T6>,
-    RemoteFacet<T7>,
+    SharedFacet<T1>,
+    SharedFacet<T2>,
+    SharedFacet<T3>,
+    SharedFacet<T4>,
+    SharedFacet<T5>,
+    SharedFacet<T6>,
+    SharedFacet<T7>,
   ],
   equalityCheck?: EqualityCheck<V>,
-): RemoteFacet<V>
+): SharedFacet<V>
 
-export function remoteSelector<
+export function sharedSelector<
   V,
   T1 extends Value,
   T2 extends Value,
@@ -146,11 +146,11 @@ export function remoteSelector<
   T6 extends Value,
 >(
   selector: (facet1: T1, facet2: T2, facet3: T3, facet4: T4, facet5: T5, facet6: T6) => V | NoValue,
-  facets: [RemoteFacet<T1>, RemoteFacet<T2>, RemoteFacet<T3>, RemoteFacet<T4>, RemoteFacet<T5>, RemoteFacet<T6>],
+  facets: [SharedFacet<T1>, SharedFacet<T2>, SharedFacet<T3>, SharedFacet<T4>, SharedFacet<T5>, SharedFacet<T6>],
   equalityCheck?: EqualityCheck<V>,
-): RemoteFacet<V>
+): SharedFacet<V>
 
-export function remoteSelector<
+export function sharedSelector<
   V,
   T1 extends Value,
   T2 extends Value,
@@ -159,33 +159,33 @@ export function remoteSelector<
   T5 extends Value,
 >(
   selector: (facet1: T1, facet2: T2, facet3: T3, facet4: T4, facet5: T5) => V | NoValue,
-  facets: [RemoteFacet<T1>, RemoteFacet<T2>, RemoteFacet<T3>, RemoteFacet<T4>, RemoteFacet<T5>],
+  facets: [SharedFacet<T1>, SharedFacet<T2>, SharedFacet<T3>, SharedFacet<T4>, SharedFacet<T5>],
   equalityCheck?: EqualityCheck<V>,
-): RemoteFacet<V>
+): SharedFacet<V>
 
-export function remoteSelector<V, T1 extends Value, T2 extends Value, T3 extends Value, T4 extends Value>(
+export function sharedSelector<V, T1 extends Value, T2 extends Value, T3 extends Value, T4 extends Value>(
   selector: (facet1: T1, facet2: T2, facet3: T3, facet4: T4) => V | NoValue,
-  facets: [RemoteFacet<T1>, RemoteFacet<T2>, RemoteFacet<T3>, RemoteFacet<T4>],
+  facets: [SharedFacet<T1>, SharedFacet<T2>, SharedFacet<T3>, SharedFacet<T4>],
   equalityCheck?: EqualityCheck<V>,
-): RemoteFacet<V>
+): SharedFacet<V>
 
-export function remoteSelector<V, T1 extends Value, T2 extends Value, T3 extends Value>(
+export function sharedSelector<V, T1 extends Value, T2 extends Value, T3 extends Value>(
   selector: (facet1: T1, facet2: T2, facet3: T3) => V | NoValue,
-  facets: [RemoteFacet<T1>, RemoteFacet<T2>, RemoteFacet<T3>],
+  facets: [SharedFacet<T1>, SharedFacet<T2>, SharedFacet<T3>],
   equalityCheck?: EqualityCheck<V>,
-): RemoteFacet<V>
+): SharedFacet<V>
 
-export function remoteSelector<V, T1 extends Value, T2 extends Value>(
+export function sharedSelector<V, T1 extends Value, T2 extends Value>(
   selector: (facet1: T1, facet2: T2) => V | NoValue,
-  facets: [RemoteFacet<T1>, RemoteFacet<T2>],
+  facets: [SharedFacet<T1>, SharedFacet<T2>],
   equalityCheck?: EqualityCheck<V>,
-): RemoteFacet<V>
+): SharedFacet<V>
 
-export function remoteSelector<V, T1 extends Value>(
+export function sharedSelector<V, T1 extends Value>(
   selector: (facet1: T1) => V | NoValue,
-  facets: [RemoteFacet<T1>],
+  facets: [SharedFacet<T1>],
   equalityCheck?: EqualityCheck<V>,
-): RemoteFacet<V>
+): SharedFacet<V>
 
 /**
  * Defines a selector to transform/map data from a facet
@@ -205,19 +205,19 @@ export function remoteSelector<V, T1 extends Value>(
  * @param selector a function to transform the data from the facets
  * @param equalityCheck optional, has a default for immutable values
  */
-export function remoteSelector<V, T extends readonly RemoteFacet<unknown>[]>(
+export function sharedSelector<V, T extends readonly SharedFacet<unknown>[]>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   selector: (...facet: any[]) => V | NoValue,
   facets: T,
   equalityCheck: EqualityCheck<V> = defaultEqualityCheck,
-): RemoteFacet<V> {
-  const definition = memoize((remoteFacetDriver: RemoteFacetDriver) =>
+): SharedFacet<V> {
+  const definition = memoize((sharedFacetDriver: SharedFacetDriver) =>
     mapFacetsCached(
-      facets.map((facet) => facet(remoteFacetDriver)),
+      facets.map((facet) => facet(sharedFacetDriver)),
       selector,
       equalityCheck,
     ),
-  ) as unknown as RemoteFacet<V>
+  ) as unknown as SharedFacet<V>
 
   definition.factory = FACET_FACTORY
 
