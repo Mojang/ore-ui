@@ -11,7 +11,7 @@
   "dependencies": {
     "@react-facet/core": "0.2.3",
     "@react-facet/dom-fiber": "0.2.3",
-    "@react-facet/shared": "0.2.3",
+    "@react-facet/shared-facet": "0.2.3",
     "@react-facet/spring": "0.2.3",
     "ramda": "^0.27.1",
     "react": "^16.9.0",

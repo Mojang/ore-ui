@@ -1036,9 +1036,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/shared@0.2.3, @react-facet/shared@workspace:packages/@react-facet/shared":
+"@react-facet/shared-facet@0.2.3, @react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
   version: 0.0.0-use.local
-  resolution: "@react-facet/shared@workspace:packages/@react-facet/shared"
+  resolution: "@react-facet/shared-facet@workspace:packages/@react-facet/shared-facet"
   dependencies:
     "@react-facet/core": 0.2.3
     "@react-facet/dom-fiber-testing-library": 0.2.3
@@ -2434,7 +2434,7 @@ __metadata:
   dependencies:
     "@react-facet/core": 0.2.3
     "@react-facet/dom-fiber": 0.2.3
-    "@react-facet/shared": 0.2.3
+    "@react-facet/shared-facet": 0.2.3
     "@react-facet/spring": 0.2.3
     "@types/fs-extra": ^9.0.12
     "@types/puppeteer": ^5.4.4
