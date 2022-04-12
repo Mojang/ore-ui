@@ -4,18 +4,27 @@ import { render } from '@react-facet/dom-fiber-testing-library'
 import { sharedDynamicSelector } from './sharedDynamicSelector'
 import { sharedFacet } from './sharedFacet'
 import { sharedSelector } from './sharedSelector'
-import { SharedFacetDriverProvider, useSharedFacet } from './context'
+import { SharedFacetDriverProvider } from './context'
+import { useSharedFacet } from './useSharedFacet'
+import { SharedFacetDriver } from './types'
 
 const facetDestructor = jest.fn()
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const sharedFacetDriver = jest.fn().mockImplementation((name: string, onChange: (value: any) => void) => {
+const sharedFacetDriverObserveMock = jest.fn().mockImplementation((name: string, onChange: (value: any) => void) => {
   if (name !== 'foo') throw new Error(`Unexpected facet requested: ${name}`)
 
   onChange({ bar: 'testing 123', values: ['a', 'b', 'c'] })
 
   return facetDestructor
 })
+
+const sharedFacetDriverSetMock = jest.fn()
+
+const sharedFacetDriver: SharedFacetDriver = {
+  observe: sharedFacetDriverObserveMock,
+  set: sharedFacetDriverSetMock,
+}
 
 interface Foo {
   bar: number
@@ -32,7 +41,8 @@ const valueDynamicSelector = sharedDynamicSelector((index: number) => [
 ])
 
 beforeEach(() => {
-  sharedFacetDriver.mockClear()
+  sharedFacetDriverObserveMock.mockClear()
+  sharedFacetDriverSetMock.mockClear()
   facetDestructor.mockClear()
 })
 
@@ -51,12 +61,13 @@ describe('rendering from facet', () => {
 
     const { getByText, rerender } = render(app)
 
-    expect(sharedFacetDriver).toBeCalledTimes(1)
+    expect(sharedFacetDriver.observe).toBeCalledTimes(1)
     expect(facetDestructor).toBeCalledTimes(0)
 
     expect(getByText('testing 123')).toBeDefined()
 
-    sharedFacetDriver.mockClear()
+    sharedFacetDriverObserveMock.mockClear()
+    sharedFacetDriverSetMock.mockClear()
     facetDestructor.mockClear()
 
     rerender(
@@ -65,7 +76,7 @@ describe('rendering from facet', () => {
       </SharedFacetDriverProvider>,
     )
 
-    expect(sharedFacetDriver).toBeCalledTimes(0)
+    expect(sharedFacetDriver.observe).toBeCalledTimes(0)
     expect(facetDestructor).toBeCalledTimes(1)
   })
 
@@ -81,7 +92,7 @@ describe('rendering from facet', () => {
 
     const { getAllByText } = render(app)
 
-    expect(sharedFacetDriver).toBeCalledTimes(1)
+    expect(sharedFacetDriver.observe).toBeCalledTimes(1)
     expect(getAllByText('testing 123')).toHaveLength(4)
   })
 })
@@ -101,12 +112,13 @@ describe('rendering from a selector', () => {
 
     const { getByText, rerender } = render(app)
 
-    expect(sharedFacetDriver).toBeCalledTimes(1)
+    expect(sharedFacetDriver.observe).toBeCalledTimes(1)
     expect(facetDestructor).toBeCalledTimes(0)
 
     expect(getByText('testing 123')).toBeDefined()
 
-    sharedFacetDriver.mockClear()
+    sharedFacetDriverObserveMock.mockClear()
+    sharedFacetDriverSetMock.mockClear()
     facetDestructor.mockClear()
 
     rerender(
@@ -115,7 +127,7 @@ describe('rendering from a selector', () => {
       </SharedFacetDriverProvider>,
     )
 
-    expect(sharedFacetDriver).toBeCalledTimes(0)
+    expect(sharedFacetDriver.observe).toBeCalledTimes(0)
     expect(facetDestructor).toBeCalledTimes(1)
   })
 
@@ -155,7 +167,7 @@ describe('rendering from a selector', () => {
 
     const { getAllByText } = render(app)
 
-    expect(sharedFacetDriver).toBeCalledTimes(1)
+    expect(sharedFacetDriver.observe).toBeCalledTimes(1)
     expect(getAllByText('testing 123')).toHaveLength(4)
   })
 })
@@ -175,7 +187,7 @@ describe('rendering from a dynamic selector', () => {
     )
 
     // request the facet only once
-    expect(sharedFacetDriver).toBeCalledTimes(1)
+    expect(sharedFacetDriver.observe).toBeCalledTimes(1)
     expect(facetDestructor).toBeCalledTimes(0)
 
     // renders both components (each with their parameter)
@@ -183,7 +195,8 @@ describe('rendering from a dynamic selector', () => {
     expect(getByText('Item: b')).toBeDefined()
 
     // cleanup the call count before rendering
-    sharedFacetDriver.mockClear()
+    sharedFacetDriverObserveMock.mockClear()
+    sharedFacetDriverSetMock.mockClear()
     facetDestructor.mockClear()
 
     rerender(
@@ -194,7 +207,7 @@ describe('rendering from a dynamic selector', () => {
     )
 
     // confirm that the facet should not have been requested again
-    expect(sharedFacetDriver).toBeCalledTimes(0)
+    expect(sharedFacetDriver.observe).toBeCalledTimes(0)
     expect(facetDestructor).toBeCalledTimes(0)
 
     // renders both components (each with their parameter)
@@ -202,7 +215,8 @@ describe('rendering from a dynamic selector', () => {
     expect(getByText('Item: a')).toBeDefined()
 
     // cleanup the call count before rendering
-    sharedFacetDriver.mockClear()
+    sharedFacetDriverObserveMock.mockClear()
+    sharedFacetDriverSetMock.mockClear()
     facetDestructor.mockClear()
 
     rerender(
@@ -212,7 +226,7 @@ describe('rendering from a dynamic selector', () => {
     )
 
     // confirm that the facet was destroyed, given we are no longer rendering anything using it
-    expect(sharedFacetDriver).toBeCalledTimes(0)
+    expect(sharedFacetDriver.observe).toBeCalledTimes(0)
     expect(facetDestructor).toBeCalledTimes(1)
   })
 })
