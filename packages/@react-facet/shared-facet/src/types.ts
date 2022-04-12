@@ -1,4 +1,4 @@
-import { Facet, FacetFactory } from '@react-facet/core'
+import { Facet, FacetFactory, WritableFacet } from '@react-facet/core'
 
 export interface OnChange<V> {
   (value: V): void
