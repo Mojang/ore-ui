@@ -1,7 +1,6 @@
-import React, { ReactElement, useMemo, useEffect } from 'react'
-import { useFacetMap, useFacetUnwrap, useFacetMemo, useFacetWrap } from '../hooks'
-import { EqualityCheck, Facet, NO_VALUE, FacetProp } from '../types'
-import { createFacet } from '../facet'
+import React, { ReactElement } from 'react'
+import { useFacetMap, useFacetUnwrap, useFacetMemo } from '../hooks'
+import { EqualityCheck, Facet, NO_VALUE } from '../types'
 
 export type MapProps<T> = {
   children: (item: Facet<T>, index: number) => ReactElement
@@ -20,6 +19,7 @@ export const Map = <T,>({ array, children, equalityCheck, keySelector }: MapProp
     <>
       {arrayUnwrapped.map((item, index) => {
         const key = keySelector?.(item) ?? index
+
         return (
           <Child<T>
             arrayFacet={array}

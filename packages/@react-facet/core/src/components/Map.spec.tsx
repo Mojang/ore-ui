@@ -6,33 +6,43 @@ import { useFacetEffect, useFacetMap } from '../hooks'
 import { Map } from '.'
 
 it('renders all items in a Facet of array', () => {
-  type Input = { a: string }
-  const data = createFacet({
-    initialValue: [{ a: '1' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }],
+  type Input = { key: string; data: string }
+  const data = createFacet<Input[]>({
+    initialValue: [
+      { key: '1', data: 'a' },
+      { key: '2', data: 'b' },
+      { key: '3', data: 'c' },
+      { key: '4', data: 'd' },
+      { key: '5', data: 'e' },
+    ],
   })
 
   const ExampleContent = ({ item, index }: { item: Facet<Input>; index: number }) => {
     return (
       <span>
-        <fast-text text={useFacetMap(({ a }) => a, [], [item])} />
+        <fast-text text={useFacetMap(({ data }) => data, [], [item])} />
         <span>{index}</span>
       </span>
     )
   }
 
-  const keySelector = ({ a }: Input) => a
+  const keySelector = ({ key }: Input) => key
 
   const inputEqualityCheck = () => {
     const previous: Partial<Input> = {}
 
     return (current: Input) => {
-      if (current.a === previous.a) {
+      if (current.key === previous.key && current.data === previous.data) {
         return true
       }
-      previous.a = current.a
+
+      previous.key = current.key
+      previous.data = current.data
+
       return false
     }
   }
+
   const Example = () => {
     return (
       <Map array={data} equalityCheck={inputEqualityCheck} keySelector={keySelector}>
@@ -49,32 +59,36 @@ it('renders all items in a Facet of array', () => {
 })
 
 it('unmounts components when the array reduces in size', () => {
-  interface Item {
-    value: string
-  }
-
-  const data = createFacet<Item[]>({
-    initialValue: [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }],
+  type Input = { key: string; data: string }
+  const data = createFacet<Input[]>({
+    initialValue: [
+      { key: '1', data: 'a' },
+      { key: '2', data: 'b' },
+      { key: '3', data: 'c' },
+      { key: '4', data: 'd' },
+      { key: '5', data: 'e' },
+    ],
   })
 
-  const Item = ({ item, index }: { item: Facet<Item>; index: number }) => (
+  const Item = ({ item, index }: { item: Facet<Input>; index: number }) => (
     <span>
-      <fast-text text={useFacetMap(({ value }) => value, [], [item])} />
+      <fast-text text={useFacetMap(({ data }) => data, [], [item])} />
       <span>{index}</span>
     </span>
   )
 
-  const keySelector = ({ value }: Item) => value
+  const keySelector = ({ key }: Input) => key
 
   const itemEqualityCheck = () => {
-    const previous: Partial<Item> = {}
+    const previous: Partial<Input> = {}
 
-    return (current: Item) => {
-      if (current.value === previous.value) {
+    return (current: Input) => {
+      if (current.key === previous.key && current.data === previous.data) {
         return true
       }
 
-      previous.value = current.value
+      previous.key = current.key
+      previous.data = current.data
 
       return false
     }
@@ -94,15 +108,24 @@ it('unmounts components when the array reduces in size', () => {
 
   expect(container).toMatchSnapshot()
 
-  data.set([{ value: '1' }, { value: '2' }])
+  data.set([
+    { key: '1', data: 'a' },
+    { key: '2', data: 'b' },
+  ])
 
   expect(container).toMatchSnapshot()
 })
 
 it('updates only items that have changed', () => {
-  type Input = { a: string }
-  const data = createFacet({
-    initialValue: [{ a: '1' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }],
+  type Input = { key: string; data: string }
+  const data = createFacet<Input[]>({
+    initialValue: [
+      { key: '1', data: 'a' },
+      { key: '2', data: 'b' },
+      { key: '3', data: 'c' },
+      { key: '4', data: 'd' },
+      { key: '5', data: 'e' },
+    ],
   })
 
   const mock = jest.fn()
@@ -112,17 +135,18 @@ it('updates only items that have changed', () => {
     return null
   }
 
-  const keySelector = ({ a }: Input) => a
+  const keySelector = ({ key }: Input) => key
 
   const inputEqualityCheck = () => {
     const previous: Partial<Input> = {}
 
     return (current: Input) => {
-      if (current.a === previous.a) {
+      if (current.key === previous.key && current.data === previous.data) {
         return true
       }
 
-      previous.a = current.a
+      previous.key = current.key
+      previous.data = current.data
 
       return false
     }
@@ -145,20 +169,33 @@ it('updates only items that have changed', () => {
   mock.mockClear()
 
   act(() => {
-    data.set([{ a: '6' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }])
+    data.set([
+      { key: '1', data: 'z' },
+      { key: '2', data: 'b' },
+      { key: '3', data: 'c' },
+      { key: '4', data: 'd' },
+      { key: '5', data: 'e' },
+    ])
   })
 
   expect(mock).toHaveBeenCalledTimes(1)
-  expect(mock).toHaveBeenCalledWith({ a: '6' })
+  expect(mock).toHaveBeenCalledWith({ key: '1', data: 'z' })
 })
 
-it('mounts children only when a new item is added', () => {
-  type Input = { a: string }
-  const data = createFacet({
-    initialValue: [{ a: '1' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }],
+it('rerenders only when key is updated or added', () => {
+  type Input = { key: string; data: string }
+  const data = createFacet<Input[]>({
+    initialValue: [
+      { key: '1', data: 'a' },
+      { key: '2', data: 'b' },
+      { key: '3', data: 'c' },
+      { key: '4', data: 'd' },
+      { key: '5', data: 'e' },
+    ],
   })
 
   const facetUpdateMock = jest.fn()
+  const onMount = jest.fn()
 
   const ExampleContent = ({
     item,
@@ -168,21 +205,36 @@ it('mounts children only when a new item is added', () => {
     item: Facet<Input>
     onMount: (input: Input | NoValue) => void
   }) => {
-    useFacetEffect((itemValue) => console.log(itemValue, index) || facetUpdateMock(itemValue, index), [index], [item])
-    return null
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => onMount(index), [])
+    useFacetEffect((itemValue) => facetUpdateMock(itemValue, index), [index], [item])
+    const dataFacet = useFacetMap(({ data }) => `Data: ${data}`, [], [item])
+    const keyFacet = useFacetMap(({ key }) => `Key: ${key}`, [], [item])
+
+    return (
+      <div>
+        <p>
+          <fast-text text={keyFacet} />
+        </p>
+        <p>
+          <fast-text text={dataFacet} />
+        </p>
+      </div>
+    )
   }
 
-  const keySelector = ({ a }: Input) => a
+  const keySelector = ({ key }: Input) => key
 
   const inputEqualityCheck = () => {
     const previous: Partial<Input> = {}
 
     return (current: Input) => {
-      if (current.a === previous.a) {
+      if (current.key === previous.key && current.data === previous.data) {
         return true
       }
 
-      previous.a = current.a
+      previous.key = current.key
+      previous.data = current.data
 
       return false
     }
@@ -198,39 +250,52 @@ it('mounts children only when a new item is added', () => {
 
   const scenario = <Example />
 
-  console.log('Render 1')
-  render(scenario)
+  const { container } = render(scenario)
 
   expect(facetUpdateMock).toHaveBeenCalledTimes(5)
+  expect(onMount).toHaveBeenCalledTimes(5)
+
+  expect(container).toMatchSnapshot()
 
   facetUpdateMock.mockClear()
+  onMount.mockClear()
 
-  console.log('Render 2')
   act(() => {
-    data.set([{ a: '0' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }])
+    data.set([
+      { key: '1', data: 'z' },
+      { key: '2', data: 'b' },
+      { key: '3', data: 'c' },
+      { key: '4', data: 'd' },
+      { key: '5', data: 'e' },
+    ])
   })
 
   expect(facetUpdateMock).toHaveBeenCalledTimes(1)
-  expect(facetUpdateMock).toHaveBeenCalledWith({ a: '0' }, 0)
+  expect(facetUpdateMock).toHaveBeenCalledWith({ key: '1', data: 'z' }, 0)
+  expect(onMount).not.toHaveBeenCalled()
+
+  expect(container).toMatchSnapshot()
 
   facetUpdateMock.mockClear()
+  onMount.mockClear()
 
-  console.log('Render 3')
   act(() => {
-    data.set([{ a: '0' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }, { a: '6' }])
+    data.set([
+      { key: '1', data: 'z' },
+      { key: '2', data: 'b' },
+      { key: '3', data: 'c' },
+      { key: '4', data: 'd' },
+      { key: '5', data: 'e' },
+      { key: '6', data: 'f' },
+    ])
   })
 
   expect(facetUpdateMock).toHaveBeenCalledTimes(1)
-  expect(facetUpdateMock).toHaveBeenCalledWith({ a: '6' }, 5)
+  expect(facetUpdateMock).toHaveBeenCalledWith({ key: '6', data: 'f' }, 5)
+  expect(onMount).toHaveBeenCalledWith(5)
+
+  expect(container).toMatchSnapshot()
 
   facetUpdateMock.mockClear()
-
-  // act(() => {
-  //   data.set([{ a: '0' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }, { a: '6' }])
-  // })
-
-  // expect(facetUpdateMock).toHaveBeenCalledTimes(1)
-  // expect(facetUpdateMock).toHaveBeenCalledWith({ a: '0' }, 0)
-
-  // facetUpdateMock.mockClear()
+  onMount.mockClear()
 })
