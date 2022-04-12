@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { createFacet } from '../facet'
-import { Facet } from '../types'
+import { Facet, NoValue } from '../types'
 import { useFacetEffect, useFacetMap } from '../hooks'
 import { Map } from '.'
 
@@ -20,6 +20,8 @@ it('renders all items in a Facet of array', () => {
     )
   }
 
+  const keySelector = ({ a }: Input) => a
+
   const inputEqualityCheck = () => {
     const previous: Partial<Input> = {}
 
@@ -33,7 +35,7 @@ it('renders all items in a Facet of array', () => {
   }
   const Example = () => {
     return (
-      <Map array={data} equalityCheck={inputEqualityCheck}>
+      <Map array={data} equalityCheck={inputEqualityCheck} keySelector={keySelector}>
         {(item, index) => <ExampleContent item={item} index={index} />}
       </Map>
     )
@@ -62,6 +64,8 @@ it('unmounts components when the array reduces in size', () => {
     </span>
   )
 
+  const keySelector = ({ value }: Item) => value
+
   const itemEqualityCheck = () => {
     const previous: Partial<Item> = {}
 
@@ -78,7 +82,7 @@ it('unmounts components when the array reduces in size', () => {
 
   const Example = () => {
     return (
-      <Map array={data} equalityCheck={itemEqualityCheck}>
+      <Map array={data} equalityCheck={itemEqualityCheck} keySelector={keySelector}>
         {(item, index) => <Item item={item} index={index} />}
       </Map>
     )
@@ -108,6 +112,8 @@ it('updates only items that have changed', () => {
     return null
   }
 
+  const keySelector = ({ a }: Input) => a
+
   const inputEqualityCheck = () => {
     const previous: Partial<Input> = {}
 
@@ -124,7 +130,7 @@ it('updates only items that have changed', () => {
 
   const Example = () => {
     return (
-      <Map array={data} equalityCheck={inputEqualityCheck}>
+      <Map array={data} equalityCheck={inputEqualityCheck} keySelector={keySelector}>
         {(item) => <ExampleContent item={item} />}
       </Map>
     )
@@ -144,4 +150,87 @@ it('updates only items that have changed', () => {
 
   expect(mock).toHaveBeenCalledTimes(1)
   expect(mock).toHaveBeenCalledWith({ a: '6' })
+})
+
+it('mounts children only when a new item is added', () => {
+  type Input = { a: string }
+  const data = createFacet({
+    initialValue: [{ a: '1' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }],
+  })
+
+  const facetUpdateMock = jest.fn()
+
+  const ExampleContent = ({
+    item,
+    index,
+  }: {
+    index: number
+    item: Facet<Input>
+    onMount: (input: Input | NoValue) => void
+  }) => {
+    useFacetEffect((itemValue) => console.log(itemValue, index) || facetUpdateMock(itemValue, index), [index], [item])
+    return null
+  }
+
+  const keySelector = ({ a }: Input) => a
+
+  const inputEqualityCheck = () => {
+    const previous: Partial<Input> = {}
+
+    return (current: Input) => {
+      if (current.a === previous.a) {
+        return true
+      }
+
+      previous.a = current.a
+
+      return false
+    }
+  }
+
+  const Example = () => {
+    return (
+      <Map array={data} equalityCheck={inputEqualityCheck} keySelector={keySelector}>
+        {(item, index) => <ExampleContent item={item} index={index} onMount={facetUpdateMock} />}
+      </Map>
+    )
+  }
+
+  const scenario = <Example />
+
+  console.log('Render 1')
+  render(scenario)
+
+  expect(facetUpdateMock).toHaveBeenCalledTimes(5)
+
+  facetUpdateMock.mockClear()
+
+  console.log('Render 2')
+  act(() => {
+    data.set([{ a: '0' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }])
+  })
+
+  expect(facetUpdateMock).toHaveBeenCalledTimes(1)
+  expect(facetUpdateMock).toHaveBeenCalledWith({ a: '0' }, 0)
+
+  facetUpdateMock.mockClear()
+
+  console.log('Render 3')
+  act(() => {
+    data.set([{ a: '0' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }, { a: '6' }])
+  })
+
+  expect(facetUpdateMock).toHaveBeenCalledTimes(1)
+  expect(facetUpdateMock).toHaveBeenCalledWith({ a: '6' }, 5)
+
+  facetUpdateMock.mockClear()
+
+  // act(() => {
+  //   data.set([{ a: '0' }, { a: '2' }, { a: '3' }, { a: '4' }, { a: '5' }, { a: '6' }])
+  // })
+
+  // expect(facetUpdateMock).toHaveBeenCalledTimes(1)
+  // expect(facetUpdateMock).toHaveBeenCalledWith({ a: '0' }, 0)
+
+  // facetUpdateMock.mockClear()
 })
