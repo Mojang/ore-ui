@@ -1,6 +1,93 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders all items in a Facet of array 1`] = `
+exports[`<Map /> renders all items in a Facet of array 1`] = `
+<div>
+  <span>
+    1
+    <span>
+      0
+    </span>
+  </span>
+  <span>
+    2
+    <span>
+      1
+    </span>
+  </span>
+  <span>
+    3
+    <span>
+      2
+    </span>
+  </span>
+  <span>
+    4
+    <span>
+      3
+    </span>
+  </span>
+  <span>
+    5
+    <span>
+      4
+    </span>
+  </span>
+</div>
+`;
+
+exports[`<Map /> unmounts components when the array reduces in size 1`] = `
+<div>
+  <span>
+    1
+    <span>
+      0
+    </span>
+  </span>
+  <span>
+    2
+    <span>
+      1
+    </span>
+  </span>
+  <span>
+    3
+    <span>
+      2
+    </span>
+  </span>
+  <span>
+    4
+    <span>
+      3
+    </span>
+  </span>
+  <span>
+    5
+    <span>
+      4
+    </span>
+  </span>
+</div>
+`;
+
+exports[`<Map /> unmounts components when the array reduces in size 2`] = `
+<div>
+  <span>
+    1
+    <span>
+      0
+    </span>
+  </span>
+  <span>
+    2
+    <span>
+      1
+    </span>
+  </span>
+</div>
+`;
+
+exports[`<MapWithKey /> renders all items in a Facet of array 1`] = `
 <div>
   <span>
     a
@@ -35,7 +122,7 @@ exports[`renders all items in a Facet of array 1`] = `
 </div>
 `;
 
-exports[`rerenders only when key is updated or added 1`] = `
+exports[`<MapWithKey /> rerenders only when key is updated or added 1`] = `
 <div>
   <div>
     <p>
@@ -80,7 +167,7 @@ exports[`rerenders only when key is updated or added 1`] = `
 </div>
 `;
 
-exports[`rerenders only when key is updated or added 2`] = `
+exports[`<MapWithKey /> rerenders only when key is updated or added 2`] = `
 <div>
   <div>
     <p>
@@ -125,7 +212,7 @@ exports[`rerenders only when key is updated or added 2`] = `
 </div>
 `;
 
-exports[`rerenders only when key is updated or added 3`] = `
+exports[`<MapWithKey /> rerenders only when key is updated or added 3`] = `
 <div>
   <div>
     <p>
@@ -178,7 +265,7 @@ exports[`rerenders only when key is updated or added 3`] = `
 </div>
 `;
 
-exports[`unmounts components when the array reduces in size 1`] = `
+exports[`<MapWithKey /> unmounts components when the array reduces in size 1`] = `
 <div>
   <span>
     a
@@ -213,7 +300,7 @@ exports[`unmounts components when the array reduces in size 1`] = `
 </div>
 `;
 
-exports[`unmounts components when the array reduces in size 2`] = `
+exports[`<MapWithKey /> unmounts components when the array reduces in size 2`] = `
 <div>
   <span>
     a
