@@ -14,7 +14,7 @@ export interface UserFacet {
   signOut(): void
 }
 
-export const userFacet = remoteFacet<UserFacet>('data.user', {
+export const userFacet = sharedFacet<UserFacet>('data.user', {
   username: 'Alex',
   signOut() {},
 })
@@ -24,7 +24,7 @@ export const userFacet = remoteFacet<UserFacet>('data.user', {
 
 ## Selectors
 
-Selectors allow to narrow data from an upstream remote facet:
+Selectors allow to narrow data from an upstream shared facet:
 
 ```ts
 interface UserFacet {
@@ -34,14 +34,14 @@ interface UserFacet {
   }
 }
 
-const profileFacet = remoteFacet<UserFacet>('data.user', {
+const profileFacet = sharedFacet<UserFacet>('data.user', {
   user: {
     name: 'Jane',
     lastname: 'Doe',
   },
 })
 
-const userNameFacet = remoteSelector(({ user }) => user.name, [profileFacet])
+const userNameFacet = sharedSelector(({ user }) => user.name, [profileFacet])
 ```
 
 The user name facet will only hold the user name as data and can be consumed like this:
@@ -60,7 +60,11 @@ const UserData = () => {
 To avoid re-renders, you can specify an equality check function, so that if the original facet updates but the value of the data returned by the selector remains the same, listeners to the new facet will not get triggered pointlessly:
 
 ```ts
-const userNameFacet = remoteSelector(({ user }) => user.name, [profileFacet], (a, b) => a === b)
+const userNameFacet = sharedSelector(
+  ({ user }) => user.name,
+  [profileFacet],
+  (a, b) => a === b,
+)
 ```
 
 ## Dynamic Selectors
@@ -75,21 +79,20 @@ interface MessagesFacet {
   }>
 }
 
-const chatFacet = remoteFacet<MessagesFacet>('data.messages', {
+const chatFacet = sharedFacet<MessagesFacet>('data.messages', {
   messages: [
     { content: 'Hello', timestamp: 0 },
     { content: 'Are you free?', timestamp: 12 },
   ],
 })
 
-const messageContentSelector = remoteDynamicSelector((index: number) => ({
+const messageContentSelector = sharedDynamicSelector((index: number) => ({
   dependencies: [chatFacet],
   get: ({ messages }) => messages[index].content,
 }))
 ```
 
 The selector will return a facet that holds the content of the particular message:
-
 
 ```tsx
 const Message = ({ index }: { index: number }) => {
@@ -105,7 +108,7 @@ const Message = ({ index }: { index: number }) => {
 As with the regular selector, you can specify an equality check function:
 
 ```ts
-const messageContentSelector = remoteDynamicSelector(
+const messageContentSelector = sharedDynamicSelector(
   (index: number) => ({
     dependencies: [chatFacet],
     get: ({ messages }) => messages[index].content,
