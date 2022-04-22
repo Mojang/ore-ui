@@ -6,14 +6,14 @@ sidebar_position: 2
 
 Here's a very simple example of how using `Facet`s for state management could look like:
 
-```tsx
-import React from 'react'
-import { useFacetState } from '@react-facet/core'
+```tsx twoslash
+// @esModuleInterop
+import React, { useCallback } from 'react'
+import { useFacetState, NO_VALUE } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
 
 const Counter = () => {
   const [counter, setCounter] = useFacetState(0)
-
   const handleClick = useCallback(() => {
     setCounter((counter) => counter + 1)
   }, [setCounter])
@@ -55,7 +55,8 @@ While this won't give you the full performance benefits of Facets, it provides a
 
 > Note: since Gameface only supports a subset of HTML elements, we don't attempt to create components for every single HTML element.
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
 import { useFacetState } from '@react-facet/core'
 import { Div, Text } from '@react-facet/dom-components'
 
@@ -84,7 +85,8 @@ To render with the custom renderer, replace the `render` function from `react-do
 
 From here, you can start using [`fast-*`](api/fast-components) elements anywhere you need to bind a `Facet` to the DOM:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
 import { useFacetState } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
 
@@ -106,7 +108,7 @@ render(<HelloWorld />, document.getElementById('root'))
 
 Facets are just JavaScript objects that update over time. An example of a facet interface definition could be:
 
-```tsx
+```tsx twoslash
 export interface UserFacet {
   username: string
   signOut(): void
@@ -115,7 +117,7 @@ export interface UserFacet {
 
 They can be initialized by using Hooks provided in `@react-facet/core`, and can be read and written to:
 
-```tsx
+```tsx twoslash
 interface TemporaryValuesFacet {
   username: string
   password: string
@@ -201,7 +203,7 @@ const App = () => {
 
 An example of defining and consuming a shared facet:
 
-```tsx
+```tsx twoslash
 interface UserFacet {
 	username: string
 	signOut(): void

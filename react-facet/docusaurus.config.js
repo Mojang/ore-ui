@@ -114,5 +114,11 @@ module.exports = {
         },
       },
     ],
+    [
+      'docusaurus-preset-shiki-twoslash',
+      {
+        themes: ['../../../react-facet/src/themes/palenight'],
+      },
+    ],
   ],
 }

@@ -18,6 +18,7 @@
   --ifm-color-primary-lighter: #f71c69;
   --ifm-color-primary-lightest: #f83e80;
   --ifm-code-font-size: 95%;
+  --ifm-color-emphasis-400: none;
 
   --ifm-code-background: #000000;
 
@@ -25,6 +26,10 @@
   --ifm-font-family-monospace: 'Source Code Pro', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
   --ifm-font-weight-semibold: 600;
+}
+
+data-lsp {
+  border: none !important;
 }
 
 .navbar--primary {
