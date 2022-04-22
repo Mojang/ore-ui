@@ -117,7 +117,7 @@ module.exports = {
     [
       'docusaurus-preset-shiki-twoslash',
       {
-        themes: ['../../../src/themes/palenight'],
+        themes: ['material-palenight'], // ['../../../src/themes/palenight'],
       },
     ],
   ],
