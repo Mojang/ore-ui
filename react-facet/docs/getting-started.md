@@ -8,6 +8,7 @@ Here's a very simple example of how using `Facet`s for state management could lo
 
 ```tsx twoslash
 // @esModuleInterop
+// @errors: 2365
 import React, { useCallback } from 'react'
 import { useFacetState, NO_VALUE } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
@@ -57,6 +58,7 @@ While this won't give you the full performance benefits of Facets, it provides a
 
 ```tsx twoslash
 // @esModuleInterop
+// @errors: 2305
 import { useFacetState } from '@react-facet/core'
 import { Div, Text } from '@react-facet/dom-components'
 
@@ -87,6 +89,7 @@ From here, you can start using [`fast-*`](api/fast-components) elements anywhere
 
 ```tsx twoslash
 // @esModuleInterop
+// @errors: 2695 1109
 import { useFacetState } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
 
@@ -117,7 +120,7 @@ export interface UserFacet {
 
 They can be initialized by using Hooks provided in `@react-facet/core`, and can be read and written to:
 
-```tsx twoslash
+```tsx
 interface TemporaryValuesFacet {
   username: string
   password: string
@@ -203,7 +206,7 @@ const App = () => {
 
 An example of defining and consuming a shared facet:
 
-```tsx twoslash
+```tsx
 interface UserFacet {
 	username: string
 	signOut(): void
