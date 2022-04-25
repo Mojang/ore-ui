@@ -8,7 +8,6 @@ Here's a very simple example of how using `Facet`s for state management could lo
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 2365
 import React, { useCallback } from 'react'
 import { useFacetState, NO_VALUE } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
@@ -16,7 +15,7 @@ import { render } from '@react-facet/dom-fiber'
 const Counter = () => {
   const [counter, setCounter] = useFacetState(0)
   const handleClick = useCallback(() => {
-    setCounter((counter) => counter + 1)
+    setCounter((counter) => counter !== NO_VALUE ?  counter + 1 : counter)
   }, [setCounter])
 
   return (
@@ -58,18 +57,17 @@ While this won't give you the full performance benefits of Facets, it provides a
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 2305
 import { useFacetState } from '@react-facet/core'
-import { Div, Text } from '@react-facet/dom-components'
+import { fast } from '@react-facet/dom-components'
 
 const HelloWorld = () => {
   const [className, setClassName] = useFacetState('root')
   const [text, setText] = useFacetState('Hello World!')
 
   return (
-    <Div className={className}>
-      <Text text={text} />
-    </Div>
+    <fast.div className={className}>
+      <fast.text text={text} />
+    </fast.div>
   )
 }
 ```
@@ -89,7 +87,6 @@ From here, you can start using [`fast-*`](api/fast-components) elements anywhere
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 2695 1109
 import { useFacetState } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
 
@@ -100,7 +97,7 @@ const HelloWorld = () => {
 	return (
 		<fast-div className={className}>
 			<fast-text text={helloWorld} />
-		</fast-div>,
+		</fast-div>
 	)
 }
 
