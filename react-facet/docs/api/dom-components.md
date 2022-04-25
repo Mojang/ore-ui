@@ -8,7 +8,10 @@ If you are not yet using the [`@react-facet/dom-fiber`](../rendering/using-the-c
 
 For example:
 
-```tsx
+```tsx twoslash
+//@esModuleInterop
+import { useCallback } from 'react'
+import { useFacetState, useFacetMap } from '@react-facet/core'
 import { fast } from '@react-facet/dom-components'
 
 const Example = () => {
