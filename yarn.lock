@@ -3136,6 +3136,47 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-facet/core@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@react-facet/core@npm:0.3.0"
+  peerDependencies:
+    react: ^16.9.0
+  checksum: af11845e86367d58cd7336d64328594a82551be5c2117cf4a78352a71c97b0b6dce858a4e41c08640926e318328ed17f7e19ec536f49ca6f32654bbe0a712590
+  languageName: node
+  linkType: hard
+
+"@react-facet/dom-components@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@react-facet/dom-components@npm:0.3.0"
+  peerDependencies:
+    "@react-facet/core": 0.3.0
+    react: ^16.9.0
+  checksum: c7e013cb0491e410b6bea2de43a86721aaa7772c5b44e5e005b6b0f1077e2540563c060265320a48ee04dfe1619b9627ba97244f062f547f188ad47b79a14c35
+  languageName: node
+  linkType: hard
+
+"@react-facet/dom-fiber@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@react-facet/dom-fiber@npm:0.3.0"
+  dependencies:
+    react-reconciler: ^0.24.0
+  peerDependencies:
+    "@react-facet/core": 0.3.0
+    react: ^16.9.0
+  checksum: 800e7fb0a1dd18580b44b2aed27f43e3768a591fc300c6096b7843ea446e373f782963773213702f078cbefd8a9761e0e5f644c8e91e1a42820729c96d140602
+  languageName: node
+  linkType: hard
+
+"@react-facet/shared-facet@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@react-facet/shared-facet@npm:0.3.0"
+  peerDependencies:
+    "@react-facet/core": 0.3.0
+    react: ^16.9.0
+  checksum: 569f8a9f5c5c460b334846d279dd9a810d965290b471c08185d17c8b137c8d0fae142ed43a3a1877d6e80e0af733b7690efedaca4f5de1b4bf909dd9a1ed3509
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-node-resolve@npm:^7.1.1":
   version: 7.1.3
   resolution: "@rollup/plugin-node-resolve@npm:7.1.3"
@@ -4040,6 +4081,35 @@ __metadata:
     "@typescript-eslint/types": 4.33.0
     eslint-visitor-keys: ^2.0.0
   checksum: 59953e474ad4610c1aa23b2b1a964445e2c6201521da6367752f37939d854352bbfced5c04ea539274065e012b1337ba3ffa49c2647a240a4e87155378ba9873
+  languageName: node
+  linkType: hard
+
+"@typescript/twoslash@npm:3.1.0":
+  version: 3.1.0
+  resolution: "@typescript/twoslash@npm:3.1.0"
+  dependencies:
+    "@typescript/vfs": 1.3.5
+    debug: ^4.1.1
+    lz-string: ^1.4.4
+  checksum: 60a64598c6665b38701a2256ab725f801a28df7c8cdecd906230daca992e34f7a4ae96be5b7c8c99fff167a2aba99daf16005f196a22af95b9b1681e82320f20
+  languageName: node
+  linkType: hard
+
+"@typescript/vfs@npm:1.3.4":
+  version: 1.3.4
+  resolution: "@typescript/vfs@npm:1.3.4"
+  dependencies:
+    debug: ^4.1.1
+  checksum: 9468126c7f5da5811f65a6a8ccded68ba3ae32e5bff710ff0fc792b9592dd0b64606669703c707a61350d18d0640a60465fd1fdfa19224bf75998061d461cbf5
+  languageName: node
+  linkType: hard
+
+"@typescript/vfs@npm:1.3.5":
+  version: 1.3.5
+  resolution: "@typescript/vfs@npm:1.3.5"
+  dependencies:
+    debug: ^4.1.1
+  checksum: 3e26c34e7e98195c12ac1963bc99d5b574eb2bcebfe262f235d1bdc461b4608e55d856331611395a7d3c8921ac2e06f5b916e73bc548a4e1fed0c7cb0891089d
   languageName: node
   linkType: hard
 
@@ -6643,7 +6713,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"copy-text-to-clipboard@npm:^3.0.0":
+"copy-text-to-clipboard@npm:^3.0.0, copy-text-to-clipboard@npm:^3.0.1":
   version: 3.0.1
   resolution: "copy-text-to-clipboard@npm:3.0.1"
   checksum: 4c301b9a65c8bf337e26a74d28849096651697fac829a364c463df81ba5ddfeea0741214f9f1232832fffd229ebd5659d3abcccea3fe54d7010a22e515cc38bc
@@ -7747,6 +7817,17 @@ __metadata:
   dependencies:
     esutils: ^2.0.2
   checksum: fd7673ca77fe26cd5cba38d816bc72d641f500f1f9b25b83e8ce28827fe2da7ad583a8da26ab6af85f834138cf8dae9f69b0cd6ab925f52ddab1754db44d99ce
+  languageName: node
+  linkType: hard
+
+"docusaurus-preset-shiki-twoslash@npm:^1.1.37":
+  version: 1.1.37
+  resolution: "docusaurus-preset-shiki-twoslash@npm:1.1.37"
+  dependencies:
+    copy-text-to-clipboard: ^3.0.1
+    remark-shiki-twoslash: 3.0.9
+    typescript: ">3"
+  checksum: 91510cf67401b00980a0f808756f766c7500d1b52ee6e1892aa6636a0178bfd3a0b02c45d2c57cb3054010b9efceb3e06e069fd6ab3aea5f507b4a24a1a0f68b
   languageName: node
   linkType: hard
 
@@ -8987,6 +9068,13 @@ __metadata:
   dependencies:
     xml-js: ^1.6.11
   checksum: 2e6992a675a049511eef7bda8ca6c08cb9540cd10e8b275ec4c95d166228ec445a335fa8de990358759f248a92861e51decdcd32bf1c54737d5b7aed7c7ffe97
+  languageName: node
+  linkType: hard
+
+"fenceparser@npm:^1.1.0":
+  version: 1.1.1
+  resolution: "fenceparser@npm:1.1.1"
+  checksum: f59c93c4713e4c09c5014c29c03e7aa4a669c817e422b72d06228bce60ab5b41c682e1ef9954c37194d9130b34f0be4b1b474237b16fddfd4d422aa0ecf7871e
   languageName: node
   linkType: hard
 
@@ -11990,6 +12078,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"jsonc-parser@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "jsonc-parser@npm:3.0.0"
+  checksum: 1df2326f1f9688de30c70ff19c5b2a83ba3b89a1036160da79821d1361090775e9db502dc57a67c11b56e1186fc1ed70b887f25c5febf9a3ec4f91435836c99d
+  languageName: node
+  linkType: hard
+
 "jsonfile@npm:^4.0.0":
   version: 4.0.0
   resolution: "jsonfile@npm:4.0.0"
@@ -13621,6 +13716,15 @@ fsevents@^1.2.7:
   dependencies:
     mimic-fn: ^2.1.0
   checksum: 2478859ef817fc5d4e9c2f9e5728512ddd1dbc9fb7829ad263765bb6d3b91ce699d6e2332eef6b7dff183c2f490bd3349f1666427eaba4469fba0ac38dfd0d34
+  languageName: node
+  linkType: hard
+
+"onigasm@npm:^2.2.5":
+  version: 2.2.5
+  resolution: "onigasm@npm:2.2.5"
+  dependencies:
+    lru-cache: ^5.1.1
+  checksum: 97aedde610ef561f05853609d6a5b720ec1e123f867bdac1b38b5aeb3bc90ed60209678c75a5f0f9821aa793c720b6d17aabfb956e26ab115ee9b81d6e56bdf7
   languageName: node
   linkType: hard
 
@@ -16129,9 +16233,14 @@ fsevents@^1.2.7:
     "@docusaurus/preset-classic": 2.0.0-alpha.73
     "@docusaurus/theme-search-algolia": ^2.0.0-beta.9
     "@mdx-js/react": ^1.6.21
+    "@react-facet/core": ^0.3.0
+    "@react-facet/dom-components": ^0.3.0
+    "@react-facet/dom-fiber": ^0.3.0
+    "@react-facet/shared-facet": ^0.3.0
     "@types/rimraf": ^3
     clsx: ^1.1.1
     cross-env: ^7.0.3
+    docusaurus-preset-shiki-twoslash: ^1.1.37
     prettier: ^2.4.1
     react: ^16.9.0
     react-dom: ^16.9.0
@@ -16228,6 +16337,20 @@ fsevents@^1.2.7:
   peerDependencies:
     react: "*"
   checksum: 72329cfd2f2c8b3d4666acf97c36e9d653a3620970d2702d22282b1eb4bcb3c709695d06489f2844da2d541e42e45bcf43fe89eeedb508680f071984cee0eddd
+  languageName: node
+  linkType: hard
+
+"react-reconciler@npm:^0.24.0":
+  version: 0.24.0
+  resolution: "react-reconciler@npm:0.24.0"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+    prop-types: ^15.6.2
+    scheduler: ^0.18.0
+  peerDependencies:
+    react: ^16.0.0
+  checksum: c9c74208325a940ca36e031b71499f6d8e62e96ee673d69e35cc9e6a661aa746a2b0750f2ffcd1bae0a29eaf3d127dc8197ab7e801e6a3a2ab7d45a71b464630
   languageName: node
   linkType: hard
 
@@ -16719,6 +16842,23 @@ fsevents@^1.2.7:
     vfile-location: ^3.0.0
     xtend: ^4.0.1
   checksum: 2dfea250e7606ddfc9e223b9f41e0b115c5c701be4bd35181beaadd46ee59816bc00aadc6085a420f8df00b991ada73b590ea7fd34ace14557de4a0a41805be5
+  languageName: node
+  linkType: hard
+
+"remark-shiki-twoslash@npm:3.0.9":
+  version: 3.0.9
+  resolution: "remark-shiki-twoslash@npm:3.0.9"
+  dependencies:
+    "@typescript/twoslash": 3.1.0
+    "@typescript/vfs": 1.3.4
+    fenceparser: ^1.1.0
+    regenerator-runtime: ^0.13.7
+    shiki: 0.9.11
+    shiki-twoslash: 3.0.2
+    tslib: 2.1.0
+    typescript: ">3"
+    unist-util-visit: ^2.0.0
+  checksum: 93979869e45282dd0d2bbf6605bee04bec38c5d3a7a4dc1a5f95597b2bdb0c2669d7fb3191e98c865f00777efba1af761cd2398de625c589f9c58e3981a812bd
   languageName: node
   linkType: hard
 
@@ -17240,6 +17380,16 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"scheduler@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "scheduler@npm:0.18.0"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+  checksum: b6e0b9e0086b200b114f1ef7f9fcac966ad5d84cd3b1867174be0549d3ff713d1fd22d5574cb024b7d3eadf3307f2afc1cb5bfbf28b0d3bc34b200183800fcae
+  languageName: node
+  linkType: hard
+
 "scheduler@npm:^0.19.1":
   version: 0.19.1
   resolution: "scheduler@npm:0.19.1"
@@ -17583,6 +17733,29 @@ resolve@^2.0.0-next.3:
   version: 0.1.1
   resolution: "shellwords@npm:0.1.1"
   checksum: 8d73a5e9861f5e5f1068e2cfc39bc0002400fe58558ab5e5fa75630d2c3adf44ca1fac81957609c8320d5533e093802fcafc72904bf1a32b95de3c19a0b1c0d4
+  languageName: node
+  linkType: hard
+
+"shiki-twoslash@npm:3.0.2":
+  version: 3.0.2
+  resolution: "shiki-twoslash@npm:3.0.2"
+  dependencies:
+    "@typescript/twoslash": 3.1.0
+    "@typescript/vfs": 1.3.4
+    shiki: 0.9.11
+    typescript: ">3"
+  checksum: cf11a381d7290d7d11e3ccbd2225ade464011b3e5d7ed177d2be3058f297b6fbd4e56fa025a5ded34c885900b298d8157a6e4807bb67e7a97287d6c41ca56235
+  languageName: node
+  linkType: hard
+
+"shiki@npm:0.9.11":
+  version: 0.9.11
+  resolution: "shiki@npm:0.9.11"
+  dependencies:
+    jsonc-parser: ^3.0.0
+    onigasm: ^2.2.5
+    vscode-textmate: 5.2.0
+  checksum: 04f0e3bce401bcd7dab43d71827bbc9c00e2e76c3a94f36f2b434d41c1570ab8d3c8491789aba360b625f86b6ff8a8f7daf2c39a1ae7589f7236718a7399ab50
   languageName: node
   linkType: hard
 
@@ -18812,6 +18985,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"tslib@npm:2.1.0":
+  version: 2.1.0
+  resolution: "tslib@npm:2.1.0"
+  checksum: aa189c8179de0427b0906da30926fd53c59d96ec239dff87d6e6bc831f608df0cbd6f77c61dabc074408bd0aa0b9ae4ec35cb2c15f729e32f37274db5730cb78
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^1.8.1, tslib@npm:^1.9.0":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
@@ -18944,6 +19124,16 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+typescript@>3:
+  version: 4.6.3
+  resolution: "typescript@npm:4.6.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 255bb26c8cb846ca689dd1c3a56587af4f69055907aa2c154796ea28ee0dea871535b1c78f85a6212c77f2657843a269c3a742d09d81495b97b914bf7920415b
+  languageName: node
+  linkType: hard
+
 typescript@^4.1.2:
   version: 4.4.4
   resolution: "typescript@npm:4.4.4"
@@ -18951,6 +19141,16 @@ typescript@^4.1.2:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 89ecb8436bb48ef5594d49289f5f89103071716b6e4844278f4fb3362856e31203e187a9c76d205c3f0b674d221a058fd28310dbcbcf5d95e9a57229bb5203f1
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@>3#~builtin<compat/typescript>":
+  version: 4.6.3
+  resolution: "typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=32657b"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 59346df396432a7dc69f86776acadbe61d1f1faf8bbecf6dadc3bd95d2a70808a40a65dc17699b8aec74902edca2d49aa7373bb61443705d7c3e56dd2757d5c3
   languageName: node
   linkType: hard
 
@@ -19530,6 +19730,13 @@ typescript@^4.1.2:
   version: 1.1.2
   resolution: "vm-browserify@npm:1.1.2"
   checksum: 10a1c50aab54ff8b4c9042c15fc64aefccce8d2fb90c0640403242db0ee7fb269f9b102bdb69cfb435d7ef3180d61fd4fb004a043a12709abaf9056cfd7e039d
+  languageName: node
+  linkType: hard
+
+"vscode-textmate@npm:5.2.0":
+  version: 5.2.0
+  resolution: "vscode-textmate@npm:5.2.0"
+  checksum: 5449b42d451080f6f3649b66948f4b5ee4643c4e88cfe3558a3b31c84c78060cfdd288c4958c1690eaa5cd65d09992fa6b7c3bef9d4aa72b3651054a04624d20
   languageName: node
   linkType: hard
 

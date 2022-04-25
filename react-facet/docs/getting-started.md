@@ -119,13 +119,20 @@ They can be initialized by using Hooks provided in `@react-facet/core`, and can 
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 7031 2304 7006 2339
+import { render } from '@react-facet/dom-fiber'
+
+interface Props {
+  onSubmit: (values: any) => void;
+}
+// ---cut---
+import { useFacetMap, useFacetState, useFacetCallback, NO_VALUE } from '@react-facet/core'
+
 interface TemporaryValuesFacet {
   username: string
   password: string
 }
 
-const UpdateLogin = ({ onSubmit }) => {
+const UpdateLogin = ({ onSubmit }: Props) => {
   const [temporaryValues, updateValues] = useFacetState<TemporaryValuesFacet>({
     username: '',
     password: '',
@@ -146,9 +153,11 @@ const UpdateLogin = ({ onSubmit }) => {
       <fast-input
         type="text"
         value={username}
-        onChange={(event) => {
+        onKeyUp={(event) => {
           updateValues((values) => {
-            values.username = event.target.value
+            if (values !== NO_VALUE) {
+              values.username = (event.target as HTMLInputElement).value
+            }
             return values
           })
         }}
@@ -158,9 +167,11 @@ const UpdateLogin = ({ onSubmit }) => {
       <fast-input
         type="text"
         value={password}
-        onChange={(event) => {
+        onKeyUp={(event) => {
           updateValues((values) => {
-            values.password = event.target.value
+            if (values !== NO_VALUE) {
+              values.password = (event.target as HTMLInputElement).value
+            }
             return values
           })
         }}
@@ -170,6 +181,7 @@ const UpdateLogin = ({ onSubmit }) => {
     </div>
   )
 }
+
 ```
 
 ## Interfacing with the game engine (Shared Facets)
@@ -183,8 +195,15 @@ const UpdateLogin = ({ onSubmit }) => {
 
 To use shared facets, you must wrap your React application inside `SharedFacetDriverProvider`. You must also provide a `sharedFacetDriver`, which takes care of requesting the facet from a C++ backend and registering a listener to be notified about updates. Below you can find a pseudo-code of a how an implementation would look like using an `engine` that implements `EventEmitter`
 
-```ts
-const sharedFacetDriver = (facetName, update) => {
+```tsx twoslash
+const engine = {
+  on: (...args: any[]) => {},
+  off: (...args: any[]) => {},
+  trigger: (...args: any[]) => {},
+}
+// ---cut---
+import { SharedFacetDriverProvider, OnChange } from '@react-facet/shared-facet'
+const sharedFacetDriver = (facetName: string, update: OnChange<unknown> ) => {
   // register a listener
   engine.on(`facet:updated:${facetName}`, update)
 
@@ -207,7 +226,10 @@ An example of defining and consuming a shared facet:
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 2304 7006 2339 17008
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useSharedFacet, sharedFacet, sharedSelector } from '@react-facet/shared-facet'
+
 interface UserFacet {
 	username: string
 	signOut(): void
@@ -218,13 +240,10 @@ const userFacet = sharedFacet<UserFacet>('data.user', {
 	signOut() {},
 })
 
-const usernameSelector = sharedSelector([userFacet], (value) => value.username);
+const usernameSelector = sharedSelector((value) => value.username, [userFacet])
 
 export const CurrentUser = () => {
 	const username = useSharedFacet(usernameSelector)
-
-	return <fast-p>
-		<fast-text text={username}>
-	</fast-p>
+	return <fast-p><fast-text text={username} /></fast-p>
 }
 ```

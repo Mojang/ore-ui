@@ -21,6 +21,7 @@
     "@react-facet/core": "^0.3.0",
     "@react-facet/dom-components": "^0.3.0",
     "@react-facet/dom-fiber": "^0.3.0",
+    "@react-facet/shared-facet": "^0.3.0",
     "clsx": "^1.1.1",
     "docusaurus-preset-shiki-twoslash": "^1.1.37",
     "react": "^16.9.0",
