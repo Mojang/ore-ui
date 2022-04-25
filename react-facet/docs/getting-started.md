@@ -120,7 +120,9 @@ export interface UserFacet {
 
 They can be initialized by using Hooks provided in `@react-facet/core`, and can be read and written to:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+// @errors: 7031 2304 7006 2339
 interface TemporaryValuesFacet {
   username: string
   password: string
@@ -206,7 +208,9 @@ const App = () => {
 
 An example of defining and consuming a shared facet:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+// @errors: 2304 7006 2339 17008
 interface UserFacet {
 	username: string
 	signOut(): void

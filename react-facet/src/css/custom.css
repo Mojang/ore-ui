@@ -32,6 +32,10 @@ data-lsp {
   border: none !important;
 }
 
+.twoslash-exception-message {
+  color: #000;
+}
+
 .navbar--primary {
   --ifm-navbar-background-color: #e70857;
 }
