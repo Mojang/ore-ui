@@ -8,9 +8,11 @@ The recommended way to consume Facets in your React application is to either [us
 
 Consuming Facets manually means, in short, to listen to their changes to do DOM manipulations imperatively. For example:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+// @errors: 2554 2365
 import React, { useCallback, useRef } from 'react'
-import { useFacetEffect, useFacetState } from '@react-facet/core'
+import { useFacetEffect, useFacetState, NO_VALUE } from '@react-facet/core'
 
 const Counter = () => {
   const [counter, setCounter] = useFacetState(0)
@@ -27,8 +29,11 @@ const Counter = () => {
   )
 
   const handleClick = useCallback(() => {
-    setCounter((counterValue) => counterValue + 1)
-  })
+    setCounter((counterValue) => {
+      return counterValue !== NO_VALUE ? counterValue + 1 : counterValue
+    })
+  }, [setCounter])
+
   return (
     <div>
       <p>
