@@ -22,8 +22,19 @@ Returns a `[facet, setFacet]` pair. Like React’s `useState`, but with a Facet 
 
 This example illustrates how to use this hook in the common use case of having to store the temporary state of the input field until it is submitted.
 
-```tsx
-const Form = ({ onSubmit, initialValue }) => {
+```tsx twoslash
+// @esModuleInterop
+import { useCallback } from 'react'
+import { render } from '@react-facet/dom-fiber'
+import { useFacetMap, useFacetState, useFacetCallback } from '@react-facet/core'
+
+interface Props {
+  onSubmit: (value: string) => void
+  initialValue: string
+}
+
+// ---cut---
+const Form = ({ onSubmit, initialValue }: Props) => {
   const [value, setValue] = useFacetState(initialValue)
 
   const handleChange = useCallback(
@@ -43,7 +54,7 @@ const Form = ({ onSubmit, initialValue }) => {
 
   return (
     <fast-div>
-      <fast-input onChange={handleChange} value={value} />
+      <fast-input onKeyUp={handleChange} value={value} />
 
       <fast-div onClick={handleClick}>Submit</fast-div>
     </fast-div>
@@ -57,8 +68,18 @@ The `useFacetCallback` hook is similar to React’s `useCallback` in that it all
 
 Say for example that you have a small form, and want to create a handler for the Submit action. You need to have access to the current value of a facet that stores the `value` of an input field in order to send that value back to the parent component when the `Submit` button of the form. `useFacetCallback` allows you to create such handler, which will always have access to the current value of the facet.
 
-```tsx
-const Form = ({ onSubmit, initialValue }) => {
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+interface Props {
+  onSubmit: (value: string) => void
+  initialValue: string
+}
+// ---cut---
+import { useCallback } from 'react'
+import { useFacetState, useFacetCallback } from '@react-facet/core'
+
+const Form = ({ onSubmit, initialValue }: Props) => {
   const [value, setValue] = useFacetState(initialValue)
 
   const handleChange = useCallback(
@@ -78,7 +99,7 @@ const Form = ({ onSubmit, initialValue }) => {
 
   return (
     <fast-div>
-      <fast-input onChange={handleChange} value={value} />
+      <fast-input onKeyUp={handleChange} value={value} />
 
       <fast-div onClick={handleClick}>Submit</fast-div>
     </fast-div>
@@ -92,8 +113,11 @@ The `useFacetEffect` hook gives you a way of performing some imperative action (
 
 Like `useEffect`, `useFacetEffect` takes an effect function to be called when the updates happen, a dependency list, and finally an array of facets. If there are more than one facet in the array, then the `useFacetEffect` will only be called when all facets have a value. This is an implementation made to avoid flickering. Once all facets do have a value, the `useFacetEffect` will be called when a value changes in any facet.
 
-```tsx
-const Logger = ({ shouldLog }) => {
+```tsx twoslash
+// @esModuleInterop
+import { useFacetEffect, useFacetState } from '@react-facet/core'
+
+const Logger = ({ shouldLog }: { shouldLog: boolean }) => {
   const [statusFacet, setStatusFacet] = useFacetState('loading')
 
   useFacetEffect(
@@ -112,8 +136,11 @@ const Logger = ({ shouldLog }) => {
 
 It also supports a cleanup function that can be returned by the effect function. This cleanup is called whenever any of the dependencies or the facets have changed or when the component is unmounted. In short, it behaves exactly like React’s `useEffect`.
 
-```tsx
-const Logger = ({ shouldLog }) => {
+```tsx twoslash
+// @esModuleInterop
+import { useFacetEffect, useFacetState } from '@react-facet/core'
+
+const Logger = ({ shouldLog }: { shouldLog: boolean }) => {
   const [statusFacet, setStatusFacet] = useFacetState('loading')
 
   useFacetEffect(
@@ -145,8 +172,13 @@ The `useFacetMap` hook allows you to do a sort of "inline selector" to narrow do
 
 This is useful to be able to combine React component props with facet data and to prepare the facet to be passed down as a prop / style into a `fast-*` component.
 
-```tsx
-const HealthBar = ({ lowHealthThreshold }) => {
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useFacetState, useFacetMap } from '@react-facet/core'
+
+const HealthBar = ({ lowHealthThreshold }: { lowHealthThreshold: number }) => {
   const [playerFacet, setPlayerFacet] = useFacetState({
     health: 80,
     mana: 65,
@@ -164,8 +196,18 @@ const HealthBar = ({ lowHealthThreshold }) => {
 
 The `useFacetMap` hook supports passing in several facets to listen to, so you can merge the values of several facets into one using it.
 
-```tsx
-const InputField = ({ placeholderFacet, valueFacet }) => {
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useFacetMap, Facet } from '@react-facet/core'
+
+type Props = {
+  placeholderFacet: Facet<string>;
+  valueFacet: Facet<string>
+}
+
+const InputField = ({ placeholderFacet, valueFacet }: Props) => {
   const valueToDisplay = useFacetMap(
     (placeholder, value) => (value != null ? value : placeholder),
     [],
@@ -182,11 +224,15 @@ const InputField = ({ placeholderFacet, valueFacet }) => {
 
 Optionally, you can pass an equality check function as the fourth argument to `useFacetMap`. This is particularly useful when grouping more than one facet together into a single array / object, since hard equality checks will not work on arrays / objects.
 
-```tsx
-import { tupleEqualityCheck, useFacetMap } from '@react-facet/dom-fiber'
+```tsx twoslash
+const SubComponent = ({ facets }: { facets: any }) => null
+// ---cut---
+// @esModuleInterop
+// @errors: 2322 1011
+import { shallowArrayEqualityCheck, useFacetState, useFacetMap } from '@react-facet/core'
 
 
-const WrapperComponent = ({ placeholderFacet, valueFacet }) => {
+const WrapperComponent = () => {
 	const [facetA, setFacetA] = useFacetState('A')
 	const [facetB, setFacetB] = useFacetState('B')
 
@@ -194,7 +240,7 @@ const WrapperComponent = ({ placeholderFacet, valueFacet }) => {
 		(a, b) => [a, b]
 		[],
 		[facetA, facetB],
-		tupleEqualityCheck
+		shallowArrayEqualityCheck
 	)
 
 	return <SubComponent facets={groupedFacet} />
@@ -216,8 +262,11 @@ Whenever the value inside the provided Facet is updated, the value inside the
 
 If the `Facet` is not yet initialized, the `Ref` will contain a `NO_VALUE`
 
-```tsx
-const LogWhenRendered = () => {
+```tsx twoslash
+import { useEffect } from 'react'
+import { useFacetRef, Facet } from '@react-facet/core'
+
+const LogWhenRendered = ({ exampleFacet }: { exampleFacet: Facet<unknown>}) => {
   const facetRef = useFacetRef(exampleFacet)
 
   useEffect(() => {
@@ -234,7 +283,12 @@ To simplify the use case in which a certain variable can hold either a value or 
 
 > Note that if the consumers of the component pass a regular prop instead of a facet, that will cause the component to re-render, negating all performance benefits. This hook is useful to be able to migrate, for compatibility, but it is still recommended that all consumers of the components that support facets use facets for maximum performance improvement.
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useFacetMap, useFacetState, useFacetWrap, FacetProp,  } from '@react-facet/core'
+
 type ButtonProps = {
   isDisabled: FacetProp<boolean>
 }
@@ -269,12 +323,15 @@ The upside is that it is backwards compatible, but the downside is that any upda
 
 For most scenarios, consider using the other hooks or the facet itself directly into a `fast.*` component instead. That approach removes all unnecessary React re-renders.
 
-```tsx
-const HealthBar = ({ lowHealthThreshold }) => {
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, useFacetMap, useFacetUnwrap, NO_VALUE } from '@react-facet/core'
+
+const HealthBar = ({ lowHealthThreshold }: { lowHealthThreshold: number }) => {
   const [playerFacet, setPlayerFacet] = useFacetState({ health: 80, mana: 65 })
 
   const health = useFacetUnwrap(useFacetMap(({ health }) => health, [], [playerFacet]))
-  const className = health > lowHealthThreshold ? 'healthy' : 'hurt'
+  const className = health !== NO_VALUE && health > lowHealthThreshold ? 'healthy' : 'hurt'
 
   return <div className={className} />
 }

@@ -10,7 +10,6 @@ Consuming Facets manually means, in short, to listen to their changes to do DOM 
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 2554 2365
 import React, { useCallback, useRef } from 'react'
 import { useFacetEffect, useFacetState, NO_VALUE } from '@react-facet/core'
 

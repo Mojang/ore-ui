@@ -8,9 +8,16 @@ When using [`@react-facet/dom-fiber`](../rendering/overview) as a renderer inste
 
 This means that all properties passed to a `fast-*` components can be regular values or `Facet`s. For example:
 
-```tsx
-<fast-div id="facet-div-0" />
-<fast-div id={useFacetWrap('facet-div-1')} />
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+import { useFacetWrap } from '@react-facet/core'
+// ---cut---
+
+<>
+  <fast-div id="facet-div-0" />
+  <fast-div id={useFacetWrap('facet-div-1')} />
+</>
 ```
 
 Here's a list of the currently supported `fast-*` components:
@@ -27,7 +34,11 @@ On top of these, a special case of a `fast-*` component that does not have any c
 
 `fast-text` receives a `text` prop that accepts a `Facet` containing a string. The `fast-text` component is renderer as just a `textNode` under the hood, so it doesn't create more DOM elements.
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+import { useFacetWrap } from '@react-facet/core'
+// ---cut---
 <fast-span>
   <fast-text text={useFacetWrap('lorem ipsum')} />
 </fast-span>

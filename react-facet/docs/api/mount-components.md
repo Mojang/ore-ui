@@ -191,7 +191,6 @@ For contrast, attempting to do the same thing with `Mount` will _not_ allow for 
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 2322
 import { render } from '@react-facet/dom-fiber'
 // ---cut---
 import { useFacetWrap, useFacetMap, Mount, FacetProp } from '@react-facet/core'
