@@ -39,7 +39,7 @@ const Form = ({ onSubmit, initialValue }: Props) => {
 
   const handleChange = useCallback(
     (event) => {
-      setValue(event.target.value)
+      setValue((event.target as HTMLInputElement).value)
     },
     [setValue],
   )
@@ -84,7 +84,7 @@ const Form = ({ onSubmit, initialValue }: Props) => {
 
   const handleChange = useCallback(
     (event) => {
-      setValue(event.target.value)
+      setValue((event.target as HTMLInputElement).value)
     },
     [setValue],
   )
