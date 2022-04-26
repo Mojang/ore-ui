@@ -2,11 +2,11 @@
 sidebar_position: 2
 ---
 
-# Remote Facets
+# Shared Facets
 
-Remote Facets are _the_ way of communicating back and forth from backend. They are constructed using `string` identifiers that the backend will use to populate the information in JavaScript.
+Shared Facets are _the_ way of communicating back and forth from backend. They are constructed using `string` identifiers that the backend will use to populate the information in JavaScript.
 
-Remote Facets are defined using the string identifier and an optional initial value. Note that since the type of the data stored in the facet cannot necessarily be deduced from the arguments, it's important to pass in the type of the facet data as a type argument:
+Shared Facets are defined using the string identifier and an optional initial value. Note that since the type of the data stored in the facet cannot necessarily be deduced from the arguments, it's important to pass in the type of the facet data as a type argument:
 
 ```ts twoslash
 // @esModuleInterop
