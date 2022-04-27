@@ -6,6 +6,7 @@ import {
   Instance,
   TextInstance,
   HydratableInstance,
+  SuspenseInstance,
   PublicInstance,
   HostContext,
   UpdatePayload,
@@ -27,6 +28,7 @@ export const setupHostConfig = (): HostConfig<
   Container,
   Instance,
   TextInstance,
+  SuspenseInstance,
   HydratableInstance,
   PublicInstance,
   HostContext,
@@ -46,7 +48,7 @@ export const setupHostConfig = (): HostConfig<
    * We need to support setting up the host config in an environment where window is not available globally yet
    * Ex: screenshot testing
    */
-  setTimeout:
+  scheduleTimeout:
     typeof window !== 'undefined'
       ? window.setTimeout
       : (handler, timeout) => window.setTimeout(handler, timeout) as unknown as NodeJS.Timeout,
@@ -55,18 +57,12 @@ export const setupHostConfig = (): HostConfig<
    * We need to support setting up the host config in an environment where window is not available globally yet
    * Ex: screenshot testing
    */
-  clearTimeout:
+  cancelTimeout:
     typeof window !== 'undefined' ? window.clearTimeout : (id) => window.clearTimeout(id as unknown as NodeJS.Timeout),
 
   noTimeout: noop,
 
-  scheduleDeferredCallback: function (callback, options) {
-    return window.setTimeout(callback, options ? options.timeout : 0)
-  },
-
-  cancelDeferredCallback: function (id) {
-    return window.clearTimeout(id)
-  },
+  preparePortalMount: function () {},
 
   getRootHostContext: function () {
     return EMPTY
@@ -220,7 +216,9 @@ export const setupHostConfig = (): HostConfig<
     return false
   },
 
-  prepareForCommit: function () {},
+  prepareForCommit: function () {
+    return null
+  },
 
   resetAfterCommit: function () {},
 
@@ -584,10 +582,6 @@ export const setupHostConfig = (): HostConfig<
 
   resetTextContent: function (instance) {
     instance.element.textContent = ''
-  },
-
-  shouldDeprioritizeSubtree: function () {
-    return false
   },
 
   getPublicInstance: function (instance) {

@@ -13,6 +13,7 @@ export const createFiberRoot =
         styleUnsubscribers: new Map(),
         style: container.style,
       },
+      0,
       false,
-      false,
+      null,
     )
