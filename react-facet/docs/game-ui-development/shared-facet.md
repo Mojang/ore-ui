@@ -54,7 +54,6 @@ The user name facet will only hold the user name as data and can be consumed lik
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 2322
 import { render } from '@react-facet/dom-fiber'
 import { sharedFacet, sharedSelector } from '@react-facet/shared-facet'
 
@@ -74,11 +73,13 @@ const profileFacet = sharedFacet<UserFacet>('data.user', {
 
 const userNameFacet = sharedSelector(({ user }) => user.name, [profileFacet])
 // ---cut---
+import { useSharedFacet } from '@react-facet/shared-facet'
+
 const UserData = () => {
   // This will print Jane
   return (
     <span>
-      <fast-text text={userNameFacet} />
+      <fast-text text={useSharedFacet(userNameFacet)} />
     </span>
   )
 }
@@ -103,13 +104,16 @@ const profileFacet = sharedFacet<UserFacet>('data.user', {
     lastname: 'Doe',
   },
 })
-// ---cut---
-import { sharedSelector } from '@react-facet/shared-facet'
 
-const userNameFacet = sharedSelector(
+import { sharedSelector } from '@react-facet/shared-facet'
+import { shallowObjectEqualityCheck } from '@react-facet/core'
+
+const equalityCheck = shallowObjectEqualityCheck()
+
+const userNameFacetWithEqualityCheck = sharedSelector(
   ({ user }) => user.name,
   [profileFacet],
-  // (a, b) => a === b,
+  //equalityCheck,
 )
 ```
 
@@ -145,10 +149,9 @@ The selector will return a facet that holds the content of the particular messag
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 2322
 import { render } from '@react-facet/dom-fiber'
 
-import { sharedFacet, sharedDynamicSelector } from '@react-facet/shared-facet'
+import { sharedFacet, sharedDynamicSelector, useSharedFacet } from '@react-facet/shared-facet'
 
 interface MessagesFacet {
   messages: ReadonlyArray<{
@@ -173,7 +176,7 @@ const Message = ({ index }: { index: number }) => {
   // For index 0, this will be "Hello"
   return (
     <span>
-      <fast-text text={messageContentSelector(index)} />
+      <fast-text text={useSharedFacet(messageContentSelector(index))} />
     </span>
   )
 }
@@ -200,13 +203,14 @@ const chatFacet = sharedFacet<MessagesFacet>('data.messages', {
 })
 // ---cut---
 import { sharedDynamicSelector } from '@react-facet/shared-facet'
+import { strictEqualityCheck } from '@react-facet/core'
 
 const messageContentSelector = sharedDynamicSelector(
   (index: number) => [
     ({ messages }) => messages[index].content,
     [chatFacet],
   ],
-  // (a, b) => a === b,
+  strictEqualityCheck,
 )
 ```
 

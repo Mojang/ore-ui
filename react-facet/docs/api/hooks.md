@@ -205,7 +205,7 @@ import { render } from '@react-facet/dom-fiber'
 import { useFacetMap, Facet } from '@react-facet/core'
 
 type Props = {
-  placeholderFacet: Facet<string>;
+  placeholderFacet: Facet<string>
   valueFacet: Facet<string>
 }
 
@@ -230,7 +230,7 @@ Optionally, you can pass an equality check function as the fourth argument to `u
 const SubComponent = ({ facets }: { facets: any }) => null
 // ---cut---
 // @esModuleInterop
-// @errors: 2322 1011
+
 import { shallowArrayEqualityCheck, useFacetState, useFacetMap } from '@react-facet/core'
 
 
@@ -239,7 +239,7 @@ const WrapperComponent = () => {
 	const [facetB, setFacetB] = useFacetState('B')
 
 	const groupedFacet = useFacetMap(
-		(a, b) => [a, b]
+		(a, b) => [a, b],
 		[],
 		[facetA, facetB],
 		shallowArrayEqualityCheck

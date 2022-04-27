@@ -22,6 +22,7 @@ const Counter = () => {
     <div>
       <p>
         Current count: <fast-text text={counter} />
+        //                                ^?
       </p>
       <button onClick={handleClick}>Increment</button>
     </div>
@@ -122,7 +123,7 @@ They can be initialized by using Hooks provided in `@react-facet/core`, and can 
 import { render } from '@react-facet/dom-fiber'
 
 interface Props {
-  onSubmit: (values: any) => void;
+  onSubmit: (values: any) => void
 }
 // ---cut---
 import { useFacetMap, useFacetState, useFacetCallback, NO_VALUE } from '@react-facet/core'
