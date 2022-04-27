@@ -944,15 +944,14 @@ __metadata:
   resolution: "@react-facet/core@workspace:packages/@react-facet/core"
   dependencies:
     "@react-facet/dom-fiber-testing-library": 0.3.0
-    "@types/react": ^17.0.11
-    "@types/react-reconciler": ^0.18.0
+    "@types/react": ^18.0.8
     "@types/rimraf": ^3
     cross-env: ^7.0.3
-    react: ^16.9.0
+    react: ^18.1.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    react: ^16.9.0
+    react: ^18.1.0
   languageName: unknown
   linkType: soft
 
@@ -961,12 +960,12 @@ __metadata:
   resolution: "@react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount"
   dependencies:
     "@react-facet/dom-fiber-testing-library": 0.3.0
-    react: ^16.9.0
+    react: ^18.1.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
     "@react-facet/core": 0.3.0
-    react: ^16.9.0
+    react: ^18.1.0
   languageName: unknown
   linkType: soft
 
@@ -977,17 +976,16 @@ __metadata:
     "@react-facet/core": 0.3.0
     "@testing-library/jest-dom": ^5.10.1
     "@testing-library/react": ^9.4.1
-    "@types/react": ^17.0.11
-    "@types/react-reconciler": ^0.18.0
+    "@types/react": ^18.0.8
     "@types/rimraf": ^3
     cross-env: ^7.0.3
-    react: ^16.9.0
-    react-dom: ^16.9.0
+    react: ^18.1.0
+    react-dom: ^18.1.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
     "@react-facet/core": 0.3.0
-    react: ^16.9.0
+    react: ^18.1.0
   languageName: unknown
   linkType: soft
 
@@ -996,13 +994,13 @@ __metadata:
   resolution: "@react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library"
   dependencies:
     "@react-facet/dom-fiber": 0.3.0
-    "@testing-library/dom": ^8.0.0
-    react: ^16.9.0
+    "@testing-library/dom": ^8.13.0
+    react: ^18.1.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
     "@react-facet/dom-fiber": 0.3.0
-    react: ^16.9.0
+    react: ^18.1.0
   languageName: unknown
   linkType: soft
 
@@ -1012,17 +1010,17 @@ __metadata:
   dependencies:
     "@react-facet/core": 0.3.0
     "@react-facet/dom-fiber-testing-library": 0.3.0
-    "@types/react": ^17.0.11
-    "@types/react-reconciler": ^0.18.0
+    "@types/react": ^18.0.8
+    "@types/react-reconciler": ^0.26.6
     "@types/rimraf": ^3
     cross-env: ^7.0.3
-    react: ^16.9.0
-    react-reconciler: ^0.24.0
+    react: ^18.1.0
+    react-reconciler: ^0.28.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
     "@react-facet/core": 0.3.0
-    react: ^16.9.0
+    react: ^18.1.0
   languageName: unknown
   linkType: soft
 
@@ -1042,15 +1040,15 @@ __metadata:
   dependencies:
     "@react-facet/core": 0.3.0
     "@react-facet/dom-fiber-testing-library": 0.3.0
-    "@types/react": ^17.0.11
+    "@types/react": ^18.0.8
     "@types/rimraf": ^3
     cross-env: ^7.0.3
-    react: ^16.9.0
+    react: ^18.1.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
     "@react-facet/core": 0.3.0
-    react: ^16.9.0
+    react: ^18.1.0
   languageName: unknown
   linkType: soft
 
@@ -1061,17 +1059,16 @@ __metadata:
     "@react-facet/core": 0.3.0
     "@testing-library/jest-dom": ^5.10.1
     "@testing-library/react": ^9.4.1
-    "@types/react": ^17.0.11
-    "@types/react-reconciler": ^0.18.0
+    "@types/react": ^18.0.8
     "@types/rimraf": ^3
     cross-env: ^7.0.3
-    react: ^16.9.0
-    react-dom: ^16.9.0
+    react: ^18.1.0
+    react-dom: ^18.1.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
     "@react-facet/core": 0.3.0
-    react: ^16.9.0
+    react: ^18.1.0
   languageName: unknown
   linkType: soft
 
@@ -1131,19 +1128,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^8.0.0":
-  version: 8.7.2
-  resolution: "@testing-library/dom@npm:8.7.2"
+"@testing-library/dom@npm:^8.13.0":
+  version: 8.13.0
+  resolution: "@testing-library/dom@npm:8.13.0"
   dependencies:
     "@babel/code-frame": ^7.10.4
     "@babel/runtime": ^7.12.5
     "@types/aria-query": ^4.2.0
-    aria-query: ^4.2.2
+    aria-query: ^5.0.0
     chalk: ^4.1.0
-    dom-accessibility-api: ^0.5.6
+    dom-accessibility-api: ^0.5.9
     lz-string: ^1.4.4
     pretty-format: ^27.0.2
-  checksum: 9c0b2a9bc7aa92f22d909d677093d4d520c59de36013e97ba6eeaea4b4fccd3cae7e1221712bf079939b7d86aa69740441b206ae1cb9c3a1ecbb420070f4d0c9
+  checksum: 880f1872b9949800d4444e3bdbd03df86d6f41ec7c27136dff1da29e87d2df2d7ee904afcdf895ffce351c25bd12119117eae023354d50e707ad56d43b2ed3ed
   languageName: node
   linkType: hard
 
@@ -1462,16 +1459,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-reconciler@npm:^0.18.0":
-  version: 0.18.0
-  resolution: "@types/react-reconciler@npm:0.18.0"
+"@types/react-reconciler@npm:^0.26.6":
+  version: 0.26.6
+  resolution: "@types/react-reconciler@npm:0.26.6"
   dependencies:
     "@types/react": "*"
-  checksum: 15f7a0ba688f0949b5fa52772fd6f34b425a7ff1c81beb8facea58533422a9a33a82a35ad4951768b80aa17c32725f2cba677d5c440e925b09c5b791fcdc60c0
+  checksum: 5c96f40338f2ccc544018610b42f467945450a8448b042ce5a052a3a45820ccd028b1fb65157c99f5889a10cd1e17093252c54c56a002bc64acadd6d5a9e4b08
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^17.0.11":
+"@types/react@npm:*":
   version: 17.0.27
   resolution: "@types/react@npm:17.0.27"
   dependencies:
@@ -1479,6 +1476,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 3a1147d963c16dc9bbea5afb20c4be94f2389cf4eca4c5fbe9b02f3406bd9957602c0459ea017c95f8c3d523221f572e8bd842f94654835776d4c2923357f9dc
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^18.0.8":
+  version: 18.0.8
+  resolution: "@types/react@npm:18.0.8"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 12d0e6bc390709926d8eaeb7d2edb4ef9c9fbe8eac41cb0619d958386700547bff91c880c2a12a9eb1e0d09afa4f1e86fd1b93164c627824465b72123f149f3b
   languageName: node
   linkType: hard
 
@@ -2187,6 +2195,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"aria-query@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "aria-query@npm:5.0.0"
+  checksum: c41f98866c5a304561ee8cae55856711cddad6f3f85d8cb43cc5f79667078d9b8979ce32d244c1ff364e6463a4d0b6865804a33ccc717fed701b281cf7dc6296
+  languageName: node
+  linkType: hard
+
 "arr-diff@npm:^4.0.0":
   version: 4.0.0
   resolution: "arr-diff@npm:4.0.0"
@@ -2444,8 +2459,8 @@ __metadata:
     http-server: ^13.0.2
     puppeteer: ^10.4.0
     ramda: ^0.27.1
-    react: ^16.9.0
-    react-dom: ^16.9.0
+    react: ^18.1.0
+    react-dom: ^18.1.0
     ts-loader: ^9.2.5
     ts-node: ^10.3.0
     typescript: ^4.3.5
@@ -3538,6 +3553,13 @@ __metadata:
   version: 0.5.8
   resolution: "dom-accessibility-api@npm:0.5.8"
   checksum: 6ede8578a7e6123f2eb27c04ff4c7947cb1362f73105c2cf75b700d94ff82740f9566025357f46ced4ae9fa2a6f6f101f4b910bb308ab516e247ed77951f46e5
+  languageName: node
+  linkType: hard
+
+"dom-accessibility-api@npm:^0.5.9":
+  version: 0.5.14
+  resolution: "dom-accessibility-api@npm:0.5.14"
+  checksum: 782c813f75a09ba6735ef03b5e1624406a3829444ae49d5bdedd272a49d437ae3354f53e02ffc8c9fd9165880250f41546538f27461f839dd4ea1234e77e8d5e
   languageName: node
   linkType: hard
 
@@ -7717,7 +7739,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
+"prop-types@npm:^15.7.2":
   version: 15.7.2
   resolution: "prop-types@npm:15.7.2"
   dependencies:
@@ -7861,17 +7883,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^16.9.0":
-  version: 16.14.0
-  resolution: "react-dom@npm:16.14.0"
+"react-dom@npm:^18.1.0":
+  version: 18.1.0
+  resolution: "react-dom@npm:18.1.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    prop-types: ^15.6.2
-    scheduler: ^0.19.1
+    scheduler: ^0.22.0
   peerDependencies:
-    react: ^16.14.0
-  checksum: 5a5c49da0f106b2655a69f96c622c347febcd10532db391c262b26aec225b235357d9da1834103457683482ab1b229af7a50f6927a6b70e53150275e31785544
+    react: ^18.1.0
+  checksum: bb0d48eeb0b297c79c2a03978baa29f5b3ff7ba3d070b21e34c9af1a6e7fdf0ca8b8d73e41f9214d91ad40eeb6d1f3559f884cbbc338713374a51320637c23df
   languageName: node
   linkType: hard
 
@@ -7889,28 +7909,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-reconciler@npm:^0.24.0":
-  version: 0.24.0
-  resolution: "react-reconciler@npm:0.24.0"
+"react-reconciler@npm:^0.28.0":
+  version: 0.28.0
+  resolution: "react-reconciler@npm:0.28.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    prop-types: ^15.6.2
-    scheduler: ^0.18.0
+    scheduler: ^0.22.0
   peerDependencies:
-    react: ^16.0.0
-  checksum: c9c74208325a940ca36e031b71499f6d8e62e96ee673d69e35cc9e6a661aa746a2b0750f2ffcd1bae0a29eaf3d127dc8197ab7e801e6a3a2ab7d45a71b464630
+    react: ^18.1.0
+  checksum: 6421f9500827219556ead3d86cbdf0553c47d633ecda2144720bf235d404f5e4e1e585336c4dfa80e26a04f1a6117c455a60964917d5600c73a91d8374f0232f
   languageName: node
   linkType: hard
 
-"react@npm:^16.9.0":
-  version: 16.14.0
-  resolution: "react@npm:16.14.0"
+"react@npm:^18.1.0":
+  version: 18.1.0
+  resolution: "react@npm:18.1.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    prop-types: ^15.6.2
-  checksum: 8484f3ecb13414526f2a7412190575fc134da785c02695eb92bb6028c930bfe1c238d7be2a125088fec663cc7cda0a3623373c46807cf2c281f49c34b79881ac
+  checksum: 5bb296b561b43ef2220395da4faac86c14a087c8c80e1a7598a5740f01ee605c11eaf249985c1e2000971c4cd32ccb46d40f00479bbd9fb6b1c7cf857393b7d4
   languageName: node
   linkType: hard
 
@@ -8277,23 +8293,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.18.0":
-  version: 0.18.0
-  resolution: "scheduler@npm:0.18.0"
+"scheduler@npm:^0.22.0":
+  version: 0.22.0
+  resolution: "scheduler@npm:0.22.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b6e0b9e0086b200b114f1ef7f9fcac966ad5d84cd3b1867174be0549d3ff713d1fd22d5574cb024b7d3eadf3307f2afc1cb5bfbf28b0d3bc34b200183800fcae
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.19.1":
-  version: 0.19.1
-  resolution: "scheduler@npm:0.19.1"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: 73e185a59e2ff5aa3609f5b9cb97ddd376f89e1610579d29939d952411ca6eb7a24907a4ea4556569dacb931467a1a4a56d94fe809ef713aa76748642cd96a6c
+  checksum: a8ef5cab769c020cd6382ad9ecc3f72dbde56a50a36639b3a42ad9c11f7724f03700bcad373044059b8067d4a6365154dc7c0ca8027ef20ff4900cf58a0fc2c5
   languageName: node
   linkType: hard
 
