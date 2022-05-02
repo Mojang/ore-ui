@@ -295,6 +295,7 @@ describe('mount', () => {
     let onKeyPress: jest.Mock
     let onKeyDown: jest.Mock
     let onKeyUp: jest.Mock
+    let onScroll: jest.Mock
     let div: Element
 
     beforeEach(() => {
@@ -311,6 +312,7 @@ describe('mount', () => {
       onKeyPress = jest.fn()
       onKeyDown = jest.fn()
       onKeyUp = jest.fn()
+      onScroll = jest.fn()
 
       render(
         <div
@@ -328,6 +330,7 @@ describe('mount', () => {
           onKeyPress={onKeyPress}
           onKeyDown={onKeyDown}
           onKeyUp={onKeyUp}
+          onScroll={onScroll}
         >
           Hello World
         </div>,
@@ -400,6 +403,11 @@ describe('mount', () => {
     it('supports onKeyUp', () => {
       div.dispatchEvent(new Event('keyup'))
       expect(onKeyUp).toHaveBeenCalled()
+    })
+
+    it('supports onScroll', () => {
+      div.dispatchEvent(new Event('scroll'))
+      expect(onScroll).toHaveBeenCalled()
     })
   })
 })
@@ -669,6 +677,7 @@ describe('update', () => {
     let firstOnKeyPress: jest.Mock
     let firstOnKeyDown: jest.Mock
     let firstOnKeyUp: jest.Mock
+    let firstOnScroll: jest.Mock
 
     let secondOnClick: jest.Mock
     let secondOnFocus: jest.Mock
@@ -683,6 +692,7 @@ describe('update', () => {
     let secondOnKeyPress: jest.Mock
     let secondOnKeyDown: jest.Mock
     let secondOnKeyUp: jest.Mock
+    let secondOnScroll: jest.Mock
 
     let div: Element
 
@@ -711,6 +721,7 @@ describe('update', () => {
           onKeyPress={second ? secondOnKeyPress : firstOnKeyPress}
           onKeyDown={second ? secondOnKeyDown : firstOnKeyDown}
           onKeyUp={second ? secondOnKeyUp : firstOnKeyUp}
+          onScroll={second ? secondOnScroll : firstOnScroll}
         >
           Hello World
         </div>
@@ -731,6 +742,7 @@ describe('update', () => {
       firstOnKeyPress = jest.fn()
       firstOnKeyDown = jest.fn()
       firstOnKeyUp = jest.fn()
+      firstOnScroll = jest.fn()
 
       secondOnClick = jest.fn()
       secondOnFocus = jest.fn()
@@ -745,6 +757,7 @@ describe('update', () => {
       secondOnKeyPress = jest.fn()
       secondOnKeyDown = jest.fn()
       secondOnKeyUp = jest.fn()
+      secondOnScroll = jest.fn()
 
       render(<TestComponent />)
 
@@ -932,6 +945,20 @@ describe('update', () => {
       div.dispatchEvent(new Event('keyup'))
       expect(firstOnKeyUp).not.toHaveBeenCalled()
       expect(secondOnKeyUp).toHaveBeenCalled()
+    })
+
+    it('supports onScroll', () => {
+      div.dispatchEvent(new Event('scroll'))
+      expect(firstOnScroll).toHaveBeenCalled()
+      expect(secondOnScroll).not.toHaveBeenCalled()
+
+      firstOnScroll.mockClear()
+      secondOnScroll.mockClear()
+      jest.runAllTimers()
+
+      div.dispatchEvent(new Event('scroll'))
+      expect(firstOnScroll).not.toHaveBeenCalled()
+      expect(secondOnScroll).toHaveBeenCalled()
     })
   })
 })

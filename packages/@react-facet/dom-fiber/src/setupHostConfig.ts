@@ -187,6 +187,10 @@ export const setupHostConfig = (): HostConfig<
       element.addEventListener('keyup', newProps.onKeyUp as EventListener)
     }
 
+    if (newProps.onScroll) {
+      element.addEventListener('scroll', newProps.onScroll as EventListener)
+    }
+
     return {
       element,
       styleUnsubscribers,
@@ -527,6 +531,11 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.onKeyUp !== oldProps.onKeyUp) {
       if (oldProps.onKeyUp) element.removeEventListener('keyup', oldProps.onKeyUp)
       if (newProps.onKeyUp) element.addEventListener('keyup', newProps.onKeyUp)
+    }
+
+    if (newProps.onScroll !== oldProps.onScroll) {
+      if (oldProps.onScroll) element.removeEventListener('scroll', oldProps.onScroll)
+      if (newProps.onScroll) element.addEventListener('scroll', newProps.onScroll)
     }
   },
 

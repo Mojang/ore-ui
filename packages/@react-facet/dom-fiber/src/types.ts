@@ -37,7 +37,8 @@ export interface NoTimeout {
 
 export type FocusCallback = (e: FocusEvent) => void
 export type TouchCallback = (e: TouchEvent) => void
-export type MouseCallback = (event: MouseEvent) => void
+export type MouseCallback = (e: MouseEvent) => void
+export type ScrollCallback = (e: Event) => void
 
 export interface PointerEvents {
   onClick?: MouseCallback
@@ -63,6 +64,10 @@ export interface KeyboardEvents {
   onKeyUp?: KeyboardCallback
 }
 
+export interface ScrollingEvents {
+  onScroll?: ScrollCallback
+}
+
 interface StrictReactElement<P = unknown, T extends string = string> {
   type: T
   props: P
@@ -78,7 +83,8 @@ export type StrictReactNode = StrictReactElement | ReactText | Array<StrictReact
 
 export type ElementProps<T> = PointerEvents &
   FocusEvents &
-  KeyboardEvents & {
+  KeyboardEvents &
+  ScrollingEvents & {
     key?: string | number
 
     /**
