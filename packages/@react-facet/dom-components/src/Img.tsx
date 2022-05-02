@@ -1,16 +1,17 @@
 import React, { RefObject, useRef } from 'react'
 import { FacetCSSStyleDeclaration, FacetProp } from '@react-facet/core'
-import { PointerEvents } from './types'
+import { PointerEvents, ScrollingEvents } from './types'
 import { useSetProp } from './useSetProp'
 import { useSetStyle } from './useSetStyle'
 
-export interface ImgProps extends PointerEvents<HTMLImageElement> {
+export type ImgProps = {
   className?: FacetProp<string | undefined>
   id?: FacetProp<string | undefined>
   style?: FacetCSSStyleDeclaration
   src: FacetProp<string | undefined>
   innerRef?: RefObject<HTMLImageElement>
-}
+} & PointerEvents<HTMLImageElement> &
+  ScrollingEvents
 
 export const Img = ({ style, className, id, src, innerRef, ...handlers }: ImgProps) => {
   const defaultRef = useRef<HTMLImageElement>(null)

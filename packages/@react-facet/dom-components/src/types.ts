@@ -3,6 +3,7 @@ import React from 'react'
 export type FocusCallback<T> = (e: React.FocusEvent<T>) => void
 export type TouchCallback<T> = (e: React.TouchEvent<T>) => void
 export type MouseCallback<T> = (event: React.MouseEvent<T>) => void
+export type ScrollCallback = (e: React.UIEvent) => void
 
 export interface PointerEvents<T> {
   onClick?: MouseCallback<T>
@@ -26,4 +27,8 @@ export interface KeyboardEvents<T> {
   onKeyPress?: KeyboardCallback<T>
   onKeyDown?: KeyboardCallback<T>
   onKeyUp?: KeyboardCallback<T>
+}
+
+export interface ScrollingEvents {
+  onScroll?: ScrollCallback
 }

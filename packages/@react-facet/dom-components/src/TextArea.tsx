@@ -2,7 +2,7 @@ import React, { useRef, RefObject } from 'react'
 import { FacetCSSStyleDeclaration, FacetProp } from '@react-facet/core'
 import { useSetProp } from './useSetProp'
 import { useSetStyle } from './useSetStyle'
-import { PointerEvents, FocusEvents, KeyboardEvents } from './types'
+import { PointerEvents, FocusEvents, KeyboardEvents, ScrollingEvents } from './types'
 
 export type TextAreaProps = {
   className?: FacetProp<string | undefined>
@@ -15,7 +15,8 @@ export type TextAreaProps = {
   innerRef?: RefObject<HTMLTextAreaElement>
 } & FocusEvents<HTMLTextAreaElement> &
   KeyboardEvents<HTMLTextAreaElement> &
-  PointerEvents<HTMLTextAreaElement>
+  PointerEvents<HTMLTextAreaElement> &
+  ScrollingEvents
 
 export const TextArea = ({
   style,

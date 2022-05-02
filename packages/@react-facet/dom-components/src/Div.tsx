@@ -1,12 +1,13 @@
 import React, { useRef, RefObject, ReactNode } from 'react'
 import { FacetCSSStyleDeclaration, FacetProp } from '@react-facet/core'
-import { FocusEvents, KeyboardEvents, PointerEvents } from './types'
+import { FocusEvents, KeyboardEvents, PointerEvents, ScrollingEvents } from './types'
 import { useSetProp } from './useSetProp'
 import { useSetStyle } from './useSetStyle'
 
 export type DivProps = PointerEvents<HTMLDivElement> &
   KeyboardEvents<HTMLDivElement> &
-  FocusEvents<HTMLSpanElement> & {
+  FocusEvents<HTMLSpanElement> &
+  ScrollingEvents & {
     className?: FacetProp<string | undefined>
     id?: FacetProp<string | undefined>
     style?: FacetCSSStyleDeclaration

@@ -4,13 +4,13 @@ import { PointerEvents } from './types'
 import { useSetProp } from './useSetProp'
 import { useSetStyle } from './useSetStyle'
 
-export interface ParagraphProps extends PointerEvents<HTMLParagraphElement> {
+export type ParagraphProps = {
   className?: FacetProp<string | undefined>
   id?: FacetProp<string | undefined>
   style?: FacetCSSStyleDeclaration
   children?: ReactNode
   innerRef?: RefObject<HTMLParagraphElement>
-}
+} & PointerEvents<HTMLParagraphElement>
 
 export const Paragraph = ({ style, className, children, id, innerRef, ...handlers }: ParagraphProps) => {
   const defaultRef = useRef<HTMLParagraphElement>(null)

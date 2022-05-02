@@ -2,7 +2,7 @@ import React, { useRef, RefObject } from 'react'
 import { FacetCSSStyleDeclaration, FacetProp } from '@react-facet/core'
 import { useSetProp } from './useSetProp'
 import { useSetStyle } from './useSetStyle'
-import { PointerEvents, FocusEvents, KeyboardEvents } from './types'
+import { PointerEvents, FocusEvents, KeyboardEvents, ScrollingEvents } from './types'
 
 export type InputType = 'text' | 'button' | 'password' | 'checkbox' | 'radio' | 'number'
 
@@ -17,7 +17,8 @@ export type InputProps = {
   innerRef?: RefObject<HTMLInputElement>
 } & FocusEvents<HTMLInputElement> &
   KeyboardEvents<HTMLInputElement> &
-  PointerEvents<HTMLInputElement>
+  PointerEvents<HTMLInputElement> &
+  ScrollingEvents
 
 export const Input = ({
   style,
