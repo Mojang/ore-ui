@@ -38,7 +38,7 @@ export interface NoTimeout {
 export type FocusCallback = (e: FocusEvent) => void
 export type TouchCallback = (e: TouchEvent) => void
 export type MouseCallback = (e: MouseEvent) => void
-export type ScrollCallback = (e: Event) => void
+export type ScrollCallback = (e: UIEvent) => void
 
 export interface PointerEvents {
   onClick?: MouseCallback
