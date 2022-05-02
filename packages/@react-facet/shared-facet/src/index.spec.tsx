@@ -1,15 +1,15 @@
 import React, { useRef } from 'react'
 import { useFacetUnwrap, useFacetEffect, NO_VALUE } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber-testing-library'
-import { remoteDynamicSelector } from './remoteDynamicSelector'
-import { remoteFacet } from './remoteFacet'
-import { remoteSelector } from './remoteSelector'
-import { RemoteFacetDriverProvider, useRemoteFacet } from './context'
+import { sharedDynamicSelector } from './sharedDynamicSelector'
+import { sharedFacet } from './sharedFacet'
+import { sharedSelector } from './sharedSelector'
+import { SharedFacetDriverProvider, useSharedFacet } from './context'
 
 const facetDestructor = jest.fn()
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const remoteFacetDriver = jest.fn().mockImplementation((name: string, onChange: (value: any) => void) => {
+const sharedFacetDriver = jest.fn().mockImplementation((name: string, onChange: (value: any) => void) => {
   if (name !== 'foo') throw new Error(`Unexpected facet requested: ${name}`)
 
   onChange({ bar: 'testing 123', values: ['a', 'b', 'c'] })
@@ -22,106 +22,106 @@ interface Foo {
   values: string[]
 }
 
-const fooFacet = remoteFacet<Foo>('foo')
+const fooFacet = sharedFacet<Foo>('foo')
 
-const barSelector = remoteSelector((foo) => foo.bar, [fooFacet])
+const barSelector = sharedSelector((foo) => foo.bar, [fooFacet])
 
-const valueDynamicSelector = remoteDynamicSelector((index: number) => [
+const valueDynamicSelector = sharedDynamicSelector((index: number) => [
   (testFacet) => testFacet.values[index],
   [fooFacet],
 ])
 
 beforeEach(() => {
-  remoteFacetDriver.mockClear()
+  sharedFacetDriver.mockClear()
   facetDestructor.mockClear()
 })
 
 describe('rendering from facet', () => {
   const RenderingFacet = () => {
-    const value = useFacetUnwrap(useRemoteFacet(fooFacet))
+    const value = useFacetUnwrap(useSharedFacet(fooFacet))
     return <div>{value !== NO_VALUE ? value.bar : null}</div>
   }
 
   it('constructs a facet, and destructs it on unmount', () => {
     const app = (
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <RenderingFacet />
-      </RemoteFacetDriverProvider>
+      </SharedFacetDriverProvider>
     )
 
     const { getByText, rerender } = render(app)
 
-    expect(remoteFacetDriver).toBeCalledTimes(1)
+    expect(sharedFacetDriver).toBeCalledTimes(1)
     expect(facetDestructor).toBeCalledTimes(0)
 
     expect(getByText('testing 123')).toBeDefined()
 
-    remoteFacetDriver.mockClear()
+    sharedFacetDriver.mockClear()
     facetDestructor.mockClear()
 
     rerender(
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <></>
-      </RemoteFacetDriverProvider>,
+      </SharedFacetDriverProvider>,
     )
 
-    expect(remoteFacetDriver).toBeCalledTimes(0)
+    expect(sharedFacetDriver).toBeCalledTimes(0)
     expect(facetDestructor).toBeCalledTimes(1)
   })
 
   it('constructs a facet once, even on rendering multiple times', () => {
     const app = (
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <RenderingFacet />
         <RenderingFacet />
         <RenderingFacet />
         <RenderingFacet />
-      </RemoteFacetDriverProvider>
+      </SharedFacetDriverProvider>
     )
 
     const { getAllByText } = render(app)
 
-    expect(remoteFacetDriver).toBeCalledTimes(1)
+    expect(sharedFacetDriver).toBeCalledTimes(1)
     expect(getAllByText('testing 123')).toHaveLength(4)
   })
 })
 
 describe('rendering from a selector', () => {
   const RenderingSelector = () => {
-    const value = useFacetUnwrap(useRemoteFacet(barSelector))
+    const value = useFacetUnwrap(useSharedFacet(barSelector))
     return <div>{value}</div>
   }
 
   it('constructs the root facet, and destructs it on unmount', () => {
     const app = (
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <RenderingSelector />
-      </RemoteFacetDriverProvider>
+      </SharedFacetDriverProvider>
     )
 
     const { getByText, rerender } = render(app)
 
-    expect(remoteFacetDriver).toBeCalledTimes(1)
+    expect(sharedFacetDriver).toBeCalledTimes(1)
     expect(facetDestructor).toBeCalledTimes(0)
 
     expect(getByText('testing 123')).toBeDefined()
 
-    remoteFacetDriver.mockClear()
+    sharedFacetDriver.mockClear()
     facetDestructor.mockClear()
 
     rerender(
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <></>
-      </RemoteFacetDriverProvider>,
+      </SharedFacetDriverProvider>,
     )
 
-    expect(remoteFacetDriver).toBeCalledTimes(0)
+    expect(sharedFacetDriver).toBeCalledTimes(0)
     expect(facetDestructor).toBeCalledTimes(1)
   })
 
   it('correctly renders nested components with selectors', () => {
     const NestedExample = () => {
-      const value = useFacetUnwrap(useRemoteFacet(fooFacet))
+      const value = useFacetUnwrap(useSharedFacet(fooFacet))
 
       if (value == NO_VALUE) return null
 
@@ -133,9 +133,9 @@ describe('rendering from a selector', () => {
     }
 
     const app = (
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <NestedExample />
-      </RemoteFacetDriverProvider>
+      </SharedFacetDriverProvider>
     )
 
     const { getByText } = render(app)
@@ -145,17 +145,17 @@ describe('rendering from a selector', () => {
 
   it('constructs the root facet once, even on rendering multiple times', () => {
     const app = (
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <RenderingSelector />
         <RenderingSelector />
         <RenderingSelector />
         <RenderingSelector />
-      </RemoteFacetDriverProvider>
+      </SharedFacetDriverProvider>
     )
 
     const { getAllByText } = render(app)
 
-    expect(remoteFacetDriver).toBeCalledTimes(1)
+    expect(sharedFacetDriver).toBeCalledTimes(1)
     expect(getAllByText('testing 123')).toHaveLength(4)
   })
 })
@@ -163,19 +163,19 @@ describe('rendering from a selector', () => {
 describe('rendering from a dynamic selector', () => {
   it('correctly renders using the selector parameter', () => {
     const RenderingSelector = ({ index }: { index: number }) => {
-      const value = useFacetUnwrap(useRemoteFacet(valueDynamicSelector(index)))
+      const value = useFacetUnwrap(useSharedFacet(valueDynamicSelector(index)))
       return <div>Item: {value}</div>
     }
 
     const { getByText, rerender } = render(
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <RenderingSelector index={2} />
         <RenderingSelector index={1} />
-      </RemoteFacetDriverProvider>,
+      </SharedFacetDriverProvider>,
     )
 
     // request the facet only once
-    expect(remoteFacetDriver).toBeCalledTimes(1)
+    expect(sharedFacetDriver).toBeCalledTimes(1)
     expect(facetDestructor).toBeCalledTimes(0)
 
     // renders both components (each with their parameter)
@@ -183,18 +183,18 @@ describe('rendering from a dynamic selector', () => {
     expect(getByText('Item: b')).toBeDefined()
 
     // cleanup the call count before rendering
-    remoteFacetDriver.mockClear()
+    sharedFacetDriver.mockClear()
     facetDestructor.mockClear()
 
     rerender(
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <RenderingSelector index={2} />
         <RenderingSelector index={0} />
-      </RemoteFacetDriverProvider>,
+      </SharedFacetDriverProvider>,
     )
 
     // confirm that the facet should not have been requested again
-    expect(remoteFacetDriver).toBeCalledTimes(0)
+    expect(sharedFacetDriver).toBeCalledTimes(0)
     expect(facetDestructor).toBeCalledTimes(0)
 
     // renders both components (each with their parameter)
@@ -202,17 +202,17 @@ describe('rendering from a dynamic selector', () => {
     expect(getByText('Item: a')).toBeDefined()
 
     // cleanup the call count before rendering
-    remoteFacetDriver.mockClear()
+    sharedFacetDriver.mockClear()
     facetDestructor.mockClear()
 
     rerender(
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <></>
-      </RemoteFacetDriverProvider>,
+      </SharedFacetDriverProvider>,
     )
 
     // confirm that the facet was destroyed, given we are no longer rendering anything using it
-    expect(remoteFacetDriver).toBeCalledTimes(0)
+    expect(sharedFacetDriver).toBeCalledTimes(0)
     expect(facetDestructor).toBeCalledTimes(1)
   })
 })
@@ -230,7 +230,7 @@ describe('rendering with imperative calls from a selector', () => {
         }
       },
       [callbackDependency],
-      [useRemoteFacet(barSelector)],
+      [useSharedFacet(barSelector)],
     )
 
     return <div ref={ref} />
@@ -238,9 +238,9 @@ describe('rendering with imperative calls from a selector', () => {
 
   it('correctly renders the value', () => {
     const app = (
-      <RemoteFacetDriverProvider value={remoteFacetDriver}>
+      <SharedFacetDriverProvider value={sharedFacetDriver}>
         <RenderingImperativeSelector callbackDependency="dependency" />
-      </RemoteFacetDriverProvider>
+      </SharedFacetDriverProvider>
     )
 
     const { getByText } = render(app)
