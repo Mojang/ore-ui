@@ -6,22 +6,23 @@ sidebar_position: 2
 
 Here's a very simple example of how using `Facet`s for state management could look like:
 
-```tsx
-import React from 'react'
-import { useFacetState } from '@react-facet/core'
+```tsx twoslash
+// @esModuleInterop
+import React, { useCallback } from 'react'
+import { useFacetState, NO_VALUE } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
 
 const Counter = () => {
   const [counter, setCounter] = useFacetState(0)
-
   const handleClick = useCallback(() => {
-    setCounter((counter) => counter + 1)
+    setCounter((counter) => counter !== NO_VALUE ?  counter + 1 : counter)
   }, [setCounter])
 
   return (
     <div>
       <p>
         Current count: <fast-text text={counter} />
+        //                                ^?
       </p>
       <button onClick={handleClick}>Increment</button>
     </div>
@@ -55,18 +56,19 @@ While this won't give you the full performance benefits of Facets, it provides a
 
 > Note: since Gameface only supports a subset of HTML elements, we don't attempt to create components for every single HTML element.
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
 import { useFacetState } from '@react-facet/core'
-import { Div, Text } from '@react-facet/dom-components'
+import { fast } from '@react-facet/dom-components'
 
 const HelloWorld = () => {
   const [className, setClassName] = useFacetState('root')
   const [text, setText] = useFacetState('Hello World!')
 
   return (
-    <Div className={className}>
-      <Text text={text} />
-    </Div>
+    <fast.div className={className}>
+      <fast.text text={text} />
+    </fast.div>
   )
 }
 ```
@@ -84,7 +86,8 @@ To render with the custom renderer, replace the `render` function from `react-do
 
 From here, you can start using [`fast-*`](api/fast-components) elements anywhere you need to bind a `Facet` to the DOM:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
 import { useFacetState } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
 
@@ -95,7 +98,7 @@ const HelloWorld = () => {
 	return (
 		<fast-div className={className}>
 			<fast-text text={helloWorld} />
-		</fast-div>,
+		</fast-div>
 	)
 }
 
@@ -106,7 +109,7 @@ render(<HelloWorld />, document.getElementById('root'))
 
 Facets are just JavaScript objects that update over time. An example of a facet interface definition could be:
 
-```tsx
+```tsx twoslash
 export interface UserFacet {
   username: string
   signOut(): void
@@ -115,13 +118,22 @@ export interface UserFacet {
 
 They can be initialized by using Hooks provided in `@react-facet/core`, and can be read and written to:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+
+interface Props {
+  onSubmit: (values: any) => void
+}
+// ---cut---
+import { useFacetMap, useFacetState, useFacetCallback, NO_VALUE } from '@react-facet/core'
+
 interface TemporaryValuesFacet {
   username: string
   password: string
 }
 
-const UpdateLogin = ({ onSubmit }) => {
+const UpdateLogin = ({ onSubmit }: Props) => {
   const [temporaryValues, updateValues] = useFacetState<TemporaryValuesFacet>({
     username: '',
     password: '',
@@ -142,9 +154,11 @@ const UpdateLogin = ({ onSubmit }) => {
       <fast-input
         type="text"
         value={username}
-        onChange={(event) => {
+        onKeyUp={(event) => {
           updateValues((values) => {
-            values.username = event.target.value
+            if (values !== NO_VALUE) {
+              values.username = (event.target as HTMLInputElement).value
+            }
             return values
           })
         }}
@@ -154,9 +168,11 @@ const UpdateLogin = ({ onSubmit }) => {
       <fast-input
         type="text"
         value={password}
-        onChange={(event) => {
+        onKeyUp={(event) => {
           updateValues((values) => {
-            values.password = event.target.value
+            if (values !== NO_VALUE) {
+              values.password = (event.target as HTMLInputElement).value
+            }
             return values
           })
         }}
@@ -166,6 +182,7 @@ const UpdateLogin = ({ onSubmit }) => {
     </div>
   )
 }
+
 ```
 
 ## Interfacing with the game engine (Shared Facets)
@@ -179,8 +196,15 @@ const UpdateLogin = ({ onSubmit }) => {
 
 To use shared facets, you must wrap your React application inside `SharedFacetDriverProvider`. You must also provide a `sharedFacetDriver`, which takes care of requesting the facet from a C++ backend and registering a listener to be notified about updates. Below you can find a pseudo-code of a how an implementation would look like using an `engine` that implements `EventEmitter`
 
-```ts
-const sharedFacetDriver = (facetName, update) => {
+```tsx twoslash
+const engine = {
+  on: (...args: any[]) => {},
+  off: (...args: any[]) => {},
+  trigger: (...args: any[]) => {},
+}
+// ---cut---
+import { SharedFacetDriverProvider, OnChange } from '@react-facet/shared-facet'
+const sharedFacetDriver = (facetName: string, update: OnChange<unknown> ) => {
   // register a listener
   engine.on(`facet:updated:${facetName}`, update)
 
@@ -201,7 +225,12 @@ const App = () => {
 
 An example of defining and consuming a shared facet:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useSharedFacet, sharedFacet, sharedSelector } from '@react-facet/shared-facet'
+
 interface UserFacet {
 	username: string
 	signOut(): void
@@ -212,13 +241,10 @@ const userFacet = sharedFacet<UserFacet>('data.user', {
 	signOut() {},
 })
 
-const usernameSelector = sharedSelector([userFacet], (value) => value.username);
+const usernameSelector = sharedSelector((value) => value.username, [userFacet])
 
 export const CurrentUser = () => {
 	const username = useSharedFacet(usernameSelector)
-
-	return <fast-p>
-		<fast-text text={username}>
-	</fast-p>
+	return <fast-p><fast-text text={username} /></fast-p>
 }
 ```

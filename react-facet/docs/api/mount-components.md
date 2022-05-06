@@ -14,7 +14,10 @@ Mounts its children conditionally. The mandatory prop `when` should be a `Facet<
 
 Example:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, Mount } from '@react-facet/core'
+
 const Example = () => {
   const [displayFacet, setDisplayFacet] = useFacetState(true)
 
@@ -28,7 +31,12 @@ const Example = () => {
 
 The `Mount` component is commonly used together with `useFacetMap`. For example, imagine that you have a search bar and a search results component. You might only want to show the search results component if the search bar has a value. That can be accomplished like so:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+const SomeComponent = () => null
+// ---cut---
+import { useFacetState, useFacetMap, Mount } from '@react-facet/core'
+
 const Example = () => {
   const [valueFacet, setValueFacet] = useFacetState('')
 
@@ -50,7 +58,10 @@ const Example = () => {
 
 Additionally, the `Mount` component takes an optional prop called `conditional`. This will default to `true`. When set to `false`, it will mount its children when when the value contained within the `Facet` is `false`.
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, Mount } from '@react-facet/core'
+
 const Example = () => {
   const [isSignedInFacet, setIsSignedInFacet] = useFacetState(true)
 
@@ -77,7 +88,12 @@ The `Map` only re-renders if the size of the array changes, so we need to be min
 
 Example:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useFacetState, Map } from '@react-facet/core'
+
 const Example = () => {
   const [arrayFacet, setArrayFacet] = useFacetState(['1', '2', '3', '4', '5'])
 
@@ -97,9 +113,16 @@ const Example = () => {
 
 Example:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useFacetState, useFacetMap, Map, Facet, shallowObjectEqualityCheck } from '@react-facet/core'
+
+type Input = { value: string }
+
 const Example = () => {
-  const [arrayFacet, setArrayFacet] = useFacetState([
+  const [arrayFacet, setArrayFacet] = useFacetState<Input[]>([
     { value: '1' },
     { value: '2' },
     { value: '3' },
@@ -132,7 +155,12 @@ This component is meant to solve an issue with refining types in TypeScript. Whe
 
 Example:
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useFacetState, With, FacetProp, useFacetWrap } from '@react-facet/core'
+
 type UserDataProps = {
   name: FacetProp<string>
   middlename?: FacetProp<string | undefined>
@@ -161,7 +189,12 @@ const UserData = ({ name, middlename }: UserDataProps) => {
 
 For contrast, attempting to do the same thing with `Mount` will _not_ allow for correct type checking. In this scenario, the type of `middlenameFacet` is not refined and could still contain a `null` or `undefined`.
 
-```tsx
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useFacetWrap, useFacetMap, Mount, FacetProp } from '@react-facet/core'
+
 type UserDataProps = {
   name: FacetProp<string>
   middlename?: FacetProp<string | undefined>
@@ -176,9 +209,9 @@ const UserData = ({ name, middlename }: UserDataProps) => {
       <p>
         Name: <fast-text text={nameFacet} />
       </p>
-      <Mount data={useFacetMap((middlename) => middlename != null, [], [middlenameFacet])}>
+      <Mount when={useFacetMap((middlename) => middlename != null, [], [middlenameFacet])}>
         <p>
-          Middlename: <fast-text text={middlenameFacet} />
+          Middlename: <fast-text text={useFacetMap((middlename) => middlename || '', [], [middlenameFacet])} />
         </p>
         {/* Since TypeScript cannot know that `middlenameFacet` now holds a `string` for sure, it will still believe that
             it could be `string | undefined`. The only way to solve this issue is to extract a new component or use a type

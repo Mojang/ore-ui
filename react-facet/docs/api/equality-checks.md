@@ -15,8 +15,9 @@ These are the equality checks currently available:
 
 Checks that the current value is exactly the same as the other previous one. Accepts value of type function, number, boolean, string, undefined or null.
 
-```tsx
-import { strictEqualityCheck } from '@react-facet/equality-checks'
+```tsx twoslash
+//@esModuleInterop
+import { strictEqualityCheck } from '@react-facet/core'
 
 const equalityCheck = strictEqualityCheck()
 
@@ -35,8 +36,10 @@ Each value must be a primitive (boolean, number or string).
 
 There is also a variant that supports "nullable values" (`undefined` and `null`).
 
-```tsx
-import { shallowObjectEqualityCheck } from '@react-facet/equality-checks'
+```tsx twoslash
+//@esModuleInterop
+import { shallowObjectEqualityCheck } from '@react-facet/core'
+
 
 const equalityCheck = shallowObjectEqualityCheck()
 
@@ -53,8 +56,10 @@ Does a shallow object equality check for each element in an array.
 
 There is also a variant that supports "nullable values" (`undefined` and `null`).
 
-```tsx
-import { shallowObjectArrayEqualityCheck } from '@react-facet/equality-checks'
+```tsx twoslash
+//@esModuleInterop
+import { shallowObjectArrayEqualityCheck } from '@react-facet/core'
+
 
 const equalityCheck = shallowObjectArrayEqualityCheck()
 
@@ -72,8 +77,9 @@ Shallow equality check of primitives in an array.
 
 There is also a variant that supports "nullable values" (`undefined` and `null`).
 
-```tsx
-import { shallowArrayEqualityCheck } from '@react-facet/equality-checks'
+```tsx twoslash
+//@esModuleInterop
+import { shallowArrayEqualityCheck } from '@react-facet/core'
 
 const equalityCheck = shallowArrayEqualityCheck()
 
@@ -91,8 +97,9 @@ console.log(equalityCheck([0, 1, 3])) // true
 - The default equality check that assumes data can be mutated.
 - It is used internally by default, so there is no need to provide it.
 
-```tsx
-import { defaultEqualityCheck } from '@react-facet/equality-checks'
+```tsx twoslash
+//@esModuleInterop
+import { defaultEqualityCheck } from '@react-facet/core'
 
 const equalityCheck = defaultEqualityCheck()
 
@@ -110,8 +117,9 @@ haven't changed.
 
 The comparison used for the value of the properties is passed to it as an argument.
 
-```tsx
-import { createUniformObjectEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/equality-checks'
+```tsx twoslash
+//@esModuleInterop
+import { createUniformObjectEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/core'
 
 const equalityCheck = createUniformObjectEqualityCheck(shallowArrayEqualityCheck)()
 
@@ -146,8 +154,9 @@ Creates an equality check that tests that the items in an array haven't changed.
 
 The comparison used for the individual items is passed to it as an argument.
 
-```tsx
-import { createUniformArrayEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/equality-checks'
+```tsx twoslash
+//@esModuleInterop
+import { createUniformArrayEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/core'
 
 const equalityCheck = createUniformArrayEqualityCheck(shallowArrayEqualityCheck)()
 
@@ -176,12 +185,13 @@ Each property is tested with a different comparator, so that they can be of diff
 The comparator are passed down to it as an object with the same keys as the target object, but
 comparators for each property as values.
 
-```tsx
+```tsx twoslash
+//@esModuleInterop
 import {
   createObjectWithKeySpecificEqualityCheck,
   shallowArrayEqualityCheck,
   strictEqualityCheck,
-} from '@react-facet/equality-checks'
+} from '@react-facet/core'
 
 const equalityCheck = createObjectWithKeySpecificEqualityCheck({
   name: strictEqualityCheck,
@@ -225,8 +235,9 @@ provided as an argument to this creator.
 This creator is useful to be able to make equality checkers for optional properties when you already have
 an equality check for the underlying type.
 
-```tsx
-import { createOptionalValueEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/equality-checks'
+```tsx twoslash
+//@esModuleInterop
+import { createOptionalValueEqualityCheck, shallowArrayEqualityCheck } from '@react-facet/core'
 
 const equalityCheck = createOptionalValueEqualityCheck(shallowArrayEqualityCheck)()
 

@@ -8,16 +8,21 @@ The `@react-facet/dom-fiber` package is a replacement for `react-dom` to work wi
 
 To use it, simply render using `@react-facet/dom-fiber`'s `render` function instead of `react-dom`'s one:
 
-```tsx
-import React from 'react'
+```tsx twoslash
+// @esModuleInterop
+import React, { useCallback } from 'react'
 import { render } from '@react-facet/dom-fiber'
-import { useFacetState } from '@react-facet/core'
+import { useFacetState, NO_VALUE } from '@react-facet/core'
 
 const Counter = () => {
   const [counter, setCounter] = useFacetState(0)
 
-  const handleIncrement = useCallback(() => setCounter((counter) => counter + 1), [])
-  const handleDecrement = useCallback(() => setCounter((counter) => counter - 1), [])
+  const handleIncrement = useCallback(() => setCounter((counter) => {
+    return counter !== NO_VALUE ? counter + 1 : counter
+  }), [])
+  const handleDecrement = useCallback(() => setCounter((counter) => {
+    return counter !== NO_VALUE ? counter - 1 : counter
+  }), [])
 
   return (
     <div>

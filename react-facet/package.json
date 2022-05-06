@@ -18,7 +18,12 @@
     "@docusaurus/preset-classic": "2.0.0-alpha.73",
     "@docusaurus/theme-search-algolia": "^2.0.0-beta.9",
     "@mdx-js/react": "^1.6.21",
+    "@react-facet/core": "^0.3.0",
+    "@react-facet/dom-components": "^0.3.0",
+    "@react-facet/dom-fiber": "^0.3.0",
+    "@react-facet/shared-facet": "^0.3.0",
     "clsx": "^1.1.1",
+    "docusaurus-preset-shiki-twoslash": "^1.1.37",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
