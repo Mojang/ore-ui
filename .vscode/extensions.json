@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "orta.vscode-twoslash",
+        "editorconfig.editorconfig",
+        "dbaeumer.vscode-eslint",
+        "silvenon.mdx",
+        "esbenp.prettier-vscode"
+    ]
+}
