@@ -18,7 +18,7 @@ export interface ErrorFn {
  */
 export interface SharedFacetDriver {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (name: string, onChange: OnChange<any>, onError?: ErrorFn, fallback?: any): () => void
+  (name: string, onChange: OnChange<any>, onError?: ErrorFn, fallback?: any, instanceName?: string): () => void
 }
 
 export interface SharedFacet<T> extends FacetFactory<T> {
