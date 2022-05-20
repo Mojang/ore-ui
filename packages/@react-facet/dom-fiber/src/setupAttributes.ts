@@ -337,6 +337,24 @@ export const setupTextUpdate = (text: FacetProp<string | number | undefined>, el
   }
 }
 
+export const setupXUpdate = (x: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(x)) {
+    return x.observe((x) => {
+      if (x != null) {
+        element.setAttribute('x', x)
+      } else {
+        element.removeAttribute('x')
+      }
+    })
+  } else {
+    if (x != null) {
+      element.setAttribute('x', x)
+    } else {
+      element.removeAttribute('x')
+    }
+  }
+}
+
 export const setupWidthUpdate = (width: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(width)) {
     return width.observe((width) => {
@@ -351,6 +369,24 @@ export const setupWidthUpdate = (width: FacetProp<string | undefined>, element: 
       element.setAttribute('width', width)
     } else {
       element.removeAttribute('width')
+    }
+  }
+}
+
+export const setupYUpdate = (y: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(y)) {
+    return y.observe((y) => {
+      if (y != null) {
+        element.setAttribute('y', y)
+      } else {
+        element.removeAttribute('y')
+      }
+    })
+  } else {
+    if (y != null) {
+      element.setAttribute('y', y)
+    } else {
+      element.removeAttribute('y')
     }
   }
 }

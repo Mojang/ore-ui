@@ -13,6 +13,7 @@ export type Type =
   | 'fast-img'
   | 'fast-textarea'
   | 'fast-input'
+  | 'fast-rect'
   | 'fast-text'
   | 'fast-svg'
   | 'a'
@@ -20,6 +21,7 @@ export type Type =
   | 'p'
   | 'path'
   | 'img'
+  | 'rect'
   | 'textarea'
   | 'input'
   | 'style'
@@ -114,7 +116,9 @@ export type ElementProps<T> = PointerEvents &
     stroke?: FacetProp<string | undefined>
     type?: FacetProp<InputType | undefined>
     value?: FacetProp<string | undefined>
+    x?: FacetProp<string | undefined>
     width?: FacetProp<string | undefined>
+    y?: FacetProp<string | undefined>
   }
 
 export type TextProps = {
@@ -153,7 +157,9 @@ export type ElementContainer = {
   type?: Unsubscribe
   text?: Unsubscribe
   value?: Unsubscribe
+  x?: Unsubscribe
   width?: Unsubscribe
+  y?: Unsubscribe
 }
 
 export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {
@@ -188,6 +194,7 @@ export type FastTextareaProps = ElementProps<HTMLTextAreaElement>
 export type FastInputProps = ElementProps<HTMLInputElement>
 export type FastPProps = ElementProps<HTMLParagraphElement>
 export type FastPathProps = ElementProps<SVGPathElement>
+export type FastRectProps = ElementProps<SVGRectElement>
 export type FastSpanProps = ElementProps<HTMLSpanElement>
 export type FastSvgProps = ElementProps<SVGSVGElement>
 export type FastTextProps = TextProps
@@ -206,6 +213,7 @@ declare global {
       'fast-input': FastInputProps
       'fast-p': FastPProps
       'fast-path': FastPathProps
+      'fast-rect': FastRectProps
       'fast-span': FastSpanProps
       'fast-text': FastTextProps
       'fast-svg': FastSvgProps

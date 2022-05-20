@@ -122,6 +122,16 @@ describe('mount', () => {
         render(<fast-svg height="500" />)
         expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
       })
+
+      it('sets the x', () => {
+        render(<fast-rect x="500" />)
+        expect(root?.innerHTML ?? '').toBe('<rect x="500"></rect>')
+      })
+
+      it('sets the y', () => {
+        render(<fast-rect y="500" />)
+        expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
+      })
     })
   })
 
@@ -356,6 +366,26 @@ describe('mount', () => {
 
         heightFacet.set('600')
         expect(root?.innerHTML ?? '').toBe('<svg height="600"></svg>')
+      })
+
+      it('sets the x', () => {
+        const xFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-rect x={xFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect x="500"></rect>')
+
+        xFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<rect x="600"></rect>')
+      })
+
+      it('sets the y', () => {
+        const yFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-rect y={yFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
+
+        yFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<rect y="600"></rect>')
       })
     })
   })
@@ -838,6 +868,48 @@ describe('update', () => {
       expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
       jest.advanceTimersByTime(1)
       expect(root?.innerHTML ?? '').toBe('<svg></svg>')
+    })
+
+    it('updates x', () => {
+      const MockComponent = () => {
+        const [x, setX] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setX('600'), 1)
+          setTimeout(() => setX('500'), 2)
+          setTimeout(() => setX(undefined), 3)
+        }, [])
+        return <rect x={x} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<rect x="500"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect x="600"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect x="500"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect></rect>')
+    })
+
+    it('updates y', () => {
+      const MockComponent = () => {
+        const [y, setY] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setY('600'), 1)
+          setTimeout(() => setY('500'), 2)
+          setTimeout(() => setY(undefined), 3)
+        }, [])
+        return <rect y={y} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect y="600"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect></rect>')
     })
   })
 
