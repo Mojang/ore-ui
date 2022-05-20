@@ -7,6 +7,7 @@ export type FacetFiberRoot = FiberRoot
 export type Type =
   | 'fast-a'
   | 'fast-div'
+  | 'fast-circle'
   | 'fast-span'
   | 'fast-p'
   | 'fast-path'
@@ -17,6 +18,7 @@ export type Type =
   | 'fast-text'
   | 'fast-svg'
   | 'a'
+  | 'circle'
   | 'div'
   | 'p'
   | 'path'
@@ -98,6 +100,8 @@ export type ElementProps<T> = PointerEvents &
     dangerouslySetInnerHTML?: { __html: string }
 
     className?: FacetProp<string | undefined>
+    cx?: FacetProp<string | undefined>
+    cy?: FacetProp<string | undefined>
     d?: FacetProp<string | undefined>
     ['data-droppable']?: FacetProp<boolean | undefined>
     ['data-testid']?: FacetProp<string | undefined>
@@ -112,6 +116,7 @@ export type ElementProps<T> = PointerEvents &
     loop?: FacetProp<boolean | undefined>
     disabled?: FacetProp<boolean | undefined>
     maxLength?: FacetProp<number | undefined>
+    r?: FacetProp<string | undefined>
     rows?: FacetProp<number | undefined>
     stroke?: FacetProp<string | undefined>
     type?: FacetProp<InputType | undefined>
@@ -138,6 +143,8 @@ export type ElementContainer = {
   styleUnsubscribers?: Map<string | number, Unsubscribe>
 
   className?: Unsubscribe
+  cx?: Unsubscribe
+  cy?: Unsubscribe
   d?: Unsubscribe
   ['data-droppable']?: Unsubscribe
   ['data-testid']?: Unsubscribe
@@ -152,6 +159,7 @@ export type ElementContainer = {
   loop?: Unsubscribe
   disabled?: Unsubscribe
   maxLength?: Unsubscribe
+  r?: Unsubscribe
   rows?: Unsubscribe
   stroke?: Unsubscribe
   type?: Unsubscribe
@@ -188,6 +196,7 @@ export interface HostContext {
 export type UpdatePayload = boolean
 
 export type FastAProps = ElementProps<HTMLAnchorElement>
+export type FastCircleProps = ElementProps<SVGCircleElement>
 export type FastDivProps = ElementProps<HTMLDivElement>
 export type FastImgProps = ElementProps<HTMLImageElement>
 export type FastTextareaProps = ElementProps<HTMLTextAreaElement>
@@ -207,6 +216,7 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       'fast-a': FastAProps
+      'fast-circle': FastCircleProps
       'fast-div': FastDivProps
       'fast-img': FastImgProps
       'fast-textarea': FastTextareaProps

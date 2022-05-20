@@ -390,3 +390,57 @@ export const setupYUpdate = (y: FacetProp<string | undefined>, element: HTMLElem
     }
   }
 }
+
+export const setupCxUpdate = (cx: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(cx)) {
+    return cx.observe((cx) => {
+      if (cx != null) {
+        element.setAttribute('cx', cx)
+      } else {
+        element.removeAttribute('cx')
+      }
+    })
+  } else {
+    if (cx != null) {
+      element.setAttribute('cx', cx)
+    } else {
+      element.removeAttribute('cx')
+    }
+  }
+}
+
+export const setupCyUpdate = (cy: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(cy)) {
+    return cy.observe((cy) => {
+      if (cy != null) {
+        element.setAttribute('cy', cy)
+      } else {
+        element.removeAttribute('cy')
+      }
+    })
+  } else {
+    if (cy != null) {
+      element.setAttribute('cy', cy)
+    } else {
+      element.removeAttribute('cy')
+    }
+  }
+}
+
+export const setupRUpdate = (r: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(r)) {
+    return r.observe((r) => {
+      if (r != null) {
+        element.setAttribute('r', r)
+      } else {
+        element.removeAttribute('r')
+      }
+    })
+  } else {
+    if (r != null) {
+      element.setAttribute('r', r)
+    } else {
+      element.removeAttribute('r')
+    }
+  }
+}

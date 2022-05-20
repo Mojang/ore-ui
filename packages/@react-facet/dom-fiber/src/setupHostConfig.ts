@@ -17,6 +17,8 @@ import { isFacet, Unsubscribe } from '@react-facet/core'
 import {
   setupAutoPlayUpdate,
   setupClassUpdate,
+  setupCxUpdate,
+  setupCyUpdate,
   setupDataDroppableUpdate,
   setupDataTestidUpdate,
   setupDataXRayUpdate,
@@ -29,6 +31,7 @@ import {
   setupLoopUpdate,
   setupMaxLengthUpdate,
   setupRowsUpdate,
+  setupRUpdate,
   setupSrcUpdate,
   setupStrokeUpdate,
   setupTargetUpdate,
@@ -238,6 +241,10 @@ export const setupHostConfig = (): HostConfig<
       x: newProps.x != null ? setupXUpdate(newProps.x, element) : undefined,
       width: newProps.width != null ? setupWidthUpdate(newProps.width, element) : undefined,
       y: newProps.y != null ? setupYUpdate(newProps.y, element) : undefined,
+
+      cx: newProps.cx != null ? setupCxUpdate(newProps.cx, element) : undefined,
+      cy: newProps.cy != null ? setupCyUpdate(newProps.cy, element) : undefined,
+      r: newProps.r != null ? setupRUpdate(newProps.r, element) : undefined,
 
       ['data-droppable']:
         newProps['data-droppable'] != null ? setupDataDroppableUpdate(newProps['data-droppable'], element) : undefined,
@@ -546,6 +553,36 @@ export const setupHostConfig = (): HostConfig<
       }
     }
 
+    if (newProps.cx !== oldProps.cx) {
+      instance.cx?.()
+
+      if (newProps.cx == null) {
+        element.removeAttribute('cx')
+      } else {
+        instance.cx = setupCxUpdate(newProps.cx, element)
+      }
+    }
+
+    if (newProps.r !== oldProps.r) {
+      instance.r?.()
+
+      if (newProps.r == null) {
+        element.removeAttribute('r')
+      } else {
+        instance.r = setupRUpdate(newProps.r, element)
+      }
+    }
+
+    if (newProps.cy !== oldProps.cy) {
+      instance.cy?.()
+
+      if (newProps.cy == null) {
+        element.removeAttribute('cy')
+      } else {
+        instance.cy = setupCyUpdate(newProps.cy, element)
+      }
+    }
+
     if (newProps.src !== oldProps.src) {
       instance.src?.()
 
@@ -729,6 +766,7 @@ const EMPTY = {}
 
 const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap> = {
   'fast-a': 'a',
+  'fast-circle': 'circle',
   'fast-div': 'div',
   'fast-p': 'p',
   'fast-path': 'path',
@@ -742,6 +780,7 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   // TODO: fix weird map
   'fast-text': 'span',
   a: 'a',
+  circle: 'circle',
   div: 'div',
   p: 'p',
   path: 'path',

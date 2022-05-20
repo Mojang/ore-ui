@@ -132,6 +132,21 @@ describe('mount', () => {
         render(<fast-rect y="500" />)
         expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
       })
+
+      it('sets the cx', () => {
+        render(<fast-circle cx="500" />)
+        expect(root?.innerHTML ?? '').toBe('<circle cx="500"></circle>')
+      })
+
+      it('sets the cy', () => {
+        render(<fast-circle cy="500" />)
+        expect(root?.innerHTML ?? '').toBe('<circle cy="500"></circle>')
+      })
+
+      it('sets the r', () => {
+        render(<fast-circle r="500" />)
+        expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
+      })
     })
   })
 
@@ -386,6 +401,36 @@ describe('mount', () => {
 
         yFacet.set('600')
         expect(root?.innerHTML ?? '').toBe('<rect y="600"></rect>')
+      })
+
+      it('sets the cx', () => {
+        const cxFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-circle cx={cxFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<circle cx="500"></circle>')
+
+        cxFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<circle cx="600"></circle>')
+      })
+
+      it('sets the cy', () => {
+        const cyFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-circle cy={cyFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<circle cy="500"></circle>')
+
+        cyFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<circle cy="600"></circle>')
+      })
+
+      it('sets the r', () => {
+        const rFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-circle r={rFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
+
+        rFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<circle r="600"></circle>')
       })
     })
   })
@@ -910,6 +955,69 @@ describe('update', () => {
       expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
       jest.advanceTimersByTime(1)
       expect(root?.innerHTML ?? '').toBe('<rect></rect>')
+    })
+
+    it('updates cx', () => {
+      const MockComponent = () => {
+        const [cx, setCx] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setCx('600'), 1)
+          setTimeout(() => setCx('500'), 2)
+          setTimeout(() => setCx(undefined), 3)
+        }, [])
+        return <circle cx={cx} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<circle cx="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle cx="600"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle cx="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle></circle>')
+    })
+
+    it('updates cy', () => {
+      const MockComponent = () => {
+        const [cy, setCy] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setCy('600'), 1)
+          setTimeout(() => setCy('500'), 2)
+          setTimeout(() => setCy(undefined), 3)
+        }, [])
+        return <circle cy={cy} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<circle cy="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle cy="600"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle cy="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle></circle>')
+    })
+
+    it('updates r', () => {
+      const MockComponent = () => {
+        const [r, setR] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setR('600'), 1)
+          setTimeout(() => setR('500'), 2)
+          setTimeout(() => setR(undefined), 3)
+        }, [])
+        return <circle r={r} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle r="600"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle></circle>')
     })
   })
 
