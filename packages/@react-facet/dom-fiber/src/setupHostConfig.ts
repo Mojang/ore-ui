@@ -207,6 +207,7 @@ export const setupHostConfig = (): HostConfig<
       src: newProps.src != null ? setupSrcUpdate(newProps.src, element) : undefined,
 
       d: newProps.d != null ? setupDUpdate(newProps.d, element) : undefined,
+      fill: newProps.fill != null ? setupFillUpdate(newProps.fill, element) : undefined,
 
       ['data-droppable']:
         newProps['data-droppable'] != null ? setupDataDroppableUpdate(newProps['data-droppable'], element) : undefined,
@@ -358,6 +359,16 @@ export const setupHostConfig = (): HostConfig<
         element.removeAttribute('data-x-ray')
       } else {
         instance['data-x-ray'] = setupDataXRayUpdate(newProps['data-x-ray'], element)
+      }
+    }
+
+    if (newProps.fill !== oldProps.fill) {
+      instance.fill?.()
+
+      if (newProps.fill == null) {
+        element.removeAttribute('fill')
+      } else {
+        instance.fill = setupFillUpdate(newProps.fill, element)
       }
     }
 
@@ -742,6 +753,24 @@ const setupDataXRayUpdate = (dataXRay: FacetProp<boolean | undefined>, element: 
       element.setAttribute('data-x-ray', '')
     } else {
       element.removeAttribute('data-x-ray')
+    }
+  }
+}
+
+const setupFillUpdate = (fill: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(fill)) {
+    return fill.observe((fill) => {
+      if (fill != null) {
+        element.setAttribute('fill', fill)
+      } else {
+        element.removeAttribute('fill')
+      }
+    })
+  } else {
+    if (fill != null) {
+      element.setAttribute('fill', fill)
+    } else {
+      element.removeAttribute('fill')
     }
   }
 }

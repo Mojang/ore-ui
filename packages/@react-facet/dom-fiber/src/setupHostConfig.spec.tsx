@@ -102,6 +102,11 @@ describe('mount', () => {
         render(<fast-path d="M0,0 L0,10 Z" />)
         expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
       })
+
+      it('sets the fill', () => {
+        render(<fast-path fill="#ff0000" />)
+        expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
+      })
     })
   })
 
@@ -296,6 +301,16 @@ describe('mount', () => {
 
         dFacet.set('M0,10 L0,10 Z')
         expect(root?.innerHTML ?? '').toBe('<path d="M0,10 L0,10 Z"></path>')
+      })
+
+      it('sets the fill', () => {
+        const fillFacet = createFacet({ initialValue: '#ff0000' })
+
+        render(<fast-path fill={fillFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
+
+        fillFacet.set('#00ff00')
+        expect(root?.innerHTML ?? '').toBe('<path fill="#00ff00"></path>')
       })
     })
   })
@@ -692,6 +707,27 @@ describe('update', () => {
       expect(root?.innerHTML ?? '').toBe('<path d="M0,10 L0,10 Z"></path>')
       jest.advanceTimersByTime(1)
       expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path></path>')
+    })
+
+    it('updates fill', () => {
+      const MockComponent = () => {
+        const [fill, setFill] = useState<string | undefined>('#ff0000')
+        useEffect(() => {
+          setTimeout(() => setFill('#00ff00'), 1)
+          setTimeout(() => setFill('#ff0000'), 2)
+          setTimeout(() => setFill(undefined), 3)
+        }, [])
+        return <path fill={fill} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path fill="#00ff00"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
       jest.advanceTimersByTime(1)
       expect(root?.innerHTML ?? '').toBe('<path></path>')
     })
