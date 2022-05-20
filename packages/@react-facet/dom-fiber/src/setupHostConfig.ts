@@ -206,6 +206,8 @@ export const setupHostConfig = (): HostConfig<
       value: newProps.value != null ? setupValueUpdate(newProps.value, element) : undefined,
       src: newProps.src != null ? setupSrcUpdate(newProps.src, element) : undefined,
 
+      d: newProps.d != null ? setupDUpdate(newProps.d, element) : undefined,
+
       ['data-droppable']:
         newProps['data-droppable'] != null ? setupDataDroppableUpdate(newProps['data-droppable'], element) : undefined,
 
@@ -316,6 +318,16 @@ export const setupHostConfig = (): HostConfig<
         element.className = ''
       } else {
         instance.className = setupClassUpdate(newProps.className, element)
+      }
+    }
+
+    if (newProps.d !== oldProps.d) {
+      instance.d?.()
+
+      if (newProps.d == null) {
+        element.removeAttribute('d')
+      } else {
+        instance.d = setupDUpdate(newProps.d, element)
       }
     }
 
@@ -662,6 +674,24 @@ const setupAutoPlayUpdate = (autoPlay: FacetProp<boolean | undefined>, element: 
   }
 }
 
+const setupDUpdate = (d: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(d)) {
+    return d.observe((d) => {
+      if (d != null) {
+        element.setAttribute('d', d)
+      } else {
+        element.removeAttribute('d')
+      }
+    })
+  } else {
+    if (d != null) {
+      element.setAttribute('d', d)
+    } else {
+      element.removeAttribute('d')
+    }
+  }
+}
+
 const setupDataDroppableUpdate = (dataDroppable: FacetProp<boolean | undefined>, element: HTMLElement) => {
   if (isFacet(dataDroppable)) {
     return dataDroppable.observe((dataDroppable) => {
@@ -889,10 +919,11 @@ const noop = () => {}
 
 const EMPTY = {}
 
-const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap> = {
+const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap> = {
   'fast-a': 'a',
   'fast-div': 'div',
   'fast-p': 'p',
+  'fast-path': 'path',
   'fast-img': 'img',
   'fast-textarea': 'textarea',
   'fast-input': 'input',
@@ -903,6 +934,7 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap> = {
   a: 'a',
   div: 'div',
   p: 'p',
+  path: 'path',
   img: 'img',
   textarea: 'textarea',
   input: 'input',

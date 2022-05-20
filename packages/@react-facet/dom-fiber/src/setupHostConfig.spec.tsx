@@ -96,6 +96,13 @@ describe('mount', () => {
       render(<div dangerouslySetInnerHTML={{ __html: '<span/>' }} />)
       expect(root?.innerHTML ?? '').toBe('<div><span></span></div>')
     })
+
+    describe('for svg', () => {
+      it('sets the d', () => {
+        render(<fast-path d="M0,0 L0,10 Z" />)
+        expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
+      })
+    })
   })
 
   describe('with facets', () => {
@@ -278,6 +285,18 @@ describe('mount', () => {
 
       dataFacet.set(false)
       expect(root?.innerHTML ?? '').toBe('<div></div>')
+    })
+
+    describe('for svg', () => {
+      it('sets the d', () => {
+        const dFacet = createFacet({ initialValue: 'M0,0 L0,10 Z' })
+
+        render(<fast-path d={dFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
+
+        dFacet.set('M0,10 L0,10 Z')
+        expect(root?.innerHTML ?? '').toBe('<path d="M0,10 L0,10 Z"></path>')
+      })
     })
   })
 
@@ -653,6 +672,29 @@ describe('update', () => {
     expect(root?.innerHTML ?? '').toBe('<div data-droppable=""></div>')
     jest.advanceTimersByTime(1)
     expect(root?.innerHTML ?? '').toBe('<div></div>')
+  })
+
+  describe('for svg', () => {
+    it('updates d', () => {
+      const MockComponent = () => {
+        const [d, setD] = useState<string | undefined>('M0,0 L0,10 Z')
+        useEffect(() => {
+          setTimeout(() => setD('M0,10 L0,10 Z'), 1)
+          setTimeout(() => setD('M0,0 L0,10 Z'), 2)
+          setTimeout(() => setD(undefined), 3)
+        }, [])
+        return <path d={d} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path d="M0,10 L0,10 Z"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path></path>')
+    })
   })
 
   describe('setting listeners', () => {

@@ -9,6 +9,7 @@ export type Type =
   | 'fast-div'
   | 'fast-span'
   | 'fast-p'
+  | 'fast-path'
   | 'fast-img'
   | 'fast-textarea'
   | 'fast-input'
@@ -16,6 +17,7 @@ export type Type =
   | 'a'
   | 'div'
   | 'p'
+  | 'path'
   | 'img'
   | 'textarea'
   | 'input'
@@ -92,6 +94,7 @@ export type ElementProps<T> = PointerEvents &
     dangerouslySetInnerHTML?: { __html: string }
 
     className?: FacetProp<string | undefined>
+    d?: FacetProp<string | undefined>
     ['data-droppable']?: FacetProp<boolean | undefined>
     ['data-testid']?: FacetProp<string | undefined>
     ['data-x-ray']?: FacetProp<boolean | undefined>
@@ -125,6 +128,7 @@ export type ElementContainer = {
   styleUnsubscribers?: Map<string | number, Unsubscribe>
 
   className?: Unsubscribe
+  d?: Unsubscribe
   ['data-droppable']?: Unsubscribe
   ['data-testid']?: Unsubscribe
   ['data-x-ray']?: Unsubscribe
@@ -173,6 +177,7 @@ export type FastImgProps = ElementProps<HTMLImageElement>
 export type FastTextareaProps = ElementProps<HTMLTextAreaElement>
 export type FastInputProps = ElementProps<HTMLInputElement>
 export type FastPProps = ElementProps<HTMLParagraphElement>
+export type FastPathProps = ElementProps<SVGPathElement>
 export type FastSpanProps = ElementProps<HTMLSpanElement>
 export type FastTextProps = TextProps
 
@@ -189,6 +194,7 @@ declare global {
       'fast-textarea': FastTextareaProps
       'fast-input': FastInputProps
       'fast-p': FastPProps
+      'fast-path': FastPathProps
       'fast-span': FastSpanProps
       'fast-text': FastTextProps
     }
