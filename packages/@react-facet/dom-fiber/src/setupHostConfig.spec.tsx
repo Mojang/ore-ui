@@ -157,6 +157,31 @@ describe('mount', () => {
         render(<fast-ellipse ry="500" />)
         expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
       })
+
+      it('sets the x1', () => {
+        render(<fast-line x1="500" />)
+        expect(root?.innerHTML ?? '').toBe('<line x1="500"></line>')
+      })
+
+      it('sets the x2', () => {
+        render(<fast-line x2="500" />)
+        expect(root?.innerHTML ?? '').toBe('<line x2="500"></line>')
+      })
+
+      it('sets the y1', () => {
+        render(<fast-line y1="500" />)
+        expect(root?.innerHTML ?? '').toBe('<line y1="500"></line>')
+      })
+
+      it('sets the y2', () => {
+        render(<fast-line y2="500" />)
+        expect(root?.innerHTML ?? '').toBe('<line y2="500"></line>')
+      })
+
+      it('sets the strokeWidth', () => {
+        render(<fast-line strokeWidth="500" />)
+        expect(root?.innerHTML ?? '').toBe('<line stroke-width="500"></line>')
+      })
     })
   })
 
@@ -461,6 +486,56 @@ describe('mount', () => {
 
         ryFacet.set('600')
         expect(root?.innerHTML ?? '').toBe('<ellipse ry="600"></ellipse>')
+      })
+
+      it('sets the x1', () => {
+        const x1Facet = createFacet({ initialValue: '500' })
+
+        render(<fast-line x1={x1Facet} />)
+        expect(root?.innerHTML ?? '').toBe('<line x1="500"></line>')
+
+        x1Facet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<line x1="600"></line>')
+      })
+
+      it('sets the x2', () => {
+        const x2Facet = createFacet({ initialValue: '500' })
+
+        render(<fast-line x2={x2Facet} />)
+        expect(root?.innerHTML ?? '').toBe('<line x2="500"></line>')
+
+        x2Facet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<line x2="600"></line>')
+      })
+
+      it('sets the y1', () => {
+        const y1Facet = createFacet({ initialValue: '500' })
+
+        render(<fast-line y1={y1Facet} />)
+        expect(root?.innerHTML ?? '').toBe('<line y1="500"></line>')
+
+        y1Facet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<line y1="600"></line>')
+      })
+
+      it('sets the y2', () => {
+        const y2Facet = createFacet({ initialValue: '500' })
+
+        render(<fast-line y2={y2Facet} />)
+        expect(root?.innerHTML ?? '').toBe('<line y2="500"></line>')
+
+        y2Facet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<line y2="600"></line>')
+      })
+
+      it('sets the strokeWidth', () => {
+        const strokeWidthFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-line strokeWidth={strokeWidthFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<line stroke-width="500"></line>')
+
+        strokeWidthFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<line stroke-width="600"></line>')
       })
     })
   })
@@ -1090,6 +1165,90 @@ describe('update', () => {
       expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
       jest.advanceTimersByTime(1)
       expect(root?.innerHTML ?? '').toBe('<ellipse></ellipse>')
+    })
+
+    it('updates x1', () => {
+      const MockComponent = () => {
+        const [x1, setX1] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setX1('600'), 1)
+          setTimeout(() => setX1('500'), 2)
+          setTimeout(() => setX1(undefined), 3)
+        }, [])
+        return <line x1={x1} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<line x1="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line x1="600"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line x1="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line></line>')
+    })
+
+    it('updates x2', () => {
+      const MockComponent = () => {
+        const [x2, setX2] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setX2('600'), 1)
+          setTimeout(() => setX2('500'), 2)
+          setTimeout(() => setX2(undefined), 3)
+        }, [])
+        return <line x2={x2} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<line x2="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line x2="600"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line x2="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line></line>')
+    })
+
+    it('updates y1', () => {
+      const MockComponent = () => {
+        const [y1, setY1] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setY1('600'), 1)
+          setTimeout(() => setY1('500'), 2)
+          setTimeout(() => setY1(undefined), 3)
+        }, [])
+        return <line y1={y1} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<line y1="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line y1="600"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line y1="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line></line>')
+    })
+
+    it('updates y2', () => {
+      const MockComponent = () => {
+        const [y2, setY2] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setY2('600'), 1)
+          setTimeout(() => setY2('500'), 2)
+          setTimeout(() => setY2(undefined), 3)
+        }, [])
+        return <line y2={y2} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<line y2="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line y2="600"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line y2="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line></line>')
     })
   })
 

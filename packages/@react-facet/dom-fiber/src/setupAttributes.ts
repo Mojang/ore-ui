@@ -480,3 +480,93 @@ export const setupRyUpdate = (ry: FacetProp<string | undefined>, element: HTMLEl
     }
   }
 }
+
+export const setupX1Update = (x1: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(x1)) {
+    return x1.observe((x1) => {
+      if (x1 != null) {
+        element.setAttribute('x1', x1)
+      } else {
+        element.removeAttribute('x1')
+      }
+    })
+  } else {
+    if (x1 != null) {
+      element.setAttribute('x1', x1)
+    } else {
+      element.removeAttribute('x1')
+    }
+  }
+}
+
+export const setupX2Update = (x2: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(x2)) {
+    return x2.observe((x2) => {
+      if (x2 != null) {
+        element.setAttribute('x2', x2)
+      } else {
+        element.removeAttribute('x2')
+      }
+    })
+  } else {
+    if (x2 != null) {
+      element.setAttribute('x2', x2)
+    } else {
+      element.removeAttribute('x2')
+    }
+  }
+}
+
+export const setupY1Update = (y1: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(y1)) {
+    return y1.observe((y1) => {
+      if (y1 != null) {
+        element.setAttribute('y1', y1)
+      } else {
+        element.removeAttribute('y1')
+      }
+    })
+  } else {
+    if (y1 != null) {
+      element.setAttribute('y1', y1)
+    } else {
+      element.removeAttribute('y1')
+    }
+  }
+}
+
+export const setupY2Update = (y2: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(y2)) {
+    return y2.observe((y2) => {
+      if (y2 != null) {
+        element.setAttribute('y2', y2)
+      } else {
+        element.removeAttribute('y2')
+      }
+    })
+  } else {
+    if (y2 != null) {
+      element.setAttribute('y2', y2)
+    } else {
+      element.removeAttribute('y2')
+    }
+  }
+}
+
+export const setupStrokeWidthUpdate = (strokeWidth: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(strokeWidth)) {
+    return strokeWidth.observe((strokeWidth) => {
+      if (strokeWidth != null) {
+        element.setAttribute('stroke-width', strokeWidth)
+      } else {
+        element.removeAttribute('stroke-width')
+      }
+    })
+  } else {
+    if (strokeWidth != null) {
+      element.setAttribute('stroke-width', strokeWidth)
+    } else {
+      element.removeAttribute('stroke-width')
+    }
+  }
+}

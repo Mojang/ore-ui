@@ -9,6 +9,7 @@ export type Type =
   | 'fast-div'
   | 'fast-circle'
   | 'fast-ellipse'
+  | 'fast-line'
   | 'fast-span'
   | 'fast-p'
   | 'fast-path'
@@ -21,6 +22,7 @@ export type Type =
   | 'a'
   | 'circle'
   | 'ellipse'
+  | 'line'
   | 'div'
   | 'p'
   | 'path'
@@ -123,11 +125,16 @@ export type ElementProps<T> = PointerEvents &
     ry?: FacetProp<string | undefined>
     rows?: FacetProp<number | undefined>
     stroke?: FacetProp<string | undefined>
+    strokeWidth?: FacetProp<string | undefined>
     type?: FacetProp<InputType | undefined>
     value?: FacetProp<string | undefined>
     x?: FacetProp<string | undefined>
+    x1?: FacetProp<string | undefined>
+    x2?: FacetProp<string | undefined>
     width?: FacetProp<string | undefined>
     y?: FacetProp<string | undefined>
+    y1?: FacetProp<string | undefined>
+    y2?: FacetProp<string | undefined>
   }
 
 export type TextProps = {
@@ -168,12 +175,17 @@ export type ElementContainer = {
   ry?: Unsubscribe
   rows?: Unsubscribe
   stroke?: Unsubscribe
+  strokeWidth?: Unsubscribe
   type?: Unsubscribe
   text?: Unsubscribe
   value?: Unsubscribe
   x?: Unsubscribe
+  x1?: Unsubscribe
+  x2?: Unsubscribe
   width?: Unsubscribe
   y?: Unsubscribe
+  y1?: Unsubscribe
+  y2?: Unsubscribe
 }
 
 export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {
@@ -205,6 +217,7 @@ export type FastAProps = ElementProps<HTMLAnchorElement>
 export type FastCircleProps = ElementProps<SVGCircleElement>
 export type FastDivProps = ElementProps<HTMLDivElement>
 export type FastEllipseProps = ElementProps<SVGEllipseElement>
+export type FastLineProps = ElementProps<SVGLineElement>
 export type FastImgProps = ElementProps<HTMLImageElement>
 export type FastTextareaProps = ElementProps<HTMLTextAreaElement>
 export type FastInputProps = ElementProps<HTMLInputElement>
@@ -225,6 +238,7 @@ declare global {
       'fast-a': FastAProps
       'fast-circle': FastCircleProps
       'fast-ellipse': FastEllipseProps
+      'fast-line': FastLineProps
       'fast-div': FastDivProps
       'fast-img': FastImgProps
       'fast-textarea': FastTextareaProps

@@ -36,12 +36,17 @@ import {
   setupRyUpdate,
   setupSrcUpdate,
   setupStrokeUpdate,
+  setupStrokeWidthUpdate,
   setupTargetUpdate,
   setupTextUpdate,
   setupTypeUpdate,
   setupValueUpdate,
   setupWidthUpdate,
+  setupX1Update,
+  setupX2Update,
   setupXUpdate,
+  setupY1Update,
+  setupY2Update,
   setupYUpdate,
 } from './setupAttributes'
 
@@ -249,6 +254,12 @@ export const setupHostConfig = (): HostConfig<
       r: newProps.r != null ? setupRUpdate(newProps.r, element) : undefined,
       rx: newProps.rx != null ? setupRxUpdate(newProps.rx, element) : undefined,
       ry: newProps.ry != null ? setupRyUpdate(newProps.ry, element) : undefined,
+
+      x1: newProps.x1 != null ? setupX1Update(newProps.x1, element) : undefined,
+      x2: newProps.x2 != null ? setupX2Update(newProps.x2, element) : undefined,
+      y1: newProps.y1 != null ? setupY1Update(newProps.y1, element) : undefined,
+      y2: newProps.y2 != null ? setupY2Update(newProps.y2, element) : undefined,
+      strokeWidth: newProps.strokeWidth != null ? setupStrokeWidthUpdate(newProps.strokeWidth, element) : undefined,
 
       ['data-droppable']:
         newProps['data-droppable'] != null ? setupDataDroppableUpdate(newProps['data-droppable'], element) : undefined,
@@ -607,6 +618,56 @@ export const setupHostConfig = (): HostConfig<
       }
     }
 
+    if (newProps.x1 !== oldProps.x1) {
+      instance.x1?.()
+
+      if (newProps.x1 == null) {
+        element.removeAttribute('x1')
+      } else {
+        instance.x1 = setupX1Update(newProps.x1, element)
+      }
+    }
+
+    if (newProps.x2 !== oldProps.x2) {
+      instance.x2?.()
+
+      if (newProps.x2 == null) {
+        element.removeAttribute('x2')
+      } else {
+        instance.x2 = setupX2Update(newProps.x2, element)
+      }
+    }
+
+    if (newProps.y1 !== oldProps.y1) {
+      instance.y1?.()
+
+      if (newProps.y1 == null) {
+        element.removeAttribute('y1')
+      } else {
+        instance.y1 = setupY1Update(newProps.y1, element)
+      }
+    }
+
+    if (newProps.y2 !== oldProps.y2) {
+      instance.y2?.()
+
+      if (newProps.y2 == null) {
+        element.removeAttribute('y2')
+      } else {
+        instance.y2 = setupY2Update(newProps.y2, element)
+      }
+    }
+
+    if (newProps.strokeWidth !== oldProps.strokeWidth) {
+      instance.strokeWidth?.()
+
+      if (newProps.strokeWidth == null) {
+        element.removeAttribute('strokeWidth')
+      } else {
+        instance.strokeWidth = setupStrokeWidthUpdate(newProps.strokeWidth, element)
+      }
+    }
+
     if (newProps.src !== oldProps.src) {
       instance.src?.()
 
@@ -792,6 +853,7 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   'fast-a': 'a',
   'fast-circle': 'circle',
   'fast-ellipse': 'ellipse',
+  'fast-line': 'line',
   'fast-div': 'div',
   'fast-p': 'p',
   'fast-path': 'path',
@@ -807,6 +869,7 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   a: 'a',
   circle: 'circle',
   ellipse: 'ellipse',
+  line: 'line',
   div: 'div',
   p: 'p',
   path: 'path',
