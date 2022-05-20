@@ -32,6 +32,8 @@ import {
   setupMaxLengthUpdate,
   setupRowsUpdate,
   setupRUpdate,
+  setupRxUpdate,
+  setupRyUpdate,
   setupSrcUpdate,
   setupStrokeUpdate,
   setupTargetUpdate,
@@ -245,6 +247,8 @@ export const setupHostConfig = (): HostConfig<
       cx: newProps.cx != null ? setupCxUpdate(newProps.cx, element) : undefined,
       cy: newProps.cy != null ? setupCyUpdate(newProps.cy, element) : undefined,
       r: newProps.r != null ? setupRUpdate(newProps.r, element) : undefined,
+      rx: newProps.rx != null ? setupRxUpdate(newProps.rx, element) : undefined,
+      ry: newProps.ry != null ? setupRyUpdate(newProps.ry, element) : undefined,
 
       ['data-droppable']:
         newProps['data-droppable'] != null ? setupDataDroppableUpdate(newProps['data-droppable'], element) : undefined,
@@ -583,6 +587,26 @@ export const setupHostConfig = (): HostConfig<
       }
     }
 
+    if (newProps.rx !== oldProps.rx) {
+      instance.rx?.()
+
+      if (newProps.rx == null) {
+        element.removeAttribute('rx')
+      } else {
+        instance.rx = setupRxUpdate(newProps.rx, element)
+      }
+    }
+
+    if (newProps.ry !== oldProps.ry) {
+      instance.ry?.()
+
+      if (newProps.ry == null) {
+        element.removeAttribute('ry')
+      } else {
+        instance.ry = setupRyUpdate(newProps.ry, element)
+      }
+    }
+
     if (newProps.src !== oldProps.src) {
       instance.src?.()
 
@@ -767,6 +791,7 @@ const EMPTY = {}
 const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap> = {
   'fast-a': 'a',
   'fast-circle': 'circle',
+  'fast-ellipse': 'ellipse',
   'fast-div': 'div',
   'fast-p': 'p',
   'fast-path': 'path',
@@ -781,6 +806,7 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   'fast-text': 'span',
   a: 'a',
   circle: 'circle',
+  ellipse: 'ellipse',
   div: 'div',
   p: 'p',
   path: 'path',

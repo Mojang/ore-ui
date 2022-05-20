@@ -444,3 +444,39 @@ export const setupRUpdate = (r: FacetProp<string | undefined>, element: HTMLElem
     }
   }
 }
+
+export const setupRxUpdate = (rx: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(rx)) {
+    return rx.observe((rx) => {
+      if (rx != null) {
+        element.setAttribute('rx', rx)
+      } else {
+        element.removeAttribute('rx')
+      }
+    })
+  } else {
+    if (rx != null) {
+      element.setAttribute('rx', rx)
+    } else {
+      element.removeAttribute('rx')
+    }
+  }
+}
+
+export const setupRyUpdate = (ry: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(ry)) {
+    return ry.observe((ry) => {
+      if (ry != null) {
+        element.setAttribute('ry', ry)
+      } else {
+        element.removeAttribute('ry')
+      }
+    })
+  } else {
+    if (ry != null) {
+      element.setAttribute('ry', ry)
+    } else {
+      element.removeAttribute('ry')
+    }
+  }
+}

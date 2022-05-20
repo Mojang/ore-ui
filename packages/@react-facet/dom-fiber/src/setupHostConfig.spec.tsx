@@ -147,6 +147,16 @@ describe('mount', () => {
         render(<fast-circle r="500" />)
         expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
       })
+
+      it('sets the rx', () => {
+        render(<fast-ellipse rx="500" />)
+        expect(root?.innerHTML ?? '').toBe('<ellipse rx="500"></ellipse>')
+      })
+
+      it('sets the ry', () => {
+        render(<fast-ellipse ry="500" />)
+        expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
+      })
     })
   })
 
@@ -431,6 +441,26 @@ describe('mount', () => {
 
         rFacet.set('600')
         expect(root?.innerHTML ?? '').toBe('<circle r="600"></circle>')
+      })
+
+      it('sets the rx', () => {
+        const rxFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-ellipse rx={rxFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<ellipse rx="500"></ellipse>')
+
+        rxFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<ellipse rx="600"></ellipse>')
+      })
+
+      it('sets the ry', () => {
+        const ryFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-ellipse ry={ryFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
+
+        ryFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<ellipse ry="600"></ellipse>')
       })
     })
   })
@@ -1018,6 +1048,48 @@ describe('update', () => {
       expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
       jest.advanceTimersByTime(1)
       expect(root?.innerHTML ?? '').toBe('<circle></circle>')
+    })
+
+    it('updates rx', () => {
+      const MockComponent = () => {
+        const [rx, setRx] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setRx('600'), 1)
+          setTimeout(() => setRx('500'), 2)
+          setTimeout(() => setRx(undefined), 3)
+        }, [])
+        return <ellipse rx={rx} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<ellipse rx="500"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse rx="600"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse rx="500"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse></ellipse>')
+    })
+
+    it('updates ry', () => {
+      const MockComponent = () => {
+        const [ry, setRy] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setRy('600'), 1)
+          setTimeout(() => setRy('500'), 2)
+          setTimeout(() => setRy(undefined), 3)
+        }, [])
+        return <ellipse ry={ry} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse ry="600"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse></ellipse>')
     })
   })
 

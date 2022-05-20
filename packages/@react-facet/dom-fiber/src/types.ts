@@ -8,6 +8,7 @@ export type Type =
   | 'fast-a'
   | 'fast-div'
   | 'fast-circle'
+  | 'fast-ellipse'
   | 'fast-span'
   | 'fast-p'
   | 'fast-path'
@@ -19,6 +20,7 @@ export type Type =
   | 'fast-svg'
   | 'a'
   | 'circle'
+  | 'ellipse'
   | 'div'
   | 'p'
   | 'path'
@@ -117,6 +119,8 @@ export type ElementProps<T> = PointerEvents &
     disabled?: FacetProp<boolean | undefined>
     maxLength?: FacetProp<number | undefined>
     r?: FacetProp<string | undefined>
+    rx?: FacetProp<string | undefined>
+    ry?: FacetProp<string | undefined>
     rows?: FacetProp<number | undefined>
     stroke?: FacetProp<string | undefined>
     type?: FacetProp<InputType | undefined>
@@ -160,6 +164,8 @@ export type ElementContainer = {
   disabled?: Unsubscribe
   maxLength?: Unsubscribe
   r?: Unsubscribe
+  rx?: Unsubscribe
+  ry?: Unsubscribe
   rows?: Unsubscribe
   stroke?: Unsubscribe
   type?: Unsubscribe
@@ -198,6 +204,7 @@ export type UpdatePayload = boolean
 export type FastAProps = ElementProps<HTMLAnchorElement>
 export type FastCircleProps = ElementProps<SVGCircleElement>
 export type FastDivProps = ElementProps<HTMLDivElement>
+export type FastEllipseProps = ElementProps<SVGEllipseElement>
 export type FastImgProps = ElementProps<HTMLImageElement>
 export type FastTextareaProps = ElementProps<HTMLTextAreaElement>
 export type FastInputProps = ElementProps<HTMLInputElement>
@@ -217,6 +224,7 @@ declare global {
     interface IntrinsicElements {
       'fast-a': FastAProps
       'fast-circle': FastCircleProps
+      'fast-ellipse': FastEllipseProps
       'fast-div': FastDivProps
       'fast-img': FastImgProps
       'fast-textarea': FastTextareaProps
