@@ -14,6 +14,7 @@ export type Type =
   | 'fast-textarea'
   | 'fast-input'
   | 'fast-text'
+  | 'fast-svg'
   | 'a'
   | 'div'
   | 'p'
@@ -22,6 +23,7 @@ export type Type =
   | 'textarea'
   | 'input'
   | 'style'
+  | 'svg'
 
 export type InputType = 'text' | 'button' | 'password' | 'checkbox' | 'radio' | 'number'
 
@@ -101,6 +103,7 @@ export type ElementProps<T> = PointerEvents &
     fill?: FacetProp<string | undefined>
     id?: FacetProp<string | undefined>
     src?: FacetProp<string | undefined>
+    height?: FacetProp<string | undefined>
     href?: FacetProp<string | undefined>
     target?: FacetProp<string | undefined>
     autoPlay?: FacetProp<boolean | undefined>
@@ -111,6 +114,7 @@ export type ElementProps<T> = PointerEvents &
     stroke?: FacetProp<string | undefined>
     type?: FacetProp<InputType | undefined>
     value?: FacetProp<string | undefined>
+    width?: FacetProp<string | undefined>
   }
 
 export type TextProps = {
@@ -137,6 +141,7 @@ export type ElementContainer = {
   fill?: Unsubscribe
   id?: Unsubscribe
   src?: Unsubscribe
+  height?: Unsubscribe
   href?: Unsubscribe
   target?: Unsubscribe
   autoPlay?: Unsubscribe
@@ -148,6 +153,7 @@ export type ElementContainer = {
   type?: Unsubscribe
   text?: Unsubscribe
   value?: Unsubscribe
+  width?: Unsubscribe
 }
 
 export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {
@@ -183,6 +189,7 @@ export type FastInputProps = ElementProps<HTMLInputElement>
 export type FastPProps = ElementProps<HTMLParagraphElement>
 export type FastPathProps = ElementProps<SVGPathElement>
 export type FastSpanProps = ElementProps<HTMLSpanElement>
+export type FastSvgProps = ElementProps<SVGSVGElement>
 export type FastTextProps = TextProps
 
 /**
@@ -201,6 +208,7 @@ declare global {
       'fast-path': FastPathProps
       'fast-span': FastSpanProps
       'fast-text': FastTextProps
+      'fast-svg': FastSvgProps
     }
   }
 }

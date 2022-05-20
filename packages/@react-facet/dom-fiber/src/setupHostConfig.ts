@@ -23,6 +23,7 @@ import {
   setupDisabledUpdate,
   setupDUpdate,
   setupFillUpdate,
+  setupHeightUpdate,
   setupHrefUpdate,
   setupIdUpdate,
   setupLoopUpdate,
@@ -34,6 +35,7 @@ import {
   setupTextUpdate,
   setupTypeUpdate,
   setupValueUpdate,
+  setupWidthUpdate,
 } from './setupAttributes'
 
 /**
@@ -229,7 +231,9 @@ export const setupHostConfig = (): HostConfig<
 
       d: newProps.d != null ? setupDUpdate(newProps.d, element) : undefined,
       fill: newProps.fill != null ? setupFillUpdate(newProps.fill, element) : undefined,
+      height: newProps.height != null ? setupHeightUpdate(newProps.height, element) : undefined,
       stroke: newProps.stroke != null ? setupStrokeUpdate(newProps.stroke, element) : undefined,
+      width: newProps.width != null ? setupWidthUpdate(newProps.width, element) : undefined,
 
       ['data-droppable']:
         newProps['data-droppable'] != null ? setupDataDroppableUpdate(newProps['data-droppable'], element) : undefined,
@@ -444,6 +448,16 @@ export const setupHostConfig = (): HostConfig<
       }
     }
 
+    if (newProps.height !== oldProps.height) {
+      instance.height?.()
+
+      if (newProps.height == null) {
+        element.removeAttribute('height')
+      } else {
+        instance.height = setupHeightUpdate(newProps.height, element)
+      }
+    }
+
     if (newProps.maxLength !== oldProps.maxLength) {
       instance.maxLength?.()
 
@@ -495,6 +509,16 @@ export const setupHostConfig = (): HostConfig<
         textElement.removeAttribute('value')
       } else {
         instance.value = setupValueUpdate(newProps.value, element)
+      }
+    }
+
+    if (newProps.width !== oldProps.width) {
+      instance.width?.()
+
+      if (newProps.width == null) {
+        element.removeAttribute('width')
+      } else {
+        instance.width = setupWidthUpdate(newProps.width, element)
       }
     }
 
@@ -688,6 +712,7 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   'fast-textarea': 'textarea',
   'fast-input': 'input',
   'fast-span': 'span',
+  'fast-svg': 'svg',
 
   // TODO: fix weird map
   'fast-text': 'span',
@@ -699,4 +724,5 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   textarea: 'textarea',
   input: 'input',
   style: 'style',
+  svg: 'svg',
 }

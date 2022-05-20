@@ -112,6 +112,16 @@ describe('mount', () => {
         render(<fast-path stroke="#ff0000" />)
         expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
       })
+
+      it('sets the width', () => {
+        render(<fast-svg width="500" />)
+        expect(root?.innerHTML ?? '').toBe('<svg width="500"></svg>')
+      })
+
+      it('sets the height', () => {
+        render(<fast-svg height="500" />)
+        expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
+      })
     })
   })
 
@@ -326,6 +336,26 @@ describe('mount', () => {
 
         strokeFacet.set('#00ff00')
         expect(root?.innerHTML ?? '').toBe('<path stroke="#00ff00"></path>')
+      })
+
+      it('sets the width', () => {
+        const widthFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-svg width={widthFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<svg width="500"></svg>')
+
+        widthFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<svg width="600"></svg>')
+      })
+
+      it('sets the height', () => {
+        const heightFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-svg height={heightFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
+
+        heightFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<svg height="600"></svg>')
       })
     })
   })
@@ -766,6 +796,48 @@ describe('update', () => {
       expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
       jest.advanceTimersByTime(1)
       expect(root?.innerHTML ?? '').toBe('<path></path>')
+    })
+
+    it('updates width', () => {
+      const MockComponent = () => {
+        const [width, setWidth] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setWidth('600'), 1)
+          setTimeout(() => setWidth('500'), 2)
+          setTimeout(() => setWidth(undefined), 3)
+        }, [])
+        return <svg width={width} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<svg width="500"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg width="600"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg width="500"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg></svg>')
+    })
+
+    it('updates height', () => {
+      const MockComponent = () => {
+        const [height, setHeight] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setHeight('600'), 1)
+          setTimeout(() => setHeight('500'), 2)
+          setTimeout(() => setHeight(undefined), 3)
+        }, [])
+        return <svg height={height} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg height="600"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg></svg>')
     })
   })
 

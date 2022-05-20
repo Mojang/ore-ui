@@ -168,6 +168,24 @@ export const setupHrefUpdate = (href: FacetProp<string | undefined>, element: HT
   }
 }
 
+export const setupHeightUpdate = (height: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(height)) {
+    return height.observe((height) => {
+      if (height != null) {
+        element.setAttribute('height', height)
+      } else {
+        element.removeAttribute('height')
+      }
+    })
+  } else {
+    if (height != null) {
+      element.setAttribute('height', height)
+    } else {
+      element.removeAttribute('height')
+    }
+  }
+}
+
 export const setupTargetUpdate = (target: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(target)) {
     return target.observe((target) => {
@@ -316,5 +334,23 @@ export const setupTextUpdate = (text: FacetProp<string | number | undefined>, el
   } else {
     const textElement = element as Text
     textElement.nodeValue = (text ?? '') as string
+  }
+}
+
+export const setupWidthUpdate = (width: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(width)) {
+    return width.observe((width) => {
+      if (width != null) {
+        element.setAttribute('width', width)
+      } else {
+        element.removeAttribute('width')
+      }
+    })
+  } else {
+    if (width != null) {
+      element.setAttribute('width', width)
+    } else {
+      element.removeAttribute('width')
+    }
   }
 }
