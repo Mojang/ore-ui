@@ -108,8 +108,9 @@ export type ElementProps<T> = PointerEvents &
     disabled?: FacetProp<boolean | undefined>
     maxLength?: FacetProp<number | undefined>
     rows?: FacetProp<number | undefined>
-    value?: FacetProp<string | undefined>
+    stroke?: FacetProp<string | undefined>
     type?: FacetProp<InputType | undefined>
+    value?: FacetProp<string | undefined>
   }
 
 export type TextProps = {
@@ -143,9 +144,10 @@ export type ElementContainer = {
   disabled?: Unsubscribe
   maxLength?: Unsubscribe
   rows?: Unsubscribe
-  value?: Unsubscribe
+  stroke?: Unsubscribe
   type?: Unsubscribe
   text?: Unsubscribe
+  value?: Unsubscribe
 }
 
 export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {

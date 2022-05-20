@@ -107,6 +107,11 @@ describe('mount', () => {
         render(<fast-path fill="#ff0000" />)
         expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
       })
+
+      it('sets the stroke', () => {
+        render(<fast-path stroke="#ff0000" />)
+        expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
+      })
     })
   })
 
@@ -311,6 +316,16 @@ describe('mount', () => {
 
         fillFacet.set('#00ff00')
         expect(root?.innerHTML ?? '').toBe('<path fill="#00ff00"></path>')
+      })
+
+      it('sets the stroke', () => {
+        const strokeFacet = createFacet({ initialValue: '#ff0000' })
+
+        render(<fast-path stroke={strokeFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
+
+        strokeFacet.set('#00ff00')
+        expect(root?.innerHTML ?? '').toBe('<path stroke="#00ff00"></path>')
       })
     })
   })
@@ -728,6 +743,27 @@ describe('update', () => {
       expect(root?.innerHTML ?? '').toBe('<path fill="#00ff00"></path>')
       jest.advanceTimersByTime(1)
       expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path></path>')
+    })
+
+    it('updates stroke', () => {
+      const MockComponent = () => {
+        const [stroke, setStroke] = useState<string | undefined>('#ff0000')
+        useEffect(() => {
+          setTimeout(() => setStroke('#00ff00'), 1)
+          setTimeout(() => setStroke('#ff0000'), 2)
+          setTimeout(() => setStroke(undefined), 3)
+        }, [])
+        return <path stroke={stroke} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path stroke="#00ff00"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
       jest.advanceTimersByTime(1)
       expect(root?.innerHTML ?? '').toBe('<path></path>')
     })
