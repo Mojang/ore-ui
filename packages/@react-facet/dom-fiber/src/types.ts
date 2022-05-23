@@ -19,6 +19,7 @@ export type Type =
   | 'fast-rect'
   | 'fast-text'
   | 'fast-svg'
+  | 'fast-use'
   | 'a'
   | 'circle'
   | 'ellipse'
@@ -32,6 +33,10 @@ export type Type =
   | 'input'
   | 'style'
   | 'svg'
+  | 'defs'
+  | 'g'
+  | 'symbol'
+  | 'use'
 
 export type InputType = 'text' | 'button' | 'password' | 'checkbox' | 'radio' | 'number'
 
@@ -135,6 +140,7 @@ export type ElementProps<T> = PointerEvents &
     y?: FacetProp<string | undefined>
     y1?: FacetProp<string | undefined>
     y2?: FacetProp<string | undefined>
+    viewBox?: FacetProp<string | undefined>
   }
 
 export type TextProps = {
@@ -186,6 +192,7 @@ export type ElementContainer = {
   y?: Unsubscribe
   y1?: Unsubscribe
   y2?: Unsubscribe
+  viewBox?: Unsubscribe
 }
 
 export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {
@@ -227,6 +234,7 @@ export type FastRectProps = ElementProps<SVGRectElement>
 export type FastSpanProps = ElementProps<HTMLSpanElement>
 export type FastSvgProps = ElementProps<SVGSVGElement>
 export type FastTextProps = TextProps
+export type FastUseProps = ElementProps<SVGUseElement>
 
 /**
  * Extends React global namespace with the "fast" types
@@ -249,6 +257,7 @@ declare global {
       'fast-span': FastSpanProps
       'fast-text': FastTextProps
       'fast-svg': FastSvgProps
+      'fast-use': FastUseProps
     }
   }
 }

@@ -182,6 +182,11 @@ describe('mount', () => {
         render(<fast-line strokeWidth="500" />)
         expect(root?.innerHTML ?? '').toBe('<line stroke-width="500"></line>')
       })
+
+      it('sets the viewBox', () => {
+        render(<fast-svg viewBox="0 0 100 100" />)
+        expect(root?.innerHTML ?? '').toBe('<svg viewBox="0 0 100 100"></svg>')
+      })
     })
   })
 
@@ -536,6 +541,16 @@ describe('mount', () => {
 
         strokeWidthFacet.set('600')
         expect(root?.innerHTML ?? '').toBe('<line stroke-width="600"></line>')
+      })
+
+      it('sets the viewBox', () => {
+        const viewBoxFacet = createFacet({ initialValue: '0 0 10 10' })
+
+        render(<fast-svg viewBox={viewBoxFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<svg viewBox="0 0 10 10"></svg>')
+
+        viewBoxFacet.set('0 0 20 20')
+        expect(root?.innerHTML ?? '').toBe('<svg viewBox="0 0 20 20"></svg>')
       })
     })
   })

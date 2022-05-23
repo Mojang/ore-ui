@@ -570,3 +570,25 @@ export const setupStrokeWidthUpdate = (strokeWidth: FacetProp<string | undefined
     }
   }
 }
+
+/**
+ * removeAttribute and setAttribute automatically convert the attribute name to lower case.
+ * The DOM attribute viewBox is camel cased so setAttributeNS and removeAttributeNS are used
+ */
+export const setupViewBoxUpdate = (viewBox: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(viewBox)) {
+    return viewBox.observe((value) => {
+      if (value != null) {
+        element.setAttributeNS(null, 'viewBox', value)
+      } else {
+        element.removeAttributeNS(null, 'viewBox')
+      }
+    })
+  } else {
+    if (viewBox != null) {
+      element.setAttributeNS(null, 'viewBox', viewBox)
+    } else {
+      element.removeAttributeNS(null, 'viewBox')
+    }
+  }
+}

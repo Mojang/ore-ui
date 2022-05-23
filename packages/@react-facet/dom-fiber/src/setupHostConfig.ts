@@ -48,6 +48,7 @@ import {
   setupY1Update,
   setupY2Update,
   setupYUpdate,
+  setupViewBoxUpdate,
 } from './setupAttributes'
 
 /**
@@ -260,6 +261,7 @@ export const setupHostConfig = (): HostConfig<
       y1: newProps.y1 != null ? setupY1Update(newProps.y1, element) : undefined,
       y2: newProps.y2 != null ? setupY2Update(newProps.y2, element) : undefined,
       strokeWidth: newProps.strokeWidth != null ? setupStrokeWidthUpdate(newProps.strokeWidth, element) : undefined,
+      viewBox: newProps.viewBox != null ? setupViewBoxUpdate(newProps.viewBox, element) : undefined,
 
       ['data-droppable']:
         newProps['data-droppable'] != null ? setupDataDroppableUpdate(newProps['data-droppable'], element) : undefined,
@@ -668,6 +670,16 @@ export const setupHostConfig = (): HostConfig<
       }
     }
 
+    if (newProps.viewBox !== oldProps.viewBox) {
+      instance.viewBox?.()
+
+      if (newProps.viewBox == null) {
+        element.removeAttribute('viewBox')
+      } else {
+        instance.viewBox = setupViewBoxUpdate(newProps.viewBox, element)
+      }
+    }
+
     if (newProps.src !== oldProps.src) {
       instance.src?.()
 
@@ -863,6 +875,7 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   'fast-span': 'span',
   'fast-svg': 'svg',
   'fast-textarea': 'textarea',
+  'fast-use': 'use',
 
   // TODO: fix weird map
   'fast-text': 'span',
@@ -879,4 +892,8 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   input: 'input',
   style: 'style',
   svg: 'svg',
+  symbol: 'symbol',
+  g: 'g',
+  use: 'use',
+  defs: 'defs',
 }
