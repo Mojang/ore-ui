@@ -141,6 +141,7 @@ export type ElementProps<T> = PointerEvents &
     y1?: FacetProp<string | undefined>
     y2?: FacetProp<string | undefined>
     viewBox?: FacetProp<string | undefined>
+    xLinkHref?: FacetProp<string | undefined>
   }
 
 export type TextProps = {
@@ -193,6 +194,7 @@ export type ElementContainer = {
   y1?: Unsubscribe
   y2?: Unsubscribe
   viewBox?: Unsubscribe
+  xLinkHref?: Unsubscribe
 }
 
 export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {

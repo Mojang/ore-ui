@@ -187,6 +187,11 @@ describe('mount', () => {
         render(<fast-svg viewBox="0 0 100 100" />)
         expect(root?.innerHTML ?? '').toBe('<svg viewBox="0 0 100 100"></svg>')
       })
+
+      it('sets the xLinkHref', () => {
+        render(<fast-use xLinkHref="#test" />)
+        expect(root?.innerHTML ?? '').toBe('<use xlink:href="#test"></use>')
+      })
     })
   })
 
@@ -551,6 +556,16 @@ describe('mount', () => {
 
         viewBoxFacet.set('0 0 20 20')
         expect(root?.innerHTML ?? '').toBe('<svg viewBox="0 0 20 20"></svg>')
+      })
+
+      it('sets the xLinkHref', () => {
+        const xLinkHrefFacet = createFacet({ initialValue: '#test1' })
+
+        render(<fast-use xLinkHref={xLinkHrefFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<use xlink:href="#test1"></use>')
+
+        xLinkHrefFacet.set('#test2')
+        expect(root?.innerHTML ?? '').toBe('<use xlink:href="#test2"></use>')
       })
     })
   })

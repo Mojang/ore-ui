@@ -27,6 +27,7 @@ import {
   setupFillUpdate,
   setupHeightUpdate,
   setupHrefUpdate,
+  setupXLinkHrefUpdate,
   setupIdUpdate,
   setupLoopUpdate,
   setupMaxLengthUpdate,
@@ -262,6 +263,7 @@ export const setupHostConfig = (): HostConfig<
       y2: newProps.y2 != null ? setupY2Update(newProps.y2, element) : undefined,
       strokeWidth: newProps.strokeWidth != null ? setupStrokeWidthUpdate(newProps.strokeWidth, element) : undefined,
       viewBox: newProps.viewBox != null ? setupViewBoxUpdate(newProps.viewBox, element) : undefined,
+      xLinkHref: newProps.xLinkHref != null ? setupXLinkHrefUpdate(newProps.xLinkHref, element) : undefined,
 
       ['data-droppable']:
         newProps['data-droppable'] != null ? setupDataDroppableUpdate(newProps['data-droppable'], element) : undefined,
@@ -677,6 +679,16 @@ export const setupHostConfig = (): HostConfig<
         element.removeAttribute('viewBox')
       } else {
         instance.viewBox = setupViewBoxUpdate(newProps.viewBox, element)
+      }
+    }
+
+    if (newProps.xLinkHref !== oldProps.xLinkHref) {
+      instance.xLinkHref?.()
+
+      if (newProps.xLinkHref == null) {
+        element.removeAttribute('xlink:href')
+      } else {
+        instance.xLinkHref = setupXLinkHrefUpdate(newProps.xLinkHref, element)
       }
     }
 

@@ -168,6 +168,24 @@ export const setupHrefUpdate = (href: FacetProp<string | undefined>, element: HT
   }
 }
 
+export const setupXLinkHrefUpdate = (href: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(href)) {
+    return href.observe((href) => {
+      if (href != null) {
+        element.setAttribute('xlink:href', href)
+      } else {
+        element.removeAttribute('xlink:href')
+      }
+    })
+  } else {
+    if (href != null) {
+      element.setAttribute('xlink:href', href)
+    } else {
+      element.removeAttribute('xlink:href')
+    }
+  }
+}
+
 export const setupHeightUpdate = (height: FacetProp<string | undefined>, element: HTMLElement) => {
   if (isFacet(height)) {
     return height.observe((height) => {
