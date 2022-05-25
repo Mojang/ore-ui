@@ -50,6 +50,16 @@ import {
   setupY2Update,
   setupYUpdate,
   setupViewBoxUpdate,
+  setupPointsUpdate,
+  setupOffsetUpdate,
+  setupStopColorUpdate,
+  setupStopOpacityUpdate,
+  setupFontFamilyUpdate,
+  setupFontSizeUpdate,
+  setupFillOpacityUpdate,
+  setupStrokeOpacityUpdate,
+  setupStrokeLinecapUpdate,
+  setupStrokeLinejoinUpdate,
 } from './setupAttributes'
 
 /**
@@ -264,6 +274,19 @@ export const setupHostConfig = (): HostConfig<
       strokeWidth: newProps.strokeWidth != null ? setupStrokeWidthUpdate(newProps.strokeWidth, element) : undefined,
       viewBox: newProps.viewBox != null ? setupViewBoxUpdate(newProps.viewBox, element) : undefined,
       xLinkHref: newProps.xLinkHref != null ? setupXLinkHrefUpdate(newProps.xLinkHref, element) : undefined,
+      fillOpacity: newProps.fillOpacity != null ? setupFillOpacityUpdate(newProps.fillOpacity, element) : undefined,
+      strokeOpacity:
+        newProps.strokeOpacity != null ? setupStrokeOpacityUpdate(newProps.strokeOpacity, element) : undefined,
+      strokeLinecap:
+        newProps.strokeLinecap != null ? setupStrokeLinecapUpdate(newProps.strokeLinecap, element) : undefined,
+      strokeLinejoin:
+        newProps.strokeLinejoin != null ? setupStrokeLinejoinUpdate(newProps.strokeLinejoin, element) : undefined,
+      points: newProps.points != null ? setupPointsUpdate(newProps.points, element) : undefined,
+      offset: newProps.offset != null ? setupOffsetUpdate(newProps.offset, element) : undefined,
+      stopColor: newProps.stopColor != null ? setupStopColorUpdate(newProps.stopColor, element) : undefined,
+      stopOpacity: newProps.stopOpacity != null ? setupStopOpacityUpdate(newProps.stopOpacity, element) : undefined,
+      fontFamily: newProps.fontFamily != null ? setupFontFamilyUpdate(newProps.fontFamily, element) : undefined,
+      fontSize: newProps.fontSize != null ? setupFontSizeUpdate(newProps.fontSize, element) : undefined,
 
       ['data-droppable']:
         newProps['data-droppable'] != null ? setupDataDroppableUpdate(newProps['data-droppable'], element) : undefined,
@@ -692,6 +715,100 @@ export const setupHostConfig = (): HostConfig<
       }
     }
 
+    if (newProps.fillOpacity !== oldProps.fillOpacity) {
+      instance.fillOpacity?.()
+
+      if (newProps.fillOpacity == null) {
+        element.removeAttribute('fill-opacity')
+      } else {
+        instance.fillOpacity = setupFillOpacityUpdate(newProps.fillOpacity, element)
+      }
+    }
+
+    if (newProps.strokeOpacity !== oldProps.strokeOpacity) {
+      instance.strokeOpacity?.()
+
+      if (newProps.strokeOpacity == null) {
+        element.removeAttribute('stroke-opacity')
+      } else {
+        instance.strokeOpacity = setupStrokeOpacityUpdate(newProps.strokeOpacity, element)
+      }
+    }
+
+    if (newProps.strokeLinecap !== oldProps.strokeLinecap) {
+      instance.strokeLinecap?.()
+
+      if (newProps.strokeLinecap == null) {
+        element.removeAttribute('stroke-linecap')
+      } else {
+        instance.strokeLinecap = setupStrokeLinecapUpdate(newProps.strokeLinecap, element)
+      }
+    }
+
+    if (newProps.strokeLinejoin !== oldProps.strokeLinejoin) {
+      instance.strokeLinejoin?.()
+
+      if (newProps.strokeLinejoin == null) {
+        element.removeAttribute('stroke-linejoin')
+      } else {
+        instance.strokeLinejoin = setupStrokeLinejoinUpdate(newProps.strokeLinejoin, element)
+      }
+    }
+
+    if (newProps.points !== oldProps.points) {
+      instance.points?.()
+      if (newProps.points == null) {
+        element.removeAttribute('points')
+      } else {
+        instance.points = setupPointsUpdate(newProps.points, element)
+      }
+    }
+
+    if (newProps.offset !== oldProps.offset) {
+      instance.offset?.()
+      if (newProps.offset == null) {
+        element.removeAttribute('offset')
+      } else {
+        instance.offset = setupOffsetUpdate(newProps.offset, element)
+      }
+    }
+
+    if (newProps.stopColor !== oldProps.stopColor) {
+      instance.stopColor?.()
+      if (newProps.stopColor == null) {
+        element.removeAttribute('stop-color')
+      } else {
+        instance.stopColor = setupStopColorUpdate(newProps.stopColor, element)
+      }
+    }
+
+    if (newProps.stopOpacity !== oldProps.stopOpacity) {
+      instance.stopOpacity?.()
+      if (newProps.stopOpacity == null) {
+        element.removeAttribute('stop-opacity')
+      } else {
+        instance.stopOpacity = setupStopOpacityUpdate(newProps.stopOpacity, element)
+      }
+    }
+
+    if (newProps.fontFamily !== oldProps.fontFamily) {
+      instance.fontFamily?.()
+      if (newProps.fontFamily == null) {
+        element.removeAttribute('font-family')
+      } else {
+        instance.fontFamily = setupFontFamilyUpdate(newProps.fontFamily, element)
+      }
+    }
+
+    if (newProps.fontSize !== oldProps.fontSize) {
+      instance.fontSize?.()
+      if (newProps.fontSize == null) {
+        element.removeAttribute('font-size')
+      } else {
+        instance.fontSize = setupFontSizeUpdate(newProps.fontSize, element)
+      }
+    }
+
     if (newProps.src !== oldProps.src) {
       instance.src?.()
 
@@ -888,6 +1005,13 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   'fast-svg': 'svg',
   'fast-textarea': 'textarea',
   'fast-use': 'use',
+  'fast-polyline': 'polyline',
+  'fast-polygon': 'polygon',
+  'fast-linearGradient': 'linearGradient',
+  'fast-radialGradient': 'radialGradient',
+  'fast-stop': 'stop',
+  'fast-svg-text': 'text',
+  'fast-pattern': 'pattern',
 
   // TODO: fix weird map
   'fast-text': 'span',
@@ -908,4 +1032,11 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   g: 'g',
   use: 'use',
   defs: 'defs',
+  polyline: 'polyline',
+  polygon: 'polygon',
+  linearGradient: 'linearGradient',
+  radialGradient: 'radialGradient',
+  stop: 'stop',
+  text: 'text',
+  pattern: 'pattern',
 }

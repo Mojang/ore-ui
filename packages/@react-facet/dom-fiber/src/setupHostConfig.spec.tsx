@@ -192,6 +192,56 @@ describe('mount', () => {
         render(<fast-use xLinkHref="#test" />)
         expect(root?.innerHTML ?? '').toBe('<use xlink:href="#test"></use>')
       })
+
+      it('sets the fillOpacity', () => {
+        render(<fast-path fillOpacity="0.5" />)
+        expect(root?.innerHTML ?? '').toBe('<path fill-opacity="0.5"></path>')
+      })
+
+      it('sets the strokeOpacity', () => {
+        render(<fast-path strokeOpacity="0.5" />)
+        expect(root?.innerHTML ?? '').toBe('<path stroke-opacity="0.5"></path>')
+      })
+
+      it('sets the strokeLinecap', () => {
+        render(<fast-path strokeLinecap="round" />)
+        expect(root?.innerHTML ?? '').toBe('<path stroke-linecap="round"></path>')
+      })
+
+      it('sets the strokeLinejoin', () => {
+        render(<fast-path strokeLinejoin="round" />)
+        expect(root?.innerHTML ?? '').toBe('<path stroke-linejoin="round"></path>')
+      })
+
+      it('sets the points', () => {
+        render(<fast-polygon points="0,0 0,10 10,10" />)
+        expect(root?.innerHTML ?? '').toBe('<polygon points="0,0 0,10 10,10"></polygon>')
+      })
+
+      it('sets the offset', () => {
+        render(<fast-stop offset="0" />)
+        expect(root?.innerHTML ?? '').toBe('<stop offset="0"></stop>')
+      })
+
+      it('sets the stopColor', () => {
+        render(<fast-stop stopColor="#ff0000" />)
+        expect(root?.innerHTML ?? '').toBe('<stop stop-color="#ff0000"></stop>')
+      })
+
+      it('sets the stopOpacity', () => {
+        render(<fast-stop stopOpacity="0" />)
+        expect(root?.innerHTML ?? '').toBe('<stop stop-opacity="0"></stop>')
+      })
+
+      it('sets the fontFamily', () => {
+        render(<fast-svg-text fontFamily="verdana" />)
+        expect(root?.innerHTML ?? '').toBe('<text font-family="verdana"></text>')
+      })
+
+      it('sets the fontSize', () => {
+        render(<fast-svg-text fontSize="10" />)
+        expect(root?.innerHTML ?? '').toBe('<text font-size="10"></text>')
+      })
     })
   })
 
@@ -566,6 +616,106 @@ describe('mount', () => {
 
         xLinkHrefFacet.set('#test2')
         expect(root?.innerHTML ?? '').toBe('<use xlink:href="#test2"></use>')
+      })
+
+      it('sets the fillOpacity', () => {
+        const fillOpacityFacet = createFacet({ initialValue: '0.5' })
+
+        render(<fast-rect fillOpacity={fillOpacityFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect fill-opacity="0.5"></rect>')
+
+        fillOpacityFacet.set('0.6')
+        expect(root?.innerHTML ?? '').toBe('<rect fill-opacity="0.6"></rect>')
+      })
+
+      it('sets the strokeOpacity', () => {
+        const strokeOpacityFacet = createFacet({ initialValue: '0.5' })
+
+        render(<fast-rect strokeOpacity={strokeOpacityFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-opacity="0.5"></rect>')
+
+        strokeOpacityFacet.set('0.6')
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-opacity="0.6"></rect>')
+      })
+
+      it('sets the strokeLinecap', () => {
+        const strokeLinecapFacet = createFacet({ initialValue: 'round' })
+
+        render(<fast-rect strokeLinecap={strokeLinecapFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-linecap="round"></rect>')
+
+        strokeLinecapFacet.set('square')
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-linecap="square"></rect>')
+      })
+
+      it('sets the strokeLinejoin', () => {
+        const strokeLinejoinFacet = createFacet({ initialValue: 'round' })
+
+        render(<fast-rect strokeLinejoin={strokeLinejoinFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-linejoin="round"></rect>')
+
+        strokeLinejoinFacet.set('square')
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-linejoin="square"></rect>')
+      })
+
+      it('sets the points', () => {
+        const pointsFacet = createFacet({ initialValue: '0 0 10 10' })
+
+        render(<fast-polygon points={pointsFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<polygon points="0 0 10 10"></polygon>')
+
+        pointsFacet.set('0 0 20 20')
+        expect(root?.innerHTML ?? '').toBe('<polygon points="0 0 20 20"></polygon>')
+      })
+
+      it('sets the offset', () => {
+        const offsetFacet = createFacet({ initialValue: '0 0' })
+
+        render(<fast-stop offset={offsetFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<stop offset="0 0"></stop>')
+
+        offsetFacet.set('1 1')
+        expect(root?.innerHTML ?? '').toBe('<stop offset="1 1"></stop>')
+      })
+
+      it('sets the stopColor', () => {
+        const stopColorFacet = createFacet({ initialValue: '#000' })
+
+        render(<fast-stop stopColor={stopColorFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<stop stop-color="#000"></stop>')
+
+        stopColorFacet.set('#fff')
+        expect(root?.innerHTML ?? '').toBe('<stop stop-color="#fff"></stop>')
+      })
+
+      it('sets the stopOpacity', () => {
+        const stopOpacityFacet = createFacet({ initialValue: '0' })
+
+        render(<fast-stop stopOpacity={stopOpacityFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<stop stop-opacity="0"></stop>')
+
+        stopOpacityFacet.set('1')
+        expect(root?.innerHTML ?? '').toBe('<stop stop-opacity="1"></stop>')
+      })
+
+      it('sets the fontFamily', () => {
+        const fontFamilyFacet = createFacet({ initialValue: 'Arial' })
+
+        render(<fast-svg-text fontFamily={fontFamilyFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<text font-family="Arial"></text>')
+
+        fontFamilyFacet.set('Helvetica')
+        expect(root?.innerHTML ?? '').toBe('<text font-family="Helvetica"></text>')
+      })
+
+      it('sets the fontSize', () => {
+        const fontSizeFacet = createFacet({ initialValue: '10' })
+
+        render(<fast-svg-text fontSize={fontSizeFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<text font-size="10"></text>')
+
+        fontSizeFacet.set('20')
+        expect(root?.innerHTML ?? '').toBe('<text font-size="20"></text>')
       })
     })
   })

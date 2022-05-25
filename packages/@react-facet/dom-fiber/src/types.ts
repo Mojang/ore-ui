@@ -20,6 +20,13 @@ export type Type =
   | 'fast-text'
   | 'fast-svg'
   | 'fast-use'
+  | 'fast-polyline'
+  | 'fast-polygon'
+  | 'fast-linearGradient'
+  | 'fast-radialGradient'
+  | 'fast-stop'
+  | 'fast-svg-text'
+  | 'fast-pattern'
   | 'a'
   | 'circle'
   | 'ellipse'
@@ -37,6 +44,13 @@ export type Type =
   | 'g'
   | 'symbol'
   | 'use'
+  | 'polyline'
+  | 'polygon'
+  | 'linearGradient'
+  | 'radialGradient'
+  | 'stop'
+  | 'text'
+  | 'pattern'
 
 export type InputType = 'text' | 'button' | 'password' | 'checkbox' | 'radio' | 'number'
 
@@ -142,6 +156,16 @@ export type ElementProps<T> = PointerEvents &
     y2?: FacetProp<string | undefined>
     viewBox?: FacetProp<string | undefined>
     xLinkHref?: FacetProp<string | undefined>
+    fillOpacity?: FacetProp<string | undefined>
+    strokeOpacity?: FacetProp<string | undefined>
+    strokeLinecap?: FacetProp<string | undefined>
+    strokeLinejoin?: FacetProp<string | undefined>
+    points?: FacetProp<string | undefined>
+    offset?: FacetProp<string | undefined>
+    stopColor?: FacetProp<string | undefined>
+    stopOpacity?: FacetProp<string | undefined>
+    fontFamily?: FacetProp<string | undefined>
+    fontSize?: FacetProp<string | undefined>
   }
 
 export type TextProps = {
@@ -195,6 +219,16 @@ export type ElementContainer = {
   y2?: Unsubscribe
   viewBox?: Unsubscribe
   xLinkHref?: Unsubscribe
+  fillOpacity?: Unsubscribe
+  strokeOpacity?: Unsubscribe
+  strokeLinecap?: Unsubscribe
+  strokeLinejoin?: Unsubscribe
+  points?: Unsubscribe
+  offset?: Unsubscribe
+  stopColor?: Unsubscribe
+  stopOpacity?: Unsubscribe
+  fontFamily?: Unsubscribe
+  fontSize?: Unsubscribe
 }
 
 export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {
@@ -237,6 +271,13 @@ export type FastSpanProps = ElementProps<HTMLSpanElement>
 export type FastSvgProps = ElementProps<SVGSVGElement>
 export type FastTextProps = TextProps
 export type FastUseProps = ElementProps<SVGUseElement>
+export type FastPolylineProps = ElementProps<SVGPolylineElement>
+export type FastPolyGonProps = ElementProps<SVGPolygonElement>
+export type FastLinearGradientProps = ElementProps<SVGLinearGradientElement>
+export type FastRadialGradientProps = ElementProps<SVGRadialGradientElement>
+export type FastStopProps = ElementProps<SVGStopElement>
+export type FastSvgTextProps = ElementProps<SVGTextElement>
+export type FastPatternProps = ElementProps<SVGPatternElement>
 
 /**
  * Extends React global namespace with the "fast" types
@@ -260,6 +301,13 @@ declare global {
       'fast-text': FastTextProps
       'fast-svg': FastSvgProps
       'fast-use': FastUseProps
+      'fast-polyline': FastPolylineProps
+      'fast-polygon': FastPolyGonProps
+      'fast-linearGradient': FastLinearGradientProps
+      'fast-radialGradient': FastRadialGradientProps
+      'fast-stop': FastStopProps
+      'fast-svg-text': FastSvgTextProps
+      'fast-pattern': FastPatternProps
     }
   }
 }

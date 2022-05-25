@@ -610,3 +610,183 @@ export const setupViewBoxUpdate = (viewBox: FacetProp<string | undefined>, eleme
     }
   }
 }
+
+export const setupFillOpacityUpdate = (fillOpacity: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(fillOpacity)) {
+    return fillOpacity.observe((value) => {
+      if (value != null) {
+        element.setAttribute('fill-opacity', value)
+      } else {
+        element.removeAttribute('fill-opacity')
+      }
+    })
+  } else {
+    if (fillOpacity != null) {
+      element.setAttribute('fill-opacity', fillOpacity)
+    } else {
+      element.removeAttribute('fill-opacity')
+    }
+  }
+}
+
+export const setupStrokeOpacityUpdate = (strokeOpacity: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(strokeOpacity)) {
+    return strokeOpacity.observe((value) => {
+      if (value != null) {
+        element.setAttribute('stroke-opacity', value)
+      } else {
+        element.removeAttribute('stroke-opacity')
+      }
+    })
+  } else {
+    if (strokeOpacity != null) {
+      element.setAttribute('stroke-opacity', strokeOpacity)
+    } else {
+      element.removeAttribute('stroke-opacity')
+    }
+  }
+}
+
+export const setupStrokeLinecapUpdate = (strokeLinecap: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(strokeLinecap)) {
+    return strokeLinecap.observe((value) => {
+      if (value != null) {
+        element.setAttribute('stroke-linecap', value)
+      } else {
+        element.removeAttribute('stroke-linecap')
+      }
+    })
+  } else {
+    if (strokeLinecap != null) {
+      element.setAttribute('stroke-linecap', strokeLinecap)
+    } else {
+      element.removeAttribute('stroke-linecap')
+    }
+  }
+}
+
+export const setupStrokeLinejoinUpdate = (strokeLinejoin: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(strokeLinejoin)) {
+    return strokeLinejoin.observe((value) => {
+      if (value != null) {
+        element.setAttribute('stroke-linejoin', value)
+      } else {
+        element.removeAttribute('stroke-linejoin')
+      }
+    })
+  } else {
+    if (strokeLinejoin != null) {
+      element.setAttribute('stroke-linejoin', strokeLinejoin)
+    } else {
+      element.removeAttribute('stroke-linejoin')
+    }
+  }
+}
+
+export const setupPointsUpdate = (points: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(points)) {
+    return points.observe((value) => {
+      if (value != null) {
+        element.setAttribute('points', value)
+      } else {
+        element.removeAttribute('points')
+      }
+    })
+  } else {
+    if (points != null) {
+      element.setAttribute('points', points)
+    } else {
+      element.removeAttribute('points')
+    }
+  }
+}
+
+export const setupOffsetUpdate = (offset: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(offset)) {
+    return offset.observe((value) => {
+      if (value != null) {
+        element.setAttribute('offset', value)
+      } else {
+        element.removeAttribute('offset')
+      }
+    })
+  } else {
+    if (offset != null) {
+      element.setAttribute('offset', offset)
+    } else {
+      element.removeAttribute('offset')
+    }
+  }
+}
+
+export const setupStopColorUpdate = (stopColor: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(stopColor)) {
+    return stopColor.observe((value) => {
+      if (value != null) {
+        element.setAttribute('stop-color', value)
+      } else {
+        element.removeAttribute('stop-color')
+      }
+    })
+  } else {
+    if (stopColor != null) {
+      element.setAttribute('stop-color', stopColor)
+    } else {
+      element.removeAttribute('stop-color')
+    }
+  }
+}
+
+export const setupStopOpacityUpdate = (stopOpacity: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(stopOpacity)) {
+    return stopOpacity.observe((value) => {
+      if (value != null) {
+        element.setAttribute('stop-opacity', value)
+      } else {
+        element.removeAttribute('stop-opacity')
+      }
+    })
+  } else {
+    if (stopOpacity != null) {
+      element.setAttribute('stop-opacity', stopOpacity)
+    } else {
+      element.removeAttribute('stop-opacity')
+    }
+  }
+}
+
+export const setupFontFamilyUpdate = (fontFamily: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(fontFamily)) {
+    return fontFamily.observe((value) => {
+      if (value != null) {
+        element.setAttribute('font-family', value)
+      } else {
+        element.removeAttribute('font-family')
+      }
+    })
+  } else {
+    if (fontFamily != null) {
+      element.setAttribute('font-family', fontFamily)
+    } else {
+      element.removeAttribute('font-family')
+    }
+  }
+}
+
+export const setupFontSizeUpdate = (fontSize: FacetProp<string | undefined>, element: HTMLElement) => {
+  if (isFacet(fontSize)) {
+    return fontSize.observe((value) => {
+      if (value != null) {
+        element.setAttribute('font-size', value)
+      } else {
+        element.removeAttribute('font-size')
+      }
+    })
+  } else {
+    if (fontSize != null) {
+      element.setAttribute('font-size', fontSize)
+    } else {
+      element.removeAttribute('font-size')
+    }
+  }
+}
