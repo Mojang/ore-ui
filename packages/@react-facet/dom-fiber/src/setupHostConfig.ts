@@ -15,51 +15,15 @@ import {
 import { HostConfig } from 'react-reconciler'
 import { isFacet, Unsubscribe } from '@react-facet/core'
 import {
-  setupAutoPlayUpdate,
   setupClassUpdate,
-  setupCxUpdate,
-  setupCyUpdate,
-  setupDataDroppableUpdate,
-  setupDataTestidUpdate,
-  setupDataXRayUpdate,
-  setupDisabledUpdate,
-  setupDUpdate,
-  setupFillUpdate,
-  setupHeightUpdate,
-  setupHrefUpdate,
-  setupXLinkHrefUpdate,
   setupIdUpdate,
-  setupLoopUpdate,
   setupMaxLengthUpdate,
   setupRowsUpdate,
-  setupRUpdate,
-  setupRxUpdate,
-  setupRyUpdate,
   setupSrcUpdate,
-  setupStrokeUpdate,
-  setupStrokeWidthUpdate,
-  setupTargetUpdate,
   setupTextUpdate,
-  setupTypeUpdate,
   setupValueUpdate,
-  setupWidthUpdate,
-  setupX1Update,
-  setupX2Update,
-  setupXUpdate,
-  setupY1Update,
-  setupY2Update,
-  setupYUpdate,
   setupViewBoxUpdate,
-  setupPointsUpdate,
-  setupOffsetUpdate,
-  setupStopColorUpdate,
-  setupStopOpacityUpdate,
-  setupFontFamilyUpdate,
-  setupFontSizeUpdate,
-  setupFillOpacityUpdate,
-  setupStrokeOpacityUpdate,
-  setupStrokeLinecapUpdate,
-  setupStrokeLinejoinUpdate,
+  setupAttributeUpdate,
 } from './setupAttributes'
 
 /**
@@ -242,59 +206,78 @@ export const setupHostConfig = (): HostConfig<
 
       className: newProps.className != null ? setupClassUpdate(newProps.className, element) : undefined,
       id: newProps.id != null ? setupIdUpdate(newProps.id, element) : undefined,
-      autoPlay: newProps.autoPlay != null ? setupAutoPlayUpdate(newProps.autoPlay, element) : undefined,
-      loop: newProps.loop != null ? setupLoopUpdate(newProps.loop, element) : undefined,
-      href: newProps.href != null ? setupHrefUpdate(newProps.href, element) : undefined,
-      target: newProps.target != null ? setupTargetUpdate(newProps.target, element) : undefined,
-      disabled: newProps.disabled != null ? setupDisabledUpdate(newProps.disabled, element) : undefined,
+      autoPlay: newProps.autoPlay != null ? setupAttributeUpdate('autoplay', newProps.autoPlay, element) : undefined,
+      loop: newProps.loop != null ? setupAttributeUpdate('loop', newProps.loop, element) : undefined,
+      href: newProps.href != null ? setupAttributeUpdate('href', newProps.href, element) : undefined,
+      target: newProps.target != null ? setupAttributeUpdate('target', newProps.target, element) : undefined,
+      disabled: newProps.disabled != null ? setupAttributeUpdate('disabled', newProps.disabled, element) : undefined,
       maxLength: newProps.maxLength != null ? setupMaxLengthUpdate(newProps.maxLength, element) : undefined,
       rows: newProps.rows != null ? setupRowsUpdate(newProps.rows, element) : undefined,
-      type: newProps.type != null ? setupTypeUpdate(newProps.type, element) : undefined,
+      type: newProps.type != null ? setupAttributeUpdate('type', newProps.type, element) : undefined,
       value: newProps.value != null ? setupValueUpdate(newProps.value, element) : undefined,
       src: newProps.src != null ? setupSrcUpdate(newProps.src, element) : undefined,
 
-      d: newProps.d != null ? setupDUpdate(newProps.d, element) : undefined,
-      fill: newProps.fill != null ? setupFillUpdate(newProps.fill, element) : undefined,
-      height: newProps.height != null ? setupHeightUpdate(newProps.height, element) : undefined,
-      stroke: newProps.stroke != null ? setupStrokeUpdate(newProps.stroke, element) : undefined,
-      x: newProps.x != null ? setupXUpdate(newProps.x, element) : undefined,
-      width: newProps.width != null ? setupWidthUpdate(newProps.width, element) : undefined,
-      y: newProps.y != null ? setupYUpdate(newProps.y, element) : undefined,
+      d: newProps.d != null ? setupAttributeUpdate('d', newProps.d, element) : undefined,
+      fill: newProps.fill != null ? setupAttributeUpdate('fill', newProps.fill, element) : undefined,
+      height: newProps.height != null ? setupAttributeUpdate('height', newProps.height, element) : undefined,
+      stroke: newProps.stroke != null ? setupAttributeUpdate('stroke', newProps.stroke, element) : undefined,
+      x: newProps.x != null ? setupAttributeUpdate('x', newProps.x, element) : undefined,
+      width: newProps.width != null ? setupAttributeUpdate('width', newProps.width, element) : undefined,
+      y: newProps.y != null ? setupAttributeUpdate('y', newProps.y, element) : undefined,
 
-      cx: newProps.cx != null ? setupCxUpdate(newProps.cx, element) : undefined,
-      cy: newProps.cy != null ? setupCyUpdate(newProps.cy, element) : undefined,
-      r: newProps.r != null ? setupRUpdate(newProps.r, element) : undefined,
-      rx: newProps.rx != null ? setupRxUpdate(newProps.rx, element) : undefined,
-      ry: newProps.ry != null ? setupRyUpdate(newProps.ry, element) : undefined,
+      cx: newProps.cx != null ? setupAttributeUpdate('cx', newProps.cx, element) : undefined,
+      cy: newProps.cy != null ? setupAttributeUpdate('cy', newProps.cy, element) : undefined,
+      r: newProps.r != null ? setupAttributeUpdate('r', newProps.r, element) : undefined,
+      rx: newProps.rx != null ? setupAttributeUpdate('rx', newProps.rx, element) : undefined,
+      ry: newProps.ry != null ? setupAttributeUpdate('ry', newProps.ry, element) : undefined,
 
-      x1: newProps.x1 != null ? setupX1Update(newProps.x1, element) : undefined,
-      x2: newProps.x2 != null ? setupX2Update(newProps.x2, element) : undefined,
-      y1: newProps.y1 != null ? setupY1Update(newProps.y1, element) : undefined,
-      y2: newProps.y2 != null ? setupY2Update(newProps.y2, element) : undefined,
-      strokeWidth: newProps.strokeWidth != null ? setupStrokeWidthUpdate(newProps.strokeWidth, element) : undefined,
+      x1: newProps.x1 != null ? setupAttributeUpdate('x1', newProps.x1, element) : undefined,
+      x2: newProps.x2 != null ? setupAttributeUpdate('x2', newProps.x2, element) : undefined,
+      y1: newProps.y1 != null ? setupAttributeUpdate('y1', newProps.y1, element) : undefined,
+      y2: newProps.y2 != null ? setupAttributeUpdate('y2', newProps.y2, element) : undefined,
+      strokeWidth:
+        newProps.strokeWidth != null ? setupAttributeUpdate('stroke-width', newProps.strokeWidth, element) : undefined,
       viewBox: newProps.viewBox != null ? setupViewBoxUpdate(newProps.viewBox, element) : undefined,
-      xLinkHref: newProps.xLinkHref != null ? setupXLinkHrefUpdate(newProps.xLinkHref, element) : undefined,
-      fillOpacity: newProps.fillOpacity != null ? setupFillOpacityUpdate(newProps.fillOpacity, element) : undefined,
+      xLinkHref:
+        newProps.xLinkHref != null ? setupAttributeUpdate('xlink:href', newProps.xLinkHref, element) : undefined,
+      fillOpacity:
+        newProps.fillOpacity != null ? setupAttributeUpdate('fill-opacity', newProps.fillOpacity, element) : undefined,
       strokeOpacity:
-        newProps.strokeOpacity != null ? setupStrokeOpacityUpdate(newProps.strokeOpacity, element) : undefined,
+        newProps.strokeOpacity != null
+          ? setupAttributeUpdate('stroke-opacity', newProps.strokeOpacity, element)
+          : undefined,
       strokeLinecap:
-        newProps.strokeLinecap != null ? setupStrokeLinecapUpdate(newProps.strokeLinecap, element) : undefined,
+        newProps.strokeLinecap != null
+          ? setupAttributeUpdate('stroke-linecap', newProps.strokeLinecap, element)
+          : undefined,
       strokeLinejoin:
-        newProps.strokeLinejoin != null ? setupStrokeLinejoinUpdate(newProps.strokeLinejoin, element) : undefined,
-      points: newProps.points != null ? setupPointsUpdate(newProps.points, element) : undefined,
-      offset: newProps.offset != null ? setupOffsetUpdate(newProps.offset, element) : undefined,
-      stopColor: newProps.stopColor != null ? setupStopColorUpdate(newProps.stopColor, element) : undefined,
-      stopOpacity: newProps.stopOpacity != null ? setupStopOpacityUpdate(newProps.stopOpacity, element) : undefined,
-      fontFamily: newProps.fontFamily != null ? setupFontFamilyUpdate(newProps.fontFamily, element) : undefined,
-      fontSize: newProps.fontSize != null ? setupFontSizeUpdate(newProps.fontSize, element) : undefined,
+        newProps.strokeLinejoin != null
+          ? setupAttributeUpdate('stroke-linejoin', newProps.strokeLinejoin, element)
+          : undefined,
+      points: newProps.points != null ? setupAttributeUpdate('points', newProps.points, element) : undefined,
+      offset: newProps.offset != null ? setupAttributeUpdate('offset', newProps.offset, element) : undefined,
+      stopColor:
+        newProps.stopColor != null ? setupAttributeUpdate('stop-color', newProps.stopColor, element) : undefined,
+      stopOpacity:
+        newProps.stopOpacity != null ? setupAttributeUpdate('stop-opacity', newProps.stopOpacity, element) : undefined,
+      fontFamily:
+        newProps.fontFamily != null ? setupAttributeUpdate('font-family', newProps.fontFamily, element) : undefined,
+      fontSize: newProps.fontSize != null ? setupAttributeUpdate('font-size', newProps.fontSize, element) : undefined,
 
       ['data-droppable']:
-        newProps['data-droppable'] != null ? setupDataDroppableUpdate(newProps['data-droppable'], element) : undefined,
+        newProps['data-droppable'] != null
+          ? setupAttributeUpdate('data-droppable', newProps['data-droppable'], element)
+          : undefined,
 
       ['data-testid']:
-        newProps['data-testid'] != null ? setupDataTestidUpdate(newProps['data-testid'], element) : undefined,
+        newProps['data-testid'] != null
+          ? setupAttributeUpdate('data-testid', newProps['data-testid'], element)
+          : undefined,
 
-      ['data-x-ray']: newProps['data-x-ray'] != null ? setupDataXRayUpdate(newProps['data-x-ray'], element) : undefined,
+      ['data-x-ray']:
+        newProps['data-x-ray'] != null
+          ? setupAttributeUpdate('data-x-ray', newProps['data-x-ray'], element)
+          : undefined,
     }
   },
 
@@ -387,7 +370,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.autoPlay == null) {
         element.removeAttribute('autoplay')
       } else {
-        instance.autoPlay = setupAutoPlayUpdate(newProps.autoPlay, element)
+        instance.autoPlay = setupAttributeUpdate('autoplay', newProps.autoPlay, element)
       }
     }
 
@@ -407,7 +390,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.d == null) {
         element.removeAttribute('d')
       } else {
-        instance.d = setupDUpdate(newProps.d, element)
+        instance.d = setupAttributeUpdate('d', newProps.d, element)
       }
     }
 
@@ -417,7 +400,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps['data-droppable'] == null) {
         element.removeAttribute('data-droppable')
       } else {
-        instance['data-droppable'] = setupDataDroppableUpdate(newProps['data-droppable'], element)
+        instance['data-droppable'] = setupAttributeUpdate('data-droppable', newProps['data-droppable'], element)
       }
     }
 
@@ -427,7 +410,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps['data-testid'] == null) {
         element.removeAttribute('data-testid')
       } else {
-        instance['data-testid'] = setupDataTestidUpdate(newProps['data-testid'], element)
+        instance['data-testid'] = setupAttributeUpdate('data-testid', newProps['data-testid'], element)
       }
     }
 
@@ -437,7 +420,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps['data-x-ray'] == null) {
         element.removeAttribute('data-x-ray')
       } else {
-        instance['data-x-ray'] = setupDataXRayUpdate(newProps['data-x-ray'], element)
+        instance['data-x-ray'] = setupAttributeUpdate('data-x-ray', newProps['data-x-ray'], element)
       }
     }
 
@@ -447,7 +430,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.fill == null) {
         element.removeAttribute('fill')
       } else {
-        instance.fill = setupFillUpdate(newProps.fill, element)
+        instance.fill = setupAttributeUpdate('fill', newProps.fill, element)
       }
     }
 
@@ -467,7 +450,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.loop == null) {
         element.removeAttribute('loop')
       } else {
-        instance.loop = setupLoopUpdate(newProps.loop, element)
+        instance.loop = setupAttributeUpdate('loop', newProps.loop, element)
       }
     }
 
@@ -477,7 +460,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.href == null) {
         element.removeAttribute('href')
       } else {
-        instance.href = setupHrefUpdate(newProps.href, element)
+        instance.href = setupAttributeUpdate('href', newProps.href, element)
       }
     }
 
@@ -487,7 +470,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.target == null) {
         element.removeAttribute('target')
       } else {
-        instance.target = setupTargetUpdate(newProps.target, element)
+        instance.target = setupAttributeUpdate('target', newProps.target, element)
       }
     }
 
@@ -497,7 +480,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.disabled == null) {
         element.removeAttribute('disabled')
       } else {
-        instance.disabled = setupDisabledUpdate(newProps.disabled, element)
+        instance.disabled = setupAttributeUpdate('disabled', newProps.disabled, element)
       }
     }
 
@@ -507,7 +490,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.height == null) {
         element.removeAttribute('height')
       } else {
-        instance.height = setupHeightUpdate(newProps.height, element)
+        instance.height = setupAttributeUpdate('height', newProps.height, element)
       }
     }
 
@@ -539,7 +522,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.stroke == null) {
         element.removeAttribute('stroke')
       } else {
-        instance.stroke = setupStrokeUpdate(newProps.stroke, element)
+        instance.stroke = setupAttributeUpdate('stroke', newProps.stroke, element)
       }
     }
 
@@ -550,7 +533,7 @@ export const setupHostConfig = (): HostConfig<
         const textElement = element as HTMLTextAreaElement
         textElement.removeAttribute('type')
       } else {
-        instance.type = setupTypeUpdate(newProps.type, element)
+        instance.type = setupAttributeUpdate('type', newProps.type, element)
       }
     }
 
@@ -571,7 +554,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.x == null) {
         element.removeAttribute('x')
       } else {
-        instance.x = setupXUpdate(newProps.x, element)
+        instance.x = setupAttributeUpdate('x', newProps.x, element)
       }
     }
 
@@ -581,7 +564,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.width == null) {
         element.removeAttribute('width')
       } else {
-        instance.width = setupWidthUpdate(newProps.width, element)
+        instance.width = setupAttributeUpdate('width', newProps.width, element)
       }
     }
 
@@ -591,7 +574,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.y == null) {
         element.removeAttribute('y')
       } else {
-        instance.y = setupYUpdate(newProps.y, element)
+        instance.y = setupAttributeUpdate('y', newProps.y, element)
       }
     }
 
@@ -601,7 +584,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.cx == null) {
         element.removeAttribute('cx')
       } else {
-        instance.cx = setupCxUpdate(newProps.cx, element)
+        instance.cx = setupAttributeUpdate('cx', newProps.cx, element)
       }
     }
 
@@ -611,7 +594,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.r == null) {
         element.removeAttribute('r')
       } else {
-        instance.r = setupRUpdate(newProps.r, element)
+        instance.r = setupAttributeUpdate('r', newProps.r, element)
       }
     }
 
@@ -621,7 +604,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.cy == null) {
         element.removeAttribute('cy')
       } else {
-        instance.cy = setupCyUpdate(newProps.cy, element)
+        instance.cy = setupAttributeUpdate('cy', newProps.cy, element)
       }
     }
 
@@ -631,7 +614,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.rx == null) {
         element.removeAttribute('rx')
       } else {
-        instance.rx = setupRxUpdate(newProps.rx, element)
+        instance.rx = setupAttributeUpdate('rx', newProps.rx, element)
       }
     }
 
@@ -641,7 +624,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.ry == null) {
         element.removeAttribute('ry')
       } else {
-        instance.ry = setupRyUpdate(newProps.ry, element)
+        instance.ry = setupAttributeUpdate('ry', newProps.ry, element)
       }
     }
 
@@ -651,7 +634,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.x1 == null) {
         element.removeAttribute('x1')
       } else {
-        instance.x1 = setupX1Update(newProps.x1, element)
+        instance.x1 = setupAttributeUpdate('x1', newProps.x1, element)
       }
     }
 
@@ -661,7 +644,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.x2 == null) {
         element.removeAttribute('x2')
       } else {
-        instance.x2 = setupX2Update(newProps.x2, element)
+        instance.x2 = setupAttributeUpdate('x2', newProps.x2, element)
       }
     }
 
@@ -671,7 +654,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.y1 == null) {
         element.removeAttribute('y1')
       } else {
-        instance.y1 = setupY1Update(newProps.y1, element)
+        instance.y1 = setupAttributeUpdate('y1', newProps.y1, element)
       }
     }
 
@@ -681,7 +664,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.y2 == null) {
         element.removeAttribute('y2')
       } else {
-        instance.y2 = setupY2Update(newProps.y2, element)
+        instance.y2 = setupAttributeUpdate('y2', newProps.y2, element)
       }
     }
 
@@ -691,7 +674,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.strokeWidth == null) {
         element.removeAttribute('strokeWidth')
       } else {
-        instance.strokeWidth = setupStrokeWidthUpdate(newProps.strokeWidth, element)
+        instance.strokeWidth = setupAttributeUpdate('stroke-width', newProps.strokeWidth, element)
       }
     }
 
@@ -711,7 +694,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.xLinkHref == null) {
         element.removeAttribute('xlink:href')
       } else {
-        instance.xLinkHref = setupXLinkHrefUpdate(newProps.xLinkHref, element)
+        instance.xLinkHref = setupAttributeUpdate('xlink:href', newProps.xLinkHref, element)
       }
     }
 
@@ -721,7 +704,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.fillOpacity == null) {
         element.removeAttribute('fill-opacity')
       } else {
-        instance.fillOpacity = setupFillOpacityUpdate(newProps.fillOpacity, element)
+        instance.fillOpacity = setupAttributeUpdate('fill-opacity', newProps.fillOpacity, element)
       }
     }
 
@@ -731,7 +714,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.strokeOpacity == null) {
         element.removeAttribute('stroke-opacity')
       } else {
-        instance.strokeOpacity = setupStrokeOpacityUpdate(newProps.strokeOpacity, element)
+        instance.strokeOpacity = setupAttributeUpdate('stroke-opacity', newProps.strokeOpacity, element)
       }
     }
 
@@ -741,7 +724,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.strokeLinecap == null) {
         element.removeAttribute('stroke-linecap')
       } else {
-        instance.strokeLinecap = setupStrokeLinecapUpdate(newProps.strokeLinecap, element)
+        instance.strokeLinecap = setupAttributeUpdate('stroke-linecap', newProps.strokeLinecap, element)
       }
     }
 
@@ -751,7 +734,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.strokeLinejoin == null) {
         element.removeAttribute('stroke-linejoin')
       } else {
-        instance.strokeLinejoin = setupStrokeLinejoinUpdate(newProps.strokeLinejoin, element)
+        instance.strokeLinejoin = setupAttributeUpdate('stroke-linejoin', newProps.strokeLinejoin, element)
       }
     }
 
@@ -760,7 +743,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.points == null) {
         element.removeAttribute('points')
       } else {
-        instance.points = setupPointsUpdate(newProps.points, element)
+        instance.points = setupAttributeUpdate('points', newProps.points, element)
       }
     }
 
@@ -769,7 +752,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.offset == null) {
         element.removeAttribute('offset')
       } else {
-        instance.offset = setupOffsetUpdate(newProps.offset, element)
+        instance.offset = setupAttributeUpdate('offset', newProps.offset, element)
       }
     }
 
@@ -778,7 +761,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.stopColor == null) {
         element.removeAttribute('stop-color')
       } else {
-        instance.stopColor = setupStopColorUpdate(newProps.stopColor, element)
+        instance.stopColor = setupAttributeUpdate('stop-color', newProps.stopColor, element)
       }
     }
 
@@ -787,7 +770,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.stopOpacity == null) {
         element.removeAttribute('stop-opacity')
       } else {
-        instance.stopOpacity = setupStopOpacityUpdate(newProps.stopOpacity, element)
+        instance.stopOpacity = setupAttributeUpdate('stop-opacity', newProps.stopOpacity, element)
       }
     }
 
@@ -796,7 +779,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.fontFamily == null) {
         element.removeAttribute('font-family')
       } else {
-        instance.fontFamily = setupFontFamilyUpdate(newProps.fontFamily, element)
+        instance.fontFamily = setupAttributeUpdate('font-family', newProps.fontFamily, element)
       }
     }
 
@@ -805,7 +788,7 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.fontSize == null) {
         element.removeAttribute('font-size')
       } else {
-        instance.fontSize = setupFontSizeUpdate(newProps.fontSize, element)
+        instance.fontSize = setupAttributeUpdate('font-size', newProps.fontSize, element)
       }
     }
 
