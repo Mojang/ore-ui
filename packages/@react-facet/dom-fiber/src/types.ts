@@ -4,20 +4,29 @@ import { Key, MutableRefObject, ReactText } from 'react'
 
 export type FacetFiberRoot = FiberRoot
 
-export type Type =
+export type TypeHTML =
   | 'fast-a'
   | 'fast-div'
-  | 'fast-circle'
-  | 'fast-ellipse'
-  | 'fast-line'
   | 'fast-span'
   | 'fast-p'
-  | 'fast-path'
   | 'fast-img'
   | 'fast-textarea'
   | 'fast-input'
-  | 'fast-rect'
   | 'fast-text'
+  | 'a'
+  | 'div'
+  | 'p'
+  | 'img'
+  | 'textarea'
+  | 'input'
+  | 'style'
+
+export type TypeSVG =
+  | 'fast-circle'
+  | 'fast-ellipse'
+  | 'fast-line'
+  | 'fast-path'
+  | 'fast-rect'
   | 'fast-svg'
   | 'fast-use'
   | 'fast-polyline'
@@ -27,18 +36,11 @@ export type Type =
   | 'fast-stop'
   | 'fast-svg-text'
   | 'fast-pattern'
-  | 'a'
   | 'circle'
   | 'ellipse'
   | 'line'
-  | 'div'
-  | 'p'
   | 'path'
-  | 'img'
   | 'rect'
-  | 'textarea'
-  | 'input'
-  | 'style'
   | 'svg'
   | 'defs'
   | 'g'
@@ -51,6 +53,8 @@ export type Type =
   | 'stop'
   | 'text'
   | 'pattern'
+
+export type Type = TypeHTML | TypeSVG
 
 export type InputType = 'text' | 'button' | 'password' | 'checkbox' | 'radio' | 'number'
 
@@ -179,7 +183,7 @@ export type ValidPropsNames = keyof Props<unknown>
 export type ElementContainer = {
   children: Set<ElementContainer>
 
-  element: HTMLElement | Text
+  element: HTMLElement | SVGElement | Text
 
   style?: CSSStyleDeclaration
   styleUnsubscribers?: Map<string | number, Unsubscribe>
@@ -243,7 +247,7 @@ export type Instance = ElementContainer
 export type Container = Instance
 export type TextInstance = TextContainer
 export type HydratableInstance = Instance
-export type PublicInstance = HTMLElement | Text
+export type PublicInstance = HTMLElement | SVGElement | Text
 
 export type ReactFacetReconciler = Reconciler<Instance, TextInstance, Container, PublicInstance> & {
   flushPassiveEffects: () => boolean

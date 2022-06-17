@@ -11,6 +11,8 @@ import {
   UpdatePayload,
   NoTimeout,
   isElementContainer,
+  TypeSVG,
+  TypeHTML,
 } from './types'
 import { HostConfig } from 'react-reconciler'
 import { isFacet, Unsubscribe } from '@react-facet/core'
@@ -108,8 +110,12 @@ export const setupHostConfig = (): HostConfig<
       }
     }
 
-    const type = fastTypeMap[externalType] ?? externalType
-    const element = document.createElement(type)
+    const typeHTML = fastTypeMapHTML[externalType as TypeHTML] ?? externalType
+    const typeSVG = fastTypeMapSVG[externalType as TypeSVG]
+    const element =
+      typeSVG != null
+        ? document.createElementNS('http://www.w3.org/2000/svg', typeSVG)
+        : document.createElement(typeHTML)
 
     let style: CSSStyleDeclaration | undefined
     let styleUnsubscribers: Map<string | number, Unsubscribe> | undefined
@@ -973,20 +979,32 @@ const noop = () => {}
 
 const EMPTY = {}
 
-const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap> = {
+const fastTypeMapHTML: Record<TypeHTML, keyof HTMLElementTagNameMap> = {
   'fast-a': 'a',
+  'fast-div': 'div',
+  'fast-p': 'p',
+  'fast-img': 'img',
+  'fast-input': 'input',
+  'fast-span': 'span',
+  'fast-textarea': 'textarea',
+
+  'fast-text': 'span',
+  a: 'a',
+  div: 'div',
+  p: 'p',
+  img: 'img',
+  textarea: 'textarea',
+  input: 'input',
+  style: 'style',
+}
+
+const fastTypeMapSVG: Record<TypeSVG, keyof SVGElementTagNameMap> = {
   'fast-circle': 'circle',
   'fast-ellipse': 'ellipse',
   'fast-line': 'line',
-  'fast-div': 'div',
-  'fast-p': 'p',
   'fast-path': 'path',
-  'fast-img': 'img',
-  'fast-input': 'input',
   'fast-rect': 'rect',
-  'fast-span': 'span',
   'fast-svg': 'svg',
-  'fast-textarea': 'textarea',
   'fast-use': 'use',
   'fast-polyline': 'polyline',
   'fast-polygon': 'polygon',
@@ -996,20 +1014,11 @@ const fastTypeMap: Record<Type, keyof HTMLElementTagNameMap | keyof SVGElementTa
   'fast-svg-text': 'text',
   'fast-pattern': 'pattern',
 
-  // TODO: fix weird map
-  'fast-text': 'span',
-  a: 'a',
   circle: 'circle',
   ellipse: 'ellipse',
   line: 'line',
-  div: 'div',
-  p: 'p',
   path: 'path',
-  img: 'img',
   rect: 'rect',
-  textarea: 'textarea',
-  input: 'input',
-  style: 'style',
   svg: 'svg',
   symbol: 'symbol',
   g: 'g',
