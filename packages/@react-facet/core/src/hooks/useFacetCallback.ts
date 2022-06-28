@@ -13,11 +13,11 @@ import { Facet, NO_VALUE, Option, ExtractFacetValues } from '../types'
  * We pass the dependencies of the callback as the second argument so we can leverage the eslint-plugin-react-hooks option for additionalHooks.
  * Having this as the second argument allows the linter to work.
  */
-export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y], K extends unknown[]>(
+export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y], K extends [...unknown[]]>(
   callback: (...args: ExtractFacetValues<T>) => (...args: K) => M,
   dependencies: unknown[],
   facets: T,
-): (...args: unknown[]) => M | NoValue {
+): (...args: K) => M | NoValue {
   const facetsRef = useRef<Option<unknown>[]>(facets.map(() => NO_VALUE))
 
   useLayoutEffect(() => {
@@ -40,7 +40,7 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return useCallback(
-    (...args: unknown[]) => {
+    (...args: K) => {
       const values = facetsRef.current
 
       for (const value of values) {
