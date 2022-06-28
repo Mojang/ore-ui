@@ -96,6 +96,153 @@ describe('mount', () => {
       render(<div dangerouslySetInnerHTML={{ __html: '<span/>' }} />)
       expect(root?.innerHTML ?? '').toBe('<div><span></span></div>')
     })
+
+    describe('for svg', () => {
+      it('sets the d', () => {
+        render(<fast-path d="M0,0 L0,10 Z" />)
+        expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
+      })
+
+      it('sets the fill', () => {
+        render(<fast-path fill="#ff0000" />)
+        expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
+      })
+
+      it('sets the stroke', () => {
+        render(<fast-path stroke="#ff0000" />)
+        expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
+      })
+
+      it('sets the width', () => {
+        render(<fast-svg width="500" />)
+        expect(root?.innerHTML ?? '').toBe('<svg width="500"></svg>')
+      })
+
+      it('sets the height', () => {
+        render(<fast-svg height="500" />)
+        expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
+      })
+
+      it('sets the x', () => {
+        render(<fast-rect x="500" />)
+        expect(root?.innerHTML ?? '').toBe('<rect x="500"></rect>')
+      })
+
+      it('sets the y', () => {
+        render(<fast-rect y="500" />)
+        expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
+      })
+
+      it('sets the cx', () => {
+        render(<fast-circle cx="500" />)
+        expect(root?.innerHTML ?? '').toBe('<circle cx="500"></circle>')
+      })
+
+      it('sets the cy', () => {
+        render(<fast-circle cy="500" />)
+        expect(root?.innerHTML ?? '').toBe('<circle cy="500"></circle>')
+      })
+
+      it('sets the r', () => {
+        render(<fast-circle r="500" />)
+        expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
+      })
+
+      it('sets the rx', () => {
+        render(<fast-ellipse rx="500" />)
+        expect(root?.innerHTML ?? '').toBe('<ellipse rx="500"></ellipse>')
+      })
+
+      it('sets the ry', () => {
+        render(<fast-ellipse ry="500" />)
+        expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
+      })
+
+      it('sets the x1', () => {
+        render(<fast-line x1="500" />)
+        expect(root?.innerHTML ?? '').toBe('<line x1="500"></line>')
+      })
+
+      it('sets the x2', () => {
+        render(<fast-line x2="500" />)
+        expect(root?.innerHTML ?? '').toBe('<line x2="500"></line>')
+      })
+
+      it('sets the y1', () => {
+        render(<fast-line y1="500" />)
+        expect(root?.innerHTML ?? '').toBe('<line y1="500"></line>')
+      })
+
+      it('sets the y2', () => {
+        render(<fast-line y2="500" />)
+        expect(root?.innerHTML ?? '').toBe('<line y2="500"></line>')
+      })
+
+      it('sets the strokeWidth', () => {
+        render(<fast-line strokeWidth="500" />)
+        expect(root?.innerHTML ?? '').toBe('<line stroke-width="500"></line>')
+      })
+
+      it('sets the viewBox', () => {
+        render(<fast-svg viewBox="0 0 100 100" />)
+        expect(root?.innerHTML ?? '').toBe('<svg viewBox="0 0 100 100"></svg>')
+      })
+
+      it('sets the xLinkHref', () => {
+        render(<fast-use xLinkHref="#test" />)
+        expect(root?.innerHTML ?? '').toBe('<use xlink:href="#test"></use>')
+      })
+
+      it('sets the fillOpacity', () => {
+        render(<fast-path fillOpacity="0.5" />)
+        expect(root?.innerHTML ?? '').toBe('<path fill-opacity="0.5"></path>')
+      })
+
+      it('sets the strokeOpacity', () => {
+        render(<fast-path strokeOpacity="0.5" />)
+        expect(root?.innerHTML ?? '').toBe('<path stroke-opacity="0.5"></path>')
+      })
+
+      it('sets the strokeLinecap', () => {
+        render(<fast-path strokeLinecap="round" />)
+        expect(root?.innerHTML ?? '').toBe('<path stroke-linecap="round"></path>')
+      })
+
+      it('sets the strokeLinejoin', () => {
+        render(<fast-path strokeLinejoin="round" />)
+        expect(root?.innerHTML ?? '').toBe('<path stroke-linejoin="round"></path>')
+      })
+
+      it('sets the points', () => {
+        render(<fast-polygon points="0,0 0,10 10,10" />)
+        expect(root?.innerHTML ?? '').toBe('<polygon points="0,0 0,10 10,10"></polygon>')
+      })
+
+      it('sets the offset', () => {
+        render(<fast-stop offset="0" />)
+        expect(root?.innerHTML ?? '').toBe('<stop offset="0"></stop>')
+      })
+
+      it('sets the stopColor', () => {
+        render(<fast-stop stopColor="#ff0000" />)
+        expect(root?.innerHTML ?? '').toBe('<stop stop-color="#ff0000"></stop>')
+      })
+
+      it('sets the stopOpacity', () => {
+        render(<fast-stop stopOpacity="0" />)
+        expect(root?.innerHTML ?? '').toBe('<stop stop-opacity="0"></stop>')
+      })
+
+      it('sets the fontFamily', () => {
+        render(<fast-svg-text fontFamily="verdana" />)
+        expect(root?.innerHTML ?? '').toBe('<text font-family="verdana"></text>')
+      })
+
+      it('sets the fontSize', () => {
+        render(<fast-svg-text fontSize="10" />)
+        expect(root?.innerHTML ?? '').toBe('<text font-size="10"></text>')
+      })
+    })
   })
 
   describe('with facets', () => {
@@ -278,6 +425,298 @@ describe('mount', () => {
 
       dataFacet.set(false)
       expect(root?.innerHTML ?? '').toBe('<div></div>')
+    })
+
+    describe('for svg', () => {
+      it('sets the d', () => {
+        const dFacet = createFacet({ initialValue: 'M0,0 L0,10 Z' })
+
+        render(<fast-path d={dFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
+
+        dFacet.set('M0,10 L0,10 Z')
+        expect(root?.innerHTML ?? '').toBe('<path d="M0,10 L0,10 Z"></path>')
+      })
+
+      it('sets the fill', () => {
+        const fillFacet = createFacet({ initialValue: '#ff0000' })
+
+        render(<fast-path fill={fillFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
+
+        fillFacet.set('#00ff00')
+        expect(root?.innerHTML ?? '').toBe('<path fill="#00ff00"></path>')
+      })
+
+      it('sets the stroke', () => {
+        const strokeFacet = createFacet({ initialValue: '#ff0000' })
+
+        render(<fast-path stroke={strokeFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
+
+        strokeFacet.set('#00ff00')
+        expect(root?.innerHTML ?? '').toBe('<path stroke="#00ff00"></path>')
+      })
+
+      it('sets the width', () => {
+        const widthFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-svg width={widthFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<svg width="500"></svg>')
+
+        widthFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<svg width="600"></svg>')
+      })
+
+      it('sets the height', () => {
+        const heightFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-svg height={heightFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
+
+        heightFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<svg height="600"></svg>')
+      })
+
+      it('sets the x', () => {
+        const xFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-rect x={xFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect x="500"></rect>')
+
+        xFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<rect x="600"></rect>')
+      })
+
+      it('sets the y', () => {
+        const yFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-rect y={yFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
+
+        yFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<rect y="600"></rect>')
+      })
+
+      it('sets the cx', () => {
+        const cxFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-circle cx={cxFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<circle cx="500"></circle>')
+
+        cxFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<circle cx="600"></circle>')
+      })
+
+      it('sets the cy', () => {
+        const cyFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-circle cy={cyFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<circle cy="500"></circle>')
+
+        cyFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<circle cy="600"></circle>')
+      })
+
+      it('sets the r', () => {
+        const rFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-circle r={rFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
+
+        rFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<circle r="600"></circle>')
+      })
+
+      it('sets the rx', () => {
+        const rxFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-ellipse rx={rxFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<ellipse rx="500"></ellipse>')
+
+        rxFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<ellipse rx="600"></ellipse>')
+      })
+
+      it('sets the ry', () => {
+        const ryFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-ellipse ry={ryFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
+
+        ryFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<ellipse ry="600"></ellipse>')
+      })
+
+      it('sets the x1', () => {
+        const x1Facet = createFacet({ initialValue: '500' })
+
+        render(<fast-line x1={x1Facet} />)
+        expect(root?.innerHTML ?? '').toBe('<line x1="500"></line>')
+
+        x1Facet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<line x1="600"></line>')
+      })
+
+      it('sets the x2', () => {
+        const x2Facet = createFacet({ initialValue: '500' })
+
+        render(<fast-line x2={x2Facet} />)
+        expect(root?.innerHTML ?? '').toBe('<line x2="500"></line>')
+
+        x2Facet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<line x2="600"></line>')
+      })
+
+      it('sets the y1', () => {
+        const y1Facet = createFacet({ initialValue: '500' })
+
+        render(<fast-line y1={y1Facet} />)
+        expect(root?.innerHTML ?? '').toBe('<line y1="500"></line>')
+
+        y1Facet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<line y1="600"></line>')
+      })
+
+      it('sets the y2', () => {
+        const y2Facet = createFacet({ initialValue: '500' })
+
+        render(<fast-line y2={y2Facet} />)
+        expect(root?.innerHTML ?? '').toBe('<line y2="500"></line>')
+
+        y2Facet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<line y2="600"></line>')
+      })
+
+      it('sets the strokeWidth', () => {
+        const strokeWidthFacet = createFacet({ initialValue: '500' })
+
+        render(<fast-line strokeWidth={strokeWidthFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<line stroke-width="500"></line>')
+
+        strokeWidthFacet.set('600')
+        expect(root?.innerHTML ?? '').toBe('<line stroke-width="600"></line>')
+      })
+
+      it('sets the viewBox', () => {
+        const viewBoxFacet = createFacet({ initialValue: '0 0 10 10' })
+
+        render(<fast-svg viewBox={viewBoxFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<svg viewBox="0 0 10 10"></svg>')
+
+        viewBoxFacet.set('0 0 20 20')
+        expect(root?.innerHTML ?? '').toBe('<svg viewBox="0 0 20 20"></svg>')
+      })
+
+      it('sets the xLinkHref', () => {
+        const xLinkHrefFacet = createFacet({ initialValue: '#test1' })
+
+        render(<fast-use xLinkHref={xLinkHrefFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<use xlink:href="#test1"></use>')
+
+        xLinkHrefFacet.set('#test2')
+        expect(root?.innerHTML ?? '').toBe('<use xlink:href="#test2"></use>')
+      })
+
+      it('sets the fillOpacity', () => {
+        const fillOpacityFacet = createFacet({ initialValue: '0.5' })
+
+        render(<fast-rect fillOpacity={fillOpacityFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect fill-opacity="0.5"></rect>')
+
+        fillOpacityFacet.set('0.6')
+        expect(root?.innerHTML ?? '').toBe('<rect fill-opacity="0.6"></rect>')
+      })
+
+      it('sets the strokeOpacity', () => {
+        const strokeOpacityFacet = createFacet({ initialValue: '0.5' })
+
+        render(<fast-rect strokeOpacity={strokeOpacityFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-opacity="0.5"></rect>')
+
+        strokeOpacityFacet.set('0.6')
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-opacity="0.6"></rect>')
+      })
+
+      it('sets the strokeLinecap', () => {
+        const strokeLinecapFacet = createFacet({ initialValue: 'round' })
+
+        render(<fast-rect strokeLinecap={strokeLinecapFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-linecap="round"></rect>')
+
+        strokeLinecapFacet.set('square')
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-linecap="square"></rect>')
+      })
+
+      it('sets the strokeLinejoin', () => {
+        const strokeLinejoinFacet = createFacet({ initialValue: 'round' })
+
+        render(<fast-rect strokeLinejoin={strokeLinejoinFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-linejoin="round"></rect>')
+
+        strokeLinejoinFacet.set('square')
+        expect(root?.innerHTML ?? '').toBe('<rect stroke-linejoin="square"></rect>')
+      })
+
+      it('sets the points', () => {
+        const pointsFacet = createFacet({ initialValue: '0 0 10 10' })
+
+        render(<fast-polygon points={pointsFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<polygon points="0 0 10 10"></polygon>')
+
+        pointsFacet.set('0 0 20 20')
+        expect(root?.innerHTML ?? '').toBe('<polygon points="0 0 20 20"></polygon>')
+      })
+
+      it('sets the offset', () => {
+        const offsetFacet = createFacet({ initialValue: '0 0' })
+
+        render(<fast-stop offset={offsetFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<stop offset="0 0"></stop>')
+
+        offsetFacet.set('1 1')
+        expect(root?.innerHTML ?? '').toBe('<stop offset="1 1"></stop>')
+      })
+
+      it('sets the stopColor', () => {
+        const stopColorFacet = createFacet({ initialValue: '#000' })
+
+        render(<fast-stop stopColor={stopColorFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<stop stop-color="#000"></stop>')
+
+        stopColorFacet.set('#fff')
+        expect(root?.innerHTML ?? '').toBe('<stop stop-color="#fff"></stop>')
+      })
+
+      it('sets the stopOpacity', () => {
+        const stopOpacityFacet = createFacet({ initialValue: '0' })
+
+        render(<fast-stop stopOpacity={stopOpacityFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<stop stop-opacity="0"></stop>')
+
+        stopOpacityFacet.set('1')
+        expect(root?.innerHTML ?? '').toBe('<stop stop-opacity="1"></stop>')
+      })
+
+      it('sets the fontFamily', () => {
+        const fontFamilyFacet = createFacet({ initialValue: 'Arial' })
+
+        render(<fast-svg-text fontFamily={fontFamilyFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<text font-family="Arial"></text>')
+
+        fontFamilyFacet.set('Helvetica')
+        expect(root?.innerHTML ?? '').toBe('<text font-family="Helvetica"></text>')
+      })
+
+      it('sets the fontSize', () => {
+        const fontSizeFacet = createFacet({ initialValue: '10' })
+
+        render(<fast-svg-text fontSize={fontSizeFacet} />)
+        expect(root?.innerHTML ?? '').toBe('<text font-size="10"></text>')
+
+        fontSizeFacet.set('20')
+        expect(root?.innerHTML ?? '').toBe('<text font-size="20"></text>')
+      })
     })
   })
 
@@ -653,6 +1092,344 @@ describe('update', () => {
     expect(root?.innerHTML ?? '').toBe('<div data-droppable=""></div>')
     jest.advanceTimersByTime(1)
     expect(root?.innerHTML ?? '').toBe('<div></div>')
+  })
+
+  describe('for svg', () => {
+    it('updates d', () => {
+      const MockComponent = () => {
+        const [d, setD] = useState<string | undefined>('M0,0 L0,10 Z')
+        useEffect(() => {
+          setTimeout(() => setD('M0,10 L0,10 Z'), 1)
+          setTimeout(() => setD('M0,0 L0,10 Z'), 2)
+          setTimeout(() => setD(undefined), 3)
+        }, [])
+        return <path d={d} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path d="M0,10 L0,10 Z"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path></path>')
+    })
+
+    it('updates fill', () => {
+      const MockComponent = () => {
+        const [fill, setFill] = useState<string | undefined>('#ff0000')
+        useEffect(() => {
+          setTimeout(() => setFill('#00ff00'), 1)
+          setTimeout(() => setFill('#ff0000'), 2)
+          setTimeout(() => setFill(undefined), 3)
+        }, [])
+        return <path fill={fill} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path fill="#00ff00"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path></path>')
+    })
+
+    it('updates stroke', () => {
+      const MockComponent = () => {
+        const [stroke, setStroke] = useState<string | undefined>('#ff0000')
+        useEffect(() => {
+          setTimeout(() => setStroke('#00ff00'), 1)
+          setTimeout(() => setStroke('#ff0000'), 2)
+          setTimeout(() => setStroke(undefined), 3)
+        }, [])
+        return <path stroke={stroke} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path stroke="#00ff00"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<path></path>')
+    })
+
+    it('updates width', () => {
+      const MockComponent = () => {
+        const [width, setWidth] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setWidth('600'), 1)
+          setTimeout(() => setWidth('500'), 2)
+          setTimeout(() => setWidth(undefined), 3)
+        }, [])
+        return <svg width={width} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<svg width="500"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg width="600"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg width="500"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg></svg>')
+    })
+
+    it('updates height', () => {
+      const MockComponent = () => {
+        const [height, setHeight] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setHeight('600'), 1)
+          setTimeout(() => setHeight('500'), 2)
+          setTimeout(() => setHeight(undefined), 3)
+        }, [])
+        return <svg height={height} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg height="600"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<svg></svg>')
+    })
+
+    it('updates x', () => {
+      const MockComponent = () => {
+        const [x, setX] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setX('600'), 1)
+          setTimeout(() => setX('500'), 2)
+          setTimeout(() => setX(undefined), 3)
+        }, [])
+        return <rect x={x} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<rect x="500"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect x="600"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect x="500"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect></rect>')
+    })
+
+    it('updates y', () => {
+      const MockComponent = () => {
+        const [y, setY] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setY('600'), 1)
+          setTimeout(() => setY('500'), 2)
+          setTimeout(() => setY(undefined), 3)
+        }, [])
+        return <rect y={y} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect y="600"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<rect></rect>')
+    })
+
+    it('updates cx', () => {
+      const MockComponent = () => {
+        const [cx, setCx] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setCx('600'), 1)
+          setTimeout(() => setCx('500'), 2)
+          setTimeout(() => setCx(undefined), 3)
+        }, [])
+        return <circle cx={cx} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<circle cx="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle cx="600"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle cx="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle></circle>')
+    })
+
+    it('updates cy', () => {
+      const MockComponent = () => {
+        const [cy, setCy] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setCy('600'), 1)
+          setTimeout(() => setCy('500'), 2)
+          setTimeout(() => setCy(undefined), 3)
+        }, [])
+        return <circle cy={cy} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<circle cy="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle cy="600"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle cy="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle></circle>')
+    })
+
+    it('updates r', () => {
+      const MockComponent = () => {
+        const [r, setR] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setR('600'), 1)
+          setTimeout(() => setR('500'), 2)
+          setTimeout(() => setR(undefined), 3)
+        }, [])
+        return <circle r={r} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle r="600"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<circle></circle>')
+    })
+
+    it('updates rx', () => {
+      const MockComponent = () => {
+        const [rx, setRx] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setRx('600'), 1)
+          setTimeout(() => setRx('500'), 2)
+          setTimeout(() => setRx(undefined), 3)
+        }, [])
+        return <ellipse rx={rx} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<ellipse rx="500"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse rx="600"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse rx="500"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse></ellipse>')
+    })
+
+    it('updates ry', () => {
+      const MockComponent = () => {
+        const [ry, setRy] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setRy('600'), 1)
+          setTimeout(() => setRy('500'), 2)
+          setTimeout(() => setRy(undefined), 3)
+        }, [])
+        return <ellipse ry={ry} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse ry="600"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<ellipse></ellipse>')
+    })
+
+    it('updates x1', () => {
+      const MockComponent = () => {
+        const [x1, setX1] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setX1('600'), 1)
+          setTimeout(() => setX1('500'), 2)
+          setTimeout(() => setX1(undefined), 3)
+        }, [])
+        return <line x1={x1} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<line x1="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line x1="600"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line x1="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line></line>')
+    })
+
+    it('updates x2', () => {
+      const MockComponent = () => {
+        const [x2, setX2] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setX2('600'), 1)
+          setTimeout(() => setX2('500'), 2)
+          setTimeout(() => setX2(undefined), 3)
+        }, [])
+        return <line x2={x2} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<line x2="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line x2="600"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line x2="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line></line>')
+    })
+
+    it('updates y1', () => {
+      const MockComponent = () => {
+        const [y1, setY1] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setY1('600'), 1)
+          setTimeout(() => setY1('500'), 2)
+          setTimeout(() => setY1(undefined), 3)
+        }, [])
+        return <line y1={y1} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<line y1="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line y1="600"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line y1="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line></line>')
+    })
+
+    it('updates y2', () => {
+      const MockComponent = () => {
+        const [y2, setY2] = useState<string | undefined>('500')
+        useEffect(() => {
+          setTimeout(() => setY2('600'), 1)
+          setTimeout(() => setY2('500'), 2)
+          setTimeout(() => setY2(undefined), 3)
+        }, [])
+        return <line y2={y2} />
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe('<line y2="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line y2="600"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line y2="500"></line>')
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe('<line></line>')
+    })
   })
 
   describe('setting listeners', () => {

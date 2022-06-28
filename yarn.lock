@@ -592,6 +592,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cspotcode/source-map-support@npm:^0.8.0":
+  version: 0.8.1
+  resolution: "@cspotcode/source-map-support@npm:0.8.1"
+  dependencies:
+    "@jridgewell/trace-mapping": 0.3.9
+  checksum: 5718f267085ed8edb3e7ef210137241775e607ee18b77d95aa5bd7514f47f5019aa2d82d96b3bf342ef7aa890a346fa1044532ff7cc3009e7d24fce3ce6200fa
+  languageName: node
+  linkType: hard
+
 "@discoveryjs/json-ext@npm:^0.5.0":
   version: 0.5.5
   resolution: "@discoveryjs/json-ext@npm:0.5.5"
@@ -892,6 +901,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jridgewell/resolve-uri@npm:^3.0.3":
+  version: 3.0.7
+  resolution: "@jridgewell/resolve-uri@npm:3.0.7"
+  checksum: 94f454f4cef8f0acaad85745fd3ca6cd0d62ef731cf9f952ecb89b8b2ce5e20998cd52be31311cedc5fa5b28b1708a15f3ad9df0fe1447ee4f42959b036c4b5b
+  languageName: node
+  linkType: hard
+
+"@jridgewell/sourcemap-codec@npm:^1.4.10":
+  version: 1.4.13
+  resolution: "@jridgewell/sourcemap-codec@npm:1.4.13"
+  checksum: f14449096f60a5f921262322fef65ce0bbbfb778080b3b20212080bcefdeba621c43a58c27065bd536ecb4cc767b18eb9c45f15b6b98a4970139572b60603a1c
+  languageName: node
+  linkType: hard
+
+"@jridgewell/trace-mapping@npm:0.3.9":
+  version: 0.3.9
+  resolution: "@jridgewell/trace-mapping@npm:0.3.9"
+  dependencies:
+    "@jridgewell/resolve-uri": ^3.0.3
+    "@jridgewell/sourcemap-codec": ^1.4.10
+  checksum: d89597752fd88d3f3480845691a05a44bd21faac18e2185b6f436c3b0fd0c5a859fbbd9aaa92050c4052caf325ad3e10e2e1d1b64327517471b7d51babc0ddef
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -939,11 +972,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-facet/core@0.3.0, @react-facet/core@workspace:packages/@react-facet/core":
+"@react-facet/core@0.3.2, @react-facet/core@workspace:packages/@react-facet/core":
   version: 0.0.0-use.local
   resolution: "@react-facet/core@workspace:packages/@react-facet/core"
   dependencies:
-    "@react-facet/dom-fiber-testing-library": 0.3.0
+    "@react-facet/dom-fiber-testing-library": 0.3.2
     "@types/react": ^17.0.11
     "@types/react-reconciler": ^0.18.0
     "@types/rimraf": ^3
@@ -960,12 +993,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount"
   dependencies:
-    "@react-facet/dom-fiber-testing-library": 0.3.0
+    "@react-facet/dom-fiber-testing-library": 0.3.2
     react: ^16.9.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/core": 0.3.0
+    "@react-facet/core": 0.3.2
     react: ^16.9.0
   languageName: unknown
   linkType: soft
@@ -974,7 +1007,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-components@workspace:packages/@react-facet/dom-components"
   dependencies:
-    "@react-facet/core": 0.3.0
+    "@react-facet/core": 0.3.2
     "@testing-library/jest-dom": ^5.10.1
     "@testing-library/react": ^9.4.1
     "@types/react": ^17.0.11
@@ -986,32 +1019,32 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/core": 0.3.0
+    "@react-facet/core": 0.3.2
     react: ^16.9.0
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber-testing-library@0.3.0, @react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library":
+"@react-facet/dom-fiber-testing-library@0.3.2, @react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library"
   dependencies:
-    "@react-facet/dom-fiber": 0.3.0
+    "@react-facet/dom-fiber": 0.3.2
     "@testing-library/dom": ^8.0.0
     react: ^16.9.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/dom-fiber": 0.3.0
+    "@react-facet/dom-fiber": 0.3.2
     react: ^16.9.0
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber@0.3.0, @react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber":
+"@react-facet/dom-fiber@0.3.2, @react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber"
   dependencies:
-    "@react-facet/core": 0.3.0
-    "@react-facet/dom-fiber-testing-library": 0.3.0
+    "@react-facet/core": 0.3.2
+    "@react-facet/dom-fiber-testing-library": 0.3.2
     "@types/react": ^17.0.11
     "@types/react-reconciler": ^0.18.0
     "@types/rimraf": ^3
@@ -1021,7 +1054,7 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/core": 0.3.0
+    "@react-facet/core": 0.3.2
     react: ^16.9.0
   languageName: unknown
   linkType: soft
@@ -1036,12 +1069,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/shared-facet@0.3.0, @react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
+"@react-facet/shared-facet@0.3.2, @react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
   version: 0.0.0-use.local
   resolution: "@react-facet/shared-facet@workspace:packages/@react-facet/shared-facet"
   dependencies:
-    "@react-facet/core": 0.3.0
-    "@react-facet/dom-fiber-testing-library": 0.3.0
+    "@react-facet/core": 0.3.2
+    "@react-facet/dom-fiber-testing-library": 0.3.2
     "@types/react": ^17.0.11
     "@types/rimraf": ^3
     cross-env: ^7.0.3
@@ -1049,16 +1082,16 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/core": 0.3.0
+    "@react-facet/core": 0.3.2
     react: ^16.9.0
   languageName: unknown
   linkType: soft
 
-"@react-facet/spring@0.3.0, @react-facet/spring@workspace:packages/@react-facet/spring":
+"@react-facet/spring@0.3.2, @react-facet/spring@workspace:packages/@react-facet/spring":
   version: 0.0.0-use.local
   resolution: "@react-facet/spring@workspace:packages/@react-facet/spring"
   dependencies:
-    "@react-facet/core": 0.3.0
+    "@react-facet/core": 0.3.2
     "@testing-library/jest-dom": ^5.10.1
     "@testing-library/react": ^9.4.1
     "@types/react": ^17.0.11
@@ -1070,7 +1103,7 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/core": 0.3.0
+    "@react-facet/core": 0.3.2
     react: ^16.9.0
   languageName: unknown
   linkType: soft
@@ -2432,10 +2465,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmarking@workspace:examples/benchmarking"
   dependencies:
-    "@react-facet/core": 0.3.0
-    "@react-facet/dom-fiber": 0.3.0
-    "@react-facet/shared-facet": 0.3.0
-    "@react-facet/spring": 0.3.0
+    "@react-facet/core": 0.3.2
+    "@react-facet/dom-fiber": 0.3.2
+    "@react-facet/shared-facet": 0.3.2
+    "@react-facet/spring": 0.3.2
     "@types/fs-extra": ^9.0.12
     "@types/puppeteer": ^5.4.4
     "@types/ramda": ^0
@@ -2447,7 +2480,7 @@ __metadata:
     react: ^16.9.0
     react-dom: ^16.9.0
     ts-loader: ^9.2.5
-    ts-node: ^10.3.0
+    ts-node: ^10.3.1
     typescript: ^4.3.5
     webpack: ^5.51.1
     webpack-cli: ^4.8.0
@@ -9243,7 +9276,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^10.2.0, ts-node@npm:^10.3.0":
+"ts-node@npm:^10.2.0":
   version: 10.3.0
   resolution: "ts-node@npm:10.3.0"
   dependencies:
@@ -9276,6 +9309,44 @@ resolve@^2.0.0-next.3:
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
   checksum: aea1b9eac4d4c735c453a0e7efef6fd76c7b59db3be158eabe21abad9d35209d243b210a9a5ef39742ffbda542250c2e771fa387e3b4829e8cb699e82f3820c4
+  languageName: node
+  linkType: hard
+
+"ts-node@npm:^10.3.1":
+  version: 10.8.1
+  resolution: "ts-node@npm:10.8.1"
+  dependencies:
+    "@cspotcode/source-map-support": ^0.8.0
+    "@tsconfig/node10": ^1.0.7
+    "@tsconfig/node12": ^1.0.7
+    "@tsconfig/node14": ^1.0.0
+    "@tsconfig/node16": ^1.0.2
+    acorn: ^8.4.1
+    acorn-walk: ^8.1.1
+    arg: ^4.1.0
+    create-require: ^1.1.0
+    diff: ^4.0.1
+    make-error: ^1.1.1
+    v8-compile-cache-lib: ^3.0.1
+    yn: 3.1.1
+  peerDependencies:
+    "@swc/core": ">=1.2.50"
+    "@swc/wasm": ">=1.2.50"
+    "@types/node": "*"
+    typescript: ">=2.7"
+  peerDependenciesMeta:
+    "@swc/core":
+      optional: true
+    "@swc/wasm":
+      optional: true
+  bin:
+    ts-node: dist/bin.js
+    ts-node-cwd: dist/bin-cwd.js
+    ts-node-esm: dist/bin-esm.js
+    ts-node-script: dist/bin-script.js
+    ts-node-transpile-only: dist/bin-transpile.js
+    ts-script: dist/bin-script-deprecated.js
+  checksum: 7d1aa7aa3ae1c0459c4922ed0dbfbade442cfe0c25aebaf620cdf1774f112c8d7a9b14934cb6719274917f35b2c503ba87bcaf5e16a0d39ba0f68ce3e7728363
   languageName: node
   linkType: hard
 
@@ -9571,6 +9642,13 @@ typescript@^4.3.5:
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
+"v8-compile-cache-lib@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "v8-compile-cache-lib@npm:3.0.1"
+  checksum: 78089ad549e21bcdbfca10c08850022b22024cdcc2da9b168bcf5a73a6ed7bf01a9cebb9eac28e03cd23a684d81e0502797e88f3ccd27a32aeab1cfc44c39da0
   languageName: node
   linkType: hard
 
