@@ -18,7 +18,7 @@ const Counter = () => {
   const ref = useRef<HTMLSpanElement>(null)
 
   useFacetEffect(
-    (counterValue) => () => {
+    (counterValue) => {
       if (ref.current == null) return
 
       ref.current.textContent = `${counterValue}`
