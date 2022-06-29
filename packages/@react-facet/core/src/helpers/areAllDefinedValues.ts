@@ -1,4 +1,4 @@
-import { Value, NoValue } from '..'
+import { Value, NoValue } from '../types'
 import { hasDefinedValue } from './hasDefinedValue'
 
 export const areAllDefinedValues = (facetValues: (Value | NoValue)[]) => {
