@@ -4,6 +4,8 @@ sidebar_position: 1
 
 # Goals
 
+> This is some test text added for the workflow test.
+
 React Facet is a React library meant to provide performant state management for game UIs using web technologies.
 
 The issue that React Facet aims to address is that vanilla React state management via props and `useState` is not performant enough for the budget requirements of games, specially in slower devices. This is not typically a concern for React web applications, since there isn't an expectation that web applications will update on a fixed budget of frames per second, so the tooling around React is not already optimized for the game UI use case.
