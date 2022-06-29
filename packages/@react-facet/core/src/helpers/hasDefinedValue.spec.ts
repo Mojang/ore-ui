@@ -1,4 +1,4 @@
-import { NO_VALUE } from '..'
+import { NO_VALUE } from '../types'
 import { hasDefinedValue } from './hasDefinedValue'
 
 it('returns false if value is null', () => {
