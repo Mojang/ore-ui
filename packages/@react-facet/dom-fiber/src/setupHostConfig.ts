@@ -16,6 +16,7 @@ import {
   TypeHTML,
 } from './types'
 import { HostConfig } from 'react-reconciler'
+import { DefaultEventPriority } from 'react-reconciler/constants'
 import { isFacet, Unsubscribe } from '@react-facet/core'
 import {
   setupClassUpdate,
@@ -55,7 +56,21 @@ export const setupHostConfig = (): HostConfig<
   supportsPersistence: false,
   supportsHydration: false,
 
-  now: Date.now,
+  getCurrentEventPriority: () => {
+    return DefaultEventPriority
+  },
+
+  getInstanceFromNode: () => {
+    return null
+  },
+
+  beforeActiveInstanceBlur: () => {},
+  afterActiveInstanceBlur: () => {},
+  prepareScopeUpdate: () => {},
+  getInstanceFromScope: () => null,
+  detachDeletedInstance: () => {},
+
+  clearContainer: () => false,
 
   /**
    * We need to support setting up the host config in an environment where window is not available globally yet
