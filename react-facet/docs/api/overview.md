@@ -39,3 +39,10 @@ These are a series of components that can be used together with the `fast-*` com
 - [`fast-img`](fast-components) / [`fast.img`](dom-components)
 - [`fast-textarea`](fast-components) / [`fast.textarea`](dom-components)
 - [`fast-input`](fast-components) / [`fast.input`](dom-components)
+
+
+## Helpers
+
+- [`multiObserve`](helpers#multiObserve)
+- [`hasDefinedValue`](helpers#hasDefinedValue)
+- [`areAllDefinedValues`](helpers#areAllDefinedValues)
