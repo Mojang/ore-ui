@@ -102,12 +102,12 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/mojang/ore-ui/edit/main/',
+          editUrl: 'https://github.com/Mojang/ore-ui/tree/documentation/react-facet/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
-          editUrl: 'https://github.com/mojang/ore-ui/edit/main/blog/',
+          editUrl: 'https://github.com/Mojang/ore-ui/tree/documentation/react-facet/blog/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
