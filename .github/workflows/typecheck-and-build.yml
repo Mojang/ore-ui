@@ -19,5 +19,5 @@ jobs:
         with:
           submodules: true
       - run: yarn install --immutable
-      - name: build
+      - name: typecheck and build
         run: cd react-facet && CI=true yarn build
