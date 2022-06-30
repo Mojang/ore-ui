@@ -84,3 +84,52 @@ const times = <T,>(fn: TimesFn<T>, n: number) => {
 
   return result
 }
+
+export type MapWithKeyProps<T> = MapProps<T> & { keySelector?: (item: T) => React.Key }
+
+export const MapWithKey = <T,>({ array, children, equalityCheck, keySelector }: MapWithKeyProps<T>) => {
+  const arrayLength = useFacetUnwrap(useFacetMap((array) => array.length, [], [array]))
+  const arrayUnwrapped = array.get()
+
+  if (arrayLength === NO_VALUE || arrayUnwrapped == NO_VALUE) return null
+
+  return (
+    <>
+      {arrayUnwrapped.map((item, index) => {
+        const key = keySelector?.(item) ?? index
+
+        return (
+          <MapWithKeyChild<T>
+            arrayFacet={array}
+            key={key}
+            index={index}
+            item={item}
+            children={children}
+            equalityCheck={equalityCheck}
+          />
+        )
+      })}
+    </>
+  )
+}
+type MapWithKeyChildProps<T> = {
+  arrayFacet: Facet<T[]>
+  item: T
+  index: number
+  children: (item: Facet<T>, index: number) => ReactElement
+  equalityCheck?: EqualityCheck<T>
+}
+
+const MapWithKeyChild = <T,>({ arrayFacet, children, index, equalityCheck }: MapWithKeyChildProps<T>) => {
+  const childFacet = useFacetMemo(
+    (array) => {
+      if (index < array.length) return array[index]
+      return NO_VALUE
+    },
+    [index],
+    [arrayFacet],
+    equalityCheck,
+  )
+
+  return children(childFacet, index)
+}
