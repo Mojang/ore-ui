@@ -3136,44 +3136,44 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-facet/core@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@react-facet/core@npm:0.3.0"
+"@react-facet/core@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@react-facet/core@npm:0.3.3"
   peerDependencies:
     react: ^16.9.0
-  checksum: af11845e86367d58cd7336d64328594a82551be5c2117cf4a78352a71c97b0b6dce858a4e41c08640926e318328ed17f7e19ec536f49ca6f32654bbe0a712590
+  checksum: 174f4c7345d15ca3eac5729c698eeace642f834a45a375f7517ef51808f5f26d2f11f46fe84d3e86d133f7063b0f60b3c0e02da86b79bebef2a599f39827bf9b
   languageName: node
   linkType: hard
 
-"@react-facet/dom-components@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@react-facet/dom-components@npm:0.3.0"
+"@react-facet/dom-components@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@react-facet/dom-components@npm:0.3.3"
   peerDependencies:
-    "@react-facet/core": 0.3.0
+    "@react-facet/core": 0.3.3
     react: ^16.9.0
-  checksum: c7e013cb0491e410b6bea2de43a86721aaa7772c5b44e5e005b6b0f1077e2540563c060265320a48ee04dfe1619b9627ba97244f062f547f188ad47b79a14c35
+  checksum: 8e4d865213a8613a2d15b773729ba02491ca59e87fcc856955a994247b56b762619519a66e54d72bec54f7be8a274bbd299ec7987ad6f3affd49a76eb8a7af4f
   languageName: node
   linkType: hard
 
-"@react-facet/dom-fiber@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@react-facet/dom-fiber@npm:0.3.0"
+"@react-facet/dom-fiber@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@react-facet/dom-fiber@npm:0.3.3"
   dependencies:
     react-reconciler: ^0.24.0
   peerDependencies:
-    "@react-facet/core": 0.3.0
+    "@react-facet/core": 0.3.3
     react: ^16.9.0
-  checksum: 800e7fb0a1dd18580b44b2aed27f43e3768a591fc300c6096b7843ea446e373f782963773213702f078cbefd8a9761e0e5f644c8e91e1a42820729c96d140602
+  checksum: 5e57be2634041bde1d9242010e67c5a5a90449edba6195f6116de13a3e5f4393c23a01e3e73d9f701097c94fcf972bd933d9681ad662444d06a0193f754c5296
   languageName: node
   linkType: hard
 
-"@react-facet/shared-facet@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@react-facet/shared-facet@npm:0.3.0"
+"@react-facet/shared-facet@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@react-facet/shared-facet@npm:0.3.3"
   peerDependencies:
-    "@react-facet/core": 0.3.0
+    "@react-facet/core": 0.3.3
     react: ^16.9.0
-  checksum: 569f8a9f5c5c460b334846d279dd9a810d965290b471c08185d17c8b137c8d0fae142ed43a3a1877d6e80e0af733b7690efedaca4f5de1b4bf909dd9a1ed3509
+  checksum: cd4f3a0704641a343c28c6e6960f479c13c8387d65c74d632f95154bf770dd2ffb78172b4bca937903dd46aad704ea56a28be0d6f93b036a617241d3beb528d2
   languageName: node
   linkType: hard
 
@@ -16233,10 +16233,10 @@ fsevents@^1.2.7:
     "@docusaurus/preset-classic": 2.0.0-alpha.73
     "@docusaurus/theme-search-algolia": ^2.0.0-beta.9
     "@mdx-js/react": ^1.6.21
-    "@react-facet/core": ^0.3.0
-    "@react-facet/dom-components": ^0.3.0
-    "@react-facet/dom-fiber": ^0.3.0
-    "@react-facet/shared-facet": ^0.3.0
+    "@react-facet/core": ^0.3.3
+    "@react-facet/dom-components": ^0.3.3
+    "@react-facet/dom-fiber": ^0.3.3
+    "@react-facet/shared-facet": ^0.3.3
     "@types/rimraf": ^3
     clsx: ^1.1.1
     cross-env: ^7.0.3
