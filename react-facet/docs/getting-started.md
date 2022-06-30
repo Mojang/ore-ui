@@ -9,7 +9,7 @@ Here's a very simple example of how using `Facet`s for state management could lo
 ```tsx twoslash
 // @esModuleInterop
 import React, { useCallback } from 'react'
-import { useFacetState NO_VALUE } from '@react-facet/core'
+import { useFacetState, NO_VALUE } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber'
 
 const Counter = () => {
