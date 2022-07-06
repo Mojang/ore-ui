@@ -1,6 +1,3 @@
 export * from './context'
-export * from './sharedDynamicSelector'
-export * from './sharedFacet'
-export * from './sharedSelector'
 export * from './types'
-export * from './useSharedFacetPropSetter'
+export * from './useFacetPropSetter'

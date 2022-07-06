@@ -1,11 +1,5 @@
-import { Facet, FacetFactory } from '@react-facet/core'
-
 export interface OnChange<V> {
   (value: V): void
-}
-
-export interface ErrorFn {
-  (errorCode: string): void
 }
 
 /**
@@ -18,9 +12,5 @@ export interface ErrorFn {
  */
 export interface SharedFacetDriver {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (name: string, onChange: OnChange<any>, onError?: ErrorFn, fallback?: any): () => void
-}
-
-export interface SharedFacet<T> extends FacetFactory<T> {
-  (sharedFacetDriver: SharedFacetDriver): Facet<T>
+  (name: string[], onChange: OnChange<any>): () => void
 }
