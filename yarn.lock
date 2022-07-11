@@ -1492,6 +1492,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dom@npm:^18.0.5":
+  version: 18.0.5
+  resolution: "@types/react-dom@npm:18.0.5"
+  dependencies:
+    "@types/react": "*"
+  checksum: cd48b81950f499b52a3f0c08261f00046f9b7c96699fa249c9664e257e820daf6ecac815cd1028cebc9d105094adc39d047d1efd79214394b8b2d515574c0787
+  languageName: node
+  linkType: hard
+
 "@types/react-reconciler@npm:^0.28.0":
   version: 0.28.0
   resolution: "@types/react-reconciler@npm:0.28.0"
@@ -3088,6 +3097,35 @@ __metadata:
   checksum: 902a9f5d8967a3e2faf138d5cb784b9979bad2e6db5357c5b21c568df4ebe62bcb15108af1b2253744844eb964fc023fbd9afbbbb6ddd0bcc204c6fb5b7bf3af
   languageName: node
   linkType: hard
+
+"concurrent@workspace:examples/concurrent":
+  version: 0.0.0-use.local
+  resolution: "concurrent@workspace:examples/concurrent"
+  dependencies:
+    "@react-facet/core": 0.3.3
+    "@react-facet/dom-fiber": 0.3.3
+    "@react-facet/shared-facet": 0.3.3
+    "@react-facet/spring": 0.3.3
+    "@types/fs-extra": ^9.0.12
+    "@types/puppeteer": ^5.4.4
+    "@types/ramda": ^0
+    "@types/react": ^18.0.8
+    "@types/react-dom": ^18.0.5
+    fs-extra: ^10.0.0
+    html-webpack-plugin: ^5.3.2
+    http-server: ^13.0.2
+    puppeteer: ^10.4.0
+    ramda: ^0.27.1
+    react: ^18.1.0
+    react-dom: ^18.1.0
+    ts-loader: ^9.2.5
+    ts-node: ^10.3.1
+    typescript: ^4.3.5
+    webpack: ^5.51.1
+    webpack-cli: ^4.8.0
+    webpack-dev-server: ^4.0.0
+  languageName: unknown
+  linkType: soft
 
 "connect-history-api-fallback@npm:^1.6.0":
   version: 1.6.0
