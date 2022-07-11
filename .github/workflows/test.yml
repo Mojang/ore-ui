@@ -13,7 +13,7 @@ jobs:
       - run: yarn test --ci
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
       - run: yarn install --immutable
