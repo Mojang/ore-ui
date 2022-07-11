@@ -10,6 +10,7 @@
     "build": "yarn workspaces foreach --topological --verbose run build",
     "publish": "yarn workspaces foreach --topological --no-private npm publish --tolerate-republish --access public",
     "test": "cross-env NODE_ENV=test jest --coverage",
+    "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint .",
     "package": "yarn workspaces foreach --topological --verbose pack --out=%s-%v.tgz && ts-node ./scripts/moveAllPackagedToArtifacts.ts"
   },
