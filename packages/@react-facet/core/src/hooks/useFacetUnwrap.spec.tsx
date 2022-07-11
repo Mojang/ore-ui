@@ -13,7 +13,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
-      return <span>{adaptValue}</span>
+      return <span>{adaptValue == NO_VALUE ? 'no-value' : adaptValue}</span>
     }
 
     render(<ComponentWithFacetEffect />)
@@ -28,7 +28,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
-      return <span>{adaptValue}</span>
+      return <span>{adaptValue == NO_VALUE ? 'no-value' : adaptValue}</span>
     }
 
     render(<ComponentWithFacetEffect />)
@@ -43,7 +43,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
-      return <span>{adaptValue}</span>
+      return <span>{adaptValue == NO_VALUE ? 'no-value' : adaptValue}</span>
     }
 
     render(<ComponentWithFacetEffect />)
@@ -58,7 +58,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
-      return <span>{adaptValue}</span>
+      return <span>{adaptValue == NO_VALUE ? 'no-value' : adaptValue}</span>
     }
 
     render(<ComponentWithFacetEffect />)
@@ -73,7 +73,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
-      return <span>{adaptValue}</span>
+      return <span>{adaptValue == NO_VALUE ? 'no-value' : adaptValue}</span>
     }
 
     render(<ComponentWithFacetEffect />)
@@ -89,7 +89,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
-      return <span>{adaptValue}</span>
+      return <span>{adaptValue == NO_VALUE ? 'no-value' : adaptValue}</span>
     }
 
     render(<ComponentWithFacetEffect />)
@@ -103,7 +103,7 @@ it('triggers when there is a change in the facet', () => {
   const ComponentWithFacetEffect = () => {
     const adaptValue = useFacetUnwrap(demoFacet)
 
-    return <span>{adaptValue}</span>
+    return <span>{adaptValue == NO_VALUE ? 'no-value' : adaptValue}</span>
   }
 
   const scenario = <ComponentWithFacetEffect />
@@ -116,7 +116,7 @@ it('triggers when there is a change in the facet', () => {
 it('returns static values when given static values', () => {
   const ComponentWithFacetEffect = () => {
     const adaptValue = useFacetUnwrap('static string')
-    return <span>{adaptValue}</span>
+    return <span>{adaptValue == NO_VALUE ? 'no-value' : adaptValue}</span>
   }
 
   const dom = render(<ComponentWithFacetEffect />)
@@ -203,7 +203,7 @@ it('does not trigger a re-render when changing a facet from undefined to undefin
     const adaptValue = useFacetUnwrap(demoFacet)
     renderedMock()
 
-    return <span>{adaptValue}</span>
+    return <span>{adaptValue == NO_VALUE ? 'no-value' : adaptValue}</span>
   }
 
   render(<ComponentWithFacetEffect />)

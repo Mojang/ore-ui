@@ -36,7 +36,8 @@ export const setupAct = ({ batchedUpdates, flushPassiveEffects, IsThisRendererAc
     }
 
     try {
-      const result = batchedUpdates(callback)
+      // TODO: check what we should pass as the second argument
+      const result = batchedUpdates(callback, null)
 
       try {
         if (actingUpdatesScopeDepth === 1 && (isSchedulerMocked === false || previousIsSomeRendererActing === false)) {
