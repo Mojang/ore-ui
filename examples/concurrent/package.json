@@ -9,6 +9,7 @@
     "@react-facet/core": "0.3.3",
     "@react-facet/dom-fiber": "0.3.3",
     "@react-facet/shared-facet": "0.3.3",
+    "@react-facet/deferred-mount": "0.3.3",
     "@react-facet/spring": "0.3.3",
     "ramda": "^0.27.1",
     "react": "^18.1.0",
