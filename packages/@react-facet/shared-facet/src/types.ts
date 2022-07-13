@@ -1,5 +1,16 @@
+import { Facet } from '@react-facet/core'
+
 export interface OnChange<V> {
   (value: V): void
+}
+
+export type Path = (string | number)[]
+
+export type FacetSubscription = {
+  path: Path
+  facet: Facet<unknown>
+  unsubscriber: () => void
+  subscriberCount: number
 }
 
 /**
@@ -12,5 +23,5 @@ export interface OnChange<V> {
  */
 export interface SharedFacetDriver {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (name: string[], onChange: OnChange<any>): () => void
+  (name: Path, onChange: OnChange<any>): () => void
 }
