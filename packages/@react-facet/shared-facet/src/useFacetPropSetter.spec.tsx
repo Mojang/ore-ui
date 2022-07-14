@@ -1,16 +1,16 @@
 import React from 'react'
 import { render } from '@react-facet/dom-fiber-testing-library'
-import { useSharedFacetPropSetter } from './useSharedFacetPropSetter'
-import { sharedFacet } from './sharedFacet'
+import { useFacetPropSetter } from './useFacetPropSetter'
+import { createFacet } from '@react-facet/core'
 
 it('updates a given prop on a shared facet', () => {
   const value = { result: false }
-  const testFacet = sharedFacet('test.facet', value)
+  const testFacet = createFacet({ initialValue: value })
 
   let setTargetState
 
   const Instance = () => {
-    setTargetState = useSharedFacetPropSetter(testFacet, 'result')
+    setTargetState = useFacetPropSetter(testFacet, 'result')
     return null
   }
 
