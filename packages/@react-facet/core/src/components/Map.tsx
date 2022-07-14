@@ -4,7 +4,7 @@ import { EqualityCheck, Facet, NO_VALUE } from '../types'
 
 export type MapProps<T> = {
   array: Facet<T[]>
-  children: (item: Facet<T>, index: number) => ReactElement
+  children: (item: Facet<T>, index: number) => ReactElement | null
   equalityCheck?: EqualityCheck<T>
 }
 
@@ -35,7 +35,7 @@ export const Map = <T,>({ array, children, equalityCheck }: MapProps<T>) => {
 type MapChildMemoProps<T> = {
   arrayFacet: Facet<T[]>
   index: number
-  children: (item: Facet<T>, index: number) => ReactElement
+  children: (item: Facet<T>, index: number) => ReactElement | null
   equalityCheck: EqualityCheck<T>
 }
 
@@ -55,7 +55,7 @@ const MapChildMemo = <T,>({ arrayFacet, index, children, equalityCheck }: MapChi
 type MapChildProps<T> = {
   arrayFacet: Facet<T[]>
   index: number
-  children: (item: Facet<T>, index: number) => ReactElement
+  children: (item: Facet<T>, index: number) => ReactElement | null
 }
 
 const MapChild = <T,>({ arrayFacet, index, children }: MapChildProps<T>) => {
