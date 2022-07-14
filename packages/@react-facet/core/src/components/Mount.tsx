@@ -4,7 +4,7 @@ import { Facet } from '../types'
 
 type MountProps = {
   when: Facet<boolean | undefined>
-  children: ReactElement
+  children: ReactElement | null
   condition?: boolean
 }
 
