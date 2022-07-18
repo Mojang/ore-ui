@@ -1,32 +1,13 @@
-import React, { ReactElement } from 'react'
-import { createFiberRoot } from './createFiberRoot'
+import React from 'react'
 import { createPortal } from './createPortal'
-import { createReconciler } from './createReconciler'
-
-document.body.innerHTML = `<div id="root"></div><div id="portal"></div>`
-
-const reconcilerInstance = createReconciler()
-const root = document.getElementById('root') as HTMLElement
-const portal = document.getElementById('portal') as HTMLElement
-const fiberRoot = createFiberRoot(reconcilerInstance)(root)
-
-/**
- * Render function local to testing that shared the same instance of the reconciler.
- *
- * This is needed otherwise React complains that we are sharing a context across different renderers.
- */
-const render = function render(ui: ReactElement) {
-  reconcilerInstance.updateContainer(ui, fiberRoot, null, () => {})
-}
-
-afterEach(() => {
-  reconcilerInstance.updateContainer(null, fiberRoot, null, () => {})
-})
+import { render, root } from './testSetup'
 
 it('portals content', () => {
   const TestComponent = () => {
     return <div>On the other side</div>
   }
+
+  const portal = document.getElementById('portal') as HTMLElement
 
   render(
     <>

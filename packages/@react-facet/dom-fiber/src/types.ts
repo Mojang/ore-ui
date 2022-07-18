@@ -247,9 +247,10 @@ export type Instance = ElementContainer
 export type Container = Instance
 export type TextInstance = TextContainer
 export type HydratableInstance = Instance
+export type SuspenseInstance = Instance
 export type PublicInstance = HTMLElement | SVGElement | Text
 
-export type ReactFacetReconciler = Reconciler<Instance, TextInstance, Container, PublicInstance> & {
+export type ReactFacetReconciler = Reconciler<Container, Instance, TextInstance, SuspenseInstance, PublicInstance> & {
   flushPassiveEffects: () => boolean
   IsThisRendererActing: MutableRefObject<boolean>
 }
