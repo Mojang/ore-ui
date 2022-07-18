@@ -4,7 +4,7 @@ import { Facet, NoValue } from '../types'
 
 type WithProps<T> = {
   data: Facet<T | null | undefined>
-  children: (data: Facet<T>) => ReactElement
+  children: (data: Facet<T>) => ReactElement | null
 }
 
 const hasData = <T,>(_: Facet<T | null | undefined>, shouldRender: boolean | NoValue): _ is Facet<T> => {
