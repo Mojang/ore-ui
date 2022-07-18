@@ -1,6 +1,5 @@
-import { ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 import * as testingLibrary from '@testing-library/dom'
-import { setupAct } from './setupAct'
 import {
   Matcher,
   MatcherOptions,
@@ -12,6 +11,10 @@ import {
   FireObject,
 } from '@testing-library/dom'
 import { createReconciler, createFiberRoot, FacetFiberRoot } from '@react-facet/dom-fiber'
+
+export interface Act {
+  (work: () => void): boolean
+}
 
 /**
  * Custom testing-library implementation based on https://github.com/testing-library/react-testing-library
@@ -25,7 +28,8 @@ const setup = () => {
 
   const mountedContainers = new Set<ContainerRootFiberTuple>()
 
-  const act = setupAct(reconcilerInstance)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const act = (React as any).unstable_act as Act
 
   function render(
     ui: ReactElement,
@@ -55,7 +59,9 @@ const setup = () => {
         })
       },
       rerender: (rerenderUi: ReactElement) => {
-        render(rerenderUi, baseElement, container, fiberRoot)
+        act(() => {
+          reconcilerInstance.updateContainer(rerenderUi, fiberRoot, null, () => {})
+        })
       },
       asFragment: () => {
         if (typeof document.createRange === 'function') {
@@ -94,12 +100,12 @@ const setup = () => {
     })
   }
 
-  const fireEventFunction: FireFunction = (...args) => act(() => testingLibrary.fireEvent(...args))
+  const fireEventFunction: FireFunction = (...args) => testingLibrary.fireEvent(...args)
 
   const fireEvent = fireEventFunction as FireFunction & FireObject
 
   mapKeys(testingLibrary.fireEvent as FireObject, (typeArg) => {
-    fireEvent[typeArg] = (...args) => act(() => testingLibrary.fireEvent[typeArg](...args))
+    fireEvent[typeArg] = (...args) => testingLibrary.fireEvent[typeArg](...args)
   })
 
   return { act, render, cleanup, fireEvent }
