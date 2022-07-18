@@ -96,12 +96,12 @@ const setup = () => {
     })
   }
 
-  const fireEventFunction: FireFunction = (...args) => testingLibrary.fireEvent(...args)
+  const fireEventFunction: FireFunction = (...args) => act(() => testingLibrary.fireEvent(...args))
 
   const fireEvent = fireEventFunction as FireFunction & FireObject
 
   mapKeys(testingLibrary.fireEvent as FireObject, (typeArg) => {
-    fireEvent[typeArg] = (...args) => testingLibrary.fireEvent[typeArg](...args)
+    fireEvent[typeArg] = (...args) => act(() => testingLibrary.fireEvent[typeArg](...args))
   })
 
   return { act, render, cleanup, fireEvent }
