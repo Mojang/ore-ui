@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react'
+import { setupAct } from './setupAct'
 import * as testingLibrary from '@testing-library/dom'
 import {
   Matcher,
@@ -12,10 +13,6 @@ import {
 } from '@testing-library/dom'
 import { createReconciler, createFiberRoot, FacetFiberRoot } from '@react-facet/dom-fiber'
 
-export interface Act {
-  (work: () => void): boolean
-}
-
 /**
  * Custom testing-library implementation based on https://github.com/testing-library/react-testing-library
  *
@@ -28,8 +25,7 @@ const setup = () => {
 
   const mountedContainers = new Set<ContainerRootFiberTuple>()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const act = (React as any).unstable_act as Act
+  const act = setupAct()
 
   function render(
     ui: ReactElement,
