@@ -1,6 +1,6 @@
 import { useFacetCallback, Value } from '@react-facet/core'
-import { useSharedFacet } from './context'
 import { SharedFacet } from './types'
+import { useSharedFacet } from './useSharedFacet'
 
 interface PropSetter<T extends Value, Prop extends keyof T> {
   (value: T[Prop]): void

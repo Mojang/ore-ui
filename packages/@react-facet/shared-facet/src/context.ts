@@ -1,13 +1,13 @@
-import { Facet } from '@react-facet/core'
-import { createContext, useContext } from 'react'
-import { SharedFacet, SharedFacetDriver } from './types'
+import { createContext } from 'react'
+import { SharedFacetDriver } from './types'
 
-const dummyConstructor = () => () => {}
+const dummyDriver: SharedFacetDriver = {
+  observe: () => {
+    return () => {}
+  },
+  set: () => {},
+}
 
-export const sharedFacetDriverContext = createContext<SharedFacetDriver>(dummyConstructor)
+export const sharedFacetDriverContext = createContext<SharedFacetDriver>(dummyDriver)
 
 export const SharedFacetDriverProvider = sharedFacetDriverContext.Provider
-
-export const useSharedFacet = <T>(sharedFacet: SharedFacet<T>): Facet<T> => {
-  return sharedFacet(useContext(sharedFacetDriverContext))
-}

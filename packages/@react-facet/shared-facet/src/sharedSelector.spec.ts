@@ -1,12 +1,19 @@
 import { WritableFacet } from '@react-facet/core'
 import { sharedFacet } from './sharedFacet'
 import { sharedSelector } from './sharedSelector'
+import { SharedFacetDriver } from './types'
 
 interface TestFacet {
   values: string[]
 }
 
-const sharedFacetDriver = jest.fn()
+const sharedFacetDriverObserveMock = jest.fn()
+const sharedFacetDriverSetMock = jest.fn()
+
+const sharedFacetDriver: SharedFacetDriver = {
+  observe: sharedFacetDriverObserveMock,
+  set: sharedFacetDriverSetMock,
+}
 
 describe('single dependency', () => {
   it('does not fire without default value', () => {
