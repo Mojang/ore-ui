@@ -10,6 +10,20 @@ import React, {
 } from 'react'
 import { createFacet, Facet, useFacetEffect, useFacetState } from '@react-facet/core'
 
+type Config = {
+  forceImmediateMount: boolean
+}
+
+const DeferredMountConfig = createContext<Config>({ forceImmediateMount: false })
+
+export function DeferredMountConfigProvider({ config, children }: { config: Config; children: React.ReactNode }) {
+  return <DeferredMountConfig.Provider value={config}>{children}</DeferredMountConfig.Provider>
+}
+
+function useConfig() {
+  return useContext(DeferredMountConfig)
+}
+
 /**
  * Targeting around 60fps
  */
@@ -24,10 +38,7 @@ interface DeferredMountProviderProps {
   frameTimeBudget?: number
 }
 
-/**
- * Provider that must wrap a tree with nodes being deferred
- */
-export function DeferredMountProvider({
+export function InnerDeferredMountProvider({
   children,
   frameTimeBudget = DEFAULT_FRAME_TIME_BUDGET,
 }: DeferredMountProviderProps) {
@@ -139,6 +150,18 @@ export function DeferredMountProvider({
       <pushDeferUpdateContext.Provider value={pushDeferUpdateFunction}>{children}</pushDeferUpdateContext.Provider>
     </isDeferringContext.Provider>
   )
+}
+
+/**
+ * Provider that must wrap a tree with nodes being deferred
+ */
+export function DeferredMountProvider(props: DeferredMountProviderProps) {
+  const config = useConfig()
+  if (config.forceImmediateMount) {
+    return <>{props.children}</>
+  }
+
+  return <InnerDeferredMountProvider {...props} />
 }
 
 interface DeferredMountProps {
