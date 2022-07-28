@@ -90,7 +90,9 @@ it('unmounts components when the array reduces in size', () => {
 
   expect(container).toMatchSnapshot()
 
-  data.set([{ value: '1' }, { value: '2' }])
+  act(() => {
+    data.set([{ value: '1' }, { value: '2' }])
+  })
 
   expect(container).toMatchSnapshot()
 })
