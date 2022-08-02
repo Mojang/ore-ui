@@ -725,6 +725,7 @@ describe('mount', () => {
     let onFocus: jest.Mock
     let onBlur: jest.Mock
     let onMouseDown: jest.Mock
+    let onMouseMove: jest.Mock
     let onMouseUp: jest.Mock
     let onTouchStart: jest.Mock
     let onTouchMove: jest.Mock
@@ -741,6 +742,7 @@ describe('mount', () => {
       onFocus = jest.fn()
       onBlur = jest.fn()
       onMouseDown = jest.fn()
+      onMouseMove = jest.fn()
       onMouseUp = jest.fn()
       onTouchStart = jest.fn()
       onTouchMove = jest.fn()
@@ -758,6 +760,7 @@ describe('mount', () => {
           onFocus={onFocus}
           onBlur={onBlur}
           onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
           onMouseUp={onMouseUp}
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
@@ -794,6 +797,11 @@ describe('mount', () => {
     it('supports onMouseDown', () => {
       div.dispatchEvent(new Event('mousedown'))
       expect(onMouseDown).toHaveBeenCalled()
+    })
+
+    it('supports onMouseMove', () => {
+      div.dispatchEvent(new Event('mousemove'))
+      expect(onMouseMove).toHaveBeenCalled()
     })
 
     it('supports onMouseUp', () => {
@@ -1437,6 +1445,7 @@ describe('update', () => {
     let firstOnFocus: jest.Mock
     let firstOnBlur: jest.Mock
     let firstOnMouseDown: jest.Mock
+    let firstOnMouseMove: jest.Mock
     let firstOnMouseUp: jest.Mock
     let firstOnTouchStart: jest.Mock
     let firstOnTouchMove: jest.Mock
@@ -1451,6 +1460,7 @@ describe('update', () => {
     let secondOnFocus: jest.Mock
     let secondOnBlur: jest.Mock
     let secondOnMouseDown: jest.Mock
+    let secondOnMouseMove: jest.Mock
     let secondOnMouseUp: jest.Mock
     let secondOnTouchStart: jest.Mock
     let secondOnTouchMove: jest.Mock
@@ -1479,6 +1489,7 @@ describe('update', () => {
           onFocus={second ? secondOnFocus : firstOnFocus}
           onBlur={second ? secondOnBlur : firstOnBlur}
           onMouseDown={second ? secondOnMouseDown : firstOnMouseDown}
+          onMouseMove={second ? secondOnMouseMove : firstOnMouseMove}
           onMouseUp={second ? secondOnMouseUp : firstOnMouseUp}
           onTouchStart={second ? secondOnTouchStart : firstOnTouchStart}
           onTouchMove={second ? secondOnTouchMove : firstOnTouchMove}
@@ -1499,6 +1510,7 @@ describe('update', () => {
       firstOnFocus = jest.fn()
       firstOnBlur = jest.fn()
       firstOnMouseDown = jest.fn()
+      firstOnMouseMove = jest.fn()
       firstOnMouseUp = jest.fn()
       firstOnTouchStart = jest.fn()
       firstOnTouchMove = jest.fn()
@@ -1513,6 +1525,7 @@ describe('update', () => {
       secondOnFocus = jest.fn()
       secondOnBlur = jest.fn()
       secondOnMouseDown = jest.fn()
+      secondOnMouseMove = jest.fn()
       secondOnMouseUp = jest.fn()
       secondOnTouchStart = jest.fn()
       secondOnTouchMove = jest.fn()
@@ -1583,6 +1596,20 @@ describe('update', () => {
       div.dispatchEvent(new Event('mousedown'))
       expect(firstOnMouseDown).not.toHaveBeenCalled()
       expect(secondOnMouseDown).toHaveBeenCalled()
+    })
+
+    it('supports onMouseMove', () => {
+      div.dispatchEvent(new Event('mousemove'))
+      expect(firstOnMouseMove).toHaveBeenCalled()
+      expect(secondOnMouseMove).not.toHaveBeenCalled()
+
+      firstOnMouseMove.mockClear()
+      secondOnMouseMove.mockClear()
+      jest.runAllTimers()
+
+      div.dispatchEvent(new Event('mousemove'))
+      expect(firstOnMouseMove).not.toHaveBeenCalled()
+      expect(secondOnMouseMove).toHaveBeenCalled()
     })
 
     it('supports onMouseUp', () => {
