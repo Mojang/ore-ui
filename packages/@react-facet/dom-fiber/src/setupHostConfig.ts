@@ -168,6 +168,10 @@ export const setupHostConfig = (): HostConfig<
       element.addEventListener('mousedown', newProps.onMouseDown as EventListener)
     }
 
+    if (newProps.onMouseMove) {
+      element.addEventListener('mousemove', newProps.onMouseMove as EventListener)
+    }
+
     if (newProps.onMouseUp) {
       element.addEventListener('mouseup', newProps.onMouseUp as EventListener)
     }
@@ -827,6 +831,11 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.onMouseDown !== oldProps.onMouseDown) {
       if (oldProps.onMouseDown) element.removeEventListener('mousedown', oldProps.onMouseDown)
       if (newProps.onMouseDown) element.addEventListener('mousedown', newProps.onMouseDown)
+    }
+
+    if (newProps.onMouseMove !== oldProps.onMouseMove) {
+      if (oldProps.onMouseMove) element.removeEventListener('mousemove', oldProps.onMouseMove)
+      if (newProps.onMouseMove) element.addEventListener('mousemove', newProps.onMouseMove)
     }
 
     if (newProps.onMouseEnter !== oldProps.onMouseEnter) {
