@@ -928,7 +928,7 @@ export const setupHostConfig = (): HostConfig<
 
   removeChild: function (parentInstance, child) {
     if (isElementContainer(child)) {
-      cleanupElementContainer(child)
+      cleanupElementContainer(parentInstance, child)
     }
 
     parentInstance.element.removeChild(child.element)
@@ -940,7 +940,7 @@ export const setupHostConfig = (): HostConfig<
 
   removeChildFromContainer: function (container, child) {
     if (isElementContainer(child)) {
-      cleanupElementContainer(child)
+      cleanupElementContainer(container, child)
     }
 
     container.element.removeChild(child.element)
@@ -959,7 +959,9 @@ export const setupHostConfig = (): HostConfig<
   },
 })
 
-const cleanupElementContainer = (instance: ElementContainer) => {
+const cleanupElementContainer = (parent: ElementContainer, instance: ElementContainer) => {
+  parent.children.delete(instance)
+
   instance.styleUnsubscribers?.forEach((unsubscribe) => unsubscribe())
   instance.styleUnsubscribers?.clear()
 
