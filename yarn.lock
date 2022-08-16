@@ -972,11 +972,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-facet/core@0.3.6, @react-facet/core@workspace:packages/@react-facet/core":
+"@react-facet/core@0.3.7, @react-facet/core@workspace:packages/@react-facet/core":
   version: 0.0.0-use.local
   resolution: "@react-facet/core@workspace:packages/@react-facet/core"
   dependencies:
-    "@react-facet/dom-fiber-testing-library": 0.3.6
+    "@react-facet/dom-fiber-testing-library": 0.3.7
     "@types/react": ^17.0.11
     "@types/react-reconciler": ^0.18.0
     "@types/rimraf": ^3
@@ -993,12 +993,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount"
   dependencies:
-    "@react-facet/dom-fiber-testing-library": 0.3.6
+    "@react-facet/dom-fiber-testing-library": 0.3.7
     react: ^16.9.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/core": 0.3.6
+    "@react-facet/core": 0.3.7
     react: ^16.9.0
   languageName: unknown
   linkType: soft
@@ -1007,7 +1007,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-components@workspace:packages/@react-facet/dom-components"
   dependencies:
-    "@react-facet/core": 0.3.6
+    "@react-facet/core": 0.3.7
     "@testing-library/jest-dom": ^5.10.1
     "@testing-library/react": ^9.4.1
     "@types/react": ^17.0.11
@@ -1019,32 +1019,32 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/core": 0.3.6
+    "@react-facet/core": 0.3.7
     react: ^16.9.0
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber-testing-library@0.3.6, @react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library":
+"@react-facet/dom-fiber-testing-library@0.3.7, @react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library"
   dependencies:
-    "@react-facet/dom-fiber": 0.3.6
+    "@react-facet/dom-fiber": 0.3.7
     "@testing-library/dom": ^8.0.0
     react: ^16.9.0
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/dom-fiber": 0.3.6
+    "@react-facet/dom-fiber": 0.3.7
     react: ^16.9.0
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber@0.3.6, @react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber":
+"@react-facet/dom-fiber@0.3.7, @react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber"
   dependencies:
-    "@react-facet/core": 0.3.6
-    "@react-facet/dom-fiber-testing-library": 0.3.6
+    "@react-facet/core": 0.3.7
+    "@react-facet/dom-fiber-testing-library": 0.3.7
     "@types/react": ^17.0.11
     "@types/react-reconciler": ^0.18.0
     "@types/rimraf": ^3
@@ -1054,7 +1054,7 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/core": 0.3.6
+    "@react-facet/core": 0.3.7
     react: ^16.9.0
   languageName: unknown
   linkType: soft
@@ -1069,12 +1069,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/shared-facet@0.3.6, @react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
+"@react-facet/shared-facet@0.3.7, @react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
   version: 0.0.0-use.local
   resolution: "@react-facet/shared-facet@workspace:packages/@react-facet/shared-facet"
   dependencies:
-    "@react-facet/core": 0.3.6
-    "@react-facet/dom-fiber-testing-library": 0.3.6
+    "@react-facet/core": 0.3.7
+    "@react-facet/dom-fiber-testing-library": 0.3.7
     "@types/react": ^17.0.11
     "@types/rimraf": ^3
     cross-env: ^7.0.3
@@ -1082,16 +1082,16 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/core": 0.3.6
+    "@react-facet/core": 0.3.7
     react: ^16.9.0
   languageName: unknown
   linkType: soft
 
-"@react-facet/spring@0.3.6, @react-facet/spring@workspace:packages/@react-facet/spring":
+"@react-facet/spring@0.3.7, @react-facet/spring@workspace:packages/@react-facet/spring":
   version: 0.0.0-use.local
   resolution: "@react-facet/spring@workspace:packages/@react-facet/spring"
   dependencies:
-    "@react-facet/core": 0.3.6
+    "@react-facet/core": 0.3.7
     "@testing-library/jest-dom": ^5.10.1
     "@testing-library/react": ^9.4.1
     "@types/react": ^17.0.11
@@ -1103,7 +1103,7 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.3.5
   peerDependencies:
-    "@react-facet/core": 0.3.6
+    "@react-facet/core": 0.3.7
     react: ^16.9.0
   languageName: unknown
   linkType: soft
@@ -2465,10 +2465,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmarking@workspace:examples/benchmarking"
   dependencies:
-    "@react-facet/core": 0.3.6
-    "@react-facet/dom-fiber": 0.3.6
-    "@react-facet/shared-facet": 0.3.6
-    "@react-facet/spring": 0.3.6
+    "@react-facet/core": 0.3.7
+    "@react-facet/dom-fiber": 0.3.7
+    "@react-facet/shared-facet": 0.3.7
+    "@react-facet/spring": 0.3.7
     "@types/fs-extra": ^9.0.12
     "@types/puppeteer": ^5.4.4
     "@types/ramda": ^0
