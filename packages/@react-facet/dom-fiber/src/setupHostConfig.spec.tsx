@@ -1741,6 +1741,52 @@ describe('update', () => {
 })
 
 describe('umnount', () => {
+  it('hostConfig.removeChild should cleanup children instances', () => {
+    const hostConfig = setupHostConfig()
+    const child: ElementContainer = {
+      children: new Set(),
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map(),
+    }
+
+    const parentInstance: ElementContainer = {
+      children: new Set(),
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map(),
+    }
+
+    hostConfig.appendChild?.(parentInstance, child)
+
+    expect(parentInstance.children.size).toBe(1)
+
+    hostConfig.removeChild?.(parentInstance, child)
+
+    expect(parentInstance.children.size).toBe(0)
+  })
+
+  it('hostConfig.removeChildFromContainer should cleanup children instances', () => {
+    const hostConfig = setupHostConfig()
+    const child: ElementContainer = {
+      children: new Set(),
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map(),
+    }
+
+    const parentInstance: ElementContainer = {
+      children: new Set(),
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map(),
+    }
+
+    hostConfig.appendChild?.(parentInstance, child)
+
+    expect(parentInstance.children.size).toBe(1)
+
+    hostConfig.removeChildFromContainer?.(parentInstance, child)
+
+    expect(parentInstance.children.size).toBe(0)
+  })
+
   it('unsubscribes from all facets when a element component is unmounted', () => {
     const unsubscribe = jest.fn()
 
