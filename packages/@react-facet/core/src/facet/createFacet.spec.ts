@@ -72,6 +72,32 @@ describe('equalityChecks', () => {
       expect(update).toHaveBeenCalledTimes(0)
     })
 
+    it('does not fire for null', () => {
+      const update = jest.fn()
+      const initialValue = null
+      const mock = createFacet({ initialValue, equalityCheck: defaultEqualityCheck })
+      mock.observe(update)
+      expect(update).toHaveBeenCalledTimes(1)
+      expect(update).toHaveBeenCalledWith(initialValue)
+
+      update.mockClear()
+      mock.set(initialValue)
+      expect(update).toHaveBeenCalledTimes(0)
+    })
+
+    it('does not fire for undefined', () => {
+      const update = jest.fn()
+      const initialValue = undefined
+      const mock = createFacet({ initialValue, equalityCheck: defaultEqualityCheck })
+      mock.observe(update)
+      expect(update).toHaveBeenCalledTimes(1)
+      expect(update).toHaveBeenCalledWith(initialValue)
+
+      update.mockClear()
+      mock.set(initialValue)
+      expect(update).toHaveBeenCalledTimes(0)
+    })
+
     it('fires if the primitive value changed', () => {
       const update = jest.fn()
       const initialValue = 'initial'

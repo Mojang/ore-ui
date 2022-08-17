@@ -4,6 +4,7 @@ import { useFacetWrap } from './useFacetWrap'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
 import { createFacet } from '../facet'
+import { FacetProp, Value } from '..'
 
 it('wraps a value, updating the facet when it changes', () => {
   const mock = jest.fn()
@@ -110,5 +111,73 @@ describe('regressions', () => {
     render(<TestingComponent />)
 
     expect(mock).toHaveBeenCalledTimes(0)
+  })
+})
+
+const testEffectUpdatesOnStaticValue = (value: FacetProp<Value>, expectUpdates: boolean) => {
+  const mock = jest.fn()
+
+  const TestingComponent = () => {
+    const undefinedFacet = useFacetWrap(value)
+    useFacetEffect(
+      () => {
+        mock()
+      },
+      [],
+      [undefinedFacet],
+    )
+    return null
+  }
+  const { rerender } = render(<TestingComponent />)
+  expect(mock).toHaveBeenCalledTimes(1)
+
+  rerender(<TestingComponent />)
+  if (expectUpdates) {
+    expect(mock).toHaveBeenCalledTimes(2)
+  } else {
+    expect(mock).toHaveBeenCalledTimes(1)
+  }
+  rerender(<TestingComponent />)
+  if (expectUpdates) {
+    expect(mock).toHaveBeenCalledTimes(3)
+  } else {
+    expect(mock).toHaveBeenCalledTimes(1)
+  }
+}
+
+describe('does not trigger effect updates on re-renders when the unchanged wrapped value is', () => {
+  it('string', () => {
+    testEffectUpdatesOnStaticValue('', false)
+    testEffectUpdatesOnStaticValue('test', false)
+  })
+  it('boolean', () => {
+    testEffectUpdatesOnStaticValue(false, false)
+    testEffectUpdatesOnStaticValue(false, false)
+  })
+  it('number', () => {
+    testEffectUpdatesOnStaticValue(0, false)
+    testEffectUpdatesOnStaticValue(1, false)
+  })
+
+  it('undefined', () => {
+    testEffectUpdatesOnStaticValue(undefined, false)
+  })
+  it('null', () => {
+    testEffectUpdatesOnStaticValue(null, false)
+  })
+})
+
+describe('triggers effect updates on re-renders when the unchanged wrapped value is', () => {
+  it('empty array', () => {
+    testEffectUpdatesOnStaticValue([], true)
+  })
+  it('filled array', () => {
+    testEffectUpdatesOnStaticValue(['string', 1], true)
+  })
+  it('empty object', () => {
+    testEffectUpdatesOnStaticValue({}, true)
+  })
+  it('filled object', () => {
+    testEffectUpdatesOnStaticValue({ key: 'value' }, true)
   })
 })
