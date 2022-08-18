@@ -27,7 +27,11 @@ export function createFacet<V>({ initialValue, startSubscription, equalityCheck 
       if (equalityCheck === defaultEqualityCheck) {
         const typeofValue = typeof newValue
         if (
-          (typeofValue === 'number' || typeofValue === 'string' || typeofValue === 'boolean') &&
+          (typeofValue === 'number' ||
+            typeofValue === 'string' ||
+            typeofValue === 'boolean' ||
+            newValue === null ||
+            newValue === undefined) &&
           currentValue === newValue
         ) {
           return
