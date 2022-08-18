@@ -152,7 +152,7 @@ describe('does not trigger effect updates on re-renders when the unchanged wrapp
   })
   it('boolean', () => {
     testEffectUpdatesOnStaticValue(false, false)
-    testEffectUpdatesOnStaticValue(false, false)
+    testEffectUpdatesOnStaticValue(true, false)
   })
   it('number', () => {
     testEffectUpdatesOnStaticValue(0, false)
