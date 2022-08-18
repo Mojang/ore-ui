@@ -1,6 +1,5 @@
 import { Reducer, Dispatch, useCallback } from 'react'
 import { Option, Facet, EqualityCheck } from '../types'
-import { defaultEqualityCheck } from '../equalityChecks'
 import { useFacetState } from './useFacetState'
 
 /**
@@ -14,7 +13,7 @@ import { useFacetState } from './useFacetState'
 export const useFacetReducer = <S, A = string>(
   reducer: Reducer<Option<S>, A>,
   initialState: S,
-  equalityCheck: EqualityCheck<S> = defaultEqualityCheck,
+  equalityCheck?: EqualityCheck<S>,
 ): [Facet<S>, Dispatch<A>] => {
   const [state, setState] = useFacetState(initialState, equalityCheck)
 

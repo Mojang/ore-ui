@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react'
-import { defaultEqualityCheck } from '../equalityChecks'
 import { mapFacetsLightweight } from '../mapFacets'
 import { EqualityCheck, Facet, NoValue, Value, ExtractFacetValues } from '../types'
 
@@ -20,7 +19,7 @@ export function useFacetMap<M extends Value, Y extends Facet<unknown>[], T exten
   selector: (...args: ExtractFacetValues<T>) => M | NoValue,
   dependencies: unknown[],
   facets: T,
-  equalityCheck: EqualityCheck<M> = defaultEqualityCheck,
+  equalityCheck?: EqualityCheck<M>,
 ): Facet<M> {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectorMemoized = useCallback(selector as (...args: unknown[]) => ReturnType<typeof selector>, dependencies)

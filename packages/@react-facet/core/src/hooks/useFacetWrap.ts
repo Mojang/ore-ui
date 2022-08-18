@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { defaultEqualityCheck } from '../equalityChecks'
 import { createFacet } from '../facet'
 import { Facet, FacetProp, isFacet, Value, EqualityCheck } from '../types'
 
@@ -7,10 +6,7 @@ import { Facet, FacetProp, isFacet, Value, EqualityCheck } from '../types'
  * Wraps a FacetProp as a Facet
  * @param value
  */
-export function useFacetWrap<T extends Value>(
-  prop: FacetProp<T>,
-  equalityCheck: EqualityCheck<T> = defaultEqualityCheck,
-): Facet<T> {
+export function useFacetWrap<T extends Value>(prop: FacetProp<T>, equalityCheck?: EqualityCheck<T>): Facet<T> {
   const is = isFacet(prop)
 
   /**

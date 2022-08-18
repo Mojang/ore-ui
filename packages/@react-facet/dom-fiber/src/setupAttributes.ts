@@ -1,10 +1,16 @@
-import { FacetProp, isFacet } from '@react-facet/core'
+import { FacetProp, isFacet, NoValue, NO_VALUE } from '@react-facet/core'
 
 export const setupClassUpdate = (className: FacetProp<string | undefined>, element: HTMLElement | SVGElement) => {
   const htmlElement = element as HTMLElement
+
   if (isFacet(className)) {
-    return className.observe((className) => {
-      htmlElement.className = className ?? ''
+    let previous: string | undefined | NoValue = NO_VALUE
+
+    return className.observe((value) => {
+      if (value !== previous) {
+        htmlElement.className = value ?? ''
+        previous = value
+      }
     })
   } else {
     htmlElement.className = className ?? ''
@@ -13,8 +19,13 @@ export const setupClassUpdate = (className: FacetProp<string | undefined>, eleme
 
 export const setupIdUpdate = (id: FacetProp<string | undefined>, element: HTMLElement | SVGElement) => {
   if (isFacet(id)) {
-    return id.observe((id) => {
-      element.id = id ?? ''
+    let previous: string | undefined | NoValue = NO_VALUE
+
+    return id.observe((value) => {
+      if (value !== previous) {
+        element.id = value ?? ''
+        previous = value
+      }
     })
   } else {
     element.id = id ?? ''
@@ -22,25 +33,35 @@ export const setupIdUpdate = (id: FacetProp<string | undefined>, element: HTMLEl
 }
 
 export const setupMaxLengthUpdate = (maxLength: FacetProp<number | undefined>, element: HTMLElement | SVGElement) => {
+  const textElement = element as HTMLTextAreaElement
+
   if (isFacet(maxLength)) {
-    return maxLength.observe((maxLength) => {
-      const textElement = element as HTMLTextAreaElement
-      textElement.maxLength = maxLength ?? Number.MAX_SAFE_INTEGER
+    let previous: number | undefined | NoValue = NO_VALUE
+
+    return maxLength.observe((value) => {
+      if (value !== previous) {
+        textElement.maxLength = value ?? Number.MAX_SAFE_INTEGER
+        previous = value
+      }
     })
   } else {
-    const textElement = element as HTMLTextAreaElement
     textElement.maxLength = maxLength ?? Number.MAX_SAFE_INTEGER
   }
 }
 
 export const setupRowsUpdate = (rows: FacetProp<number | undefined>, element: HTMLElement | SVGElement) => {
+  const textElement = element as HTMLTextAreaElement
+
   if (isFacet(rows)) {
-    return rows.observe((rows) => {
-      const textElement = element as HTMLTextAreaElement
-      textElement.rows = rows ?? Number.MAX_SAFE_INTEGER
+    let previous: number | undefined | NoValue = NO_VALUE
+
+    return rows.observe((value) => {
+      if (value !== previous) {
+        textElement.rows = value ?? Number.MAX_SAFE_INTEGER
+        previous = value
+      }
     })
   } else {
-    const textElement = element as HTMLTextAreaElement
     textElement.rows = rows ?? Number.MAX_SAFE_INTEGER
   }
 }
@@ -53,19 +74,25 @@ export const setupRowsUpdate = (rows: FacetProp<number | undefined>, element: HT
  * ref: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/ReactDOMInput.js
  */
 export const setupValueUpdate = (value: FacetProp<string | undefined>, element: HTMLElement | SVGElement) => {
-  if (isFacet(value)) {
-    return value.observe((value) => {
-      const inputElement = element as HTMLInputElement
-      inputElement.value = value ?? ''
+  const inputElement = element as HTMLInputElement
 
-      if (value != null) {
-        inputElement.setAttribute('value', value)
-      } else {
-        inputElement.removeAttribute('value')
+  if (isFacet(value)) {
+    let previous: string | undefined | NoValue = NO_VALUE
+
+    return value.observe((value) => {
+      if (value !== previous) {
+        inputElement.value = value ?? ''
+
+        if (value != null) {
+          inputElement.setAttribute('value', value)
+        } else {
+          inputElement.removeAttribute('value')
+        }
+
+        previous = value
       }
     })
   } else {
-    const inputElement = element as HTMLInputElement
     inputElement.value = value ?? ''
 
     if (value != null) {
@@ -77,25 +104,35 @@ export const setupValueUpdate = (value: FacetProp<string | undefined>, element: 
 }
 
 export const setupSrcUpdate = (src: FacetProp<string | undefined>, element: HTMLElement | SVGElement) => {
+  const textElement = element as HTMLImageElement
+
   if (isFacet(src)) {
-    return src.observe((src) => {
-      const textElement = element as HTMLImageElement
-      textElement.src = src ?? ''
+    let previous: string | undefined | NoValue = NO_VALUE
+
+    return src.observe((value) => {
+      if (value !== previous) {
+        textElement.src = value ?? ''
+        previous = value
+      }
     })
   } else {
-    const textElement = element as HTMLImageElement
     textElement.src = src ?? ''
   }
 }
 
 export const setupTextUpdate = (text: FacetProp<string | number | undefined>, element: Text) => {
+  const textElement = element as Text
+
   if (isFacet(text)) {
-    return text.observe((text) => {
-      const textElement = element as Text
-      textElement.nodeValue = (text ?? '') as string
+    let previous: string | number | undefined | NoValue = NO_VALUE
+
+    return text.observe((value) => {
+      if (value !== previous) {
+        textElement.nodeValue = (value ?? '') as string
+        previous = value
+      }
     })
   } else {
-    const textElement = element as Text
     textElement.nodeValue = (text ?? '') as string
   }
 }
@@ -106,11 +143,16 @@ export const setupTextUpdate = (text: FacetProp<string | number | undefined>, el
  */
 export const setupViewBoxUpdate = (viewBox: FacetProp<string | undefined>, element: HTMLElement | SVGElement) => {
   if (isFacet(viewBox)) {
+    let previous: string | undefined | NoValue = NO_VALUE
+
     return viewBox.observe((value) => {
-      if (value != null) {
-        element.setAttributeNS(null, 'viewBox', value)
-      } else {
-        element.removeAttributeNS(null, 'viewBox')
+      if (value !== previous) {
+        if (value != null) {
+          element.setAttributeNS(null, 'viewBox', value)
+        } else {
+          element.removeAttributeNS(null, 'viewBox')
+        }
+        previous = value
       }
     })
   } else {
@@ -128,15 +170,21 @@ export const setupAttributeUpdate = (
   element: HTMLElement | SVGElement,
 ) => {
   if (isFacet(value)) {
+    let previous: string | boolean | undefined | NoValue = NO_VALUE
+
     return value.observe((value) => {
-      if (value === true) {
-        element.setAttribute(attribute, '')
-      } else if (value === false) {
-        element.removeAttribute(attribute)
-      } else if (value != null) {
-        element.setAttribute(attribute, value)
-      } else {
-        element.removeAttribute(attribute)
+      if (value !== previous) {
+        if (value === true) {
+          element.setAttribute(attribute, '')
+        } else if (value === false) {
+          element.removeAttribute(attribute)
+        } else if (value != null) {
+          element.setAttribute(attribute, value)
+        } else {
+          element.removeAttribute(attribute)
+        }
+
+        previous = value
       }
     })
   } else {
