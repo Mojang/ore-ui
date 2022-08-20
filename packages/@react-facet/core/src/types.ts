@@ -17,6 +17,10 @@ export type ExtractFacetValues<T extends ReadonlyArray<Facet<unknown>>> = {
   [K in keyof T]: T[K] extends Facet<infer V> ? V : never
 }
 
+export type ExtractFacetPropValues<T extends ReadonlyArray<FacetProp<unknown>>> = {
+  [K in keyof T]: T[K] extends FacetProp<infer V> ? V : never
+}
+
 export const FACET_FACTORY = Symbol('facet-factory')
 
 export interface FacetFactory<T> {
@@ -59,7 +63,7 @@ export const isFacet = <T extends Value>(value: unknown): value is Facet<T> => {
   return value != null && (value as Facet<T>).observe != null && (value as Facet<T>).get != null
 }
 
-export type FacetProp<T extends Value> = Facet<T> | ExcludeFacetFactory<T>
+export type FacetProp<T> = Facet<T> | ExcludeFacetFactory<T>
 
 export interface Effect<T> {
   (value: T): void | Cleanup
