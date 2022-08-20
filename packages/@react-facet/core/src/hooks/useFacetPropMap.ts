@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
+import { wrapFacets } from '../facet'
 import { defaultEqualityCheck } from '../equalityChecks'
 import { mapFacetsLightweight } from '../mapFacets'
-import { EqualityCheck, Facet, FacetProp, NoValue, Value, ExtractFacetPropValues, isFacet } from '../types'
+import { EqualityCheck, Facet, FacetProp, NoValue, Value, ExtractFacetPropValues } from '../types'
 
 /**
  * Helper hook that allows mapping a value from a facet with local variables/props in a React component
@@ -23,7 +24,7 @@ export function useFacetPropMap<M extends Value, Y extends FacetProp<unknown>[],
   const facetComposition = useMemo<Facet<M>>(() => {
     const selectorTyped = selector as (...args: unknown[]) => ReturnType<typeof selector>
 
-    return mapFacetsLightweight(convertToFacet(facetProps), selectorTyped, equalityCheck)
+    return mapFacetsLightweight(wrapFacets(facetProps), selectorTyped, equalityCheck)
 
     // We need to disable the linter on the next line given we are spreading the facets as individual dependencies
     // of the effect. We do this to avoid re-running this effect when passing a new array with the same facets.
@@ -31,18 +32,4 @@ export function useFacetPropMap<M extends Value, Y extends FacetProp<unknown>[],
   }, [selector, equalityCheck, ...facetProps])
 
   return facetComposition
-}
-
-const convertToFacet = (facetProps: FacetProp<unknown>[]): Facet<unknown>[] => {
-  return facetProps.map((facetProp) => (isFacet(facetProp) ? facetProp : createStaticFacet(facetProp)))
-}
-
-const createStaticFacet = <T>(value: T): Facet<T> => {
-  return {
-    get: () => value,
-    observe: (listener) => {
-      listener(value)
-      return () => {}
-    },
-  }
 }
