@@ -13,7 +13,11 @@ export interface FacetOptions<V> {
   equalityCheck?: EqualityCheck<V>
 }
 
-export function createFacet<V>({ initialValue, startSubscription, equalityCheck }: FacetOptions<V>): WritableFacet<V> {
+export function createFacet<V>({
+  initialValue,
+  startSubscription,
+  equalityCheck = defaultEqualityCheck,
+}: FacetOptions<V>): WritableFacet<V> {
   const listeners: Set<Listener<V>> = new Set()
   let currentValue = initialValue
   let cleanupSubscription: Cleanup | undefined
