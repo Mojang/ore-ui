@@ -1,5 +1,4 @@
 import 'react'
-import { defaultEqualityCheck } from '../equalityChecks'
 import { NO_VALUE } from '../types'
 import { createFacet } from './createFacet'
 
@@ -8,7 +7,7 @@ describe('equalityChecks', () => {
     it('fires for object values, since it can be mutated', () => {
       const update = jest.fn()
       const initialValue = {}
-      const mock = createFacet({ initialValue, equalityCheck: defaultEqualityCheck })
+      const mock = createFacet({ initialValue })
       mock.observe(update)
       expect(update).toHaveBeenCalledTimes(1)
       expect(update).toHaveBeenCalledWith(initialValue)
@@ -22,7 +21,7 @@ describe('equalityChecks', () => {
     it('fires for array values, since it can be mutated', () => {
       const update = jest.fn()
       const initialValue: string[] = []
-      const mock = createFacet({ initialValue, equalityCheck: defaultEqualityCheck })
+      const mock = createFacet({ initialValue })
       mock.observe(update)
       expect(update).toHaveBeenCalledTimes(1)
       expect(update).toHaveBeenCalledWith(initialValue)
@@ -36,7 +35,7 @@ describe('equalityChecks', () => {
     it('does not fire for string', () => {
       const update = jest.fn()
       const initialValue = 'string'
-      const mock = createFacet({ initialValue, equalityCheck: defaultEqualityCheck })
+      const mock = createFacet({ initialValue })
       mock.observe(update)
       expect(update).toHaveBeenCalledTimes(1)
       expect(update).toHaveBeenCalledWith(initialValue)
@@ -49,7 +48,7 @@ describe('equalityChecks', () => {
     it('does not fire for boolean', () => {
       const update = jest.fn()
       const initialValue = true
-      const mock = createFacet({ initialValue, equalityCheck: defaultEqualityCheck })
+      const mock = createFacet({ initialValue })
       mock.observe(update)
       expect(update).toHaveBeenCalledTimes(1)
       expect(update).toHaveBeenCalledWith(initialValue)
@@ -62,7 +61,7 @@ describe('equalityChecks', () => {
     it('does not fire for number', () => {
       const update = jest.fn()
       const initialValue = 1
-      const mock = createFacet({ initialValue, equalityCheck: defaultEqualityCheck })
+      const mock = createFacet({ initialValue })
       mock.observe(update)
       expect(update).toHaveBeenCalledTimes(1)
       expect(update).toHaveBeenCalledWith(initialValue)
@@ -75,7 +74,7 @@ describe('equalityChecks', () => {
     it('does not fire for null', () => {
       const update = jest.fn()
       const initialValue = null
-      const mock = createFacet({ initialValue, equalityCheck: defaultEqualityCheck })
+      const mock = createFacet({ initialValue })
       mock.observe(update)
       expect(update).toHaveBeenCalledTimes(1)
       expect(update).toHaveBeenCalledWith(initialValue)
@@ -88,7 +87,7 @@ describe('equalityChecks', () => {
     it('does not fire for undefined', () => {
       const update = jest.fn()
       const initialValue = undefined
-      const mock = createFacet({ initialValue, equalityCheck: defaultEqualityCheck })
+      const mock = createFacet({ initialValue })
       mock.observe(update)
       expect(update).toHaveBeenCalledTimes(1)
       expect(update).toHaveBeenCalledWith(initialValue)
@@ -101,7 +100,7 @@ describe('equalityChecks', () => {
     it('fires if the primitive value changed', () => {
       const update = jest.fn()
       const initialValue = 'initial'
-      const mock = createFacet({ initialValue, equalityCheck: defaultEqualityCheck })
+      const mock = createFacet({ initialValue })
       mock.observe(update)
       expect(update).toHaveBeenCalledTimes(1)
       expect(update).toHaveBeenCalledWith(initialValue)
