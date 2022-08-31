@@ -7,9 +7,6 @@ export function createStaticFacet<T>(value: T): Facet<T> {
   const facet: Facet<T> = {
     get: () => value,
     observe: (listener) => {
-      if (process.env.NODE_ENV !== 'production') {
-        console.log(`Accessing a static facet, perhaps you're missing a Context Provider?`)
-      }
       listener(value)
       return () => {}
     },
