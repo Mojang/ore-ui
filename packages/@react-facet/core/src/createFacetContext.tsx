@@ -6,7 +6,9 @@ export function createFacetContext<T>(initialValue: T) {
     get: () => initialValue,
     observe: (listener) => {
       if (process.env.NODE_ENV !== 'production') {
-        console.log('Missing Provider')
+        console.log(
+          `Accessing a static facet created through createFacetContext, perhaps you're missing a Context Provider?`,
+        )
       }
       listener(initialValue)
       return () => {}
