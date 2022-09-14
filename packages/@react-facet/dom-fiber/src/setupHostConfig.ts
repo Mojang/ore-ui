@@ -279,6 +279,26 @@ export const setupHostConfig = (): HostConfig<
           ? setupAttributeUpdate('data-droppable', newProps['data-droppable'], element)
           : undefined,
 
+      ['data-narrate']:
+        newProps['data-narrate'] != null
+          ? setupAttributeUpdate('data-narrate', newProps['data-narrate'], element)
+          : undefined,
+
+      ['data-narrate-as']:
+        newProps['data-narrate-as'] != null
+          ? setupAttributeUpdate('data-narrate-as', newProps['data-narrate-as'], element)
+          : undefined,
+
+      ['data-narrate-before']:
+        newProps['data-narrate-before'] != null
+          ? setupAttributeUpdate('data-narrate-before', newProps['data-narrate-before'], element)
+          : undefined,
+
+      ['data-narrate-after']:
+        newProps['data-narrate-after'] != null
+          ? setupAttributeUpdate('data-narrate-after', newProps['data-narrate-after'], element)
+          : undefined,
+
       ['data-testid']:
         newProps['data-testid'] != null
           ? setupAttributeUpdate('data-testid', newProps['data-testid'], element)
@@ -411,6 +431,54 @@ export const setupHostConfig = (): HostConfig<
         element.removeAttribute('data-droppable')
       } else {
         instance['data-droppable'] = setupAttributeUpdate('data-droppable', newProps['data-droppable'], element)
+      }
+    }
+
+    if (newProps['data-narrate'] !== oldProps['data-narrate']) {
+      instance['data-narrate']?.()
+
+      if (newProps['data-narrate'] == null) {
+        element.removeAttribute('data-narrate')
+      } else {
+        instance['data-narrate'] = setupAttributeUpdate('data-narrate', newProps['data-narrate'], element)
+      }
+    }
+
+    if (newProps['data-narrate-as'] !== oldProps['data-narrate-as']) {
+      instance['data-narrate-as']?.()
+
+      if (newProps['data-narrate-as'] == null) {
+        element.removeAttribute('data-narrate-as')
+      } else {
+        instance['data-narrate-as'] = setupAttributeUpdate('data-narrate-as', newProps['data-narrate-as'], element)
+      }
+    }
+
+    if (newProps['data-narrate-after'] !== oldProps['data-narrate-after']) {
+      instance['data-narrate-after']?.()
+
+      if (newProps['data-narrate-after'] == null) {
+        element.removeAttribute('data-narrate-after')
+      } else {
+        instance['data-narrate-after'] = setupAttributeUpdate(
+          'data-narrate-after',
+          newProps['data-narrate-after'],
+          element,
+        )
+      }
+    }
+
+    if (newProps['data-narrate-before'] !== oldProps['data-narrate-before']) {
+      instance['data-narrate-before']?.()
+
+      if (newProps['data-narrate-before'] == null) {
+        element.removeAttribute('data-narrate-before')
+      } else {
+        instance['data-narrate-before'] = setupAttributeUpdate(
+          'data-narrate-before',
+          newProps['data-narrate-before'],
+          element,
+        )
       }
     }
 
@@ -970,6 +1038,10 @@ const cleanupElementContainer = (parent: ElementContainer, instance: ElementCont
 
   instance.className?.()
   instance['data-droppable']?.()
+  instance['data-narrate']?.()
+  instance['data-narrate-as']?.()
+  instance['data-narrate-after']?.()
+  instance['data-narrate-before']?.()
   instance['data-testid']?.()
   instance['data-x-ray']?.()
   instance.id?.()
