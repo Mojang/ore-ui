@@ -6,6 +6,8 @@ import { useFacetEffect } from './useFacetEffect'
 import { createFacet } from '../facet'
 import { useFacetState } from './useFacetState'
 
+// TODO: Add more tests for when a equality check is passed in
+
 it('triggers the map once for each multiple consumers', () => {
   const mapFn = jest.fn().mockReturnValue('map-value')
 
@@ -135,7 +137,7 @@ describe('multiple dependencies', () => {
     expect(mock).not.toHaveBeenCalled()
   })
 
-  it('does not fire change notifications for string primitive', () => {
+  it('does fires change notifications for string primitive', () => {
     const facetA = createFacet({ initialValue: ['A'] })
     const facetB = createFacet({ initialValue: 'B' })
 
@@ -174,10 +176,10 @@ describe('multiple dependencies', () => {
       facetA.set(['Y'])
     })
 
-    expect(mock).not.toHaveBeenCalled()
+    expect(mock).toHaveBeenCalled()
   })
 
-  it('does not fire change notifications for number primitive', () => {
+  it('does fires change notifications for number primitive', () => {
     const facetA = createFacet({ initialValue: [1] })
     const facetB = createFacet({ initialValue: 2 })
 
@@ -216,10 +218,10 @@ describe('multiple dependencies', () => {
       facetA.set([20])
     })
 
-    expect(mock).not.toHaveBeenCalled()
+    expect(mock).toHaveBeenCalled()
   })
 
-  it('does not fire change notifications for boolean primitive', () => {
+  it('does fires change notifications for boolean primitive', () => {
     const facetA = createFacet({ initialValue: [false] })
     const facetB = createFacet({ initialValue: true })
 
@@ -258,7 +260,7 @@ describe('multiple dependencies', () => {
       facetA.set([true])
     })
 
-    expect(mock).not.toHaveBeenCalled()
+    expect(mock).toHaveBeenCalled()
   })
 })
 
@@ -418,7 +420,7 @@ describe('single dependency', () => {
     expect(mock).not.toHaveBeenCalled()
   })
 
-  it('does not fire change notifications for string primitive', () => {
+  it('does fires change notifications for string primitive', () => {
     const facetA = createFacet({ initialValue: [{ name: 'A' }] })
 
     const mock = jest.fn()
@@ -456,10 +458,10 @@ describe('single dependency', () => {
       facetA.set([{ name: 'Y' }])
     })
 
-    expect(mock).not.toHaveBeenCalled()
+    expect(mock).toHaveBeenCalled()
   })
 
-  it('does not fire change notifications for number primitive', () => {
+  it('does fires change notifications for number primitive', () => {
     const facetA = createFacet({ initialValue: [{ name: 1 }] })
 
     const mock = jest.fn()
@@ -497,10 +499,10 @@ describe('single dependency', () => {
       facetA.set([{ name: 2 }])
     })
 
-    expect(mock).not.toHaveBeenCalled()
+    expect(mock).toHaveBeenCalled()
   })
 
-  it('does not fire change notifications for boolean primitive', () => {
+  it('does fires change notifications for boolean primitive', () => {
     const facetA = createFacet({ initialValue: [{ name: true }] })
 
     const mock = jest.fn()
@@ -538,6 +540,6 @@ describe('single dependency', () => {
       facetA.set([{ name: false }])
     })
 
-    expect(mock).not.toHaveBeenCalled()
+    expect(mock).toHaveBeenCalled()
   })
 })
