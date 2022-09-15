@@ -12,8 +12,14 @@ export interface FacetOptions<V> {
   startSubscription?: StartSubscription<V>
   equalityCheck?: EqualityCheck<V>
 }
-
-export function createFacet<V>({ initialValue, startSubscription, equalityCheck }: FacetOptions<V>): WritableFacet<V> {
+/**
+ * The low level function to create a Facet, not recommended to be used if you can use any of the react facet hooks to create facets instead (Ex: useFacetState, useFacetWrap)
+ */
+export function createFacet<V>({
+  initialValue,
+  startSubscription,
+  equalityCheck = defaultEqualityCheck,
+}: FacetOptions<V>): WritableFacet<V> {
   const listeners: Set<Listener<V>> = new Set()
   let currentValue = initialValue
   let cleanupSubscription: Cleanup | undefined

@@ -10,7 +10,12 @@ describe('regression testing preventing accidental removal of APIs', () => {
 
   it('exposes the core facets', () => {
     expect(facet.createFacet).toBeDefined()
+    expect(facet.createStaticFacet).toBeDefined()
     expect(facet.createReadOnlyFacet).toBeDefined()
+  })
+
+  it('exposes the react facet methods', () => {
+    expect(facet.createFacetContext).toBeDefined()
   })
 
   it('exposes the hooks', () => {

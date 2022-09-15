@@ -131,6 +131,10 @@ export type ElementProps<T> = PointerEvents &
     cx?: FacetProp<string | undefined>
     cy?: FacetProp<string | undefined>
     d?: FacetProp<string | undefined>
+    ['data-narrate']?: FacetProp<string | boolean | undefined>
+    ['data-narrate-as']?: FacetProp<string>
+    ['data-narrate-before']?: FacetProp<string>
+    ['data-narrate-after']?: FacetProp<string>
     ['data-droppable']?: FacetProp<boolean | undefined>
     ['data-testid']?: FacetProp<string | undefined>
     ['data-x-ray']?: FacetProp<boolean | undefined>
@@ -194,6 +198,10 @@ export type ElementContainer = {
   cy?: Unsubscribe
   d?: Unsubscribe
   ['data-droppable']?: Unsubscribe
+  ['data-narrate']?: Unsubscribe
+  ['data-narrate-as']?: Unsubscribe
+  ['data-narrate-after']?: Unsubscribe
+  ['data-narrate-before']?: Unsubscribe
   ['data-testid']?: Unsubscribe
   ['data-x-ray']?: Unsubscribe
   fill?: Unsubscribe
