@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react'
-import { defaultEqualityCheck } from '../equalityChecks'
 import { mapFacetsLightweight } from '../mapFacets'
 import { EqualityCheck, Facet, NoValue, Value, ExtractFacetValues } from '../types'
 
@@ -9,7 +8,7 @@ import { EqualityCheck, Facet, NoValue, Value, ExtractFacetValues } from '../typ
  * @param selector function that takes value from provided facets and maps them to a new value
  * @param dependencies variable used by the selector that are available in scope (similar as dependencies of useEffect)
  * @param facets facets that we will listen for its values to be mapped
- * @param equalityCheck optional, has a default for immutable values
+ * @param equalityCheck optional
  *
  * We pass the dependencies of the callback as the second argument so we can leverage the eslint-plugin-react-hooks option for additionalHooks.
  * Having this as the second argument allows the linter to work.
@@ -20,7 +19,7 @@ export function useFacetMap<M extends Value, Y extends Facet<unknown>[], T exten
   selector: (...args: ExtractFacetValues<T>) => M | NoValue,
   dependencies: unknown[],
   facets: T,
-  equalityCheck: EqualityCheck<M> = defaultEqualityCheck,
+  equalityCheck?: EqualityCheck<M>,
 ): Facet<M> {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectorMemoized = useCallback(selector as (...args: unknown[]) => ReturnType<typeof selector>, dependencies)
