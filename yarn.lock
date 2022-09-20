@@ -983,7 +983,7 @@ __metadata:
     cross-env: ^7.0.3
     react: ^16.9.0
     rimraf: ^3.0.2
-    typescript: ^4.3.5
+    typescript: ^4.8.2
   peerDependencies:
     react: ^16.9.0
   languageName: unknown
@@ -996,7 +996,7 @@ __metadata:
     "@react-facet/dom-fiber-testing-library": 0.3.11
     react: ^16.9.0
     rimraf: ^3.0.2
-    typescript: ^4.3.5
+    typescript: ^4.8.2
   peerDependencies:
     "@react-facet/core": 0.3.11
     react: ^16.9.0
@@ -1017,7 +1017,7 @@ __metadata:
     react: ^16.9.0
     react-dom: ^16.9.0
     rimraf: ^3.0.2
-    typescript: ^4.3.5
+    typescript: ^4.8.2
   peerDependencies:
     "@react-facet/core": 0.3.11
     react: ^16.9.0
@@ -1032,7 +1032,7 @@ __metadata:
     "@testing-library/dom": ^8.0.0
     react: ^16.9.0
     rimraf: ^3.0.2
-    typescript: ^4.3.5
+    typescript: ^4.8.2
   peerDependencies:
     "@react-facet/dom-fiber": 0.3.11
     react: ^16.9.0
@@ -1052,7 +1052,7 @@ __metadata:
     react: ^16.9.0
     react-reconciler: ^0.24.0
     rimraf: ^3.0.2
-    typescript: ^4.3.5
+    typescript: ^4.8.2
   peerDependencies:
     "@react-facet/core": 0.3.11
     react: ^16.9.0
@@ -1080,7 +1080,7 @@ __metadata:
     cross-env: ^7.0.3
     react: ^16.9.0
     rimraf: ^3.0.2
-    typescript: ^4.3.5
+    typescript: ^4.8.2
   peerDependencies:
     "@react-facet/core": 0.3.11
     react: ^16.9.0
@@ -1101,7 +1101,7 @@ __metadata:
     react: ^16.9.0
     react-dom: ^16.9.0
     rimraf: ^3.0.2
-    typescript: ^4.3.5
+    typescript: ^4.8.2
   peerDependencies:
     "@react-facet/core": 0.3.11
     react: ^16.9.0
@@ -2481,7 +2481,7 @@ __metadata:
     react-dom: ^16.9.0
     ts-loader: ^9.2.5
     ts-node: ^10.3.1
-    typescript: ^4.3.5
+    typescript: ^4.8.2
     webpack: ^5.51.1
     webpack-cli: ^4.8.0
     webpack-dev-server: ^4.0.0
@@ -9454,23 +9454,23 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-typescript@^4.3.5:
-  version: 4.4.3
-  resolution: "typescript@npm:4.4.3"
+typescript@^4.8.2:
+  version: 4.8.3
+  resolution: "typescript@npm:4.8.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 05823f21796d450531a7e4ab299715d38fd9ded0e4ce7400876053f4b5166ca3dde7a68cecfe72d9086039f03c0b6edba36516fb10ed83c5837d9600532ea4c2
+  checksum: 8286a5edcaf3d68e65c451aa1e7150ad1cf53ee0813c07ec35b7abdfdb10f355ecaa13c6a226a694ae7a67785fd7eeebf89f845da0b4f7e4a35561ddc459aba0
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.3.5#~builtin<compat/typescript>":
-  version: 4.4.3
-  resolution: "typescript@patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=32657b"
+"typescript@patch:typescript@^4.8.2#~builtin<compat/typescript>":
+  version: 4.8.3
+  resolution: "typescript@patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=32657b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 28ab98313afab46788ff41014fdb5932430ada6e03cf9e92ac47f406526a2cac1ae2894834e7da61e46b7429318e9c47f45ba8de323332f0cb9af99b72ebae74
+  checksum: 57acee3231cdd759173b2e2783ba06da7a730437c7962db89ae8b6d7149adc6d36eb35225d082600b592982e245f7bdf861a745ba5aa1cecc1c9718945cdd6e1
   languageName: node
   linkType: hard
 
