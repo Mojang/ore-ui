@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 import { useFacetMap, useFacetMemo, useFacetUnwrap } from '../hooks'
-import { EqualityCheck, Facet, NO_VALUE, Value } from '../types'
+import { EqualityCheck, Facet, NO_VALUE } from '../types'
 
 export type MapProps<T> = {
   array: Facet<T[]>
@@ -8,7 +8,7 @@ export type MapProps<T> = {
   equalityCheck?: EqualityCheck<T>
 }
 
-export const Map = <T extends Value>({ array, children, equalityCheck }: MapProps<T>) => {
+export const Map = <T,>({ array, children, equalityCheck }: MapProps<T>) => {
   const countValue = useFacetUnwrap(useFacetMap((array) => array.length, [], [array])) ?? 0
 
   return (
@@ -39,7 +39,7 @@ type MapChildMemoProps<T> = {
   equalityCheck: EqualityCheck<T>
 }
 
-const MapChildMemo = <T extends Value>({ arrayFacet, index, children, equalityCheck }: MapChildMemoProps<T>) => {
+const MapChildMemo = <T,>({ arrayFacet, index, children, equalityCheck }: MapChildMemoProps<T>) => {
   const childFacet = useFacetMemo(
     (array) => {
       if (index < array.length) return array[index]
@@ -58,7 +58,7 @@ type MapChildProps<T> = {
   children: (item: Facet<T>, index: number) => ReactElement | null
 }
 
-const MapChild = <T extends Value>({ arrayFacet, index, children }: MapChildProps<T>) => {
+const MapChild = <T,>({ arrayFacet, index, children }: MapChildProps<T>) => {
   const childFacet = useFacetMap(
     (array) => {
       if (index < array.length) return array[index]
