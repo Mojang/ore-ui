@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { defaultEqualityCheck } from '../equalityChecks'
 import { mapFacetsLightweight } from '../mapFacets'
-import { EqualityCheck, Facet, NoValue, Value, ExtractFacetValues } from '../types'
+import { EqualityCheck, Facet, NoValue, ExtractFacetValues } from '../types'
 
 /**
  * Helper hook that allows mapping a value from a facet with local variables/props in a React component
@@ -16,7 +16,7 @@ import { EqualityCheck, Facet, NoValue, Value, ExtractFacetValues } from '../typ
  *
  * @returns a new facet definition that can be consumed as a regular facet
  */
-export function useFacetMap<M extends Value, Y extends Facet<unknown>[], T extends [...Y]>(
+export function useFacetMap<M, Y extends Facet<unknown>[], T extends [...Y]>(
   selector: (...args: ExtractFacetValues<T>) => M | NoValue,
   dependencies: unknown[],
   facets: T,

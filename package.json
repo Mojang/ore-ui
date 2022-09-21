@@ -41,6 +41,6 @@
     "jest-junit-reporter": "^1.1.0",
     "jest-sonar-reporter": "2.0.0",
     "prettier": "^2.3.2",
-    "ts-node": "^10.2.0"
+    "ts-node": "^10.9.1"
   }
 }
