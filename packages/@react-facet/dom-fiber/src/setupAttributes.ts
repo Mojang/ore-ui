@@ -4,20 +4,20 @@ export const setupClassUpdate = (className: FacetProp<string | undefined>, eleme
   const htmlElement = element as HTMLElement
   if (isFacet(className)) {
     return className.observe((className) => {
-      htmlElement.className = className ?? ''
+      htmlElement.className = className != null ? className : ''
     })
   } else {
-    htmlElement.className = className ?? ''
+    htmlElement.className = className != null ? className : ''
   }
 }
 
 export const setupIdUpdate = (id: FacetProp<string | undefined>, element: HTMLElement | SVGElement) => {
   if (isFacet(id)) {
     return id.observe((id) => {
-      element.id = id ?? ''
+      element.id = id != null ? id : ''
     })
   } else {
-    element.id = id ?? ''
+    element.id = id != null ? id : ''
   }
 }
 
@@ -25,11 +25,11 @@ export const setupMaxLengthUpdate = (maxLength: FacetProp<number | undefined>, e
   if (isFacet(maxLength)) {
     return maxLength.observe((maxLength) => {
       const textElement = element as HTMLTextAreaElement
-      textElement.maxLength = maxLength ?? Number.MAX_SAFE_INTEGER
+      textElement.maxLength = maxLength != null ? maxLength : Number.MAX_SAFE_INTEGER
     })
   } else {
     const textElement = element as HTMLTextAreaElement
-    textElement.maxLength = maxLength ?? Number.MAX_SAFE_INTEGER
+    textElement.maxLength = maxLength != null ? maxLength : Number.MAX_SAFE_INTEGER
   }
 }
 
@@ -37,11 +37,11 @@ export const setupRowsUpdate = (rows: FacetProp<number | undefined>, element: HT
   if (isFacet(rows)) {
     return rows.observe((rows) => {
       const textElement = element as HTMLTextAreaElement
-      textElement.rows = rows ?? Number.MAX_SAFE_INTEGER
+      textElement.rows = rows != null ? rows : Number.MAX_SAFE_INTEGER
     })
   } else {
     const textElement = element as HTMLTextAreaElement
-    textElement.rows = rows ?? Number.MAX_SAFE_INTEGER
+    textElement.rows = rows != null ? rows : Number.MAX_SAFE_INTEGER
   }
 }
 
@@ -56,7 +56,7 @@ export const setupValueUpdate = (value: FacetProp<string | undefined>, element: 
   if (isFacet(value)) {
     return value.observe((value) => {
       const inputElement = element as HTMLInputElement
-      inputElement.value = value ?? ''
+      inputElement.value = value != null ? value : ''
 
       if (value != null) {
         inputElement.setAttribute('value', value)
@@ -66,7 +66,7 @@ export const setupValueUpdate = (value: FacetProp<string | undefined>, element: 
     })
   } else {
     const inputElement = element as HTMLInputElement
-    inputElement.value = value ?? ''
+    inputElement.value = value != null ? value : ''
 
     if (value != null) {
       inputElement.setAttribute('value', value)
@@ -80,11 +80,11 @@ export const setupSrcUpdate = (src: FacetProp<string | undefined>, element: HTML
   if (isFacet(src)) {
     return src.observe((src) => {
       const textElement = element as HTMLImageElement
-      textElement.src = src ?? ''
+      textElement.src = src != null ? src : ''
     })
   } else {
     const textElement = element as HTMLImageElement
-    textElement.src = src ?? ''
+    textElement.src = src != null ? src : ''
   }
 }
 
@@ -92,11 +92,11 @@ export const setupTextUpdate = (text: FacetProp<string | number | undefined>, el
   if (isFacet(text)) {
     return text.observe((text) => {
       const textElement = element as Text
-      textElement.nodeValue = (text ?? '') as string
+      textElement.nodeValue = (text != null ? text : '') as string
     })
   } else {
     const textElement = element as Text
-    textElement.nodeValue = (text ?? '') as string
+    textElement.nodeValue = (text != null ? text : '') as string
   }
 }
 
