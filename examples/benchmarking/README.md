@@ -24,7 +24,7 @@ And open the examples in the target platform. Ex: http://localhost:8080/listMemo
 
 ## Comparing
 
-There is a compare script that runs the comparison automatically using Chrome. Simply pass the two examples to compare and a target relative performance:
+There is a compare script that runs the comparison automatically using Chrome in JIT-less mode. Simply pass the two examples to compare and a target relative performance:
 
 ```
 yarn compare progressBarFacet progressBarState 74
