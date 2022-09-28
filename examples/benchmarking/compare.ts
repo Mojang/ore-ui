@@ -21,7 +21,9 @@ const compare = async (optionA: string, optionB: string, targetRelativePerforman
     process.exit(1)
   }
 
-  const browser = await puppeteer.launch()
+  // Runs the browser with JIT disabled, given the main target platform for Facet are game consoles
+  // and they don't have JIT available.
+  const browser = await puppeteer.launch({ args: ['--js-flags="--jitless"'] })
 
   interface TraceEvent {
     name: string
