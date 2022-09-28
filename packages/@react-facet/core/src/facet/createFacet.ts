@@ -60,14 +60,15 @@ export function createFacet<V>({
       listenerCleanups = []
     }
 
-    for (const listener of listeners) {
-      const cleanup = listener(currentValue)
+    // forEach has proven to be faster than "for...of" for JIT less environments
+    listeners.forEach((listener) => {
+      const cleanup = listener(currentValue as V)
 
       // if the listener returns a cleanup function, we store it to call latter
       if (cleanup != null) {
         listenerCleanups.push({ cleanup, listener })
       }
-    }
+    })
   }
 
   /**
