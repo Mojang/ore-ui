@@ -22,7 +22,7 @@ Optimal performance is always obtained by doing as little as possible; so direct
 
 Enter `@react-facet`, which is the solution we built to address this issue after years of working within these exact constraints in the Minecraft Bedrock edition.
 
-To find the a way to be able to get all the design, developer experience, organizational and code sustainability benefits of React, we worked on identifying the particular performance concerns that would raise out of using it. Our exploration yields a clear result:
+To find a way to be able to get all the design, developer experience, organizational and code sustainability benefits of React, we worked on identifying the particular performance concerns that would raise out of using it. Our exploration yields a clear result:
 
 1. Any manipulation of the DOM is to be avoided. Setting a property on the DOM, even if it is set to the same value that it had before, is orders of magnitude more expensive that pure object manipulation within JavaScript.
 2. Reconciliation is the most expensive feature of React, by a long margin. Mounting and unmounting components is to be avoided, and re renders caused by prop changes are to be avoided as well.
