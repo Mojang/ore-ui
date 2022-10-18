@@ -5,7 +5,7 @@ import { createFacet, useFacetEffect, useFacetMap } from '.'
 import { act, render } from '@react-facet/dom-fiber-testing-library'
 
 describe('integration testing', () => {
-  it('handles effect cleanups from a useFacetMap', () => {
+  it('calls effects and corresponding clean up handlers properly when depending on a useFacetMap facet', () => {
     const demoFacet = createFacet({ initialValue: { valueA: 'initialA', valueB: 'initialB' } })
 
     const cleanup = jest.fn()
