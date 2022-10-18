@@ -44,11 +44,11 @@
     "@testing-library/dom": "^8.0.0"
   },
   "peerDependencies": {
-    "@react-facet/dom-fiber": "workspace:*",
+    "@react-facet/dom-fiber": "0.3.12",
     "react": "^16.9.0"
   },
   "devDependencies": {
-    "@react-facet/dom-fiber": "workspace:*",
+    "@react-facet/dom-fiber": "0.3.12",
     "react": "^16.9.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.8.2"
