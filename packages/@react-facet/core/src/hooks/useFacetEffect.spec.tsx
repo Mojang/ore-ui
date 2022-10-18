@@ -10,13 +10,7 @@ it('triggers the effect on mount with the initial value and on any update of the
   const callback = jest.fn()
 
   const ComponentWithFacetEffect = () => {
-    useFacetEffect(
-      (value) => {
-        callback(value)
-      },
-      [],
-      [demoFacet],
-    )
+    useFacetEffect(callback, [], [demoFacet])
 
     return null
   }
@@ -75,15 +69,12 @@ describe('cleanup', () => {
     const demoFacet = createFacet({ initialValue: 'initial value' })
 
     const cleanup = jest.fn()
+    const effect = jest.fn((...args) => {
+      return () => cleanup(...args)
+    })
 
     const ComponentWithFacetEffect = () => {
-      useFacetEffect(
-        () => {
-          return cleanup
-        },
-        [],
-        [demoFacet],
-      )
+      useFacetEffect(effect, [], [demoFacet])
 
       return null
     }
@@ -95,21 +86,36 @@ describe('cleanup', () => {
     // cleanup is not called immediately
     expect(cleanup).not.toHaveBeenCalled()
 
+    // ...but the effect is
+    expect(effect).toHaveBeenCalledTimes(1)
+    expect(effect).toHaveBeenCalledWith('initial value')
+
+    effect.mockClear()
+
     act(() => {
       demoFacet.set('new value')
     })
 
     // once a new value is triggered we expect that the previous cleanup was called
-    expect(cleanup).toHaveBeenCalled()
+    expect(cleanup).toHaveBeenCalledTimes(1)
+    expect(cleanup).toHaveBeenCalledWith('initial value')
 
-    // clear any recorded calls ahead of next check
+    // ...and the effect is called again with the new value
+    expect(effect).toHaveBeenCalledTimes(1)
+    expect(effect).toHaveBeenLastCalledWith('new value')
+
     cleanup.mockClear()
+    effect.mockClear()
 
     // unmount the component to check if the cleanup is also called
     rerender(<></>)
 
-    // once a new value is triggered we expect that the previous cleanup was called
-    expect(cleanup).toHaveBeenCalled()
+    // when the component unmounts we expect that we cleanup the last called effect
+    expect(cleanup).toHaveBeenCalledTimes(1)
+    expect(cleanup).toHaveBeenCalledWith('new value')
+
+    // the effect shouldn't be called again on unmount
+    expect(effect).not.toHaveBeenCalled()
   })
 })
 
@@ -121,13 +127,7 @@ it('supports multiple facets, only triggering the effect once all facets have a 
   const effect = jest.fn().mockReturnValue(cleanup)
 
   const ComponentWithFacetEffect = () => {
-    useFacetEffect(
-      (valueA, valueB) => {
-        return effect(valueA, valueB)
-      },
-      [],
-      [facetA, facetB],
-    )
+    useFacetEffect(effect, [], [facetA, facetB])
 
     return null
   }

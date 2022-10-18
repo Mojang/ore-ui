@@ -1,5 +1,70 @@
 // Import from the index to check for sure that APIs are correctly exposed
+import React from 'react'
 import * as facet from '.'
+import { createFacet, useFacetEffect, useFacetMap } from '.'
+import { act, render } from '@react-facet/dom-fiber-testing-library'
+
+describe('integration testing', () => {
+  it('handles effect cleanups from a useFacetMap', () => {
+    const demoFacet = createFacet({ initialValue: { valueA: 'initialA', valueB: 'initialB' } })
+
+    const cleanup = jest.fn()
+    const effect = jest.fn((...args) => {
+      return () => cleanup(...args)
+    })
+
+    const Scenario = () => {
+      const valueAFacet = useFacetMap(({ valueA }) => valueA, [], [demoFacet])
+      useFacetEffect(effect, [], [valueAFacet])
+
+      return null
+    }
+
+    const { rerender } = render(<Scenario />)
+
+    // cleanup is not called immediately
+    expect(cleanup).not.toHaveBeenCalled()
+
+    // ...but the effect is
+    expect(effect).toHaveBeenCalledTimes(1)
+    expect(effect).toHaveBeenCalledWith('initialA')
+
+    effect.mockClear()
+
+    act(() => {
+      demoFacet.set({ valueA: 'initialA', valueB: 'newB' })
+    })
+
+    // nothing should be called
+    expect(cleanup).not.toHaveBeenCalled()
+    expect(effect).not.toHaveBeenCalled()
+
+    act(() => {
+      demoFacet.set({ valueA: 'newA', valueB: 'newB' })
+    })
+
+    // once a new value is triggered we expect that the previous cleanup was called
+    expect(cleanup).toHaveBeenCalledTimes(1)
+    expect(cleanup).toHaveBeenCalledWith('initialA')
+
+    // ...and the effect is called again with the new value
+    expect(effect).toHaveBeenCalledTimes(1)
+    expect(effect).toHaveBeenLastCalledWith('newA')
+
+    cleanup.mockClear()
+    effect.mockClear()
+
+    // unmount the component to check if the cleanup is also called
+    rerender(<></>)
+
+    // when the component unmounts we expect that we cleanup the last called effect
+    expect(cleanup).toHaveBeenCalledTimes(1)
+    expect(cleanup).toHaveBeenCalledWith('newA')
+
+    // the effect shouldn't be called again on unmount
+    expect(effect).not.toHaveBeenCalled()
+  })
+})
 
 describe('regression testing preventing accidental removal of APIs', () => {
   it('exposes the components', () => {

@@ -1,12 +1,6 @@
 import { defaultEqualityCheck } from '../equalityChecks'
 import { Cleanup, EqualityCheck, Listener, WritableFacet, StartSubscription, Option, NO_VALUE } from '../types'
 
-interface ListenerCleanupEntry {
-  cleanup: Cleanup
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  listener: Listener<any>
-}
-
 export interface FacetOptions<V> {
   initialValue: Option<V>
   startSubscription?: StartSubscription<V>
@@ -24,7 +18,6 @@ export function createFacet<V>({
   let currentValue = initialValue
   let cleanupSubscription: Cleanup | undefined
 
-  let listenerCleanups: ListenerCleanupEntry[] = []
   const checker = equalityCheck?.()
 
   const update = (newValue: V) => {
@@ -51,22 +44,8 @@ export function createFacet<V>({
 
     currentValue = newValue
 
-    if (listenerCleanups.length !== 0) {
-      for (let index = 0; index < listenerCleanups.length; index++) {
-        listenerCleanups[index].cleanup()
-      }
-
-      // start with a new array
-      listenerCleanups = []
-    }
-
     for (const listener of listeners) {
-      const cleanup = listener(currentValue)
-
-      // if the listener returns a cleanup function, we store it to call latter
-      if (cleanup != null) {
-        listenerCleanups.push({ cleanup, listener })
-      }
+      listener(currentValue)
     }
   }
 
@@ -76,15 +55,6 @@ export function createFacet<V>({
    */
   const updateToNoValue = () => {
     currentValue = NO_VALUE
-
-    if (listenerCleanups.length !== 0) {
-      for (let index = 0; index < listenerCleanups.length; index++) {
-        listenerCleanups[index].cleanup()
-      }
-
-      // start with a new array
-      listenerCleanups = []
-    }
   }
 
   return {
@@ -105,12 +75,7 @@ export function createFacet<V>({
       listeners.add(listener)
 
       if (currentValue !== NO_VALUE) {
-        const cleanup = listener(currentValue)
-
-        // if the listener returns a cleanup function, we store it to call latter
-        if (cleanup != null) {
-          listenerCleanups.push({ cleanup, listener })
-        }
+        listener(currentValue)
       }
 
       // This is the first subscription, so we start subscribing to dependencies
@@ -119,13 +84,6 @@ export function createFacet<V>({
       }
 
       return () => {
-        // check if this listener has any cleanup that we need to call
-        const cleanupIndex = listenerCleanups.findIndex((entry) => entry.listener === listener)
-        if (cleanupIndex !== -1) {
-          listenerCleanups[cleanupIndex].cleanup()
-          listenerCleanups.splice(cleanupIndex, 1)
-        }
-
         listeners.delete(listener)
 
         // if this was the last to unsubscribe, we unsubscribe from our dependencies
