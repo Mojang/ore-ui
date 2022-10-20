@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect } from 'react'
 import { Facet, Unsubscribe, Cleanup, NO_VALUE, ExtractFacetValues } from '../types'
 
 export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayoutEffect) => {
-  return function useFacetEffect<Y extends Facet<unknown>[], T extends [...Y]>(
+  return function <Y extends Facet<unknown>[], T extends [...Y]>(
     effect: (...args: ExtractFacetValues<T>) => void | Cleanup,
     dependencies: unknown[],
     facets: T,
@@ -44,7 +44,7 @@ export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayou
               cleanup()
             }
 
-            cleanup = effect(...(values as ExtractFacetValues<T>))
+            cleanup = effectMemoized(...(values as ExtractFacetValues<T>))
           }
         })
       })
