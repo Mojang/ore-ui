@@ -13,7 +13,7 @@ export function mapIntoObserveSingle<T, M>(
         const result = fn(value)
         if (result === NO_VALUE) return
 
-        return listener(result)
+        listener(result)
       })
     }
   }
@@ -42,7 +42,7 @@ export function mapIntoObserveSingle<T, M>(
 
         currentValue = result
 
-        return listener(result)
+        listener(result)
       })
     }
   }
@@ -56,7 +56,7 @@ export function mapIntoObserveSingle<T, M>(
       if (result === NO_VALUE) return
       if (checker(result)) return
 
-      return listener(result)
+      listener(result)
     })
   }
 }

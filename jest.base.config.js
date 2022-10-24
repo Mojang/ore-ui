@@ -11,4 +11,5 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest',
     '^.+\\.tsx?$': 'babel-jest',
   },
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 }

@@ -28,7 +28,7 @@ export interface FacetFactory<T> {
 export type ExcludeFacetFactory<T> = T extends FacetFactory<any> ? never : T
 
 export interface Listener<T> {
-  (value: T): void | Cleanup
+  (value: T): void
 }
 
 export type Unsubscribe = () => void
