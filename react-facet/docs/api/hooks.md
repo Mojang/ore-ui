@@ -24,9 +24,8 @@ This example illustrates how to use this hook in the common use case of having t
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 7006
 import { useCallback } from 'react'
-import { render } from '@react-facet/dom-fiber'
+import { render, KeyboardCallback } from '@react-facet/dom-fiber'
 import { useFacetMap, useFacetState, useFacetCallback } from '@react-facet/core'
 
 interface Props {
@@ -38,9 +37,11 @@ interface Props {
 const Form = ({ onSubmit, initialValue }: Props) => {
   const [value, setValue] = useFacetState(initialValue)
 
-  const handleChange = useCallback(
+  const handleChange = useCallback<KeyboardCallback>(
     (event) => {
-      setValue((event.target as HTMLInputElement).value)
+      if (event.target instanceof HTMLInputElement) {
+        setValue(event.target.value)
+      }
     },
     [setValue],
   )
@@ -71,8 +72,7 @@ Say for example that you have a small form, and want to create a handler for the
 
 ```tsx twoslash
 // @esModuleInterop
-// @errors: 7006
-import { render } from '@react-facet/dom-fiber'
+import { render, KeyboardCallback } from '@react-facet/dom-fiber'
 interface Props {
   onSubmit: (value: string) => void
   initialValue: string
@@ -84,9 +84,11 @@ import { useFacetState, useFacetCallback } from '@react-facet/core'
 const Form = ({ onSubmit, initialValue }: Props) => {
   const [value, setValue] = useFacetState(initialValue)
 
-  const handleChange = useCallback(
+  const handleChange = useCallback<KeyboardCallback>(
     (event) => {
-      setValue((event.target as HTMLInputElement).value)
+      if (event.target instanceof HTMLInputElement) {
+        setValue(event.target.value)
+      }
     },
     [setValue],
   )
