@@ -42,5 +42,6 @@
     "jest-sonar-reporter": "2.0.0",
     "prettier": "^2.3.2",
     "ts-node": "^10.9.1"
-  }
+  },
+  "packageManager": "yarn@3.2.4"
 }
