@@ -107,6 +107,7 @@ describe('createFacetContext initial facet', () => {
     const consoleLogMock = jest.spyOn(console, 'log').mockImplementation()
 
     const update = jest.fn()
+    process.env.NODE_ENV = 'development'
 
     staticFacet.observe(update)
     expect(update).toHaveBeenCalledTimes(1)
@@ -120,6 +121,31 @@ describe('createFacetContext initial facet', () => {
     consoleLogMock.mockClear()
 
     process.env.NODE_ENV = 'production'
+
+    staticFacet.observe(update)
+    expect(update).toHaveBeenCalledTimes(1)
+    expect(update).toHaveBeenCalledWith(defaultValue)
+    expect(consoleLogMock).toHaveBeenCalledTimes(0)
+  })
+
+  it(`it responds with the same value if you observe it and warns you in a non-production environment`, () => {
+    const consoleLogMock = jest.spyOn(console, 'log').mockImplementation()
+
+    const update = jest.fn()
+    process.env.NODE_ENV = 'development'
+
+    staticFacet.observe(update)
+    expect(update).toHaveBeenCalledTimes(1)
+    expect(update).toHaveBeenCalledWith(defaultValue)
+    expect(consoleLogMock).toHaveBeenCalledTimes(1)
+    expect(consoleLogMock).toHaveBeenCalledWith(
+      `Accessing a static facet created through createFacetContext, perhaps you're missing a Context Provider?`,
+    )
+
+    update.mockClear()
+    consoleLogMock.mockClear()
+
+    process.env.NODE_ENV = 'test'
 
     staticFacet.observe(update)
     expect(update).toHaveBeenCalledTimes(1)
