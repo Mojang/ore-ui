@@ -108,6 +108,8 @@ describe('createFacetContext initial facet', () => {
 
     const update = jest.fn()
 
+    process.env.NODE_ENV = 'development'
+
     staticFacet.observe(update)
     expect(update).toHaveBeenCalledTimes(1)
     expect(update).toHaveBeenCalledWith(defaultValue)
@@ -120,10 +122,10 @@ describe('createFacetContext initial facet', () => {
     consoleLogMock.mockClear()
 
     process.env.NODE_ENV = 'production'
-
     staticFacet.observe(update)
     expect(update).toHaveBeenCalledTimes(1)
     expect(update).toHaveBeenCalledWith(defaultValue)
     expect(consoleLogMock).toHaveBeenCalledTimes(0)
+    process.env.NODE_ENV = 'test'
   })
 })

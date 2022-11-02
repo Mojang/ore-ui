@@ -5,7 +5,7 @@ export function createFacetContext<T>(initialValue: T) {
   const facet: Facet<T> = {
     get: () => initialValue,
     observe: (listener) => {
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV === 'development') {
         console.log(
           `Accessing a static facet created through createFacetContext, perhaps you're missing a Context Provider?`,
         )
