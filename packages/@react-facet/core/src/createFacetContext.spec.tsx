@@ -114,7 +114,8 @@ describe('createFacetContext initial facet', () => {
     expect(update).toHaveBeenCalledWith(defaultValue)
     expect(consoleLogMock).toHaveBeenCalledTimes(1)
     expect(consoleLogMock).toHaveBeenCalledWith(
-      `Accessing a static facet created through createFacetContext, perhaps you're missing a Context Provider?`,
+      `Accessing a static facet created through createFacetContext, perhaps you're missing a Context Provider? initialValue: `,
+      JSON.stringify(defaultValue),
     )
 
     update.mockClear()
@@ -126,6 +127,7 @@ describe('createFacetContext initial facet', () => {
     expect(update).toHaveBeenCalledTimes(1)
     expect(update).toHaveBeenCalledWith(defaultValue)
     expect(consoleLogMock).toHaveBeenCalledTimes(0)
+    process.env.NODE_ENV = 'test' // Restore NODE_ENV back to test to not mess with subsequent tests
   })
 
   it(`it responds with the same value if you observe it and warns you in a non-production environment`, () => {
@@ -139,7 +141,8 @@ describe('createFacetContext initial facet', () => {
     expect(update).toHaveBeenCalledWith(defaultValue)
     expect(consoleLogMock).toHaveBeenCalledTimes(1)
     expect(consoleLogMock).toHaveBeenCalledWith(
-      `Accessing a static facet created through createFacetContext, perhaps you're missing a Context Provider?`,
+      `Accessing a static facet created through createFacetContext, perhaps you're missing a Context Provider? initialValue: `,
+      JSON.stringify(defaultValue),
     )
 
     update.mockClear()
