@@ -23,7 +23,7 @@ export function createFacetContext<T>(initialValue: T) {
 
 function parseInitialValue<T>(initialValue: T) {
   try {
-    return JSON.stringify(initialValue)
+    return JSON.stringify(initialValue, null, 2)
   } catch (e) {
     return initialValue
   }
