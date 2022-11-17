@@ -179,6 +179,10 @@ export const setupHostConfig = (): HostConfig<
       element.addEventListener('mousedown', newProps.onMouseDown as EventListener)
     }
 
+    if (newProps.onMouseMove) {
+      element.addEventListener('mousemove', newProps.onMouseMove as EventListener)
+    }
+
     if (newProps.onMouseUp) {
       element.addEventListener('mouseup', newProps.onMouseUp as EventListener)
     }
@@ -284,6 +288,26 @@ export const setupHostConfig = (): HostConfig<
       ['data-droppable']:
         newProps['data-droppable'] != null
           ? setupAttributeUpdate('data-droppable', newProps['data-droppable'], element)
+          : undefined,
+
+      ['data-narrate']:
+        newProps['data-narrate'] != null
+          ? setupAttributeUpdate('data-narrate', newProps['data-narrate'], element)
+          : undefined,
+
+      ['data-narrate-as']:
+        newProps['data-narrate-as'] != null
+          ? setupAttributeUpdate('data-narrate-as', newProps['data-narrate-as'], element)
+          : undefined,
+
+      ['data-narrate-before']:
+        newProps['data-narrate-before'] != null
+          ? setupAttributeUpdate('data-narrate-before', newProps['data-narrate-before'], element)
+          : undefined,
+
+      ['data-narrate-after']:
+        newProps['data-narrate-after'] != null
+          ? setupAttributeUpdate('data-narrate-after', newProps['data-narrate-after'], element)
           : undefined,
 
       ['data-testid']:
@@ -420,6 +444,54 @@ export const setupHostConfig = (): HostConfig<
         element.removeAttribute('data-droppable')
       } else {
         instance['data-droppable'] = setupAttributeUpdate('data-droppable', newProps['data-droppable'], element)
+      }
+    }
+
+    if (newProps['data-narrate'] !== oldProps['data-narrate']) {
+      instance['data-narrate']?.()
+
+      if (newProps['data-narrate'] == null) {
+        element.removeAttribute('data-narrate')
+      } else {
+        instance['data-narrate'] = setupAttributeUpdate('data-narrate', newProps['data-narrate'], element)
+      }
+    }
+
+    if (newProps['data-narrate-as'] !== oldProps['data-narrate-as']) {
+      instance['data-narrate-as']?.()
+
+      if (newProps['data-narrate-as'] == null) {
+        element.removeAttribute('data-narrate-as')
+      } else {
+        instance['data-narrate-as'] = setupAttributeUpdate('data-narrate-as', newProps['data-narrate-as'], element)
+      }
+    }
+
+    if (newProps['data-narrate-after'] !== oldProps['data-narrate-after']) {
+      instance['data-narrate-after']?.()
+
+      if (newProps['data-narrate-after'] == null) {
+        element.removeAttribute('data-narrate-after')
+      } else {
+        instance['data-narrate-after'] = setupAttributeUpdate(
+          'data-narrate-after',
+          newProps['data-narrate-after'],
+          element,
+        )
+      }
+    }
+
+    if (newProps['data-narrate-before'] !== oldProps['data-narrate-before']) {
+      instance['data-narrate-before']?.()
+
+      if (newProps['data-narrate-before'] == null) {
+        element.removeAttribute('data-narrate-before')
+      } else {
+        instance['data-narrate-before'] = setupAttributeUpdate(
+          'data-narrate-before',
+          newProps['data-narrate-before'],
+          element,
+        )
       }
     }
 
@@ -842,6 +914,11 @@ export const setupHostConfig = (): HostConfig<
       if (newProps.onMouseDown) element.addEventListener('mousedown', newProps.onMouseDown)
     }
 
+    if (newProps.onMouseMove !== oldProps.onMouseMove) {
+      if (oldProps.onMouseMove) element.removeEventListener('mousemove', oldProps.onMouseMove)
+      if (newProps.onMouseMove) element.addEventListener('mousemove', newProps.onMouseMove)
+    }
+
     if (newProps.onMouseEnter !== oldProps.onMouseEnter) {
       if (oldProps.onMouseEnter) element.removeEventListener('mouseenter', oldProps.onMouseEnter)
       if (newProps.onMouseEnter) element.addEventListener('mouseenter', newProps.onMouseEnter)
@@ -932,7 +1009,7 @@ export const setupHostConfig = (): HostConfig<
 
   removeChild: function (parentInstance, child) {
     if (isElementContainer(child)) {
-      cleanupElementContainer(child)
+      cleanupElementContainer(parentInstance, child)
     }
 
     parentInstance.element.removeChild(child.element)
@@ -944,7 +1021,7 @@ export const setupHostConfig = (): HostConfig<
 
   removeChildFromContainer: function (container, child) {
     if (isElementContainer(child)) {
-      cleanupElementContainer(child)
+      cleanupElementContainer(container, child)
     }
 
     container.element.removeChild(child.element)
@@ -959,7 +1036,9 @@ export const setupHostConfig = (): HostConfig<
   },
 })
 
-const cleanupElementContainer = (instance: ElementContainer) => {
+const cleanupElementContainer = (parent: ElementContainer, instance: ElementContainer) => {
+  parent.children.delete(instance)
+
   instance.styleUnsubscribers?.forEach((unsubscribe) => unsubscribe())
   instance.styleUnsubscribers?.clear()
 
@@ -968,6 +1047,10 @@ const cleanupElementContainer = (instance: ElementContainer) => {
 
   instance.className?.()
   instance['data-droppable']?.()
+  instance['data-narrate']?.()
+  instance['data-narrate-as']?.()
+  instance['data-narrate-after']?.()
+  instance['data-narrate-before']?.()
   instance['data-testid']?.()
   instance['data-x-ray']?.()
   instance.id?.()

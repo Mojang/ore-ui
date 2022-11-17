@@ -28,7 +28,7 @@ export interface FacetFactory<T> {
 export type ExcludeFacetFactory<T> = T extends FacetFactory<any> ? never : T
 
 export interface Listener<T> {
-  (value: T): void | Cleanup
+  (value: T): void
 }
 
 export type Unsubscribe = () => void
@@ -55,7 +55,7 @@ export type Cleanup = Unsubscribe
 
 export type StartSubscription<V> = (update: Update<V>) => Cleanup
 
-export const isFacet = <T extends Value>(value: unknown): value is Facet<T> => {
+export const isFacet = <T>(value: Value | Facet<T>): value is Facet<T> => {
   return value != null && (value as Facet<T>).observe != null && (value as Facet<T>).get != null
 }
 

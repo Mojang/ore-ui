@@ -26,7 +26,7 @@ export function mapIntoObserveArray<M>(
             const result = fn(...dependencyValues)
             if (result === NO_VALUE) return
 
-            return listener(result)
+            listener(result)
           }
         })
       }
@@ -57,7 +57,7 @@ export function mapIntoObserveArray<M>(
 
             currentValue = result
 
-            return listener(result)
+            listener(result)
           }
         })
       }
@@ -76,7 +76,7 @@ export function mapIntoObserveArray<M>(
           if (result === NO_VALUE) return
           if (checker(result)) return
 
-          return listener(result)
+          listener(result)
         }
       })
     })

@@ -67,6 +67,31 @@ describe('mount', () => {
       expect(root?.innerHTML ?? '').toBe('<div data-droppable=""></div>')
     })
 
+    it('sets the data-narrate', () => {
+      render(<div data-narrate />)
+      expect(root?.innerHTML ?? '').toBe('<div data-narrate=""></div>')
+    })
+
+    it('sets the data-narrate (with value)', () => {
+      render(<div data-narrate="hello world" />)
+      expect(root?.innerHTML ?? '').toBe('<div data-narrate="hello world"></div>')
+    })
+
+    it('sets the data-narrate-after', () => {
+      render(<div data-narrate-after="this comes after" />)
+      expect(root?.innerHTML ?? '').toBe('<div data-narrate-after="this comes after"></div>')
+    })
+
+    it('sets the data-narrate-before', () => {
+      render(<div data-narrate-before="and this comes before" />)
+      expect(root?.innerHTML ?? '').toBe('<div data-narrate-before="and this comes before"></div>')
+    })
+
+    it('sets the data-narrate-as', () => {
+      render(<div data-narrate-as="title" />)
+      expect(root?.innerHTML ?? '').toBe('<div data-narrate-as="title"></div>')
+    })
+
     it('sets the href and target', () => {
       render(<a href="url" target="__blank"></a>)
       expect(root?.innerHTML ?? '').toBe('<a href="url" target="__blank"></a>')
@@ -353,6 +378,42 @@ describe('mount', () => {
 
       dataDroppableFacet.set(false)
       expect(root?.innerHTML ?? '').toBe('<div></div>')
+    })
+
+    it('sets the data narration properties', () => {
+      const dataNarrateFacet = createFacet<string | boolean>({ initialValue: true })
+      const dataNarrateBeforeFacet = createFacet({ initialValue: 'this comes before' })
+      const dataNarrateAsFacet = createFacet({ initialValue: 'title' })
+      const dataNarrateAfterFacet = createFacet({ initialValue: 'this comes after' })
+
+      render(
+        <fast-div
+          data-narrate={dataNarrateFacet}
+          data-narrate-before={dataNarrateBeforeFacet}
+          data-narrate-as={dataNarrateAsFacet}
+          data-narrate-after={dataNarrateAfterFacet}
+        />,
+      )
+
+      const fastDivNode = root?.children[0]
+
+      expect(fastDivNode.getAttribute('data-narrate')).toBe('')
+      expect(fastDivNode.getAttribute('data-narrate-before')).toBe('this comes before')
+      expect(fastDivNode.getAttribute('data-narrate-as')).toBe('title')
+      expect(fastDivNode.getAttribute('data-narrate-after')).toBe('this comes after')
+
+      dataNarrateFacet.set('some content')
+      dataNarrateAsFacet.set('subtitle')
+      dataNarrateBeforeFacet.set('also called prefix')
+      dataNarrateAfterFacet.set('also called suffix')
+
+      expect(fastDivNode.getAttribute('data-narrate')).toBe('some content')
+      expect(fastDivNode.getAttribute('data-narrate-before')).toBe('also called prefix')
+      expect(fastDivNode.getAttribute('data-narrate-as')).toBe('subtitle')
+      expect(fastDivNode.getAttribute('data-narrate-after')).toBe('also called suffix')
+
+      dataNarrateFacet.set(false)
+      expect(fastDivNode.getAttribute('data-narrate')).toBe(null)
     })
 
     it('sets the data-testid', () => {
@@ -705,6 +766,7 @@ describe('mount', () => {
     let onFocus: jest.Mock
     let onBlur: jest.Mock
     let onMouseDown: jest.Mock
+    let onMouseMove: jest.Mock
     let onMouseUp: jest.Mock
     let onTouchStart: jest.Mock
     let onTouchMove: jest.Mock
@@ -721,6 +783,7 @@ describe('mount', () => {
       onFocus = jest.fn()
       onBlur = jest.fn()
       onMouseDown = jest.fn()
+      onMouseMove = jest.fn()
       onMouseUp = jest.fn()
       onTouchStart = jest.fn()
       onTouchMove = jest.fn()
@@ -738,6 +801,7 @@ describe('mount', () => {
           onFocus={onFocus}
           onBlur={onBlur}
           onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
           onMouseUp={onMouseUp}
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
@@ -774,6 +838,11 @@ describe('mount', () => {
     it('supports onMouseDown', () => {
       div.dispatchEvent(new Event('mousedown'))
       expect(onMouseDown).toHaveBeenCalled()
+    })
+
+    it('supports onMouseMove', () => {
+      div.dispatchEvent(new Event('mousemove'))
+      expect(onMouseMove).toHaveBeenCalled()
     })
 
     it('supports onMouseUp', () => {
@@ -1553,6 +1622,7 @@ describe('update', () => {
     let firstOnFocus: jest.Mock
     let firstOnBlur: jest.Mock
     let firstOnMouseDown: jest.Mock
+    let firstOnMouseMove: jest.Mock
     let firstOnMouseUp: jest.Mock
     let firstOnTouchStart: jest.Mock
     let firstOnTouchMove: jest.Mock
@@ -1567,6 +1637,7 @@ describe('update', () => {
     let secondOnFocus: jest.Mock
     let secondOnBlur: jest.Mock
     let secondOnMouseDown: jest.Mock
+    let secondOnMouseMove: jest.Mock
     let secondOnMouseUp: jest.Mock
     let secondOnTouchStart: jest.Mock
     let secondOnTouchMove: jest.Mock
@@ -1595,6 +1666,7 @@ describe('update', () => {
           onFocus={second ? secondOnFocus : firstOnFocus}
           onBlur={second ? secondOnBlur : firstOnBlur}
           onMouseDown={second ? secondOnMouseDown : firstOnMouseDown}
+          onMouseMove={second ? secondOnMouseMove : firstOnMouseMove}
           onMouseUp={second ? secondOnMouseUp : firstOnMouseUp}
           onTouchStart={second ? secondOnTouchStart : firstOnTouchStart}
           onTouchMove={second ? secondOnTouchMove : firstOnTouchMove}
@@ -1615,6 +1687,7 @@ describe('update', () => {
       firstOnFocus = jest.fn()
       firstOnBlur = jest.fn()
       firstOnMouseDown = jest.fn()
+      firstOnMouseMove = jest.fn()
       firstOnMouseUp = jest.fn()
       firstOnTouchStart = jest.fn()
       firstOnTouchMove = jest.fn()
@@ -1629,6 +1702,7 @@ describe('update', () => {
       secondOnFocus = jest.fn()
       secondOnBlur = jest.fn()
       secondOnMouseDown = jest.fn()
+      secondOnMouseMove = jest.fn()
       secondOnMouseUp = jest.fn()
       secondOnTouchStart = jest.fn()
       secondOnTouchMove = jest.fn()
@@ -1707,6 +1781,20 @@ describe('update', () => {
       div.dispatchEvent(new Event('mousedown'))
       expect(firstOnMouseDown).not.toHaveBeenCalled()
       expect(secondOnMouseDown).toHaveBeenCalled()
+    })
+
+    it('supports onMouseMove', () => {
+      div.dispatchEvent(new Event('mousemove'))
+      expect(firstOnMouseMove).toHaveBeenCalled()
+      expect(secondOnMouseMove).not.toHaveBeenCalled()
+
+      firstOnMouseMove.mockClear()
+      secondOnMouseMove.mockClear()
+      jest.runAllTimers()
+
+      div.dispatchEvent(new Event('mousemove'))
+      expect(firstOnMouseMove).not.toHaveBeenCalled()
+      expect(secondOnMouseMove).toHaveBeenCalled()
     })
 
     it('supports onMouseUp', () => {
@@ -1856,6 +1944,52 @@ describe('update', () => {
 })
 
 describe('umnount', () => {
+  it('hostConfig.removeChild should cleanup children instances', () => {
+    const hostConfig = setupHostConfig()
+    const child: ElementContainer = {
+      children: new Set(),
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map(),
+    }
+
+    const parentInstance: ElementContainer = {
+      children: new Set(),
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map(),
+    }
+
+    hostConfig.appendChild?.(parentInstance, child)
+
+    expect(parentInstance.children.size).toBe(1)
+
+    hostConfig.removeChild?.(parentInstance, child)
+
+    expect(parentInstance.children.size).toBe(0)
+  })
+
+  it('hostConfig.removeChildFromContainer should cleanup children instances', () => {
+    const hostConfig = setupHostConfig()
+    const child: ElementContainer = {
+      children: new Set(),
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map(),
+    }
+
+    const parentInstance: ElementContainer = {
+      children: new Set(),
+      element: document.createElement('div'),
+      styleUnsubscribers: new Map(),
+    }
+
+    hostConfig.appendChild?.(parentInstance, child)
+
+    expect(parentInstance.children.size).toBe(1)
+
+    hostConfig.removeChildFromContainer?.(parentInstance, child)
+
+    expect(parentInstance.children.size).toBe(0)
+  })
+
   it('unsubscribes from all facets when a element component is unmounted', () => {
     const unsubscribe = jest.fn()
 
@@ -1870,6 +2004,10 @@ describe('umnount', () => {
         style={{ background: facet, color: facet }}
         className={facet}
         data-droppable={facet}
+        data-narrate={facet}
+        data-narrate-before={facet}
+        data-narrate-after={facet}
+        data-narrate-as={facet}
         data-testid={facet}
         data-x-ray={facet}
         src={facet}
@@ -1884,12 +2022,12 @@ describe('umnount', () => {
         type={facet}
       />,
     )
-    // on mount, we verify that we have added 16 subscriptions (one for each prop and style above)
-    expect(facet.observe).toHaveBeenCalledTimes(16)
+    // on mount, we verify that we have added 20 subscriptions (one for each prop and style above)
+    expect(facet.observe).toHaveBeenCalledTimes(20)
 
     // on unmount, we check that unsubscribe was called once for each subscription
     render(<></>)
-    expect(unsubscribe).toHaveBeenCalledTimes(16)
+    expect(unsubscribe).toHaveBeenCalledTimes(20)
   })
 
   it('unsubscribes from the text facet when a fast-text component is unmounted', () => {

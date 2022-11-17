@@ -19,7 +19,7 @@ export function useFacetUnwrap<T extends Value>(prop: FacetProp<T>): T | NoValue
 
   useLayoutEffect(() => {
     if (isFacet(prop)) {
-      return prop.observe((value: T) => {
+      return prop.observe((value) => {
         setState((previousState) => {
           const { value: previousValue } = previousState
 
