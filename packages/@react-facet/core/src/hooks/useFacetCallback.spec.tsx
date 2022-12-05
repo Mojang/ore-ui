@@ -198,34 +198,3 @@ it('has proper return type with NO_VALUE in it', () => {
 
   render(<TestComponent />)
 })
-
-it('returns the defaultValue, when provided, if any facet has NO_VALUE and skip calling the callback', () => {
-  const facetA = createFacet({ initialValue: 'a' })
-  const facetB = createFacet<number>({ initialValue: NO_VALUE })
-
-  const callback = jest.fn()
-  let handler: (event: string) => string
-
-  const TestComponent = ({ dependency }: { dependency: string }) => {
-    handler = useFacetCallback(
-      (valueA, valueB) => (event: string) => {
-        callback(valueA, valueB, dependency, event)
-        return `${valueA} ${valueB}`
-      },
-      [dependency],
-      [facetA, facetB],
-      'default value',
-    )
-
-    return null
-  }
-
-  render(<TestComponent dependency="dependency" />)
-
-  act(() => {
-    const result = handler('event')
-    expect(result).toBe('default value')
-  })
-
-  expect(callback).not.toHaveBeenCalledWith()
-})
