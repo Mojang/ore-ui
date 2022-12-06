@@ -1,7 +1,13 @@
 /* eslint-env node */
 
 module.exports = {
-  extends: ['plugin:prettier/recommended', 'prettier/@typescript-eslint', '@react-facet/eslint-config'],
+  extends: [
+    'plugin:prettier/recommended',
+    'prettier/@typescript-eslint',
+    '@react-facet/eslint-config',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+  ],
   plugins: ['react', 'require-in-package', 'react-hooks', 'prettier'],
 
   root: true,
@@ -19,6 +25,7 @@ module.exports = {
   },
 
   rules: {
+    'import/no-cycle': 'error',
     'no-unreachable': 'error',
     'no-undef': 'error',
     'react-hooks/rules-of-hooks': 'error',
@@ -26,6 +33,14 @@ module.exports = {
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
     'require-in-package/require-in-package': 2,
+  },
+
+  settings: {
+    'import/extensions': ['.ts', '.tsx'],
+    'import/resolver': {
+      typescript: true,
+      node: true,
+    },
   },
 
   overrides: [

@@ -1,7 +1,6 @@
 import { useRef, MutableRefObject } from 'react'
-import { Facet } from '../types'
 import { useFacetEffect } from './useFacetEffect'
-import { NO_VALUE, Option } from '..'
+import { NO_VALUE, Option, Facet } from '../types'
 
 export function useFacetRef<T>(facet: Facet<T>): MutableRefObject<Option<T>>
 export function useFacetRef<T>(facet: Facet<T>, defaultValue: T): MutableRefObject<T>

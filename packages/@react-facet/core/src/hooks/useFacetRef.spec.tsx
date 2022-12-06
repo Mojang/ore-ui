@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import { render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetRef } from './useFacetRef'
 import { createFacet } from '../facet'
@@ -6,7 +6,7 @@ import { NoValue, NO_VALUE } from '..'
 
 it('passes a value into the ref', () => {
   const mockFacet = createFacet({ initialValue: 'value' })
-  let ref: React.RefObject<string | NoValue> = React.createRef()
+  let ref: React.RefObject<string | NoValue> = createRef()
 
   const ComponentWithFacetEffect: React.FC = () => {
     ref = useFacetRef(mockFacet)
@@ -22,7 +22,7 @@ it('passes a value into the ref', () => {
 
 it('should default to no NO_VALUE', () => {
   const mockFacet = createFacet<string>({ initialValue: NO_VALUE })
-  let ref: React.RefObject<string | NoValue> = React.createRef()
+  let ref: React.RefObject<string | NoValue> = createRef()
 
   const ComponentWithFacetEffect: React.FC = () => {
     ref = useFacetRef(mockFacet)
@@ -38,7 +38,7 @@ it('should default to no NO_VALUE', () => {
 
 it('should be able to set a default value', () => {
   const mockFacet = createFacet<string>({ initialValue: NO_VALUE })
-  let ref: React.RefObject<string | NoValue> = React.createRef()
+  let ref: React.RefObject<string | NoValue> = createRef()
 
   const ComponentWithFacetEffect: React.FC = () => {
     ref = useFacetRef(mockFacet, 'fallback')
@@ -54,7 +54,7 @@ it('should be able to set a default value', () => {
 
 it('should ignore the default state if the facet has a value', () => {
   const mockFacet = createFacet<string>({ initialValue: 'initialValue' })
-  let ref: React.RefObject<string | NoValue> = React.createRef()
+  let ref: React.RefObject<string | NoValue> = createRef()
 
   const ComponentWithFacetEffect: React.FC = () => {
     ref = useFacetRef(mockFacet, 'fallback')

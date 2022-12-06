@@ -1,5 +1,7 @@
 import React, { ReactElement } from 'react'
-import { useFacetMap, useFacetMemo, useFacetUnwrap } from '../hooks'
+import { useFacetMemo } from '../hooks/useFacetMemo'
+import { useFacetUnwrap } from '../hooks/useFacetUnwrap'
+import { useFacetMap } from '../hooks/useFacetMap'
 import { EqualityCheck, Facet, NO_VALUE } from '../types'
 
 export type MapProps<T> = {

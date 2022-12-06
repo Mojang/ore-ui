@@ -238,5 +238,4 @@ const environment = setup()
 export const act = environment.act
 export const render = environment.render
 export const cleanup = environment.cleanup
-export const fireEvent = environment.fireEvent
 export * from '@testing-library/dom'
