@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer'
+import { launch } from 'puppeteer'
 import { times } from 'ramda'
 import path from 'path'
 import { mkdirpSync } from 'fs-extra'
@@ -21,7 +21,7 @@ const compare = async (optionA: string, optionB: string, targetRelativePerforman
     process.exit(1)
   }
 
-  const browser = await puppeteer.launch()
+  const browser = await launch()
 
   interface TraceEvent {
     name: string

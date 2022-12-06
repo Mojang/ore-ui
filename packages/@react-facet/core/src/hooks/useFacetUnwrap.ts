@@ -1,6 +1,5 @@
 import { useLayoutEffect, useState } from 'react'
-import { NoValue } from '..'
-import { FacetProp, isFacet, Value } from '../types'
+import { FacetProp, isFacet, Value, NoValue } from '../types'
 
 /**
  * Hook that allows consuming values from a Facet
