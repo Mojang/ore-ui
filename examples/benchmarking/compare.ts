@@ -1,4 +1,4 @@
-import { launch } from 'puppeteer'
+import puppeteer from 'puppeteer'
 import { times } from 'ramda'
 import path from 'path'
 import { mkdirpSync } from 'fs-extra'
@@ -21,7 +21,9 @@ const compare = async (optionA: string, optionB: string, targetRelativePerforman
     process.exit(1)
   }
 
-  const browser = await launch()
+  // Puppeteer doesn't really have a `launch` named export.
+  // eslint-disable-next-line import/no-named-as-default-member
+  const browser = await puppeteer.launch()
 
   interface TraceEvent {
     name: string
