@@ -30,7 +30,7 @@
   "bugs": "https://github.com/Mojang/ore-ui/issues",
   "license": "MIT",
   "version": "0.4.1",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "publishConfig": {
     "main": "dist/index.js",
     "types": "dist/index.d.ts"
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@react-facet/dom-fiber-testing-library": "0.4.1",
     "@types/react": "^18.0.8",
-    "@types/react-reconciler": "^0.18.0",
+    "@types/react-reconciler": "^0.28.0",
     "@types/rimraf": "^3",
     "cross-env": "^7.0.3",
     "react": "^18.1.0",
