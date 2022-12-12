@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 // eslint-disable-next-line require-in-package/require-in-package
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'

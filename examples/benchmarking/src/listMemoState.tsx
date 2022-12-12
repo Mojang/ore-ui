@@ -1,5 +1,5 @@
 import { render } from 'react-dom'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, memo } from 'react'
 
 interface Data {
   name: string
@@ -41,7 +41,7 @@ export const Performance = () => {
   )
 }
 
-const ListItem = React.memo(({ health, name }: Data) => {
+const ListItem = memo(({ health, name }: Data) => {
   useEffect(() => {
     randomWork(health)
   }, [health])

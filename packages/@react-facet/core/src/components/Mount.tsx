@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import { useFacetUnwrap } from '../hooks'
+import { useFacetUnwrap } from '../hooks/useFacetUnwrap'
 import { Facet } from '../types'
 
 type MountProps = {
