@@ -1044,6 +1044,22 @@ export const setupHostConfig = (): HostConfig<
   getPublicInstance: function(instance) {
     return instance.element
   },
+  hideInstance(instance) {
+    console.log("Hidden: ", instance)
+    // Detach while the instance is hidden
+    // const { attach: type, parent } = instance.__r3f ?? {}
+    // if (type && parent) detach(parent, instance, type)
+    // if (instance.isObject3D) instance.visible = false
+    // invalidateInstance(instance)
+  },
+  unhideInstance(instance, props) {
+    console.log("Unhidden: ", instance, props)
+    // Re-attach when the instance is unhidden
+    // const { attach: type, parent } = instance.__r3f ?? {}
+    // if (type && parent) attach(parent, instance, type)
+    // if ((instance.isObject3D && props.visible == null) || props.visible) instance.visible = true
+    // invalidateInstance(instance)
+  },
 })
 
 const cleanupElementContainer = (parent: ElementContainer, instance: ElementContainer) => {
