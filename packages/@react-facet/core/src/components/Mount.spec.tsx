@@ -64,7 +64,7 @@ it('can perform conditional rendering', () => {
 
   const Example = () => {
     return (
-      <Mount when={hasItemsFacet} condition={false}>
+      <Mount when={hasItemsFacet} is={false}>
         <Component />
       </Mount>
     )
