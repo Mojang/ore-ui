@@ -987,26 +987,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/core@npm:0.4.1":
-  version: 0.4.1
-  resolution: "@react-facet/core@npm:0.4.1"
-  peerDependencies:
-    react: ^16.9.0
-  checksum: 80dff039c4d089912907d004d2a9303773d6ef826bbc5b8321dafcb74704f6fc95abef36c1398ed8718e0274a578efdf35bcca5e6ab4619021539a9226451d02
-  languageName: node
-  linkType: hard
-
-"@react-facet/deferred-mount@npm:0.4.1":
-  version: 0.4.1
-  resolution: "@react-facet/deferred-mount@npm:0.4.1"
-  peerDependencies:
-    "@react-facet/core": 0.4.1
-    react: ^16.9.0
-  checksum: 5689c5ee2b5e670804451b1c3521214c6d8762812b79e2bed10baafb04220e914bb50c397d8004d879e74c34591e99fa09cc44f9620d1ccbac52c5d775e79712
-  languageName: node
-  linkType: hard
-
-"@react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount":
+"@react-facet/deferred-mount@0.4.3, @react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount":
   version: 0.0.0-use.local
   resolution: "@react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount"
   dependencies:
@@ -1075,18 +1056,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber@npm:0.4.1":
-  version: 0.4.1
-  resolution: "@react-facet/dom-fiber@npm:0.4.1"
-  dependencies:
-    react-reconciler: ^0.24.0
-  peerDependencies:
-    "@react-facet/core": 0.4.1
-    react: ^16.9.0
-  checksum: 26a197ccee7011fdfbd6c359c82444e446aa3b2b9291c8e1364c6b26595961d9dd721c1cc96d4356dacf6176815e2c97e35e777a148284d1d6517b46ba60f0b9
-  languageName: node
-  linkType: hard
-
 "@react-facet/eslint-config@workspace:packages/@react-facet/eslint-config":
   version: 0.0.0-use.local
   resolution: "@react-facet/eslint-config@workspace:packages/@react-facet/eslint-config"
@@ -1115,16 +1084,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/shared-facet@npm:0.4.1":
-  version: 0.4.1
-  resolution: "@react-facet/shared-facet@npm:0.4.1"
-  peerDependencies:
-    "@react-facet/core": 0.4.1
-    react: ^16.9.0
-  checksum: 5208d1f87f7f412e8daf7fb6269453459baab6183159da948142facdfe765daca8e66ccfe1009bd7e1079252cebae5b6bdefe22102e69b42ef83b206bebcb834
-  languageName: node
-  linkType: hard
-
 "@react-facet/spring@0.4.3, @react-facet/spring@workspace:packages/@react-facet/spring":
   version: 0.0.0-use.local
   resolution: "@react-facet/spring@workspace:packages/@react-facet/spring"
@@ -1144,16 +1103,6 @@ __metadata:
     react: ^18.1.0
   languageName: unknown
   linkType: soft
-
-"@react-facet/spring@npm:0.4.1":
-  version: 0.4.1
-  resolution: "@react-facet/spring@npm:0.4.1"
-  peerDependencies:
-    "@react-facet/core": 0.4.1
-    react: ^16.9.0
-  checksum: 7db1668cbf3b3d41c7db4c497e86adea58e2269e57664693d479a31e09f27fc680539a6dece675f76d18a5abc531d6d30119232ee62f42088fdafd68ed2d3bec
-  languageName: node
-  linkType: hard
 
 "@sheerun/mutationobserver-shim@npm:^0.3.2":
   version: 0.3.3
@@ -3249,11 +3198,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "concurrent@workspace:examples/concurrent"
   dependencies:
-    "@react-facet/core": 0.4.1
-    "@react-facet/deferred-mount": 0.4.1
-    "@react-facet/dom-fiber": 0.4.1
-    "@react-facet/shared-facet": 0.4.1
-    "@react-facet/spring": 0.4.1
+    "@react-facet/core": 0.4.3
+    "@react-facet/deferred-mount": 0.4.3
+    "@react-facet/dom-fiber": 0.4.3
+    "@react-facet/shared-facet": 0.4.3
+    "@react-facet/spring": 0.4.3
     "@types/fs-extra": ^9.0.12
     "@types/puppeteer": ^5.4.4
     "@types/ramda": ^0
@@ -8515,20 +8464,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-reconciler@npm:^0.24.0":
-  version: 0.24.0
-  resolution: "react-reconciler@npm:0.24.0"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    prop-types: ^15.6.2
-    scheduler: ^0.18.0
-  peerDependencies:
-    react: ^16.0.0
-  checksum: c9c74208325a940ca36e031b71499f6d8e62e96ee673d69e35cc9e6a661aa746a2b0750f2ffcd1bae0a29eaf3d127dc8197ab7e801e6a3a2ab7d45a71b464630
-  languageName: node
-  linkType: hard
-
 "react-reconciler@npm:^0.28.0":
   version: 0.28.0
   resolution: "react-reconciler@npm:0.28.0"
@@ -8969,16 +8904,6 @@ resolve@^2.0.0-next.3:
   dependencies:
     xmlchars: ^2.2.0
   checksum: 5636b55cf15f7cf0baa73f2797bf992bdcf75d1b39d82c0aa4608555c774368f6ac321cb641fd5f3d3ceb87805122cd47540da6a7b5960fe0dbdb8f8c263f000
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.18.0":
-  version: 0.18.0
-  resolution: "scheduler@npm:0.18.0"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b6e0b9e0086b200b114f1ef7f9fcac966ad5d84cd3b1867174be0549d3ff713d1fd22d5574cb024b7d3eadf3307f2afc1cb5bfbf28b0d3bc34b200183800fcae
   languageName: node
   linkType: hard
 
