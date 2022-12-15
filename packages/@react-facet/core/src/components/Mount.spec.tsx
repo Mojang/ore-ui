@@ -6,7 +6,7 @@ import { mapFacetsLightweight } from '../mapFacets'
 import { NO_VALUE } from '../types'
 
 it('renders when true', () => {
-  const display = createFacet({ initialValue: true })
+  const displayFacet = createFacet({ initialValue: true })
   const rendered = jest.fn()
 
   const Content = () => {
@@ -16,7 +16,7 @@ it('renders when true', () => {
 
   const Example = () => {
     return (
-      <Mount when={display}>
+      <Mount when={displayFacet}>
         <Content />
       </Mount>
     )
@@ -31,7 +31,7 @@ it('renders when true', () => {
 })
 
 it('does not render when false', () => {
-  const display = createFacet({ initialValue: false })
+  const displayFacet = createFacet({ initialValue: false })
   const rendered = jest.fn()
 
   const Content = () => {
@@ -41,7 +41,7 @@ it('does not render when false', () => {
 
   const Example = () => {
     return (
-      <Mount when={display}>
+      <Mount when={displayFacet}>
         <Content />
       </Mount>
     )
@@ -55,18 +55,38 @@ it('does not render when false', () => {
 })
 
 it('can perform conditional rendering', () => {
-  const itemsFacet = createFacet<Array<string>>({ initialValue: NO_VALUE })
-  const hasItemsFacet = mapFacetsLightweight<boolean>([itemsFacet], (x) => Boolean((x as Array<string>).length))
+  const stringArrayFacet = createFacet<Array<string>>({ initialValue: NO_VALUE })
+  const doesStringArrayHaveItemsFacet = mapFacetsLightweight<boolean>([stringArrayFacet], (item) =>
+    Boolean((item as Array<string>).length),
+  )
+  const numberFacet = createFacet<number>({ initialValue: NO_VALUE })
+  const stringFacet = createFacet<string>({ initialValue: NO_VALUE })
 
-  const componentText = 'The component passed the condition and is being rendered'
-  const Component = jest.fn()
-  Component.mockImplementation(() => <div>{componentText}</div>)
+  const booleanComponentText = 'The component passed the boolean condition and is being rendered'
+  const BooleanComponent = jest.fn()
+  BooleanComponent.mockImplementation(() => <div>{booleanComponentText}</div>)
+
+  const numberComponentText = 'The component passed the numeric condition and is being rendered'
+  const NumberComponent = jest.fn()
+  NumberComponent.mockImplementation(() => <div>{numberComponentText}</div>)
+
+  const stringComponentText = 'The component passed the string condition and is being rendered'
+  const StringComponent = jest.fn()
+  StringComponent.mockImplementation(() => <div>{stringComponentText}</div>)
 
   const Example = () => {
     return (
-      <Mount when={hasItemsFacet} is={false}>
-        <Component />
-      </Mount>
+      <>
+        <Mount when={doesStringArrayHaveItemsFacet} is={false}>
+          <BooleanComponent />
+        </Mount>
+        <Mount when={numberFacet} is={0}>
+          <NumberComponent />
+        </Mount>
+        <Mount when={stringFacet} is={'example'}>
+          <StringComponent />
+        </Mount>
+      </>
     )
   }
 
@@ -74,20 +94,101 @@ it('can perform conditional rendering', () => {
   render(scenario)
 
   // It should not render before the facet has produced a value.
-  expect(screen.queryByText(componentText)).not.toBeInTheDocument()
-  expect(Component).not.toHaveBeenCalled()
+  expect(screen.queryByText(booleanComponentText)).not.toBeInTheDocument()
+  expect(BooleanComponent).not.toHaveBeenCalled()
+  expect(screen.queryByText(numberComponentText)).not.toBeInTheDocument()
+  expect(NumberComponent).not.toHaveBeenCalled()
+  expect(screen.queryByText(stringComponentText)).not.toBeInTheDocument()
+  expect(StringComponent).not.toHaveBeenCalled()
 
   act(() => {
-    itemsFacet.set([])
+    stringArrayFacet.set([])
+    numberFacet.set(0)
+    stringFacet.set('example')
   })
 
-  expect(screen.queryByText(componentText)).toBeInTheDocument()
-  expect(Component).toHaveBeenCalledTimes(1)
+  expect(screen.queryByText(booleanComponentText)).toBeInTheDocument()
+  expect(BooleanComponent).toHaveBeenCalledTimes(1)
+  expect(screen.queryByText(numberComponentText)).toBeInTheDocument()
+  expect(NumberComponent).toHaveBeenCalledTimes(1)
+  expect(screen.queryByText(stringComponentText)).toBeInTheDocument()
+  expect(StringComponent).toHaveBeenCalledTimes(1)
 
   act(() => {
-    itemsFacet.set(['Lorem ipsum'])
+    stringArrayFacet.set(['Lorem ipsum'])
+    numberFacet.set(1)
+    stringFacet.set('example 1')
   })
 
-  expect(screen.queryByText(componentText)).not.toBeInTheDocument()
-  expect(Component).toHaveBeenCalledTimes(1)
+  expect(screen.queryByText(booleanComponentText)).not.toBeInTheDocument()
+  expect(BooleanComponent).toHaveBeenCalledTimes(1)
+  expect(screen.queryByText(numberComponentText)).not.toBeInTheDocument()
+  expect(NumberComponent).toHaveBeenCalledTimes(1)
+  expect(screen.queryByText(stringComponentText)).not.toBeInTheDocument()
+  expect(StringComponent).toHaveBeenCalledTimes(1)
+})
+
+it('can perform conditional rendering with the not prop', () => {
+  const stringFacet = createFacet<string | null>({ initialValue: '' })
+
+  const stringComponentText = 'The component passed the string condition and is being rendered'
+  const StringComponent = jest.fn()
+  StringComponent.mockImplementation(() => <div>{stringComponentText}</div>)
+
+  const Example = () => {
+    return (
+      <Mount when={stringFacet} not={''}>
+        <StringComponent />
+      </Mount>
+    )
+  }
+
+  const scenario = <Example />
+  render(scenario)
+
+  expect(screen.queryByText(stringComponentText)).not.toBeInTheDocument()
+  expect(StringComponent).not.toHaveBeenCalled()
+
+  act(() => {
+    stringFacet.set(' ')
+  })
+
+  expect(screen.queryByText(stringComponentText)).toBeInTheDocument()
+  expect(StringComponent).toHaveBeenCalledTimes(1)
+
+  act(() => {
+    stringFacet.set(null)
+  })
+
+  expect(screen.queryByText(stringComponentText)).toBeInTheDocument()
+  expect(StringComponent).toHaveBeenCalledTimes(1)
+})
+
+it('will ignore the is prop if the not prop exists', () => {
+  const stringFacet = createFacet<string | null>({ initialValue: '' })
+
+  const stringComponentText = 'The component passed the string condition and is being rendered'
+  const StringComponent = jest.fn()
+  StringComponent.mockImplementation(() => <div>{stringComponentText}</div>)
+
+  const Example = () => {
+    return (
+      <Mount when={stringFacet} is={''} not={''}>
+        <StringComponent />
+      </Mount>
+    )
+  }
+
+  const scenario = <Example />
+  render(scenario)
+
+  expect(screen.queryByText(stringComponentText)).not.toBeInTheDocument()
+  expect(StringComponent).not.toHaveBeenCalled()
+
+  act(() => {
+    stringFacet.set('text')
+  })
+
+  expect(screen.queryByText(stringComponentText)).toBeInTheDocument()
+  expect(StringComponent).toHaveBeenCalledTimes(1)
 })

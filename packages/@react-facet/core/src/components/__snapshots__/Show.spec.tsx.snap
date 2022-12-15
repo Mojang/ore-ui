@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`can use FastDivProps except style 1`] = `
+<div
+  class="some-class-name"
+  style="display: unset;"
+>
+  <div>
+    Lorem ipsum
+  </div>
+</div>
+`;

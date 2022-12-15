@@ -134,7 +134,7 @@ export type FacetCSSStyleDeclaration = {
   color?: FacetProp<string>
   contain?: FacetProp<string>
   cursor?: FacetProp<string>
-  display?: FacetProp<'flex' | 'none'>
+  display?: FacetProp<'flex' | 'none' | 'unset'>
   filter?: FacetProp<string>
   flex?: FacetProp<string>
   flexDirection?: FacetProp<string>
