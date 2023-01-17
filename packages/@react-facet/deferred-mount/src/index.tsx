@@ -52,6 +52,7 @@ export function InnerDeferredMountProvider({
     (updateFn: UpdateFn) => {
       // Causes a re-render of this component that will kick-off the effect below
       setRequestingToRun(true)
+      setIsDeferring(true)
 
       deferredMountsRef.current.push(updateFn)
 
@@ -69,7 +70,7 @@ export function InnerDeferredMountProvider({
         }
       }
     },
-    [setRequestingToRun],
+    [setRequestingToRun, setIsDeferring],
   )
 
   useFacetEffect(
