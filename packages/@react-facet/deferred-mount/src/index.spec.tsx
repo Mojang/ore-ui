@@ -28,6 +28,39 @@ describe('DeferredMount', () => {
 })
 
 describe('DeferredMountWithCallback', () => {
+  jest.useFakeTimers()
+
+  const frames: (() => void)[] = []
+  const requestSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((frameRequest) => {
+    const id = idSeed++
+    const cb = () => {
+      frameRequest(id)
+    }
+    frames.push(cb)
+    return id
+  })
+
+  const runRaf = () => {
+    const cb = frames.pop()
+    if (cb != null) act(() => cb())
+  }
+
+  const MOUNT_COMPLETION_DELAY = 1000
+
+  const MockDeferredComponent = ({ index }: { index: number }) => {
+    const triggerMountComplete = useNotifyMountComplete()
+
+    useEffect(() => {
+      const id = setTimeout(triggerMountComplete, MOUNT_COMPLETION_DELAY)
+
+      return () => {
+        clearTimeout(id)
+      }
+    }, [triggerMountComplete, index])
+
+    return <div>Callback{index}</div>
+  }
+
   it('renders immediately if we dont have a provider', () => {
     const { container } = render(
       <DeferredMountWithCallback>
@@ -37,61 +70,63 @@ describe('DeferredMountWithCallback', () => {
     expect(container.firstChild).toContainHTML('<div>Should be rendered</div>')
   })
 
-  it('waits until previous deferred callback finishes', async () => {
-    jest.useFakeTimers()
-
-    const frames: (() => void)[] = []
-    const requestSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((frameRequest) => {
-      const id = idSeed++
-      const cb = () => {
-        frameRequest(id)
-      }
-      frames.push(cb)
-      return id
-    })
-
-    const runRaf = () => {
-      const cb = frames.pop()
-      if (cb != null) act(() => cb())
-    }
-
-    const MOUNT_COMPLETION_DELAY = 1000
-
-    const MockDeferredComponent = ({ index }: { index: number }) => {
-      const triggerMountComplete = useNotifyMountComplete()
-
-      useEffect(() => {
-        const id = setTimeout(triggerMountComplete, MOUNT_COMPLETION_DELAY)
-
-        return () => {
-          clearTimeout(id)
-        }
-      }, [triggerMountComplete, index])
-
-      return <div>Callback{index}</div>
-    }
-
-    const SampleComponent = () => {
-      const isDeferringFacet = useIsDeferring()
-
+  it('defers again after initial defer has completed', () => {
+    const DeferConditionally: React.FC<{ mountDeferred: boolean }> = ({ mountDeferred }) => {
       return (
         <>
-          <fast-text
-            text={useFacetMap((isDeferring) => (isDeferring ? 'deferring' : 'done'), [], [isDeferringFacet])}
-          />
-          <DeferredMountWithCallback>
-            <MockDeferredComponent index={0} />
-          </DeferredMountWithCallback>
-          <DeferredMountWithCallback>
-            <MockDeferredComponent index={1} />
-          </DeferredMountWithCallback>
-          <DeferredMountWithCallback>
-            <MockDeferredComponent index={2} />
-          </DeferredMountWithCallback>
+          <p>Always rendered</p>
+          {mountDeferred && (
+            <DeferredMount>
+              <p>Conditionally rendered</p>
+            </DeferredMount>
+          )}
         </>
       )
     }
 
+    const { container, rerender } = render(
+      <DeferredMountProvider>
+        <DeferConditionally mountDeferred={false} />
+      </DeferredMountProvider>,
+    )
+
+    expect(container).toContainHTML('<p>Always rendered</p>')
+    expect(container).not.toContainHTML('<p>Conditionally rendered</p>')
+
+    rerender(
+      <DeferredMountProvider>
+        <DeferConditionally mountDeferred />
+      </DeferredMountProvider>,
+    )
+
+    expect(container).toContainHTML('<p>Always rendered</p>')
+    expect(container).not.toContainHTML('<p>Conditionally rendered</p>')
+
+    runRaf()
+    expect(container).toContainHTML('<p>Always rendered</p>')
+    expect(container).toContainHTML('<p>Conditionally rendered</p>')
+  })
+
+  const SampleComponent = () => {
+    const isDeferringFacet = useIsDeferring()
+
+    return (
+      <>
+        <fast-text text={useFacetMap((isDeferring) => (isDeferring ? 'deferring' : 'done'), [], [isDeferringFacet])} />
+        <DeferredMountWithCallback>
+          <MockDeferredComponent index={0} />
+        </DeferredMountWithCallback>
+        <DeferredMountWithCallback>
+          <MockDeferredComponent index={1} />
+        </DeferredMountWithCallback>
+        <DeferredMountWithCallback>
+          <MockDeferredComponent index={2} />
+        </DeferredMountWithCallback>
+      </>
+    )
+  }
+
+  it('waits until previous deferred callback finishes', async () => {
     const { container } = render(
       <DeferredMountProvider>
         <SampleComponent />
