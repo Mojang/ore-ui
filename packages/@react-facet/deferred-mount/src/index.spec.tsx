@@ -72,9 +72,12 @@ describe('DeferredMountWithCallback', () => {
 
   it('defers again after initial defer has completed', () => {
     const DeferConditionally: React.FC<{ mountDeferred: boolean }> = ({ mountDeferred }) => {
+      const isDeferringFacet = useIsDeferring()
       return (
         <>
-          <p>Always rendered</p>
+          <fast-text
+            text={useFacetMap((isDeferring) => (isDeferring ? 'deferring' : 'done'), [], [isDeferringFacet])}
+          />
           {mountDeferred && (
             <DeferredMount>
               <p>Conditionally rendered</p>
@@ -90,7 +93,11 @@ describe('DeferredMountWithCallback', () => {
       </DeferredMountProvider>,
     )
 
-    expect(container).toContainHTML('<p>Always rendered</p>')
+    expect(container).toContainHTML('deferring')
+    expect(container).not.toContainHTML('<p>Conditionally rendered</p>')
+
+    runRaf()
+    expect(container).toContainHTML('done')
     expect(container).not.toContainHTML('<p>Conditionally rendered</p>')
 
     rerender(
@@ -99,11 +106,11 @@ describe('DeferredMountWithCallback', () => {
       </DeferredMountProvider>,
     )
 
-    expect(container).toContainHTML('<p>Always rendered</p>')
+    expect(container).toContainHTML('deferring')
     expect(container).not.toContainHTML('<p>Conditionally rendered</p>')
 
     runRaf()
-    expect(container).toContainHTML('<p>Always rendered</p>')
+    expect(container).toContainHTML('done')
     expect(container).toContainHTML('<p>Conditionally rendered</p>')
   })
 

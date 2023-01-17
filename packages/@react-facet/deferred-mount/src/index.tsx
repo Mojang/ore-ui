@@ -43,7 +43,6 @@ export function InnerDeferredMountProvider({
   frameTimeBudget = DEFAULT_FRAME_TIME_BUDGET,
 }: DeferredMountProviderProps) {
   const [isDeferring, setIsDeferring] = useFacetState(true)
-  const [requestingToRun, setRequestingToRun] = useFacetState(false)
   const waitingForMountCallback = useRef(false)
 
   const deferredMountsRef = useRef<UpdateFn[]>([])
@@ -51,7 +50,6 @@ export function InnerDeferredMountProvider({
   const pushDeferUpdateFunction = useCallback(
     (updateFn: UpdateFn) => {
       // Causes a re-render of this component that will kick-off the effect below
-      setRequestingToRun(true)
       setIsDeferring(true)
 
       deferredMountsRef.current.push(updateFn)
@@ -70,14 +68,14 @@ export function InnerDeferredMountProvider({
         }
       }
     },
-    [setRequestingToRun, setIsDeferring],
+    [setIsDeferring],
   )
 
   useFacetEffect(
-    (requestingToRun) => {
+    (isDeferring) => {
       // Even if we are not considered to be running, we need to check if there is still
       // work pending to be done. If there is... we still need to run this effect.
-      if (!requestingToRun && deferredMountsRef.current.length === 0 && !waitingForMountCallback.current) return
+      if (!isDeferring && deferredMountsRef.current.length === 0 && !waitingForMountCallback.current) return
 
       const work = (startTimestamp: number) => {
         const deferredMounts = deferredMountsRef.current
@@ -132,7 +130,6 @@ export function InnerDeferredMountProvider({
 
         if (deferredMounts.length === 0 && !waitingForMountCallback.current) {
           setIsDeferring(false)
-          setRequestingToRun(false)
         }
       }
 
@@ -142,8 +139,8 @@ export function InnerDeferredMountProvider({
         window.cancelAnimationFrame(frameId)
       }
     },
-    [frameTimeBudget, setIsDeferring, setRequestingToRun],
-    [requestingToRun],
+    [frameTimeBudget, setIsDeferring],
+    [isDeferring],
   )
 
   return (
