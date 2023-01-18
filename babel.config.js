@@ -5,7 +5,7 @@ module.exports = function (api) {
   api.cache.forever()
 
   return {
-    presets: ['@babel/preset-typescript'],
-    plugins: ['@babel/plugin-transform-modules-commonjs', '@babel/plugin-transform-react-jsx'],
+    presets: ['@babel/preset-typescript', '@babel/preset-react'],
+    plugins: ['@babel/plugin-transform-modules-commonjs'],
   }
 }
