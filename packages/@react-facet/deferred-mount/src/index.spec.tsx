@@ -16,56 +16,33 @@ interface Cb {
   frameId: number
 }
 
+jest.useFakeTimers()
+
+const frames: (() => void)[] = []
+const requestSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((frameRequest) => {
+  const id = idSeed++
+  const cb = () => {
+    frameRequest(id)
+  }
+  frames.push(cb)
+  return id
+})
+
+const runRaf = () => {
+  const cb = frames.pop()
+  if (cb != null) act(() => cb())
+}
+
+afterEach(() => {
+  requestSpy.mockClear()
+})
+
 describe('DeferredMount', () => {
   it('renders immediately if we dont have a provider', () => {
     const { container } = render(
       <DeferredMount>
         <div>Should be rendered</div>
       </DeferredMount>,
-    )
-    expect(container.firstChild).toContainHTML('<div>Should be rendered</div>')
-  })
-})
-
-describe('DeferredMountWithCallback', () => {
-  jest.useFakeTimers()
-
-  const frames: (() => void)[] = []
-  const requestSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((frameRequest) => {
-    const id = idSeed++
-    const cb = () => {
-      frameRequest(id)
-    }
-    frames.push(cb)
-    return id
-  })
-
-  const runRaf = () => {
-    const cb = frames.pop()
-    if (cb != null) act(() => cb())
-  }
-
-  const MOUNT_COMPLETION_DELAY = 1000
-
-  const MockDeferredComponent = ({ index }: { index: number }) => {
-    const triggerMountComplete = useNotifyMountComplete()
-
-    useEffect(() => {
-      const id = setTimeout(triggerMountComplete, MOUNT_COMPLETION_DELAY)
-
-      return () => {
-        clearTimeout(id)
-      }
-    }, [triggerMountComplete, index])
-
-    return <div>Callback{index}</div>
-  }
-
-  it('renders immediately if we dont have a provider', () => {
-    const { container } = render(
-      <DeferredMountWithCallback>
-        <div>Should be rendered</div>
-      </DeferredMountWithCallback>,
     )
     expect(container.firstChild).toContainHTML('<div>Should be rendered</div>')
   })
@@ -112,6 +89,33 @@ describe('DeferredMountWithCallback', () => {
     runRaf()
     expect(container).toContainHTML('done')
     expect(container).toContainHTML('<p>Conditionally rendered</p>')
+  })
+})
+
+describe('DeferredMountWithCallback', () => {
+  const MOUNT_COMPLETION_DELAY = 1000
+
+  const MockDeferredComponent = ({ index }: { index: number }) => {
+    const triggerMountComplete = useNotifyMountComplete()
+
+    useEffect(() => {
+      const id = setTimeout(triggerMountComplete, MOUNT_COMPLETION_DELAY)
+
+      return () => {
+        clearTimeout(id)
+      }
+    }, [triggerMountComplete, index])
+
+    return <div>Callback{index}</div>
+  }
+
+  it('renders immediately if we dont have a provider', () => {
+    const { container } = render(
+      <DeferredMountWithCallback>
+        <div>Should be rendered</div>
+      </DeferredMountWithCallback>,
+    )
+    expect(container.firstChild).toContainHTML('<div>Should be rendered</div>')
   })
 
   const SampleComponent = () => {
@@ -170,9 +174,6 @@ describe('DeferredMountWithCallback', () => {
     jest.advanceTimersByTime(MOUNT_COMPLETION_DELAY)
     runRaf()
     expect(container).toContainHTML('done')
-
-    jest.useRealTimers()
-    requestSpy.mockRestore()
   })
 })
 
