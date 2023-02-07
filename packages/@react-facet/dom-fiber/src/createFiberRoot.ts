@@ -16,7 +16,7 @@ export const createFiberRoot =
       },
       ConcurrentRoot,
       null,
-      true,
+      false,
       true,
       '',
       (error) => console.error('[@react-facet/dom-fiber]', error),

@@ -1,194 +1,36 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  ReactNode,
-  useCallback,
-  useRef,
-  useEffect,
-  ReactElement,
-} from 'react'
-import { createFacet, Facet, useFacetEffect, useFacetState } from '@react-facet/core'
+import React, { createContext, useContext, FC, PropsWithChildren, useTransition, useState, useEffect } from 'react'
+import { createFacet, Facet } from '@react-facet/core'
 
-type Config = {
-  forceImmediateMount: boolean
+type BLANK = Record<string, unknown>
+
+const DeferredMountConfig = createContext<BLANK>({})
+
+export const DeferredMountConfigProvider: FC<PropsWithChildren<BLANK>> = ({ children }) => {
+  return <DeferredMountConfig.Provider value={{}}>{children}</DeferredMountConfig.Provider>
 }
 
-const DeferredMountConfig = createContext<Config>({ forceImmediateMount: false })
-
-export function DeferredMountConfigProvider({ config, children }: { config: Config; children: React.ReactNode }) {
-  return <DeferredMountConfig.Provider value={config}>{children}</DeferredMountConfig.Provider>
+export const InnerDeferredMountProvider: FC<PropsWithChildren<BLANK>> = ({ children }) => {
+  return <>{children}</>
 }
 
-function useConfig() {
-  return useContext(DeferredMountConfig)
+export const DeferredMountProvider: FC<PropsWithChildren<BLANK>> = ({ children }) => {
+  return <>{children}</>
 }
 
-/**
- * Targeting around 60fps
- */
-const DEFAULT_FRAME_TIME_BUDGET = 16
-
-interface DeferredMountProviderProps {
-  children: ReactNode
-
-  /**
-   * How many milliseconds we can spend mounting components.
-   */
-  frameTimeBudget?: number
-}
-
-export function InnerDeferredMountProvider({
-  children,
-  frameTimeBudget = DEFAULT_FRAME_TIME_BUDGET,
-}: DeferredMountProviderProps) {
-  const [isDeferring, setIsDeferring] = useFacetState(true)
-  const [requestingToRun, setRequestingToRun] = useFacetState(false)
-  const waitingForMountCallback = useRef(false)
-
-  const deferredMountsRef = useRef<UpdateFn[]>([])
-
-  const pushDeferUpdateFunction = useCallback(
-    (updateFn: UpdateFn) => {
-      // Causes a re-render of this component that will kick-off the effect below
-      setRequestingToRun(true)
-
-      deferredMountsRef.current.push(updateFn)
-
-      /**
-       * Cleanup function that makes sure that we don't try to "mount" a deferred component
-       * if it has already been unmounted.
-       */
-      return () => {
-        // It is most common that we will be cleaning up after all deferred mounting has been run
-        if (deferredMountsRef.current.length === 0 && !waitingForMountCallback.current) return
-
-        const index = deferredMountsRef.current.indexOf(updateFn)
-        if (index !== -1) {
-          deferredMountsRef.current.splice(index, 1)
-        }
-      }
-    },
-    [setRequestingToRun],
-  )
-
-  useFacetEffect(
-    (requestingToRun) => {
-      // Even if we are not considered to be running, we need to check if there is still
-      // work pending to be done. If there is... we still need to run this effect.
-      if (!requestingToRun && deferredMountsRef.current.length === 0 && !waitingForMountCallback.current) return
-
-      const work = (startTimestamp: number) => {
-        const deferredMounts = deferredMountsRef.current
-
-        // We need to request the new frame at the top
-        // otherwise, the state change at the bottom will trigger a new render
-        // before we have a chance to cancel
-        // Its not possible to detect this with unit testing, so verify on the browser
-        // after a change here that this function is not executing every frame unnecessarily
-        if (deferredMounts.length > 0 || waitingForMountCallback.current) {
-          frameId = window.requestAnimationFrame(work)
-        } else {
-          // Used to check if the requestAnimationFrame has stopped running
-          frameId = -1
-        }
-
-        let lastUpdateCost = 0
-        let now = startTimestamp
-
-        while (
-          deferredMounts.length > 0 &&
-          now - startTimestamp + lastUpdateCost < frameTimeBudget &&
-          !waitingForMountCallback.current
-        ) {
-          const before = now
-
-          const updateFn = deferredMounts.shift() as UpdateFn
-          const result = updateFn(false)
-
-          const after = performance.now()
-
-          lastUpdateCost = after - before
-          now = after
-
-          // Can be a function that takes a callback if using DeferredMountWithCallback
-          const resultTakesCallback = typeof result === 'function'
-
-          if (resultTakesCallback) {
-            waitingForMountCallback.current = true
-
-            result(() => {
-              waitingForMountCallback.current = false
-
-              // If the requestAnimationFrame stops running while waiting for the
-              // callback we need to restart it to process the rest of the queue.
-              if (frameId === -1) {
-                frameId = window.requestAnimationFrame(work)
-              }
-            })
-          }
-        }
-
-        if (deferredMounts.length === 0 && !waitingForMountCallback.current) {
-          setIsDeferring(false)
-          setRequestingToRun(false)
-        }
-      }
-
-      let frameId = window.requestAnimationFrame(work)
-
-      return () => {
-        window.cancelAnimationFrame(frameId)
-      }
-    },
-    [frameTimeBudget, setIsDeferring, setRequestingToRun],
-    [requestingToRun],
-  )
-
-  return (
-    <isDeferringContext.Provider value={isDeferring}>
-      <pushDeferUpdateContext.Provider value={pushDeferUpdateFunction}>{children}</pushDeferUpdateContext.Provider>
-    </isDeferringContext.Provider>
-  )
-}
-
-/**
- * Provider that must wrap a tree with nodes being deferred
- */
-export function DeferredMountProvider(props: DeferredMountProviderProps) {
-  const config = useConfig()
-  if (config.forceImmediateMount) {
-    return <>{props.children}</>
-  }
-
-  return <InnerDeferredMountProvider {...props} />
-}
-
-interface DeferredMountProps {
-  children: ReactElement
-}
-
-/**
- * Component that should wrap some mounting that must be deferred to a later frame
- * @param children component to be mounted deferred
- */
-export function DeferredMount({ children }: DeferredMountProps) {
-  const pushDeferUpdateFunction = useContext(pushDeferUpdateContext)
-  const [deferred, setDeferred] = useState(pushDeferUpdateFunction != null)
+export const DeferredMount: FC<PropsWithChildren<{ isReady?: (x: boolean) => void }>> = ({ children, isReady }) => {
+  const [pending, startTransition] = useTransition()
 
   useEffect(() => {
-    if (pushDeferUpdateFunction) pushDeferUpdateFunction(setDeferred)
-  }, [pushDeferUpdateFunction])
+    startTransition(() => {
+      isReady && isReady(pending)
+    })
+  }, [startTransition])
 
-  if (deferred) return null
-  return children
-}
-
-interface DeferredMountWithCallbackProps {
-  children: ReactElement
+  return <>{children}</>
 }
 
 const NotifyMountComplete = createContext(() => {})
+
 export const useNotifyMountComplete = () => useContext(NotifyMountComplete)
 
 /**
@@ -196,48 +38,19 @@ export const useNotifyMountComplete = () => useContext(NotifyMountComplete)
  * This will wait for a callback from the child component before marking itself as rendered.
  * @param children component to be mounted deferred
  */
-export function DeferredMountWithCallback({ children }: DeferredMountWithCallbackProps) {
-  const pushDeferUpdateFunction = useContext(pushDeferUpdateContext)
-  const [deferred, setDeferred] = useState(pushDeferUpdateFunction != null)
-  const resolveMountComplete = useRef<(value: void | PromiseLike<void>) => void>()
-  const mountCompleteBeforeInitialization = useRef(false)
-
-  const onMountComplete = useCallback(() => {
-    if (resolveMountComplete.current != null) {
-      resolveMountComplete.current()
-    } else {
-      mountCompleteBeforeInitialization.current = true
-    }
-  }, [])
-
-  useEffect(() => {
-    if (pushDeferUpdateFunction)
-      pushDeferUpdateFunction((isDeferred) => {
-        return (resolve) => {
-          setDeferred(isDeferred)
-
-          if (mountCompleteBeforeInitialization.current) {
-            resolve()
-          } else {
-            resolveMountComplete.current = resolve
-          }
-        }
-      })
-  }, [pushDeferUpdateFunction, onMountComplete])
-
-  if (deferred) return null
-  return <NotifyMountComplete.Provider value={onMountComplete}>{children}</NotifyMountComplete.Provider>
+export const DeferredMountWithCallback: FC<PropsWithChildren<BLANK>> = ({ children }) => {
+  return <>{children}</>
 }
 
-interface ImmediateMountProps {
-  children: ReactElement
-}
+const isDeferringContext = createContext<Facet<boolean>>(createFacet({ initialValue: false }))
+
+const isPausedContext = createContext<boolean>(false)
 
 /**
  * Hook that informs if any mounting is currently being deferred
  * Can be used to show some loading indicator
  */
-export function useIsDeferring() {
+export const useIsDeferring = () => {
   return useContext(isDeferringContext)
 }
 
@@ -245,43 +58,21 @@ export function useIsDeferring() {
  * Allow us to pause costly mounting (mounting) of components
  * So that transitions can occur
  */
-export function useIsPaused() {
+export const useIsPaused = () => {
   return useContext(isPausedContext)
 }
 
 /**
  * API compatible component with DeferredMount, but renders immediately
  */
-export function ImmediateMount({ children }: ImmediateMountProps) {
-  return children
+export const ImmediateMount: FC<PropsWithChildren<BLANK>> = ({ children }) => {
+  return <>{children}</>
 }
-
-interface UpdateFn {
-  (deferred: boolean): void | ((onMountComplete: () => void) => void)
-}
-
-interface PushDeferUpdateFunction {
-  (updateFn: UpdateFn): void
-}
-
-const pushDeferUpdateContext = createContext<PushDeferUpdateFunction | undefined>(undefined)
-
-const isDeferringContext = createContext<Facet<boolean>>(createFacet({ initialValue: false }))
-
-const isPausedContext = createContext<boolean>(false)
 
 /**
  * This pauses the mounting of children components.
  * Given it affects mounting, it should only happen the first time! Asking to pause again in the future is not possible
  */
-export function PauseMountProvider({ paused, children }: { paused: boolean; children: ReactNode }) {
-  const wasEverResumed = useRef(!paused)
-
-  useEffect(() => {
-    if (!paused) {
-      wasEverResumed.current = true
-    }
-  }, [paused])
-
-  return <isPausedContext.Provider value={wasEverResumed.current ? false : paused}>{children}</isPausedContext.Provider>
+export const PauseMountProvider: FC<PropsWithChildren<BLANK>> = ({ children }) => {
+  return <>{children}</>
 }

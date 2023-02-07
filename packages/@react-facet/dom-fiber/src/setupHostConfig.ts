@@ -57,14 +57,14 @@ export const setupHostConfig = (): HostConfig<
   supportsHydration: false,
 
   supportsMicrotask: true,
-  scheduleMicrotask: (callback) => Promise
-    .resolve(null)
-    .then(callback)
-    .catch((error) => {
-      setTimeout(() => {
-        throw error
-      })
-    }),
+  scheduleMicrotask: (callback) =>
+    Promise.resolve(null)
+      .then(callback)
+      .catch((error) => {
+        setTimeout(() => {
+          throw error
+        })
+      }),
 
   getCurrentEventPriority: () => {
     return DefaultEventPriority
@@ -74,11 +74,11 @@ export const setupHostConfig = (): HostConfig<
     return null
   },
 
-  beforeActiveInstanceBlur: () => { },
-  afterActiveInstanceBlur: () => { },
-  prepareScopeUpdate: () => { },
+  beforeActiveInstanceBlur: () => {},
+  afterActiveInstanceBlur: () => {},
+  prepareScopeUpdate: () => {},
   getInstanceFromScope: () => null,
-  detachDeletedInstance: () => { },
+  detachDeletedInstance: () => {},
 
   clearContainer: () => false,
 
@@ -100,27 +100,27 @@ export const setupHostConfig = (): HostConfig<
 
   noTimeout: noop,
 
-  preparePortalMount: function() { },
+  preparePortalMount: function () {},
 
-  getRootHostContext: function() {
+  getRootHostContext: function () {
     return EMPTY
   },
 
-  getChildHostContext: function() {
+  getChildHostContext: function () {
     return EMPTY
   },
 
-  shouldSetTextContent: function() {
+  shouldSetTextContent: function () {
     return false
   },
 
-  createTextInstance: function(newText) {
+  createTextInstance: function (newText) {
     return {
       element: document.createTextNode(newText),
     }
   },
 
-  createInstance: function(externalType, newProps) {
+  createInstance: function (externalType, newProps) {
     if (externalType === 'fast-text') {
       const element = document.createTextNode('')
 
@@ -332,23 +332,23 @@ export const setupHostConfig = (): HostConfig<
     }
   },
 
-  finalizeInitialChildren: function() {
+  finalizeInitialChildren: function () {
     return false
   },
 
-  prepareForCommit: function() {
+  prepareForCommit: function () {
     return null
   },
 
-  resetAfterCommit: function() { },
+  resetAfterCommit: function () {},
 
-  commitMount: function() { },
+  commitMount: function () {},
 
-  prepareUpdate: function() {
+  prepareUpdate: function () {
     return true
   },
 
-  commitUpdate: function(instance, updatePayload, type, oldProps, newProps) {
+  commitUpdate: function (instance, updatePayload, type, oldProps, newProps) {
     const { element: uncastElement } = instance
 
     if (type === 'fast-text') {
@@ -985,11 +985,11 @@ export const setupHostConfig = (): HostConfig<
     }
   },
 
-  commitTextUpdate: function(textInstance, oldText, newText) {
+  commitTextUpdate: function (textInstance, oldText, newText) {
     textInstance.element.nodeValue = newText
   },
 
-  appendInitialChild: function(parent, child) {
+  appendInitialChild: function (parent, child) {
     if (isElementContainer(child)) {
       parent.children.add(child)
     }
@@ -997,7 +997,7 @@ export const setupHostConfig = (): HostConfig<
     parent.element.appendChild(child.element)
   },
 
-  appendChildToContainer: function(parent, child) {
+  appendChildToContainer: function (parent, child) {
     if (isElementContainer(child)) {
       parent.children.add(child)
     }
@@ -1005,7 +1005,7 @@ export const setupHostConfig = (): HostConfig<
     parent.element.appendChild(child.element)
   },
 
-  appendChild: function(parentInstance, child) {
+  appendChild: function (parentInstance, child) {
     if (isElementContainer(child)) {
       parentInstance.children.add(child)
     }
@@ -1013,11 +1013,11 @@ export const setupHostConfig = (): HostConfig<
     parentInstance.element.appendChild(child.element)
   },
 
-  insertBefore: function(parentInstance, child, beforeChild) {
+  insertBefore: function (parentInstance, child, beforeChild) {
     parentInstance.element.insertBefore(child.element, beforeChild.element)
   },
 
-  removeChild: function(parentInstance, child) {
+  removeChild: function (parentInstance, child) {
     if (isElementContainer(child)) {
       cleanupElementContainer(parentInstance, child)
     }
@@ -1025,11 +1025,11 @@ export const setupHostConfig = (): HostConfig<
     parentInstance.element.removeChild(child.element)
   },
 
-  insertInContainerBefore: function(container, child, beforeChild) {
+  insertInContainerBefore: function (container, child, beforeChild) {
     container.element.insertBefore(child.element, beforeChild.element)
   },
 
-  removeChildFromContainer: function(container, child) {
+  removeChildFromContainer: function (container, child) {
     if (isElementContainer(child)) {
       cleanupElementContainer(container, child)
     }
@@ -1037,15 +1037,15 @@ export const setupHostConfig = (): HostConfig<
     container.element.removeChild(child.element)
   },
 
-  resetTextContent: function(instance) {
+  resetTextContent: function (instance) {
     instance.element.textContent = ''
   },
 
-  getPublicInstance: function(instance) {
+  getPublicInstance: function (instance) {
     return instance.element
   },
   hideInstance(instance) {
-    console.log("Hidden: ", instance)
+    console.log('Hidden: ', instance)
     // Detach while the instance is hidden
     // const { attach: type, parent } = instance.__r3f ?? {}
     // if (type && parent) detach(parent, instance, type)
@@ -1053,7 +1053,7 @@ export const setupHostConfig = (): HostConfig<
     // invalidateInstance(instance)
   },
   unhideInstance(instance, props) {
-    console.log("Unhidden: ", instance, props)
+    console.log('Unhidden: ', instance, props)
     // Re-attach when the instance is unhidden
     // const { attach: type, parent } = instance.__r3f ?? {}
     // if (type && parent) attach(parent, instance, type)
@@ -1093,7 +1093,7 @@ const cleanupElementContainer = (parent: ElementContainer, instance: ElementCont
   instance.text?.()
 }
 
-const noop = () => { }
+const noop = () => {}
 
 const EMPTY = {}
 

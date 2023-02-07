@@ -41,7 +41,7 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@testing-library/dom": "^8.19.0"
+    "@testing-library/dom": "^8.20.0"
   },
   "peerDependencies": {
     "@react-facet/dom-fiber": "0.4.3",
@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@react-facet/dom-fiber": "0.4.3",
+    "@testing-library/react": "^13.4.0",
     "react": "18.1.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.8.2"
