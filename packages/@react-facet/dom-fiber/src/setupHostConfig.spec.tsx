@@ -1655,7 +1655,9 @@ describe('update', () => {
 
       useEffect(() => {
         setTimeout(() => {
-          setSecond(true)
+          act(() => {
+            setSecond(true)
+          })
         }, 1000)
       }, [])
 
