@@ -52,27 +52,26 @@ export const setupRowsUpdate = (rows: FacetProp<number | undefined>, element: HT
  * so we need to set the `value` attribute directly to solve this.
  * ref: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/ReactDOMInput.js
  */
+
+const updateValue = (element: HTMLElement | SVGElement, value: string | undefined) => {
+  const inputElement = element as HTMLInputElement
+  // Only accept numerical characters if the input type is number
+  if (inputElement.type === 'number' && isNaN(Number(value))) return
+
+  if (value != null) {
+    inputElement.value = value
+    inputElement.setAttribute('value', value)
+  } else {
+    inputElement.value = ''
+    inputElement.removeAttribute('value')
+  }
+}
+
 export const setupValueUpdate = (value: FacetProp<string | undefined>, element: HTMLElement | SVGElement) => {
   if (isFacet(value)) {
-    return value.observe((value) => {
-      const inputElement = element as HTMLInputElement
-      inputElement.value = value != null ? value : ''
-
-      if (value != null) {
-        inputElement.setAttribute('value', value)
-      } else {
-        inputElement.removeAttribute('value')
-      }
-    })
+    return value.observe((value) => updateValue(element, value))
   } else {
-    const inputElement = element as HTMLInputElement
-    inputElement.value = value != null ? value : ''
-
-    if (value != null) {
-      inputElement.setAttribute('value', value)
-    } else {
-      inputElement.removeAttribute('value')
-    }
+    updateValue(element, value)
   }
 }
 
