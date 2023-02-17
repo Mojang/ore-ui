@@ -1,5 +1,3 @@
-import { Facet, FacetFactory } from '@react-facet/core'
-
 export interface OnChange<V> {
   (value: V): void
 }
@@ -21,6 +19,11 @@ export interface SharedFacetDriver {
   (name: string, onChange: OnChange<any>, onError?: ErrorFn, fallback?: any): () => void
 }
 
-export interface SharedFacet<T> extends FacetFactory<T> {
-  (sharedFacetDriver: SharedFacetDriver): Facet<T>
+export type SharedFacet<T> = string & { typeHolder?: T }
+
+/**
+ * Defines a facet with shared data (attaching the Type with the name)
+ */
+export function sharedFacet<T>(name: string): SharedFacet<T> {
+  return name
 }
