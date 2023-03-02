@@ -251,6 +251,8 @@ it('should always have the current value of tracked facets', () => {
     return null
   }
 
+  // We make sure to be the first listener registered, so this is called before
+  // the listener within the useFacetCallback (which would have created the issue)
   facetA.observe(() => {
     const result = handler('string')
     expect(result).toBe('newstring')
@@ -258,6 +260,8 @@ it('should always have the current value of tracked facets', () => {
 
   render(<TestComponent />)
 
+  // In this act, the effect within useFacetCallback will be executed, subscribing for changes of the facetA
+  // Then we set the value, causing the listener above to being called
   act(() => {
     facetA.set('new')
   })
