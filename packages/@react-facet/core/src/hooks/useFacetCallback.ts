@@ -59,7 +59,6 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const callbackMemoized = useCallback(callback, dependencies)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   return useCallback(
     (...args: K) => {
       const values = facets.map((facet) => facet.get())
@@ -70,6 +69,8 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
 
       return callbackMemoized(...(values as ExtractFacetValues<T>))(...(args as K))
     },
+    // We care about each individual facet and if any is a different reference
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [callbackMemoized, defaultReturnValue, ...facets],
   )
 }
