@@ -1,5 +1,5 @@
-import { useCallback, useLayoutEffect, useRef } from 'react'
-import { Facet, NO_VALUE, Option, ExtractFacetValues, NoValue } from '../types'
+import { useCallback, useLayoutEffect } from 'react'
+import { Facet, NO_VALUE, ExtractFacetValues, NoValue } from '../types'
 
 /**
  * Creates a callback that depends on the value of a facet.
