@@ -43,14 +43,10 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
   facets: T,
   defaultReturnValue?: M,
 ): (...args: K) => M | NoValue {
-  const facetsRef = useRef<Option<unknown>[]>(facets.map(() => NO_VALUE))
-
   useLayoutEffect(() => {
-    const unsubscribes = facets.map((facet, index) => {
-      return facet.observe((value) => {
-        facetsRef.current[index] = value
-      })
-    })
+    // Make sure to start subscriptions, even though we are getting the values directly from them
+    // We read the values using `.get` to make sure they are always up-to-date
+    const unsubscribes = facets.map((facet) => facet.observe(noop))
 
     return () => {
       unsubscribes.forEach((unsubscribe) => unsubscribe())
@@ -66,7 +62,7 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return useCallback(
     (...args: K) => {
-      const values = facetsRef.current
+      const values = facets.map((facet) => facet.get())
 
       for (const value of values) {
         if (value === NO_VALUE) return defaultReturnValue != null ? defaultReturnValue : NO_VALUE
@@ -74,6 +70,8 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
 
       return callbackMemoized(...(values as ExtractFacetValues<T>))(...(args as K))
     },
-    [callbackMemoized, facetsRef, defaultReturnValue],
+    [callbackMemoized, defaultReturnValue, ...facets],
   )
 }
+
+const noop = () => {}
