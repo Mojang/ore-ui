@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: yarn test --ci
 
@@ -19,5 +23,9 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: yarn lint

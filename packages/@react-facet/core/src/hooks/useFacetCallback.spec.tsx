@@ -181,8 +181,10 @@ it('returns NO_VALUE if any facet has NO_VALUE and skip calling the callback', (
 it('has proper return type with NO_VALUE in it', () => {
   const facetA = createFacet({ initialValue: 'a' })
 
+  let handler: (event: string) => void
+
   const TestComponent = () => {
-    const handler = useFacetCallback(
+    handler = useFacetCallback(
       (a) => (b: string) => {
         return a + b
       },
@@ -190,13 +192,15 @@ it('has proper return type with NO_VALUE in it', () => {
       [facetA],
     )
 
-    if (handler('string') !== NO_VALUE) {
-      throw new Error('Expected NO_VALUE')
-    }
     return null
   }
 
   render(<TestComponent />)
+
+  act(() => {
+    const result = handler('string')
+    expect(result).toBe('astring')
+  })
 })
 
 it('returns the defaultValue, when provided, if any facet has NO_VALUE and skip calling the callback', () => {
@@ -228,4 +232,37 @@ it('returns the defaultValue, when provided, if any facet has NO_VALUE and skip 
   })
 
   expect(callback).not.toHaveBeenCalledWith()
+})
+
+it('should always have the current value of tracked facets', () => {
+  const facetA = createFacet<string>({ initialValue: NO_VALUE })
+
+  let handler: (event: string) => void = () => {}
+
+  const TestComponent = () => {
+    handler = useFacetCallback(
+      (a) => (b: string) => {
+        return a + b
+      },
+      [],
+      [facetA],
+    )
+
+    return null
+  }
+
+  // We make sure to be the first listener registered, so this is called before
+  // the listener within the useFacetCallback (which would have created the issue)
+  facetA.observe(() => {
+    const result = handler('string')
+    expect(result).toBe('newstring')
+  })
+
+  render(<TestComponent />)
+
+  // In this act, the effect within useFacetCallback will be executed, subscribing for changes of the facetA
+  // Then we set the value, causing the listener above to being called
+  act(() => {
+    facetA.set('new')
+  })
 })
