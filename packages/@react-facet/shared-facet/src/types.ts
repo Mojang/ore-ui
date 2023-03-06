@@ -1,4 +1,6 @@
-import { Facet, FacetFactory } from '@react-facet/core'
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Facet, FacetFactory, NoValue, Value, ValueWithoutFunction } from '@react-facet/core'
 
 export interface OnChange<V> {
   (value: V): void
@@ -24,3 +26,21 @@ export interface SharedFacetDriver {
 export interface SharedFacet<T> extends FacetFactory<T> {
   (sharedFacetDriver: SharedFacetDriver): Facet<T>
 }
+
+export type OnlyDataOrOnlyMethods<T> = Flatten<T> extends (...args: never) => unknown
+  ? T | NoValue
+  : Flatten<T> extends ValueWithoutFunction
+  ? T | NoValue
+  : never
+
+type Flatten<T> = T extends object
+  ? T extends unknown[]
+    ? T[number] extends object
+      ? Flatten<T[number]>
+      : T[number]
+    : T extends (...args: never) => unknown
+    ? T
+    : T[keyof T] extends object
+    ? Flatten<T[keyof T]>
+    : T[keyof T]
+  : T

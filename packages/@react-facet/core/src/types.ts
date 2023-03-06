@@ -13,6 +13,15 @@ export interface EqualityCheck<T> {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Value = string | number | boolean | undefined | null | [] | Record<string, any>
 
+export type ValueWithoutFunction =
+  | string
+  | number
+  | boolean
+  | undefined
+  | null
+  | ValueWithoutFunction[]
+  | { [key: string]: ValueWithoutFunction }
+
 export type ExtractFacetValues<T extends ReadonlyArray<Facet<unknown>>> = {
   [K in keyof T]: T[K] extends Facet<infer V> ? V : never
 }

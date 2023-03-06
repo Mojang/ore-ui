@@ -1,6 +1,6 @@
 import memoize from './memoize'
-import { EqualityCheck, defaultEqualityCheck, mapFacetsCached, FACET_FACTORY, NoValue } from '@react-facet/core'
-import { SharedFacetDriver, SharedFacet } from './types'
+import { EqualityCheck, defaultEqualityCheck, mapFacetsCached, FACET_FACTORY } from '@react-facet/core'
+import { SharedFacetDriver, SharedFacet, OnlyDataOrOnlyMethods } from './types'
 
 /**
  * Defines a selector to transform/map data from a facet
@@ -17,12 +17,11 @@ import { SharedFacetDriver, SharedFacet } from './types'
  * returned by the selector are numbers, booleans, strings, or objects/arrays constructed by the selector.
  *
  * @param facets which facets to read the data from
- * @param selector a function to transform the data from the facets
+ * @param selector a function to transform the data from the facets. Do not mix data and methods.
  * @param equalityCheck optional, has a default for immutable values
  */
 export function sharedSelector<V, Y extends readonly SharedFacet<unknown>[], T extends [...Y]>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  selector: (...args: { [K in keyof T]: T[K] extends SharedFacet<infer V> ? V : never }) => V | NoValue,
+  selector: (...args: { [K in keyof T]: T[K] extends SharedFacet<infer V> ? V : never }) => OnlyDataOrOnlyMethods<V>,
   facets: T,
   equalityCheck: EqualityCheck<V> = defaultEqualityCheck,
 ): SharedFacet<V> {
