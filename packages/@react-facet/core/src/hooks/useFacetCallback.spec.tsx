@@ -234,35 +234,91 @@ it('returns the defaultValue, when provided, if any facet has NO_VALUE and skip 
   expect(callback).not.toHaveBeenCalledWith()
 })
 
-it('should always have the current value of tracked facets', () => {
-  const facetA = createFacet<string>({ initialValue: NO_VALUE })
+describe('regressions', () => {
+  it('should always have the current value of tracked facets', () => {
+    const facetA = createFacet<string>({ initialValue: NO_VALUE })
 
-  let handler: (event: string) => void = () => {}
+    let handler: (event: string) => void = () => {}
 
-  const TestComponent = () => {
-    handler = useFacetCallback(
-      (a) => (b: string) => {
-        return a + b
-      },
-      [],
-      [facetA],
-    )
+    const TestComponent = () => {
+      handler = useFacetCallback(
+        (a) => (b: string) => {
+          return a + b
+        },
+        [],
+        [facetA],
+      )
 
-    return null
-  }
+      return null
+    }
 
-  // We make sure to be the first listener registered, so this is called before
-  // the listener within the useFacetCallback (which would have created the issue)
-  facetA.observe(() => {
-    const result = handler('string')
-    expect(result).toBe('newstring')
+    // We make sure to be the first listener registered, so this is called before
+    // the listener within the useFacetCallback (which would have created the issue)
+    facetA.observe(() => {
+      const result = handler('string')
+      expect(result).toBe('newstring')
+    })
+
+    render(<TestComponent />)
+
+    // In this act, the effect within useFacetCallback will be executed, subscribing for changes of the facetA
+    // Then we set the value, causing the listener above to being called
+    act(() => {
+      facetA.set('new')
+    })
   })
 
-  render(<TestComponent />)
+  it('should always have the current value of tracked facets (even after another component unmounts)', () => {
+    const facetA = createFacet<string>({
+      initialValue: NO_VALUE,
 
-  // In this act, the effect within useFacetCallback will be executed, subscribing for changes of the facetA
-  // Then we set the value, causing the listener above to being called
-  act(() => {
-    facetA.set('new')
+      // We need to have a value from a startSubscription so that after the last listener is removed, we set the facet back to NO_VALUE
+      startSubscription: (update) => {
+        update('value')
+        return () => {}
+      },
+    })
+
+    let handler: (event: string) => void = () => {}
+
+    const TestComponentA = () => {
+      handler = useFacetCallback(
+        (a) => (b: string) => {
+          return a + b
+        },
+        [],
+        [facetA],
+      )
+
+      return null
+    }
+
+    const TestComponentB = () => {
+      useFacetCallback(() => () => {}, [], [facetA])
+
+      return null
+    }
+
+    // We mount both components, both internally calling the useFacetCallback to start subscriptions towards the facetA
+    const { rerender } = render(
+      <>
+        <TestComponentA />
+        <TestComponentB />
+      </>,
+    )
+
+    // Then we unmount one of the components, causing it to unsubscribe from the facetA
+    rerender(
+      <>
+        <TestComponentA />
+      </>,
+    )
+
+    // However, with a prior implementation, a shared instance of a listener (noop) was used across all useFacetCallback usages
+    // causing a mismatch between calls to observer and unsubscribe.
+    act(() => {
+      const result = handler('string')
+      expect(result).toBe('valuestring')
+    })
   })
 })
