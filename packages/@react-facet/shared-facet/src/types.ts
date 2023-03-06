@@ -36,7 +36,7 @@ export type OnlyDataOrOnlyMethods<T> = Flatten<T> extends (...args: never) => un
   : never
 
 /**
- * Utility to extract the value from a generic type
+ * Utility to extract values from a generic type
  */
 type Flatten<T> = T extends object
   ? T extends unknown[]
