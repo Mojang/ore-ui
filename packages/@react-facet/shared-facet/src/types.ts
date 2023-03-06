@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Facet, FacetFactory, NoValue, Value, ValueWithoutFunction } from '@react-facet/core'
+import { Facet, FacetFactory, NoValue, ValueWithoutFunction } from '@react-facet/core'
 
 export interface OnChange<V> {
   (value: V): void
@@ -27,12 +26,18 @@ export interface SharedFacet<T> extends FacetFactory<T> {
   (sharedFacetDriver: SharedFacetDriver): Facet<T>
 }
 
+/**
+ * This type act as a guard against mixing methods and data.
+ */
 export type OnlyDataOrOnlyMethods<T> = Flatten<T> extends (...args: never) => unknown
   ? T | NoValue
   : Flatten<T> extends ValueWithoutFunction
   ? T | NoValue
   : never
 
+/**
+ * Utility to extract the value from a generic type
+ */
 type Flatten<T> = T extends object
   ? T extends unknown[]
     ? T[number] extends object
