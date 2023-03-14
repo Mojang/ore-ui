@@ -8,7 +8,7 @@ Open-source building blocks from Mojang Studios to construct video game user int
 
 This repository contains some infrastructure bits used internally, but that can also be shared across other game studios and general-purpose web applications.
 
-Current titles using this tech:
+Some of the projects using this tech are:
 
 - Minecraft Bedrock Edition
 - Minecraft Legends
