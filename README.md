@@ -65,21 +65,21 @@ The repository is maintained by JavaScript developers at Mojang Studios.
         <a href="https://github.com/MartinMoe">Martin Moe</a>
       </td>
       <td align="center" valign="top">
+        <img width="150" height="150" src="https://github.com/Shenato.png?s=150">
+        <br />
+        <a href="https://github.com/Shenato">Omar ElGaml</a>
+      </td>
+      <td align="center" valign="top">
         <img width="150" height="150" src="https://github.com/AdamRamberg.png?s=150">
         <br />
         <a href="https://github.com/AdamRamberg">Adam Ramberg</a>
       </td>
+     </tr>
+    <tr>
       <td align="center" valign="top">
         <img width="150" height="150" src="https://github.com/vb.png?s=150">
         <br />
         <a href="https://github.com/vb">Viktor Bergehall</a>
-      </td>
-     </tr>
-    <tr>
-      <td align="center" valign="top">
-        <img width="150" height="150" src="https://github.com/Shenato.png?s=150">
-        <br />
-        <a href="https://github.com/Shenato">Omar ElGaml</a>
       </td>
       <td align="center" valign="top">
         <img width="150" height="150" src="https://github.com/ja-ni.png?s=150">
