@@ -2,11 +2,16 @@
 
 <img src="logo.png" width="400px" />
 
-Open-source building blocks from Mojang Studios to construct video game user interfaces (UI's) using web tech.
+Open-source building blocks from Mojang Studios to construct video game user interfaces (UI's) using [web standards](https://coherent-labs.com/products/coherent-gameface/).
 
 ## What is this?
 
-Minecraft Bedrock Edition is migrating its UI system to a solution based on [web standards](https://coherent-labs.com/products/coherent-gameface/). This repository contains some infrastructure bits used internally, but that can also be shared across other game studios and general-purpose web applications.
+This repository contains some infrastructure bits used internally, but that can also be shared across other game studios and general-purpose web applications.
+
+Current titles using this tech:
+
+- Minecraft Bedrock Edition
+- Minecraft Legends
 
 Ore UI is based on:
 
