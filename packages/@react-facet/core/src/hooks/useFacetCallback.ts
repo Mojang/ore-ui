@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect } from 'react'
+import { useCallback, useLayoutEffect, useRef } from 'react'
 import { Facet, NO_VALUE, ExtractFacetValues, NoValue } from '../types'
 
 /**
@@ -59,8 +59,14 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const callbackMemoized = useCallback(callback, dependencies)
 
+  // Setup a ref so that the callback instance below can be kept the same
+  // when Facet instances change across re-renders
+  const facetsRef = useRef(facets)
+  facetsRef.current = facets
+
   return useCallback(
     (...args: K) => {
+      const facets = facetsRef.current
       const values = facets.map((facet) => facet.get())
 
       for (const value of values) {
@@ -69,8 +75,6 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
 
       return callbackMemoized(...(values as ExtractFacetValues<T>))(...(args as K))
     },
-    // We care about each individual facet and if any is a different reference
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [callbackMemoized, defaultReturnValue, ...facets],
+    [callbackMemoized, defaultReturnValue],
   )
 }

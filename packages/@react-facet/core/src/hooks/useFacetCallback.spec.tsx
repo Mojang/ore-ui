@@ -321,4 +321,6 @@ describe('regressions', () => {
       expect(result).toBe('valuestring')
     })
   })
+
+  it.todo('always returns the same callback instance, even if the Facet instances change')
 })
