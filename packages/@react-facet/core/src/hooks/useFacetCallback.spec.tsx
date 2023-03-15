@@ -322,5 +322,30 @@ describe('regressions', () => {
     })
   })
 
-  it.todo('always returns the same callback instance, even if the Facet instances change')
+  it('always returns the same callback instance, even if the Facet instances change', () => {
+    let handler: (event: string) => void = () => {}
+
+    const TestComponent = () => {
+      const facetA = createFacet<string>({ initialValue: 'a' })
+      const facetB = createFacet<string>({ initialValue: 'b' })
+
+      handler = useFacetCallback(
+        (a, b) => () => {
+          return a + b
+        },
+        [],
+        [facetA, facetB],
+      )
+
+      return null
+    }
+
+    const { rerender } = render(<TestComponent />)
+    const firstHandler = handler
+
+    rerender(<TestComponent />)
+    const secondHandler = handler
+
+    expect(firstHandler).toBe(secondHandler)
+  })
 })
