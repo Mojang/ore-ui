@@ -3,10 +3,9 @@ import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetCallback } from './useFacetCallback'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
-import { NO_VALUE } from '../types'
-import { createFacet } from '../facet'
+import { NO_VALUE, Facet } from '../types'
+import { createFacet, createStaticFacet } from '../facet'
 import { NoValue } from '..'
-import { createStaticFacet, Facet } from '@react-facet/core'
 
 it('captures the current value of the facet in a function that can be used as handler', () => {
   const demoFacet = createFacet({ initialValue: 'initial value' })
