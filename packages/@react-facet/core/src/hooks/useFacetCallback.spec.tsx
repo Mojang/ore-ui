@@ -6,6 +6,7 @@ import { useFacetMap } from './useFacetMap'
 import { NO_VALUE } from '../types'
 import { createFacet } from '../facet'
 import { NoValue } from '..'
+import { createStaticFacet, Facet } from '@react-facet/core'
 
 it('captures the current value of the facet in a function that can be used as handler', () => {
   const demoFacet = createFacet({ initialValue: 'initial value' })
@@ -323,28 +324,29 @@ describe('regressions', () => {
   })
 
   it('always returns the same callback instance, even if the Facet instances change', () => {
-    let handler: (event: string) => void = () => {}
+    let handler: () => void = () => {}
+    const facetA = createStaticFacet('a')
+    const facetB = createStaticFacet('b')
 
-    const TestComponent = () => {
-      const facetA = createFacet<string>({ initialValue: 'a' })
-      const facetB = createFacet<string>({ initialValue: 'b' })
-
+    const TestComponent = ({ facet }: { facet: Facet<string> }) => {
       handler = useFacetCallback(
-        (a, b) => () => {
-          return a + b
+        (a) => () => {
+          return a
         },
         [],
-        [facetA, facetB],
+        [facet],
       )
 
       return null
     }
 
-    const { rerender } = render(<TestComponent />)
+    const { rerender } = render(<TestComponent facet={facetA} />)
     const firstHandler = handler
+    expect(firstHandler()).toBe('a')
 
-    rerender(<TestComponent />)
+    rerender(<TestComponent facet={facetB} />)
     const secondHandler = handler
+    expect(secondHandler()).toBe('b')
 
     expect(firstHandler).toBe(secondHandler)
   })
