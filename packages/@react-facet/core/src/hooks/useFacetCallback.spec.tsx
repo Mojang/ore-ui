@@ -3,8 +3,8 @@ import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetCallback } from './useFacetCallback'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
-import { NO_VALUE } from '../types'
-import { createFacet } from '../facet'
+import { NO_VALUE, Facet } from '../types'
+import { createFacet, createStaticFacet } from '../facet'
 import { NoValue } from '..'
 
 it('captures the current value of the facet in a function that can be used as handler', () => {
@@ -320,5 +320,33 @@ describe('regressions', () => {
       const result = handler('string')
       expect(result).toBe('valuestring')
     })
+  })
+
+  it('always returns the same callback instance, even if the Facet instances change', () => {
+    let handler: () => void = () => {}
+    const facetA = createStaticFacet('a')
+    const facetB = createStaticFacet('b')
+
+    const TestComponent = ({ facet }: { facet: Facet<string> }) => {
+      handler = useFacetCallback(
+        (a) => () => {
+          return a
+        },
+        [],
+        [facet],
+      )
+
+      return null
+    }
+
+    const { rerender } = render(<TestComponent facet={facetA} />)
+    const firstHandler = handler
+    expect(firstHandler()).toBe('a')
+
+    rerender(<TestComponent facet={facetB} />)
+    const secondHandler = handler
+    expect(secondHandler()).toBe('b')
+
+    expect(firstHandler).toBe(secondHandler)
   })
 })
