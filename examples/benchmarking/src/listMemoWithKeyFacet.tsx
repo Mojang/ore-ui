@@ -8,7 +8,7 @@ interface Data {
   index: number
 }
 
-const initialData = Array.from({ length: 2000 }, (_, index): Data => ({ name: 'player', health: 10, index }))
+const initialData = Array.from({ length: 2000 }, (_, index): Data => ({ name: `player-${index}`, health: 10, index }))
 
 export const Performance = () => {
   const [dataFacet, setDataFacet] = useFacetState(initialData)
