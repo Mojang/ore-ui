@@ -5,7 +5,7 @@ import { EqualityCheck, Facet, NO_VALUE } from '../types'
 
 export type MapWithKeysProps<T> = {
   array: Facet<T[]>
-  keySelector: (item: T) => React.Key
+  keySelector?: (item: T) => React.Key
   children: (item: Facet<T>, index: number) => ReactElement | null
   equalityCheck?: EqualityCheck<T>
 }
@@ -22,7 +22,7 @@ export const MapWithKey = <T,>({ array, children, keySelector, equalityCheck }: 
       // Even though shouldRerender is true, we still need to loop through every item in the array
       // in order to make sure no keys have changed and update previousKeys accordingly.
       for (let i = 0; i < array.length; i++) {
-        const key = keySelector(array[i])
+        const key = keySelector != null ? keySelector(array[i]) : i
         newKeys.push(key)
 
         if (!shouldRerender && newKeys[i] !== currentKeys.current[i]) {
