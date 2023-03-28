@@ -16,6 +16,17 @@ jobs:
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare listMemoFacet listMemoState 70
 
+  listMemoWithKey:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: cd examples/benchmarking && yarn build && yarn compare listMemoWithKeyFacet listMemoState 70
+
   marker:
     runs-on: ubuntu-latest
     steps:
