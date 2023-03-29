@@ -1,65 +1,96 @@
-import React, { ReactElement, useRef, useState, memo, useMemo } from 'react'
+import React, { ReactElement, useRef, useState, memo, useCallback } from 'react'
 import { createFacet } from '../facet/createFacet'
 import { useFacetEffect } from '../hooks/useFacetEffect'
-import { EqualityCheck, Facet, NO_VALUE, WritableFacet } from '../types'
+import { EqualityCheck, Facet, WritableFacet, NO_VALUE } from '../types'
 
-export type MapWithKeysProps<T> = {
+type MapWithKeyProps<T> = {
   array: Facet<T[]>
   keySelector?: (item: T) => React.Key
   children: (item: Facet<T>, index: number) => ReactElement | null
   equalityCheck?: EqualityCheck<T>
 }
 
-export const MapWithKey = <T,>({ array, children, keySelector, equalityCheck }: MapWithKeysProps<T>) => {
-  const currentKeys = useRef<React.Key[]>([])
+type ChildBaseProps<T> = {
+  itemFacet: Facet<T>
+  key: React.Key
+}
+
+type ChildProps<T> = ChildBaseProps<T> & {
+  children: (item: Facet<T>, index: number) => ReactElement | null
+  index: number
+}
+
+export const MapWithKey = <T,>({ array, children, keySelector, equalityCheck }: MapWithKeyProps<T>) => {
+  const currentEqualityCheckRef = useRef<EqualityCheck<T> | undefined>(equalityCheck)
   const itemFacetsMap = useRef<Map<React.Key, WritableFacet<T>>>(new Map())
-  const [, rerender] = useState(0)
+  const createInitialChildrenProps = useCallback(() => {
+    const childrenProps: ChildBaseProps<T>[] = []
+    const unwrappedArray = array.get()
+    if (unwrappedArray == NO_VALUE) return childrenProps
+
+    for (let i = 0; i < unwrappedArray.length; i++) {
+      const item = unwrappedArray[i]
+      const key = keySelector != null ? keySelector(item) : i
+      const itemFacet = createFacet({ initialValue: item, equalityCheck })
+      itemFacetsMap.current.set(key, itemFacet)
+      childrenProps.push({ key, itemFacet })
+    }
+
+    return childrenProps
+  }, [equalityCheck, keySelector, array])
+  const [childrenProps, setChildrenProps] = useState<ChildBaseProps<T>[]>(createInitialChildrenProps)
 
   useFacetEffect(
     (array) => {
-      let shouldRerender = array.length != currentKeys.current.length
-      const newKeys = []
+      const equalityCheckUpdated = currentEqualityCheckRef.current !== equalityCheck
+      if (equalityCheckUpdated) {
+        // There is no way of updating a facet with a new equality check so we recreate them instead.
+        // We could of course add that to the facet API, however updating the equality check dynamically
+        // is very rare and it's therefore not worth it.
+        itemFacetsMap.current.clear()
+        currentEqualityCheckRef.current = equalityCheck
+      }
 
-      for (let i = 0; i < array.length; i++) {
-        const item = array[i]
-        // Get key
-        const key = keySelector != null ? keySelector(array[i]) : i
-        newKeys.push(key)
+      setChildrenProps((currentChildrenProps) => {
+        let shouldUpdate = array.length !== currentChildrenProps.length || equalityCheckUpdated
+        const newChildrenProps = []
 
-        // Update the item facet
-        const itemFacet = itemFacetsMap.current.get(key)
-        if (itemFacet != null) {
-          itemFacet.set(item)
+        for (let i = 0; i < array.length; i++) {
+          const item = array[i]
+          const key = keySelector != null ? keySelector(array[i]) : i
+          let itemFacet: WritableFacet<T> | undefined = undefined
+
+          if (itemFacetsMap.current.has(key)) {
+            itemFacet = itemFacetsMap.current.get(key) as WritableFacet<T>
+            itemFacet.set(item)
+
+            const currentChildProps = currentChildrenProps[i]
+            shouldUpdate = shouldUpdate || currentChildProps == null || currentChildProps.key !== key
+          } else {
+            itemFacet = createFacet({ initialValue: item, equalityCheck })
+            itemFacetsMap.current.set(key, itemFacet)
+
+            shouldUpdate = true
+          }
+
+          newChildrenProps.push({ key, itemFacet })
         }
 
-        // Determine if we need to rerender
-        shouldRerender = shouldRerender || key !== currentKeys.current[i]
-      }
-
-      if (shouldRerender) {
-        currentKeys.current = newKeys
-        rerender((value) => value + 1)
-      }
+        return shouldUpdate ? newChildrenProps : currentChildrenProps
+      })
     },
     [keySelector, equalityCheck],
     [array],
   )
 
-  const unwrappedArray = array.get()
-  if (unwrappedArray === NO_VALUE) return null
-
   return (
     <>
-      {unwrappedArray.map((item, index) => {
+      {childrenProps.map((childProps, index) => {
         return (
           <MemoizedMapChild
-            key={currentKeys.current[index]}
-            memoKey={currentKeys.current[index]}
-            index={index}
+            {...childProps}
             children={children as (item: Facet<unknown>, index: number) => ReactElement | null}
-            item={item}
-            equalityCheck={equalityCheck as EqualityCheck<unknown> | undefined}
-            itemFacetsMap={itemFacetsMap}
+            index={index}
           />
         )
       })}
@@ -67,32 +98,7 @@ export const MapWithKey = <T,>({ array, children, keySelector, equalityCheck }: 
   )
 }
 
-type MapChildProps<T> = {
-  item: T
-  index: number
-  children: (item: Facet<T>, index: number) => ReactElement | null
-  equalityCheck?: EqualityCheck<T>
-  memoKey: React.Key
-  itemFacetsMap: React.MutableRefObject<Map<React.Key, Facet<T>>>
-}
-
-const MapChild = <T,>({ item, children, index, equalityCheck, itemFacetsMap, memoKey }: MapChildProps<T>) => {
-  const itemFacet = useMemo(
-    () => {
-      // Create the facet
-      const facet = createFacet<T>({ initialValue: item, equalityCheck })
-      // Update the facet map
-      itemFacetsMap.current.set(memoKey, facet)
-      return facet
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-
+const MapChild = <T,>({ itemFacet, children, index }: ChildProps<T>) => {
   return children(itemFacet, index)
 }
-
-const arePropsEqual = (oldProps: MapChildProps<unknown>, newProps: MapChildProps<unknown>) => {
-  return oldProps.memoKey === newProps.memoKey
-}
-const MemoizedMapChild = memo(MapChild, arePropsEqual)
+const MemoizedMapChild = memo(MapChild)
