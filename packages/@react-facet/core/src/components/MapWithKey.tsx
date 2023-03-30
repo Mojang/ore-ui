@@ -1,12 +1,16 @@
-import React, { ReactElement, useRef, useState, memo, useCallback } from 'react'
+import React, { ReactElement, useRef, useState, memo } from 'react'
 import { createFacet } from '../facet/createFacet'
 import { useFacetEffect } from '../hooks/useFacetEffect'
+import { mapFacetSingleLightweight } from '../mapFacets'
 import { EqualityCheck, Facet, WritableFacet, NO_VALUE } from '../types'
+
+type KeySelector<T> = (item: T) => React.Key
+type Children<T> = (item: Facet<T>, index: number) => ReactElement | null
 
 type MapWithKeyProps<T> = {
   array: Facet<T[]>
-  keySelector?: (item: T) => React.Key
-  children: (item: Facet<T>, index: number) => ReactElement | null
+  keySelector?: KeySelector<T>
+  children: Children<T>
   equalityCheck?: EqualityCheck<T>
 }
 
@@ -16,58 +20,73 @@ type ChildBaseProps<T> = {
 }
 
 type ChildProps<T> = ChildBaseProps<T> & {
-  children: (item: Facet<T>, index: number) => ReactElement | null
+  children: Children<T>
   index: number
 }
 
 export const MapWithKey = <T,>({ array, children, keySelector, equalityCheck }: MapWithKeyProps<T>) => {
   const currentEqualityCheckRef = useRef<EqualityCheck<T> | undefined>(equalityCheck)
-  const itemFacetsMap = useRef<Map<React.Key, WritableFacet<T>>>(new Map())
-  const createInitialChildrenProps = useCallback(() => {
+  const currentKeySelectorRef = useRef<KeySelector<T> | undefined>(keySelector)
+  const itemFacetsMap = useRef<Map<React.Key, Facet<T>>>(new Map())
+
+  const [childrenProps, setChildrenProps] = useState<ChildBaseProps<T>[]>(() => {
     const childrenProps: ChildBaseProps<T>[] = []
     const unwrappedArray = array.get()
+    const usingLightweightItemFacets = keySelector == null && equalityCheck == null
     if (unwrappedArray == NO_VALUE) return childrenProps
 
     for (let i = 0; i < unwrappedArray.length; i++) {
       const item = unwrappedArray[i]
       const key = keySelector != null ? keySelector(item) : i
-      const itemFacet = createFacet({ initialValue: item, equalityCheck })
+      const itemFacet = !usingLightweightItemFacets
+        ? createFacet({ initialValue: item, equalityCheck })
+        : mapFacetSingleLightweight(array, (a) => a[i])
       itemFacetsMap.current.set(key, itemFacet)
       childrenProps.push({ key, itemFacet })
     }
 
     return childrenProps
-  }, [equalityCheck, keySelector, array])
-  const [childrenProps, setChildrenProps] = useState<ChildBaseProps<T>[]>(createInitialChildrenProps)
+  })
 
   useFacetEffect(
-    (array) => {
+    (unwrappedArray) => {
       const equalityCheckUpdated = currentEqualityCheckRef.current !== equalityCheck
-      if (equalityCheckUpdated) {
-        // There is no way of updating a facet with a new equality check so we recreate them instead.
-        // We could of course add that to the facet API, however updating the equality check dynamically
-        // is very rare and it's therefore not worth it.
+      const keySelectorUpdated = currentKeySelectorRef.current !== keySelector
+      if (equalityCheckUpdated || keySelectorUpdated) {
+        // There is no way of updating a facet with a new equality check so we flush the cache and recreate them instead.
+        // We could of course add that to the facet API, however updating the equality check dynamically is very rare
+        // and it's therefore not worth it.
         itemFacetsMap.current.clear()
         currentEqualityCheckRef.current = equalityCheck
+        currentKeySelectorRef.current = keySelector
       }
-
+      const usingLightweightItemFacets = keySelector == null && equalityCheck == null
       setChildrenProps((currentChildrenProps) => {
-        let shouldUpdate = array.length !== currentChildrenProps.length || equalityCheckUpdated
+        const lenghUpdated = unwrappedArray.length !== currentChildrenProps.length
+        if (!lenghUpdated && usingLightweightItemFacets) return currentChildrenProps
+
+        let shouldUpdate = lenghUpdated || equalityCheckUpdated || keySelectorUpdated
         const newChildrenProps = []
 
-        for (let i = 0; i < array.length; i++) {
-          const item = array[i]
-          const key = keySelector != null ? keySelector(array[i]) : i
-          let itemFacet: WritableFacet<T> | undefined = undefined
+        for (let i = 0; i < unwrappedArray.length; i++) {
+          const item = unwrappedArray[i]
+          const key = keySelector != null ? keySelector(item) : i
+          let itemFacet: Facet<T> | undefined = undefined
 
           if (itemFacetsMap.current.has(key)) {
-            itemFacet = itemFacetsMap.current.get(key) as WritableFacet<T>
-            itemFacet.set(item)
+            itemFacet = itemFacetsMap.current.get(key) as Facet<T>
+
+            if (!usingLightweightItemFacets) {
+              const writeableItemFacet = itemFacet as WritableFacet<T>
+              writeableItemFacet.set(item)
+            }
 
             const currentChildProps = currentChildrenProps[i]
             shouldUpdate = shouldUpdate || currentChildProps == null || currentChildProps.key !== key
           } else {
-            itemFacet = createFacet({ initialValue: item, equalityCheck })
+            itemFacet = !usingLightweightItemFacets
+              ? createFacet({ initialValue: item, equalityCheck })
+              : mapFacetSingleLightweight(array, (a) => a[i])
             itemFacetsMap.current.set(key, itemFacet)
 
             shouldUpdate = true
@@ -79,7 +98,7 @@ export const MapWithKey = <T,>({ array, children, keySelector, equalityCheck }: 
         return shouldUpdate ? newChildrenProps : currentChildrenProps
       })
     },
-    [keySelector, equalityCheck],
+    [keySelector, equalityCheck, array],
     [array],
   )
 
