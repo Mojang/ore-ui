@@ -26,7 +26,6 @@ type ChildProps<T> = ChildBaseProps<T> & {
 
 export const MapWithKey = <T,>({ array, children, keySelector, equalityCheck }: MapWithKeyProps<T>) => {
   const currentEqualityCheckRef = useRef<EqualityCheck<T> | undefined>(equalityCheck)
-  const currentKeySelectorRef = useRef<KeySelector<T> | undefined>(keySelector)
   const itemFacetsMap = useRef<Map<React.Key, Facet<T>>>(new Map())
 
   const [childrenProps, setChildrenProps] = useState<ChildBaseProps<T>[]>(() => {
@@ -51,21 +50,19 @@ export const MapWithKey = <T,>({ array, children, keySelector, equalityCheck }: 
   useFacetEffect(
     (unwrappedArray) => {
       const equalityCheckUpdated = currentEqualityCheckRef.current !== equalityCheck
-      const keySelectorUpdated = currentKeySelectorRef.current !== keySelector
-      if (equalityCheckUpdated || keySelectorUpdated) {
+      if (equalityCheckUpdated) {
         // There is no way of updating a facet with a new equality check so we flush the cache and recreate them instead.
         // We could of course add that to the facet API, however updating the equality check dynamically is very rare
         // and it's therefore not worth it.
         itemFacetsMap.current.clear()
         currentEqualityCheckRef.current = equalityCheck
-        currentKeySelectorRef.current = keySelector
       }
       const usingLightweightItemFacets = keySelector == null && equalityCheck == null
       setChildrenProps((currentChildrenProps) => {
-        const lenghUpdated = unwrappedArray.length !== currentChildrenProps.length
-        if (!lenghUpdated && usingLightweightItemFacets) return currentChildrenProps
+        const lengthUpdated = unwrappedArray.length !== currentChildrenProps.length
+        if (!lengthUpdated && usingLightweightItemFacets) return currentChildrenProps
 
-        let shouldUpdate = lenghUpdated || equalityCheckUpdated || keySelectorUpdated
+        let shouldUpdate = lengthUpdated || equalityCheckUpdated
         const newChildrenProps = []
 
         for (let i = 0; i < unwrappedArray.length; i++) {
