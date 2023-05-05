@@ -27,12 +27,14 @@ export interface SharedFacet<T> extends FacetFactory<T> {
 }
 
 /**
- * This type act as a guard against mixing methods and data.
+ * This utility act as a guard against mixing methods and data.
  */
-export type OnlyDataOrOnlyMethods<T> = Flatten<T> extends (...args: never) => unknown
-  ? T | NoValue
+export type OnlyDataOrOnlyMethods<T, C = true, R = C extends true ? T | NoValue : T> = Flatten<T> extends (
+  ...args: never
+) => unknown
+  ? R
   : Flatten<T> extends ValueWithoutFunction
-  ? T | NoValue
+  ? R
   : never
 
 /**

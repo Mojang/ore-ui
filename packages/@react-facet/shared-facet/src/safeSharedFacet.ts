@@ -1,6 +1,6 @@
 import memoize from './memoize'
 import { createFacet, NO_VALUE, Option, FACET_FACTORY } from '@react-facet/core'
-import { SharedFacetDriver, SharedFacet } from './types'
+import { SharedFacetDriver, SharedFacet, OnlyDataOrOnlyMethods } from './types'
 
 /**
  * Defines a facet with shared data
@@ -8,10 +8,10 @@ import { SharedFacetDriver, SharedFacet } from './types'
  * @param name the name of the facet (used to construct it with the sharedFacetDriver)
  * @param initialValue optional default value while constructor is not ready with the real value
  */
-/**
- * @deprecated use safeSharedFacet instead
- */
-export function sharedFacet<T>(name: string, initialValue: Option<T> = NO_VALUE): SharedFacet<T> {
+export function safeSharedFacet<T, R = OnlyDataOrOnlyMethods<T, false>>(
+  name: string,
+  initialValue: Option<T> = NO_VALUE,
+): SharedFacet<Readonly<R>> {
   const definition = memoize((sharedFacetDriver: SharedFacetDriver) =>
     createFacet<T>({
       initialValue,
@@ -19,7 +19,7 @@ export function sharedFacet<T>(name: string, initialValue: Option<T> = NO_VALUE)
         return sharedFacetDriver(name, update)
       },
     }),
-  ) as unknown as SharedFacet<T>
+  ) as unknown as SharedFacet<R>
 
   definition.factory = FACET_FACTORY
 
