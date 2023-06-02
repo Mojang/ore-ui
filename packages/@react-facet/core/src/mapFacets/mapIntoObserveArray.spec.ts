@@ -1,6 +1,8 @@
 import { defaultEqualityCheck } from '../equalityChecks'
 import { NO_VALUE } from '../types'
-import { mapIntoObserveArray } from './mapIntoObserveArray'
+import { mapIntoObserveArray, batch } from './mapIntoObserveArray'
+import { createFacet } from '../facet'
+import { mapFacetSingleLightweight } from './mapFacetSingleLightweight'
 
 it('checks equality of primitives when passing defaultEqualityCheck', () => {
   const sourceA = { observe: jest.fn(), get: jest.fn() }
@@ -226,3 +228,83 @@ describe('mapping to NO_VALUE', () => {
     expect(listener).not.toBeCalled()
   })
 })
+
+describe('batch', () => {
+  it('supports batching', () => {
+    const facetA = createFacet<string>({ initialValue: 'a1' })
+    const facetB = createFacet<string>({ initialValue: 'b1' })
+    const observe = mapIntoObserveArray([facetA, facetB], (a, b) => `${a} ${b}`)
+
+    const observer = jest.fn()
+    observe(observer)
+
+    expect(observer).toHaveBeenCalledTimes(1)
+    expect(observer).toHaveBeenCalledWith('a1 b1')
+
+    jest.clearAllMocks()
+    batch(() => {
+      facetA.set('a2')
+      facetB.set('b2')
+    })
+
+    expect(observer).toHaveBeenCalledTimes(1)
+    expect(observer).toHaveBeenCalledWith('a2 b2')
+  })
+
+  it('supports batching, but nested', () => {
+    const facetA = createFacet<string>({ initialValue: 'a1' })
+    const facetB = createFacet<string>({ initialValue: 'b1' })
+    const observe = mapIntoObserveArray([facetA, facetB], (a, b) => `${a} ${b}`)
+
+    const observer = jest.fn()
+    observe(observer)
+
+    expect(observer).toHaveBeenCalledTimes(1)
+    expect(observer).toHaveBeenCalledWith('a1 b1')
+
+    jest.clearAllMocks()
+    batch(() => {
+      facetA.set('a2')
+      batch(() => {
+        facetB.set('b2')
+      })
+    })
+
+    expect(observer).toHaveBeenCalledTimes(1)
+    expect(observer).toHaveBeenCalledWith('a2 b2')
+  })
+
+  it('batches a single facet mapped into multiple facets and then combined again', () => {
+    const facet = createFacet<string>({ initialValue: 'a' })
+    const first = mapFacetSingleLightweight(facet, (a) => `first ${a}`)
+    const second = mapFacetSingleLightweight(facet, (a) => `second ${a}`)
+
+    const observe = mapIntoObserveArray([first, second], (a, b) => `${a},${b}`)
+
+    const observer = jest.fn()
+    observe(observer)
+
+    expect(observer).toHaveBeenCalledTimes(1)
+    expect(observer).toHaveBeenCalledWith('first a,second a')
+
+    jest.clearAllMocks()
+    batch(() => {
+      facet.set('b')
+    })
+
+    expect(observer).toHaveBeenCalledTimes(1)
+    expect(observer).toHaveBeenCalledWith('first b,second b')
+  })
+
+  // it('supports composition', () => {
+  //   const facetA = createFacet<string>({ initialValue: 'A' })
+  //   const facetA_A = mapFacetSingleLightweight(facetA, (a) => `${a}_A`)
+  //   const facetA_B = mapFacetSingleLightweight(facetA, (a) => `${a}_B`)
+  // })
+})
+
+// engine.on('start', () => {
+//   batch(() => {
+//     engine.on('cnw', (value) => facet.set(value))
+//   })
+// })

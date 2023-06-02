@@ -14,20 +14,27 @@ export function mapIntoObserveArray<M>(
     const dependencyValues: Option<unknown>[] = facets.map(() => NO_VALUE)
     let hasAllDependencies = false
 
+    const notify = () => {
+      const result = fn(...dependencyValues)
+      if (result === NO_VALUE) return
+
+      listener(result)
+    }
+
     const subscriptions = facets.map((facet, index) => {
       // Most common scenario is not having any equality check
       if (equalityCheck == null) {
         return facet.observe((value) => {
           dependencyValues[index] = value
 
+          if (batchId >= 0) {
+            scheduledBatches[batchId] = notify
+            return
+          }
+
           hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
 
-          if (hasAllDependencies) {
-            const result = fn(...dependencyValues)
-            if (result === NO_VALUE) return
-
-            listener(result)
-          }
+          if (hasAllDependencies) notify()
         })
       }
 
@@ -85,4 +92,19 @@ export function mapIntoObserveArray<M>(
       subscriptions.forEach((unsubscribe) => unsubscribe())
     }
   }
+}
+
+export type Cb = () => void
+
+let batchId = -1
+const scheduledBatches: Cb[] = []
+
+export const batch = (cb: Cb) => {
+  batchId += 1
+
+  cb()
+
+  scheduledBatches[batchId]()
+
+  batchId -= 1
 }
