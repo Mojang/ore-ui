@@ -1,3 +1,4 @@
+import { scheduleUpdate } from '../batch'
 import { defaultEqualityCheck } from '../equalityChecks'
 import { EqualityCheck, Listener, Option, NO_VALUE, Observe, Facet, NoValue } from '../types'
 
@@ -14,38 +15,22 @@ export function mapIntoObserveArray<M>(
     const dependencyValues: Option<unknown>[] = facets.map(() => NO_VALUE)
     let hasAllDependencies = false
 
-    const notify = () => {
-      const result = fn(...dependencyValues)
-      if (result === NO_VALUE) return
+    const notify =
+      checker == null
+        ? () => {
+            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
+            if (!hasAllDependencies) return
 
-      listener(result)
-    }
+            const result = fn(...dependencyValues)
+            if (result === NO_VALUE) return
 
-    const subscriptions = facets.map((facet, index) => {
-      // Most common scenario is not having any equality check
-      if (equalityCheck == null) {
-        return facet.observe((value) => {
-          dependencyValues[index] = value
-
-          if (batchId >= 0) {
-            scheduledBatches.add(notify)
-            return
+            listener(result)
           }
+        : equalityCheck === defaultEqualityCheck
+        ? () => {
+            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
+            if (!hasAllDependencies) return
 
-          hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
-
-          if (hasAllDependencies) notify()
-        })
-      }
-
-      // Then we optimize for the second most common scenario of using the defaultEqualityCheck (by inline its implementation)
-      if (equalityCheck === defaultEqualityCheck) {
-        return facet.observe((value) => {
-          dependencyValues[index] = value
-
-          hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
-
-          if (hasAllDependencies) {
             const result = fn(...dependencyValues)
             if (result === NO_VALUE) return
 
@@ -66,56 +51,26 @@ export function mapIntoObserveArray<M>(
 
             listener(result)
           }
-        })
-      }
+        : () => {
+            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
+            if (!hasAllDependencies) return
 
-      // Just a type-check guard, it will never happen
-      if (checker == null) return () => {}
+            const result = fn(...dependencyValues)
+            if (result === NO_VALUE) return
+            if (checker(result)) return
 
-      // Finally we use the custom equality check
+            listener(result)
+          }
+
+    const subscriptions = facets.map((facet, index) => {
       return facet.observe((value) => {
         dependencyValues[index] = value
-
-        hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
-
-        if (hasAllDependencies) {
-          const result = fn(...dependencyValues)
-          if (result === NO_VALUE) return
-          if (checker(result)) return
-
-          listener(result)
-        }
+        if (scheduleUpdate(notify) != true) notify()
       })
     })
 
     return () => {
       subscriptions.forEach((unsubscribe) => unsubscribe())
-    }
-  }
-}
-
-export type Cb = () => void
-
-let batchId = -1
-let scheduledBatches = new Set<Cb>()
-
-export const batch = (cb: Cb) => {
-  batchId += 1
-
-  cb()
-
-  batchId -= 1
-
-  // We are back at the root batch call
-  if (batchId === -1) {
-    // Make a copy of the schedule
-    // As notifying can start other batch roots
-    const array = Array.from(scheduledBatches)
-    scheduledBatches = new Set<Cb>()
-
-    for (let index = array.length - 1; index >= 0; index--) {
-      const notify = array[index]
-      notify()
     }
   }
 }

@@ -1,5 +1,6 @@
 import { defaultEqualityCheck } from '../equalityChecks'
 import { Cleanup, EqualityCheck, Listener, WritableFacet, StartSubscription, Option, NO_VALUE } from '../types'
+import { batch } from '../batch'
 
 export interface FacetOptions<V> {
   initialValue: Option<V>
@@ -21,32 +22,34 @@ export function createFacet<V>({
   const checker = equalityCheck?.()
 
   const update = (newValue: V) => {
-    if (equalityCheck != null) {
-      // we optimize for the most common scenario of using the defaultEqualityCheck (by inline its implementation)
-      if (equalityCheck === defaultEqualityCheck) {
-        const typeofValue = typeof newValue
-        if (
-          (typeofValue === 'number' ||
-            typeofValue === 'string' ||
-            typeofValue === 'boolean' ||
-            newValue === null ||
-            newValue === undefined) &&
-          currentValue === newValue
-        ) {
-          return
-        }
-      } else {
-        if (checker != null && checker(newValue)) {
-          return
+    batch(() => {
+      if (equalityCheck != null) {
+        // we optimize for the most common scenario of using the defaultEqualityCheck (by inline its implementation)
+        if (equalityCheck === defaultEqualityCheck) {
+          const typeofValue = typeof newValue
+          if (
+            (typeofValue === 'number' ||
+              typeofValue === 'string' ||
+              typeofValue === 'boolean' ||
+              newValue === null ||
+              newValue === undefined) &&
+            currentValue === newValue
+          ) {
+            return
+          }
+        } else {
+          if (checker != null && checker(newValue)) {
+            return
+          }
         }
       }
-    }
 
-    currentValue = newValue
+      currentValue = newValue
 
-    for (const listener of listeners) {
-      listener(currentValue)
-    }
+      for (const listener of listeners) {
+        listener(currentValue)
+      }
+    })
   }
 
   /**

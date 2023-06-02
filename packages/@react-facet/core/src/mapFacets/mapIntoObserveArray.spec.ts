@@ -1,9 +1,6 @@
 import { defaultEqualityCheck } from '../equalityChecks'
 import { NO_VALUE } from '../types'
-import { mapIntoObserveArray, batch } from './mapIntoObserveArray'
-import { createFacet } from '../facet'
-import { mapFacetSingleLightweight } from './mapFacetSingleLightweight'
-import { mapFacetArrayLightweight } from './mapFacetArrayLightweight'
+import { mapIntoObserveArray } from './mapIntoObserveArray'
 
 it('checks equality of primitives when passing defaultEqualityCheck', () => {
   const sourceA = { observe: jest.fn(), get: jest.fn() }
@@ -227,109 +224,5 @@ describe('mapping to NO_VALUE', () => {
     // trigger an update on one dependency and check it wasn't called
     source.observe.mock.calls[0][0](10)
     expect(listener).not.toBeCalled()
-  })
-})
-
-describe('batch', () => {
-  it('supports batching', () => {
-    const facetA = createFacet<string>({ initialValue: 'a1' })
-    const facetB = createFacet<string>({ initialValue: 'b1' })
-    const observe = mapIntoObserveArray([facetA, facetB], (a, b) => `${a} ${b}`)
-
-    const observer = jest.fn()
-    observe(observer)
-
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(observer).toHaveBeenCalledWith('a1 b1')
-
-    jest.clearAllMocks()
-    batch(() => {
-      facetA.set('a2')
-      facetB.set('b2')
-    })
-
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(observer).toHaveBeenCalledWith('a2 b2')
-  })
-
-  it('supports batching, but nested', () => {
-    const facetA = createFacet<string>({ initialValue: 'a1' })
-    const facetB = createFacet<string>({ initialValue: 'b1' })
-    const observe = mapIntoObserveArray([facetA, facetB], (a, b) => `${a} ${b}`)
-
-    const observer = jest.fn()
-    observe(observer)
-
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(observer).toHaveBeenCalledWith('a1 b1')
-
-    jest.clearAllMocks()
-    batch(() => {
-      facetA.set('a2')
-      batch(() => {
-        facetB.set('b2')
-      })
-    })
-
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(observer).toHaveBeenCalledWith('a2 b2')
-  })
-
-  it('batches a single facet mapped into multiple facets and then combined again', () => {
-    const facet = createFacet<string>({ initialValue: 'a' })
-    const first = mapFacetSingleLightweight(facet, (a) => `first ${a}`)
-    const second = mapFacetSingleLightweight(facet, (a) => `second ${a}`)
-    const observe = mapIntoObserveArray([first, second], (a, b) => `${a},${b}`)
-
-    const observer = jest.fn()
-    observe(observer)
-
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(observer).toHaveBeenCalledWith('first a,second a')
-
-    jest.clearAllMocks()
-    batch(() => {
-      facet.set('b')
-    })
-
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(observer).toHaveBeenCalledWith('first b,second b')
-  })
-
-  it('batches effects of other batches', () => {
-    const derivativeFacet = createFacet<string>({ initialValue: 'a' })
-    const derivativeFacetFirst = mapFacetSingleLightweight(derivativeFacet, (a) => `first ${a}`)
-    const derivativeFacetSecond = mapFacetSingleLightweight(derivativeFacet, (a) => `second ${a}`)
-    const derivativeFacetMapped = mapFacetArrayLightweight(
-      [derivativeFacetFirst, derivativeFacetSecond],
-      (a, b) => `${a},${b}`,
-    )
-
-    const sourceFacetA = createFacet<string>({ initialValue: 'a1' })
-    const sourceFacetB = createFacet<string>({ initialValue: 'b1' })
-    const mappedFacetAAndFacetB = mapFacetArrayLightweight([sourceFacetA, sourceFacetB], (a, b) => `${a}_${b}`)
-
-    const observer = jest.fn()
-    mappedFacetAAndFacetB.observe((value) => {
-      batch(() => {
-        derivativeFacet.set(value)
-      })
-    })
-
-    derivativeFacetMapped.observe(observer)
-
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(observer).toHaveBeenCalledWith('first a1_b1,second a1_b1')
-
-    jest.clearAllMocks()
-    // this batch groups with the batch that's called as an effect of it's function call contents
-    batch(() => {
-      sourceFacetA.set('a2')
-      sourceFacetB.set('b2')
-      console.log('got here')
-    })
-
-    expect(observer).toHaveBeenCalledTimes(1)
-    expect(observer).toHaveBeenCalledWith('first a2_b2,second a2_b2')
   })
 })
