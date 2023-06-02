@@ -3,6 +3,7 @@ import { NO_VALUE } from '../types'
 import { mapIntoObserveArray, batch } from './mapIntoObserveArray'
 import { createFacet } from '../facet'
 import { mapFacetSingleLightweight } from './mapFacetSingleLightweight'
+import { mapFacetArrayLightweight } from './mapFacetArrayLightweight'
 
 it('checks equality of primitives when passing defaultEqualityCheck', () => {
   const sourceA = { observe: jest.fn(), get: jest.fn() }
@@ -278,7 +279,6 @@ describe('batch', () => {
     const facet = createFacet<string>({ initialValue: 'a' })
     const first = mapFacetSingleLightweight(facet, (a) => `first ${a}`)
     const second = mapFacetSingleLightweight(facet, (a) => `second ${a}`)
-
     const observe = mapIntoObserveArray([first, second], (a, b) => `${a},${b}`)
 
     const observer = jest.fn()
@@ -296,15 +296,40 @@ describe('batch', () => {
     expect(observer).toHaveBeenCalledWith('first b,second b')
   })
 
-  // it('supports composition', () => {
-  //   const facetA = createFacet<string>({ initialValue: 'A' })
-  //   const facetA_A = mapFacetSingleLightweight(facetA, (a) => `${a}_A`)
-  //   const facetA_B = mapFacetSingleLightweight(facetA, (a) => `${a}_B`)
-  // })
-})
+  it('batches effects of other batches', () => {
+    const derivativeFacet = createFacet<string>({ initialValue: 'a' })
+    const derivativeFacetFirst = mapFacetSingleLightweight(derivativeFacet, (a) => `first ${a}`)
+    const derivativeFacetSecond = mapFacetSingleLightweight(derivativeFacet, (a) => `second ${a}`)
+    const derivativeFacetMapped = mapFacetArrayLightweight(
+      [derivativeFacetFirst, derivativeFacetSecond],
+      (a, b) => `${a},${b}`,
+    )
 
-// engine.on('start', () => {
-//   batch(() => {
-//     engine.on('cnw', (value) => facet.set(value))
-//   })
-// })
+    const sourceFacetA = createFacet<string>({ initialValue: 'a1' })
+    const sourceFacetB = createFacet<string>({ initialValue: 'b1' })
+    const mappedFacetAAndFacetB = mapFacetArrayLightweight([sourceFacetA, sourceFacetB], (a, b) => `${a}_${b}`)
+
+    const observer = jest.fn()
+    mappedFacetAAndFacetB.observe((value) => {
+      batch(() => {
+        derivativeFacet.set(value)
+      })
+    })
+
+    derivativeFacetMapped.observe(observer)
+
+    expect(observer).toHaveBeenCalledTimes(1)
+    expect(observer).toHaveBeenCalledWith('first a1_b1,second a1_b1')
+
+    jest.clearAllMocks()
+    // this batch groups with the batch that's called as an effect of it's function call contents
+    batch(() => {
+      sourceFacetA.set('a2')
+      sourceFacetB.set('b2')
+      console.log('got here')
+    })
+
+    expect(observer).toHaveBeenCalledTimes(1)
+    expect(observer).toHaveBeenCalledWith('first a2_b2,second a2_b2')
+  })
+})

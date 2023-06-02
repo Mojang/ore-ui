@@ -28,7 +28,7 @@ export function mapIntoObserveArray<M>(
           dependencyValues[index] = value
 
           if (batchId >= 0) {
-            scheduledBatches[batchId] = notify
+            scheduledBatches.add(notify)
             return
           }
 
@@ -97,14 +97,25 @@ export function mapIntoObserveArray<M>(
 export type Cb = () => void
 
 let batchId = -1
-const scheduledBatches: Cb[] = []
+let scheduledBatches = new Set<Cb>()
 
 export const batch = (cb: Cb) => {
   batchId += 1
 
   cb()
 
-  scheduledBatches[batchId]()
-
   batchId -= 1
+
+  // We are back at the root batch call
+  if (batchId === -1) {
+    // Make a copy of the schedule
+    // As notifying can start other batch roots
+    const array = Array.from(scheduledBatches)
+    scheduledBatches = new Set<Cb>()
+
+    for (let index = array.length - 1; index >= 0; index--) {
+      const notify = array[index]
+      notify()
+    }
+  }
 }
