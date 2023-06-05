@@ -13,8 +13,8 @@
     "@react-facet/shared-facet": "0.4.3",
     "@react-facet/spring": "0.4.3",
     "ramda": "^0.27.1",
-    "react": "18.1.0",
-    "react-dom": "^18.1.0"
+    "react": "18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.12",
