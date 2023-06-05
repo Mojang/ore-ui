@@ -1,5 +1,7 @@
-import { useLayoutEffect, useState } from 'react'
-import { FacetProp, isFacet, Value, NoValue } from '../types'
+import { useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { Facet, isFacet, Value, NoValue, Option } from '../types'
+import { NO_VALUE } from '@react-facet/core'
+import { asPromise } from '../helpers'
 
 /**
  * Hook that allows consuming values from a Facet
@@ -7,49 +9,57 @@ import { FacetProp, isFacet, Value, NoValue } from '../types'
  *
  * @param facet
  */
-export function useFacetUnwrap<T extends Value>(prop: FacetProp<T>): T | NoValue {
-  const [state, setState] = useState<{ value: T | NoValue }>(() => {
-    if (!isFacet(prop)) return { value: prop }
+export function useFacetUnwrap<T extends Value>(prop: Facet<T>): T {
+  // const [state, setState] = useState<{ value: T | NoValue }>(() => {
+  //   if (!isFacet(prop)) return { value: prop }
 
-    return {
-      value: prop.get(),
-    }
-  })
+  //   return {
+  //     value: prop.get(),
+  //   }
+  // })
 
-  useLayoutEffect(() => {
-    if (isFacet(prop)) {
-      return prop.observe((value) => {
-        setState((previousState) => {
-          const { value: previousValue } = previousState
+  const value = useSyncExternalStore<Option<T>>(prop.observe, prop.get)
 
-          const typeofValue = typeof previousValue
+  if (value === NO_VALUE) {
+    throw asPromise(prop)
+  }
 
-          /**
-           * Performs this equality check locally to prevent triggering two consecutive renderings
-           * for facets that have immutable values (unfortunately we can't handle mutable values).
-           *
-           * The two renderings might happen for the same state value if the Facet has a value on mount.
-           *
-           * The unwrap will get the value:
-           * - Once on initialization of the useState above
-           * - And another time on this observe initialization
-           */
-          if (
-            (typeofValue === 'number' ||
-              typeofValue === 'string' ||
-              typeofValue === 'boolean' ||
-              value === undefined ||
-              value === null) &&
-            value === previousValue
-          ) {
-            return previousState
-          }
+  return value
 
-          return { value }
-        })
-      })
-    }
-  }, [prop])
+  // useLayoutEffect(() => {
+  //   if (isFacet(prop)) {
+  //     return prop.observe((value) => {
+  //       setState((previousState) => {
+  //         const { value: previousValue } = previousState
 
-  return isFacet(prop) ? state.value : prop
+  //         const typeofValue = typeof previousValue
+
+  //         /**
+  //          * Performs this equality check locally to prevent triggering two consecutive renderings
+  //          * for facets that have immutable values (unfortunately we can't handle mutable values).
+  //          *
+  //          * The two renderings might happen for the same state value if the Facet has a value on mount.
+  //          *
+  //          * The unwrap will get the value:
+  //          * - Once on initialization of the useState above
+  //          * - And another time on this observe initialization
+  //          */
+  //         if (
+  //           (typeofValue === 'number' ||
+  //             typeofValue === 'string' ||
+  //             typeofValue === 'boolean' ||
+  //             value === undefined ||
+  //             value === null) &&
+  //           value === previousValue
+  //         ) {
+  //           return previousState
+  //         }
+
+  //         return { value }
+  //       })
+  //     })
+  //   }
+  // }, [prop])
+
+  // return isFacet(prop) ? state.value : prop
 }
