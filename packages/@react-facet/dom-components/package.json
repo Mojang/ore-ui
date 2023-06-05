@@ -48,7 +48,6 @@
     "@react-facet/core": "0.4.5",
     "@react-facet/dom-fiber-testing-library": "0.4.5",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^9.4.1",
     "@types/react": "^18.0.8",
     "@types/rimraf": "^3",
     "cross-env": "^7.0.3",
