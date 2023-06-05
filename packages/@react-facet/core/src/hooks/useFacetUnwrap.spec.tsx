@@ -2,7 +2,8 @@ import React, { Suspense } from 'react'
 import { render, act } from '@react-facet/dom-fiber-testing-library'
 import { useFacetUnwrap } from './useFacetUnwrap'
 import { createFacet } from '../facet'
-import { NO_VALUE } from '..'
+import { asPromise } from '../helpers'
+import { NO_VALUE } from '../types'
 
 describe('when mounting facets with values', () => {
   it('renders only once for Immutable value of type string', () => {
@@ -236,11 +237,11 @@ describe('suspense', () => {
 
     expect(renderedMock).toHaveBeenCalledTimes(0)
 
-    await act(() => {
-      console.log('before setting, in act')
+    await act(async () => {
       demoFacet.set('updated value')
+      await asPromise(demoFacet)
     })
 
-    // expect(renderedMock).toHaveBeenCalledTimes(1)
+    expect(renderedMock).toHaveBeenCalledTimes(1)
   })
 })
