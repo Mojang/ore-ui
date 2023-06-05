@@ -26,11 +26,10 @@ function getGlobalThis(): any {
  * Reference implementation: https://github.com/testing-library/react-testing-library/blob/c80809a956b0b9f3289c4a6fa8b5e8cc72d6ef6d/src/act-compat.js#L5
  */
 export const setupAct = (): Act => {
+  getGlobalThis().IS_REACT_ACT_ENVIRONMENT = true
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const act = (React as any).unstable_act as Act
-
-  getGlobalThis().IS_REACT_ACT_ENVIRONMENT = act
-
   return act
 }
 
