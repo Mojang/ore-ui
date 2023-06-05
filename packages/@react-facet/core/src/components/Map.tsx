@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useDeferredValue } from 'react'
 import { useFacetMemo } from '../hooks/useFacetMemo'
 import { useFacetUnwrap } from '../hooks/useFacetUnwrap'
 import { useFacetMap } from '../hooks/useFacetMap'
@@ -11,7 +11,8 @@ export type MapProps<T> = {
 }
 
 export const Map = <T,>({ array, children, equalityCheck }: MapProps<T>) => {
-  const countValue = useFacetUnwrap(useFacetMap((array) => array.length, [], [array])) ?? 0
+  // When mounting lists, we always want to defer
+  const countValue = useDeferredValue(useFacetUnwrap(useFacetMap((array) => array.length, [], [array])))
 
   return (
     <>
@@ -28,7 +29,7 @@ export const Map = <T,>({ array, children, equalityCheck }: MapProps<T>) => {
           ) : (
             <MapChild<T> key={index} arrayFacet={array} index={index} children={children} />
           ),
-        countValue !== NO_VALUE ? countValue : 0,
+        countValue,
       )}
     </>
   )
