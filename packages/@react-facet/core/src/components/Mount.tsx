@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { ReactElement, useDeferredValue } from 'react'
 import { useFacetUnwrap } from '../hooks/useFacetUnwrap'
 import { Facet } from '../types'
 
@@ -9,6 +9,6 @@ type MountProps = {
 }
 
 export const Mount = ({ when, children, condition = true }: MountProps) => {
-  const whenValue = useFacetUnwrap(when)
+  const whenValue = useDeferredValue(useFacetUnwrap(when))
   return whenValue === condition ? children : null
 }
