@@ -1,4 +1,4 @@
-import React, { createContext, useContext, FC, PropsWithChildren, useTransition, useState, useEffect } from 'react'
+import React, { createContext, useContext, FC, PropsWithChildren, useTransition, useEffect } from 'react'
 import { createFacet, Facet } from '@react-facet/core'
 
 type BLANK = Record<string, unknown>
@@ -24,7 +24,7 @@ export const DeferredMount: FC<PropsWithChildren<{ isReady?: (x: boolean) => voi
     startTransition(() => {
       isReady && isReady(pending)
     })
-  }, [startTransition])
+  }, [isReady, startTransition])
 
   return <>{children}</>
 }
