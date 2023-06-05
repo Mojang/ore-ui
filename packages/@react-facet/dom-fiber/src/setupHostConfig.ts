@@ -28,6 +28,7 @@ import {
   setupValueUpdate,
   setupViewBoxUpdate,
   setupAttributeUpdate,
+  setupStyleUpdate,
 } from './setupAttributes'
 
 /**
@@ -145,28 +146,7 @@ export const setupHostConfig = (): HostConfig<
       style = element.style
       styleUnsubscribers = new Map()
 
-      // We know for sure here that style will never be null (we created it above)
-      const notNullStyle = style as unknown as Record<string, unknown>
-      const notNullStyleUnsubscribers = styleUnsubscribers as unknown as Map<string | number, Unsubscribe>
-
-      const styleProp = newProps.style
-
-      for (const key in styleProp) {
-        const value = styleProp[key]
-
-        if (value != null) {
-          if (isFacet(value)) {
-            notNullStyleUnsubscribers.set(
-              key,
-              value.observe((value) => {
-                notNullStyle[key] = value
-              }),
-            )
-          } else {
-            notNullStyle[key] = value
-          }
-        }
-      }
+      setupStyleUpdate(newProps.style, style, styleUnsubscribers)
     }
 
     if (newProps.dangerouslySetInnerHTML != null) {
@@ -1045,22 +1025,44 @@ export const setupHostConfig = (): HostConfig<
     return instance.element
   },
   hideInstance(instance) {
-    console.log('Hidden: ', instance)
-    // Detach while the instance is hidden
-    // const { attach: type, parent } = instance.__r3f ?? {}
-    // if (type && parent) detach(parent, instance, type)
-    // if (instance.isObject3D) instance.visible = false
-    // invalidateInstance(instance)
+    if (isTextElement(instance.element)) {
+      // Stop listening for updates
+      if (instance.text) {
+        instance.text()
+      }
+
+      instance.element.nodeValue = ''
+      return
+    }
+
+    // Stop listening for style changes
+    instance.styleUnsubscribers?.forEach((unsubscribe) => unsubscribe())
+    instance.styleUnsubscribers?.clear()
+
+    // Hide
+    instance.element.style.display = 'none'
   },
   unhideInstance(instance, props) {
-    console.log('Unhidden: ', instance, props)
-    // Re-attach when the instance is unhidden
-    // const { attach: type, parent } = instance.__r3f ?? {}
-    // if (type && parent) attach(parent, instance, type)
-    // if ((instance.isObject3D && props.visible == null) || props.visible) instance.visible = true
-    // invalidateInstance(instance)
+    if (isTextElement(instance.element)) {
+      instance.text = setupTextUpdate(props.text, instance.element)
+      return
+    }
+
+    if (props.style != null) {
+      setupStyleUpdate(
+        props.style,
+        instance.style ?? instance.element.style,
+        instance.styleUnsubscribers as Map<string | number, Unsubscribe>,
+      )
+    } else {
+      instance.element.style.display = ''
+    }
   },
 })
+
+export const isTextElement = (value: HTMLElement | SVGElement | Text): value is Text => {
+  return (value as HTMLElement).style == null
+}
 
 const cleanupElementContainer = (parent: ElementContainer, instance: ElementContainer) => {
   parent.children.delete(instance)
