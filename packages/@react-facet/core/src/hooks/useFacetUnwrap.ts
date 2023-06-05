@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react'
-import { Facet, isFacet, Value, NO_VALUE, Option } from '../types'
+import { isFacet, Value, NO_VALUE, Option, FacetProp } from '../types'
 import { asPromise } from '../helpers'
 
 /**
@@ -11,7 +11,7 @@ import { asPromise } from '../helpers'
  * @param facet
  * @returns value of the Facet
  */
-export function useFacetUnwrap<T extends Value>(prop: Facet<T>): T {
+export function useFacetUnwrap<T extends Value>(prop: FacetProp<T>): T {
   const [state, setState] = useState<{ value: Option<T> }>(() => {
     if (!isFacet(prop)) return { value: prop }
 
