@@ -5,7 +5,6 @@ module.exports = {
   testEnvironment: 'jsdom',
   testEnvironmentOptions: { url: 'http://localhost' },
   watchPathIgnorePatterns: ['<rootDir>/dist/'],
-  testResultsProcessor: '<rootDir>/../../../jest.testResultsProcessor.js',
   moduleFileExtensions: ['tsx', 'js', 'ts'],
   testMatch: ['**/?(*.)+(spec|test).js?(x)', '**/?(*.)+(spec|test).ts?(x)'],
   setupFilesAfterEnv: ['<rootDir>/../../../jest.setupTestFrameworkScriptFile.js'],
