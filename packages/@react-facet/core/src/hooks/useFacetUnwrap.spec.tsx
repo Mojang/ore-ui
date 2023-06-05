@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { render, act } from '@react-facet/dom-fiber-testing-library'
 import { useFacetUnwrap } from './useFacetUnwrap'
 import { createFacet } from '../facet'
@@ -214,4 +214,33 @@ it('does not trigger a re-render when changing a facet from undefined to undefin
   })
 
   expect(renderedMock).toHaveBeenCalledTimes(0)
+})
+
+describe('suspense', () => {
+  it('throws when a facet has NO_VALUE', async () => {
+    const demoFacet = createFacet<string>({ initialValue: NO_VALUE })
+    const renderedMock = jest.fn()
+
+    const ComponentWithFacetEffect = () => {
+      const adaptValue = useFacetUnwrap(demoFacet)
+      renderedMock()
+
+      return <span>{adaptValue}</span>
+    }
+
+    render(
+      <Suspense>
+        <ComponentWithFacetEffect />
+      </Suspense>,
+    )
+
+    expect(renderedMock).toHaveBeenCalledTimes(0)
+
+    await act(() => {
+      console.log('before setting, in act')
+      demoFacet.set('updated value')
+    })
+
+    // expect(renderedMock).toHaveBeenCalledTimes(1)
+  })
 })
