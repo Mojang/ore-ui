@@ -1511,11 +1511,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-facet/core@0.4.3, @react-facet/core@workspace:packages/@react-facet/core":
+"@react-facet/core@0.4.5, @react-facet/core@workspace:packages/@react-facet/core":
   version: 0.0.0-use.local
   resolution: "@react-facet/core@workspace:packages/@react-facet/core"
   dependencies:
-    "@react-facet/dom-fiber-testing-library": 0.4.3
+    "@react-facet/dom-fiber-testing-library": 0.4.5
     "@types/react": ^18.0.8
     "@types/react-reconciler": ^0.28.0
     "@types/rimraf": ^3
@@ -1528,16 +1528,35 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/deferred-mount@0.4.3, @react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount":
+"@react-facet/core@npm:0.4.3":
+  version: 0.4.3
+  resolution: "@react-facet/core@npm:0.4.3"
+  peerDependencies:
+    react: ^16.9.0
+  checksum: 2d90540baaf2ff646d9e1fd941dbb18db84c698cd51416668d141f4fa9705a9ec33c5df4816e30ac58e4766c6d31208e31efb2c5643a326ca0e98eb4c6b61ad5
+  languageName: node
+  linkType: hard
+
+"@react-facet/deferred-mount@npm:0.4.3":
+  version: 0.4.3
+  resolution: "@react-facet/deferred-mount@npm:0.4.3"
+  peerDependencies:
+    "@react-facet/core": 0.4.3
+    react: ^16.9.0
+  checksum: 9f2841b0f2b0c8a0cfcd2a0dd4ded3a2acfb910f77b46ae85dc5bf2d87aa12d879a6a56a7e77a499a6cbcc67b288eaee9882c82ddf97d7b301b30073355fc3fa
+  languageName: node
+  linkType: hard
+
+"@react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount":
   version: 0.0.0-use.local
   resolution: "@react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount"
   dependencies:
-    "@react-facet/dom-fiber-testing-library": 0.4.3
+    "@react-facet/dom-fiber-testing-library": 0.4.5
     react: 18.1.0
     rimraf: ^3.0.2
     typescript: ^4.8.2
   peerDependencies:
-    "@react-facet/core": 0.4.3
+    "@react-facet/core": 0.4.5
     react: ^18.1.0
   languageName: unknown
   linkType: soft
@@ -1546,8 +1565,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-components@workspace:packages/@react-facet/dom-components"
   dependencies:
-    "@react-facet/core": 0.4.3
-    "@react-facet/dom-fiber-testing-library": 0.4.3
+    "@react-facet/core": 0.4.5
+    "@react-facet/dom-fiber-testing-library": 0.4.5
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^9.4.1
     "@types/react": ^18.0.8
@@ -1558,32 +1577,32 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.8.2
   peerDependencies:
-    "@react-facet/core": 0.4.3
+    "@react-facet/core": 0.4.5
     react: ^18.1.0
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber-testing-library@0.4.3, @react-facet/dom-fiber-testing-library@workspace:^, @react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library":
+"@react-facet/dom-fiber-testing-library@0.4.5, @react-facet/dom-fiber-testing-library@workspace:^, @react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library"
   dependencies:
-    "@react-facet/dom-fiber": 0.4.3
+    "@react-facet/dom-fiber": 0.4.5
     "@testing-library/dom": ^8.20.0
     "@testing-library/react": ^13.4.0
     react: 18.1.0
     rimraf: ^3.0.2
     typescript: ^4.8.2
   peerDependencies:
-    "@react-facet/dom-fiber": 0.4.3
+    "@react-facet/dom-fiber": 0.4.5
     react: ^18.1.0
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber@0.4.3, @react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber":
+"@react-facet/dom-fiber@0.4.5, @react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber"
   dependencies:
-    "@react-facet/core": 0.4.3
+    "@react-facet/core": 0.4.5
     "@react-facet/dom-fiber-testing-library": "workspace:^"
     "@types/react": ^17.0.11
     "@types/react-reconciler": ^0.28.0
@@ -1594,10 +1613,22 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.8.2
   peerDependencies:
-    "@react-facet/core": 0.4.3
+    "@react-facet/core": 0.4.5
     react: ^18.1.0
   languageName: unknown
   linkType: soft
+
+"@react-facet/dom-fiber@npm:0.4.3":
+  version: 0.4.3
+  resolution: "@react-facet/dom-fiber@npm:0.4.3"
+  dependencies:
+    react-reconciler: ^0.24.0
+  peerDependencies:
+    "@react-facet/core": 0.4.3
+    react: ^16.9.0
+  checksum: 4014173e4089e6a40b25878653ab82720f4498a895388a6c9dc336c1ba67d1db2cc661b8c0c7128ea366d90f0448458551675d00fd4dcbdaf1670de2c4844d21
+  languageName: node
+  linkType: hard
 
 "@react-facet/eslint-config@workspace:packages/@react-facet/eslint-config":
   version: 0.0.0-use.local
@@ -1609,12 +1640,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/shared-facet@0.4.3, @react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
+"@react-facet/shared-facet@0.4.5, @react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
   version: 0.0.0-use.local
   resolution: "@react-facet/shared-facet@workspace:packages/@react-facet/shared-facet"
   dependencies:
-    "@react-facet/core": 0.4.3
-    "@react-facet/dom-fiber-testing-library": 0.4.3
+    "@react-facet/core": 0.4.5
+    "@react-facet/dom-fiber-testing-library": 0.4.5
     "@types/react": ^18.0.8
     "@types/rimraf": ^3
     cross-env: ^7.0.3
@@ -1622,16 +1653,26 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.8.2
   peerDependencies:
-    "@react-facet/core": 0.4.3
+    "@react-facet/core": 0.4.5
     react: ^18.1.0
   languageName: unknown
   linkType: soft
 
-"@react-facet/spring@0.4.3, @react-facet/spring@workspace:packages/@react-facet/spring":
+"@react-facet/shared-facet@npm:0.4.3":
+  version: 0.4.3
+  resolution: "@react-facet/shared-facet@npm:0.4.3"
+  peerDependencies:
+    "@react-facet/core": 0.4.3
+    react: ^16.9.0
+  checksum: e321d19ba498fb5a455abace4b75233714136f9116c6ffc88967483b2530839c1f1bc9645901f84292b000442ddd0516520586b7508989ad0b110e1a811ee11e
+  languageName: node
+  linkType: hard
+
+"@react-facet/spring@0.4.5, @react-facet/spring@workspace:packages/@react-facet/spring":
   version: 0.0.0-use.local
   resolution: "@react-facet/spring@workspace:packages/@react-facet/spring"
   dependencies:
-    "@react-facet/core": 0.4.3
+    "@react-facet/core": 0.4.5
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^9.4.1
     "@types/react": ^18.0.8
@@ -1642,10 +1683,20 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.8.2
   peerDependencies:
-    "@react-facet/core": 0.4.3
+    "@react-facet/core": 0.4.5
     react: ^18.1.0
   languageName: unknown
   linkType: soft
+
+"@react-facet/spring@npm:0.4.3":
+  version: 0.4.3
+  resolution: "@react-facet/spring@npm:0.4.3"
+  peerDependencies:
+    "@react-facet/core": 0.4.3
+    react: ^16.9.0
+  checksum: ce11750732996922f55de6f29088e7adc1fbd03c4caa366b28d6adbdfff7fb552c3ae6c79d270a6da99c56dd7ce4134f0ce07426fd41b31332ed4ecad449f987
+  languageName: node
+  linkType: hard
 
 "@sheerun/mutationobserver-shim@npm:^0.3.2":
   version: 0.3.3
@@ -3229,10 +3280,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmarking@workspace:examples/benchmarking"
   dependencies:
-    "@react-facet/core": 0.4.3
-    "@react-facet/dom-fiber": 0.4.3
-    "@react-facet/shared-facet": 0.4.3
-    "@react-facet/spring": 0.4.3
+    "@react-facet/core": 0.4.5
+    "@react-facet/dom-fiber": 0.4.5
+    "@react-facet/shared-facet": 0.4.5
+    "@react-facet/spring": 0.4.5
     "@types/fs-extra": ^9.0.12
     "@types/puppeteer": ^5.4.4
     "@types/ramda": ^0
@@ -9078,6 +9129,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prop-types@npm:^15.6.2":
+  version: 15.8.1
+  resolution: "prop-types@npm:15.8.1"
+  dependencies:
+    loose-envify: ^1.4.0
+    object-assign: ^4.1.1
+    react-is: ^16.13.1
+  checksum: c056d3f1c057cb7ff8344c645450e14f088a915d078dcda795041765047fa080d38e5d626560ccaac94a4e16e3aa15f3557c1a9a8d1174530955e992c675e459
+  languageName: node
+  linkType: hard
+
 "prop-types@npm:^15.7.2":
   version: 15.7.2
   resolution: "prop-types@npm:15.7.2"
@@ -9248,7 +9310,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.12.0, react-is@npm:^16.8.1, react-is@npm:^16.8.4":
+"react-is@npm:^16.12.0, react-is@npm:^16.13.1, react-is@npm:^16.8.1, react-is@npm:^16.8.4":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
@@ -9266,6 +9328,20 @@ __metadata:
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
+  languageName: node
+  linkType: hard
+
+"react-reconciler@npm:^0.24.0":
+  version: 0.24.0
+  resolution: "react-reconciler@npm:0.24.0"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+    prop-types: ^15.6.2
+    scheduler: ^0.18.0
+  peerDependencies:
+    react: ^16.0.0
+  checksum: c9c74208325a940ca36e031b71499f6d8e62e96ee673d69e35cc9e6a661aa746a2b0750f2ffcd1bae0a29eaf3d127dc8197ab7e801e6a3a2ab7d45a71b464630
   languageName: node
   linkType: hard
 
@@ -9675,6 +9751,16 @@ resolve@^2.0.0-next.3:
   dependencies:
     xmlchars: ^2.2.0
   checksum: d3fa3e2aaf6c65ed52ee993aff1891fc47d5e47d515164b5449cbf5da2cbdc396137e55590472e64c5c436c14ae64a8a03c29b9e7389fc6f14035cf4e982ef3b
+  languageName: node
+  linkType: hard
+
+"scheduler@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "scheduler@npm:0.18.0"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+  checksum: b6e0b9e0086b200b114f1ef7f9fcac966ad5d84cd3b1867174be0549d3ff713d1fd22d5574cb024b7d3eadf3307f2afc1cb5bfbf28b0d3bc34b200183800fcae
   languageName: node
   linkType: hard
 

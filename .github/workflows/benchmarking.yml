@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare listMemoFacet listMemoState 70
 
@@ -16,6 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare markerFacet markerState 88 19000
 
@@ -23,6 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare mountFacetDomFiber mountReactDom 90
 
@@ -30,6 +42,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare overheadFacet overheadState 53
 
@@ -37,6 +53,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare progressBarFacet progressBarState 51
 
@@ -44,6 +64,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare toggleRealisticClassFacet toggleRealisticClassState 45
 
@@ -51,5 +75,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare toggleSimpleClassFacet toggleSimpleClassState 59

@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useRef } from 'react'
-import { Facet, NO_VALUE, Option, ExtractFacetValues, NoValue } from '../types'
+import { Facet, NO_VALUE, ExtractFacetValues, NoValue } from '../types'
 
 /**
  * Creates a callback that depends on the value of a facet.
@@ -43,14 +43,10 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
   facets: T,
   defaultReturnValue?: M,
 ): (...args: K) => M | NoValue {
-  const facetsRef = useRef<Option<unknown>[]>(facets.map(() => NO_VALUE))
-
   useLayoutEffect(() => {
-    const unsubscribes = facets.map((facet, index) => {
-      return facet.observe((value) => {
-        facetsRef.current[index] = value
-      })
-    })
+    // Make sure to start subscriptions, even though we are getting the values directly from them
+    // We read the values using `.get` to make sure they are always up-to-date
+    const unsubscribes = facets.map((facet) => facet.observe(() => {}))
 
     return () => {
       unsubscribes.forEach((unsubscribe) => unsubscribe())
@@ -63,10 +59,15 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const callbackMemoized = useCallback(callback, dependencies)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // Setup a ref so that the callback instance below can be kept the same
+  // when Facet instances change across re-renders
+  const facetsRef = useRef(facets)
+  facetsRef.current = facets
+
   return useCallback(
     (...args: K) => {
-      const values = facetsRef.current
+      const facets = facetsRef.current
+      const values = facets.map((facet) => facet.get())
 
       for (const value of values) {
         if (value === NO_VALUE) return defaultReturnValue != null ? defaultReturnValue : NO_VALUE
@@ -74,6 +75,6 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
 
       return callbackMemoized(...(values as ExtractFacetValues<T>))(...(args as K))
     },
-    [callbackMemoized, facetsRef, defaultReturnValue],
+    [callbackMemoized, defaultReturnValue],
   )
 }

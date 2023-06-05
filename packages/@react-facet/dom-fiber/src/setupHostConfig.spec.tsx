@@ -360,6 +360,19 @@ describe('mount', () => {
       expect(root?.innerHTML ?? '').toBe('<input maxlength="20" type="text">')
     })
 
+    it('should only accept numerical characters if the input type is number', () => {
+      const valueFacet = createFacet({ initialValue: 'e' })
+      render(<fast-input type="number" value={valueFacet} />)
+
+      expect(root?.innerHTML ?? '').toBe('<input type="number">')
+      valueFacet.set('1')
+      expect(root?.innerHTML ?? '').toBe('<input type="number" value="1">')
+      valueFacet.set('1e')
+      expect(root?.innerHTML ?? '').toBe('<input type="number" value="1">')
+      valueFacet.set('12')
+      expect(root?.innerHTML ?? '').toBe('<input type="number" value="12">')
+    })
+
     it('sets rows', () => {
       const rowsFacet = createFacet({ initialValue: 10 })
 

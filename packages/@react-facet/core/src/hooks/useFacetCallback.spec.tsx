@@ -3,8 +3,8 @@ import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { useFacetCallback } from './useFacetCallback'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
-import { NO_VALUE } from '../types'
-import { createFacet } from '../facet'
+import { NO_VALUE, Facet } from '../types'
+import { createFacet, createStaticFacet } from '../facet'
 import { NoValue } from '..'
 
 it('captures the current value of the facet in a function that can be used as handler', () => {
@@ -181,8 +181,10 @@ it('returns NO_VALUE if any facet has NO_VALUE and skip calling the callback', (
 it('has proper return type with NO_VALUE in it', () => {
   const facetA = createFacet({ initialValue: 'a' })
 
+  let handler: (event: string) => void
+
   const TestComponent = () => {
-    const handler = useFacetCallback(
+    handler = useFacetCallback(
       (a) => (b: string) => {
         return a + b
       },
@@ -190,13 +192,15 @@ it('has proper return type with NO_VALUE in it', () => {
       [facetA],
     )
 
-    if (handler('string') !== NO_VALUE) {
-      throw new Error('Expected NO_VALUE')
-    }
     return null
   }
 
   render(<TestComponent />)
+
+  act(() => {
+    const result = handler('string')
+    expect(result).toBe('astring')
+  })
 })
 
 it('returns the defaultValue, when provided, if any facet has NO_VALUE and skip calling the callback', () => {
@@ -228,4 +232,121 @@ it('returns the defaultValue, when provided, if any facet has NO_VALUE and skip 
   })
 
   expect(callback).not.toHaveBeenCalledWith()
+})
+
+describe('regressions', () => {
+  it('should always have the current value of tracked facets', () => {
+    const facetA = createFacet<string>({ initialValue: NO_VALUE })
+
+    let handler: (event: string) => void = () => {}
+
+    const TestComponent = () => {
+      handler = useFacetCallback(
+        (a) => (b: string) => {
+          return a + b
+        },
+        [],
+        [facetA],
+      )
+
+      return null
+    }
+
+    // We make sure to be the first listener registered, so this is called before
+    // the listener within the useFacetCallback (which would have created the issue)
+    facetA.observe(() => {
+      const result = handler('string')
+      expect(result).toBe('newstring')
+    })
+
+    render(<TestComponent />)
+
+    // In this act, the effect within useFacetCallback will be executed, subscribing for changes of the facetA
+    // Then we set the value, causing the listener above to being called
+    act(() => {
+      facetA.set('new')
+    })
+  })
+
+  it('should always have the current value of tracked facets (even after another component unmounts)', () => {
+    const facetA = createFacet<string>({
+      initialValue: NO_VALUE,
+
+      // We need to have a value from a startSubscription so that after the last listener is removed, we set the facet back to NO_VALUE
+      startSubscription: (update) => {
+        update('value')
+        return () => {}
+      },
+    })
+
+    let handler: (event: string) => void = () => {}
+
+    const TestComponentA = () => {
+      handler = useFacetCallback(
+        (a) => (b: string) => {
+          return a + b
+        },
+        [],
+        [facetA],
+      )
+
+      return null
+    }
+
+    const TestComponentB = () => {
+      useFacetCallback(() => () => {}, [], [facetA])
+
+      return null
+    }
+
+    // We mount both components, both internally calling the useFacetCallback to start subscriptions towards the facetA
+    const { rerender } = render(
+      <>
+        <TestComponentA />
+        <TestComponentB />
+      </>,
+    )
+
+    // Then we unmount one of the components, causing it to unsubscribe from the facetA
+    rerender(
+      <>
+        <TestComponentA />
+      </>,
+    )
+
+    // However, with a prior implementation, a shared instance of a listener (noop) was used across all useFacetCallback usages
+    // causing a mismatch between calls to observer and unsubscribe.
+    act(() => {
+      const result = handler('string')
+      expect(result).toBe('valuestring')
+    })
+  })
+
+  it('always returns the same callback instance, even if the Facet instances change', () => {
+    let handler: () => void = () => {}
+    const facetA = createStaticFacet('a')
+    const facetB = createStaticFacet('b')
+
+    const TestComponent = ({ facet }: { facet: Facet<string> }) => {
+      handler = useFacetCallback(
+        (a) => () => {
+          return a
+        },
+        [],
+        [facet],
+      )
+
+      return null
+    }
+
+    const { rerender } = render(<TestComponent facet={facetA} />)
+    const firstHandler = handler
+    expect(firstHandler()).toBe('a')
+
+    rerender(<TestComponent facet={facetB} />)
+    const secondHandler = handler
+    expect(secondHandler()).toBe('b')
+
+    expect(firstHandler).toBe(secondHandler)
+  })
 })
