@@ -2,11 +2,17 @@ export type Task = () => void
 
 let batchId = 0
 let scheduledBatches = new Set<Task>()
+const taskCounter = new Map<Task, number>()
 
 export const scheduleUpdate = (task: Task) => {
   if (batchId === 0) {
     task()
     return
+  }
+
+  if (process.env.NODE_ENV === 'development') {
+    const currentCount = taskCounter.get(task) ?? 0
+    taskCounter.set(task, currentCount + 1)
   }
 
   scheduledBatches.add(task)
@@ -21,6 +27,16 @@ export const batch = (cb: Task) => {
 
   // We are back at the root batch call
   if (batchId === 0) {
+    if (process.env.NODE_ENV === 'development') {
+      const taskCounterCopy = Array.from(taskCounter)
+      taskCounter.clear()
+
+      const optimizedCount = taskCounterCopy.filter(([_, count]) => count > 1).length
+      if (taskCounterCopy.length > 0) {
+        console.log(`⚒️ Total: ${taskCounterCopy.length}. Optimized: ${optimizedCount}`)
+      }
+    }
+
     // Make a copy of the schedule
     // As notifying can start other batch roots
     const array = Array.from(scheduledBatches)
