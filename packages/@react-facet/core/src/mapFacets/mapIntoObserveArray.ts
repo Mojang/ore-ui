@@ -65,7 +65,7 @@ export function mapIntoObserveArray<M>(
     const subscriptions = facets.map((facet, index) => {
       return facet.observe((value) => {
         dependencyValues[index] = value
-        if (scheduleUpdate(notify) != true) notify()
+        scheduleUpdate(notify)
       })
     })
 

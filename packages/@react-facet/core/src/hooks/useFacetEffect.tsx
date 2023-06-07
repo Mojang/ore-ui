@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect } from 'react'
 import { Facet, Unsubscribe, Cleanup, NO_VALUE, ExtractFacetValues } from '../types'
+import { scheduleUpdate } from '../batch'
 
 export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayoutEffect) => {
   return function <Y extends Facet<unknown>[], T extends [...Y]>(
@@ -34,18 +35,22 @@ export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayou
       const unsubscribes: Unsubscribe[] = []
       const values: unknown[] = facets.map(() => NO_VALUE)
 
+      const task = () => {
+        hasAllDependencies = hasAllDependencies || values.every((value) => value != NO_VALUE)
+
+        if (hasAllDependencies) {
+          if (cleanup != null) {
+            cleanup()
+          }
+
+          cleanup = effectMemoized(...(values as ExtractFacetValues<T>))
+        }
+      }
+
       facets.forEach((facet, index) => {
         unsubscribes[index] = facet.observe((value) => {
           values[index] = value
-          hasAllDependencies = hasAllDependencies || values.every((value) => value != NO_VALUE)
-
-          if (hasAllDependencies) {
-            if (cleanup != null) {
-              cleanup()
-            }
-
-            cleanup = effectMemoized(...(values as ExtractFacetValues<T>))
-          }
+          scheduleUpdate(task)
         })
       })
 
