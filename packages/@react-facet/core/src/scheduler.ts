@@ -39,7 +39,7 @@ export const batch = (b: Batch) => {
       const taskCounterCopy = Array.from(taskCounter)
       taskCounter.clear()
 
-      const optimizedCount = taskCounterCopy.filter(([_, count]) => count > 1).length
+      const optimizedCount = taskCounterCopy.filter((pair) => pair[1] > 1).length
       if (taskCounterCopy.length > 0) {
         console.log(`⚒️ Total: ${taskCounterCopy.length}. Optimized: ${optimizedCount}`)
       }
