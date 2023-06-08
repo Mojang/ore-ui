@@ -23,6 +23,10 @@ export const scheduleTask = (task: Task) => {
   scheduledTasks.add(task)
 }
 
+export const cancelScheduledTask = (task: Task) => {
+  scheduledTasks.delete(task)
+}
+
 /**
  * Starts a batch, scheduling Facet updates within the cb to be executed at the end of the batch.
  * @param b will be executed immediately to collect Facet changes
