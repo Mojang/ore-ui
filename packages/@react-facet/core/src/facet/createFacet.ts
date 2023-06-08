@@ -22,28 +22,28 @@ export function createFacet<V>({
   const checker = equalityCheck?.()
 
   const update = (newValue: V) => {
-    batch(() => {
-      if (equalityCheck != null) {
-        // we optimize for the most common scenario of using the defaultEqualityCheck (by inline its implementation)
-        if (equalityCheck === defaultEqualityCheck) {
-          const typeofValue = typeof newValue
-          if (
-            (typeofValue === 'number' ||
-              typeofValue === 'string' ||
-              typeofValue === 'boolean' ||
-              newValue === null ||
-              newValue === undefined) &&
-            currentValue === newValue
-          ) {
-            return
-          }
-        } else {
-          if (checker != null && checker(newValue)) {
-            return
-          }
+    if (equalityCheck != null) {
+      // we optimize for the most common scenario of using the defaultEqualityCheck (by inline its implementation)
+      if (equalityCheck === defaultEqualityCheck) {
+        const typeofValue = typeof newValue
+        if (
+          (typeofValue === 'number' ||
+            typeofValue === 'string' ||
+            typeofValue === 'boolean' ||
+            newValue === null ||
+            newValue === undefined) &&
+          currentValue === newValue
+        ) {
+          return
+        }
+      } else {
+        if (checker != null && checker(newValue)) {
+          return
         }
       }
+    }
 
+    batch(() => {
       currentValue = newValue
 
       for (const listener of listeners) {
