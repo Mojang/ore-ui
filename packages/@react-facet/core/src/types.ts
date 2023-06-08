@@ -74,7 +74,10 @@ export type Option<T> = NoValue | T
 /**
  * Unit of work that can be scheduled within a batch.
  */
-export type Task = () => void
+export type Task = {
+  (): void
+  canceled?: boolean
+}
 
 /**
  * Function that when executed will have its Facet updates scheduled.
