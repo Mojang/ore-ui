@@ -1,10 +1,10 @@
-export type Task = () => void
+import { Task } from './types'
 
 let batchId = 0
-let scheduledBatches = new Set<Task>()
+const scheduledTasks = new Set<Task>()
 const taskCounter = new Map<Task, number>()
 
-export const scheduleUpdate = (task: Task) => {
+export const scheduleTask = (task: Task) => {
   if (batchId === 0) {
     task()
     return
@@ -15,7 +15,7 @@ export const scheduleUpdate = (task: Task) => {
     taskCounter.set(task, currentCount + 1)
   }
 
-  scheduledBatches.add(task)
+  scheduledTasks.add(task)
 }
 
 export const batch = (cb: Task) => {
@@ -39,8 +39,8 @@ export const batch = (cb: Task) => {
 
     // Make a copy of the schedule
     // As notifying can start other batch roots
-    const array = Array.from(scheduledBatches)
-    scheduledBatches = new Set<Task>()
+    const array = Array.from(scheduledTasks)
+    scheduledTasks.clear()
 
     for (const task of array) {
       task()

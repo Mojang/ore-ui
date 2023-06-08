@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect } from 'react'
 import { Facet, Unsubscribe, Cleanup, NO_VALUE, ExtractFacetValues } from '../types'
-import { scheduleUpdate } from '../batch'
+import { scheduleTask } from '../scheduler'
 
 export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayoutEffect) => {
   return function <Y extends Facet<unknown>[], T extends [...Y]>(
@@ -50,7 +50,7 @@ export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayou
       facets.forEach((facet, index) => {
         unsubscribes[index] = facet.observe((value) => {
           values[index] = value
-          scheduleUpdate(task)
+          scheduleTask(task)
         })
       })
 

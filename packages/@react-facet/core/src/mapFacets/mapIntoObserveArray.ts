@@ -1,4 +1,4 @@
-import { scheduleUpdate } from '../batch'
+import { scheduleTask } from '../scheduler'
 import { defaultEqualityCheck } from '../equalityChecks'
 import { EqualityCheck, Listener, Option, NO_VALUE, Observe, Facet, NoValue } from '../types'
 
@@ -15,7 +15,7 @@ export function mapIntoObserveArray<M>(
     const dependencyValues: Option<unknown>[] = facets.map(() => NO_VALUE)
     let hasAllDependencies = false
 
-    const notify =
+    const task =
       checker == null
         ? () => {
             hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
@@ -65,7 +65,7 @@ export function mapIntoObserveArray<M>(
     const subscriptions = facets.map((facet, index) => {
       return facet.observe((value) => {
         dependencyValues[index] = value
-        scheduleUpdate(notify)
+        scheduleTask(task)
       })
     })
 

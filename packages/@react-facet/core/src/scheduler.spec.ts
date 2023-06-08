@@ -1,6 +1,6 @@
 import { createFacet } from './facet'
 import { mapFacetsLightweight } from './mapFacets'
-import { batch } from './batch'
+import { batch } from './scheduler'
 
 it('supports batching', () => {
   const facetA = createFacet<string>({ initialValue: 'a1' })

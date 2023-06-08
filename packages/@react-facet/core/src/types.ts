@@ -71,6 +71,8 @@ export type NoValue = typeof NO_VALUE
 
 export type Option<T> = NoValue | T
 
+export type Task = () => void
+
 /**
  * CSSStyleDeclaration that has FacetDefinition as values and includes Gameface's extended number based properties
  * Based on Gameface's TypeScript definition: https://github.com/Mojang/Mojang_Cohtml/blob/master/src/Scripting/scripted/typescript/ScriptedCSSStyleDeclaration.d.ts
