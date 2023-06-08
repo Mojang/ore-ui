@@ -76,7 +76,7 @@ export type Option<T> = NoValue | T
  */
 export type Task = {
   (): void
-  canceled?: boolean
+  scheduled?: boolean
 }
 
 /**
