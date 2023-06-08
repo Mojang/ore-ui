@@ -45,20 +45,17 @@ export const batch = (b: Batch) => {
       }
     }
 
-    // Exhaust tasks
-    let hasTasks = true
-    while (hasTasks) {
-      // Make a copy of the schedule
-      // As notifying can start other batch roots
-      const array = Array.from(scheduledTasks)
+    do {
+      // Make a copy of the schedule, as running a task can cause other tasks to be scheduled
+      const copiedScheduledTasks = Array.from(scheduledTasks)
       scheduledTasks.clear()
 
-      hasTasks = array.length > 0
-
-      for (const task of array) {
+      for (const task of copiedScheduledTasks) {
         task()
       }
-    }
+
+      // Exhaust all tasks
+    } while (scheduledTasks.size > 0)
   }
 
   // Ends a batch
