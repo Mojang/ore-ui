@@ -1,9 +1,14 @@
-import { Task } from './types'
+import { Task, Batch } from './types'
 
 let batchId = 0
 const scheduledTasks = new Set<Task>()
 const taskCounter = new Map<Task, number>()
 
+/**
+ * Schedules a given task to be executed at the end of a current batch, or runs it immediately if no batch is active.
+ * @param task
+ * @returns
+ */
 export const scheduleTask = (task: Task) => {
   if (batchId === 0) {
     task()
@@ -18,10 +23,14 @@ export const scheduleTask = (task: Task) => {
   scheduledTasks.add(task)
 }
 
-export const batch = (cb: Task) => {
+/**
+ * Starts a batch, scheduling Facet updates within the cb to be executed at the end of the batch.
+ * @param b will be executed immediately to collect Facet changes
+ */
+export const batch = (b: Batch) => {
   batchId += 1
 
-  cb()
+  b()
 
   batchId -= 1
 
