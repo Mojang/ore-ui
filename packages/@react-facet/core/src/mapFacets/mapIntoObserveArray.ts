@@ -1,4 +1,4 @@
-import { scheduleTask } from '../scheduler'
+import { cancelScheduledTask, scheduleTask } from '../scheduler'
 import { defaultEqualityCheck } from '../equalityChecks'
 import { EqualityCheck, Listener, Option, NO_VALUE, Observe, Facet, NoValue } from '../types'
 
@@ -70,6 +70,7 @@ export function mapIntoObserveArray<M>(
     })
 
     return () => {
+      cancelScheduledTask(task)
       subscriptions.forEach((unsubscribe) => unsubscribe())
     }
   }

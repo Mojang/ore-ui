@@ -2,7 +2,7 @@ import React from 'react'
 import { createFacet } from './facet'
 import { useFacetEffect, useFacetMap } from './hooks'
 import { mapFacetsLightweight } from './mapFacets'
-import { batch } from './scheduler'
+import { batch, scheduleTask } from './scheduler'
 import { act, render } from '@react-facet/dom-fiber-testing-library'
 
 /**
@@ -52,6 +52,52 @@ it('batches maps and effects', () => {
   expect(cleanup).toHaveBeenCalledTimes(1)
   expect(effect).toHaveBeenCalledWith('New Name', 'New Login')
   expect(effect).toHaveBeenCalledTimes(1)
+})
+
+describe('order of execution', () => {
+  it('runs tasks within a batch in the correct order', () => {
+    const order: string[] = []
+
+    const taskB = jest.fn().mockImplementation(() => order.push('B'))
+    const taskA = jest.fn().mockImplementation(() => order.push('A'))
+    const taskC = jest.fn().mockImplementation(() => order.push('C'))
+
+    batch(() => {
+      scheduleTask(taskA)
+      scheduleTask(taskB)
+      batch(() => {
+        scheduleTask(taskC)
+      })
+    })
+
+    expect(order).toEqual(['A', 'B', 'C'])
+  })
+
+  it('runs tasks of nested batches in the correct order', () => {
+    const order: string[] = []
+
+    const taskC = jest.fn().mockImplementation(() => {
+      order.push('C')
+    })
+    const taskB = jest.fn().mockImplementation(() => {
+      order.push('B')
+      batch(() => {
+        scheduleTask(taskC)
+      })
+    })
+    const taskA = jest.fn().mockImplementation(() => {
+      order.push('A')
+      batch(() => {
+        scheduleTask(taskB)
+      })
+    })
+
+    batch(() => {
+      scheduleTask(taskA)
+    })
+
+    expect(order).toEqual(['A', 'B', 'C'])
+  })
 })
 
 describe('mapping an array of facets', () => {

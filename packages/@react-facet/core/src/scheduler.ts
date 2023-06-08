@@ -20,7 +20,14 @@ export const scheduleTask = (task: Task) => {
     taskCounter.set(task, currentCount + 1)
   }
 
+  task.scheduled = true
   scheduledTasks.add(task)
+}
+
+export const cancelScheduledTask = (task: Task) => {
+  // Mark a task as canceled instead of removing it.
+  // Its reference might already have been taken while processing the tasks.
+  task.scheduled = false
 }
 
 /**
@@ -51,7 +58,7 @@ export const batch = (b: Batch) => {
       scheduledTasks.clear()
 
       for (const task of copiedScheduledTasks) {
-        task()
+        if (task.scheduled) task()
       }
 
       // Exhaust all tasks
