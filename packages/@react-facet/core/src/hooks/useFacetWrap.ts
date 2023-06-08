@@ -22,7 +22,7 @@ export function useFacetWrap<T extends Value>(
   const inlineFacet = useMemo(
     () => (is ? undefined : createFacet<T>({ initialValue: prop as T, equalityCheck })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [is],
+    [is, equalityCheck],
   )
 
   if (inlineFacet == null) {

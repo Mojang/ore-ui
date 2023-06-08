@@ -53,6 +53,42 @@ it('wraps a value, with the default equality check (preventing unnecessary updat
   expect(mock).toHaveBeenCalledTimes(0)
 })
 
+it('allows changing the equality check', () => {
+  const mock = jest.fn()
+  const neverEqual = () => () => false
+  const alwaysEqual = () => () => true
+
+  let equalityCheck = neverEqual
+
+  const ComponentWithFacetEffect: React.FC<{ value: string }> = ({ value }) => {
+    const facetifiedValue = useFacetWrap(value, equalityCheck)
+    useFacetEffect(
+      (value) => {
+        mock(value)
+      },
+      [],
+      [facetifiedValue],
+    )
+    return <span />
+  }
+
+  const dom = render(<ComponentWithFacetEffect value="value" />)
+  expect(mock).toHaveBeenCalledTimes(1)
+  expect(mock).toHaveBeenCalledWith('value')
+
+  // Given its an equality check that always returns false, it updates the Facet
+  mock.mockClear()
+  dom.rerender(<ComponentWithFacetEffect value="value" />)
+  expect(mock).toHaveBeenCalledTimes(1)
+  expect(mock).toHaveBeenCalledWith('value')
+
+  // But once we change it to another equality check
+  equalityCheck = alwaysEqual
+  mock.mockClear()
+  dom.rerender(<ComponentWithFacetEffect value="value" />)
+  expect(mock).toHaveBeenCalledTimes(0)
+})
+
 it('forwards a facet', () => {
   const demoFacet = createFacet({ initialValue: 'value' })
   const mock = jest.fn()
