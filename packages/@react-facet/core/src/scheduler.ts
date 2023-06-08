@@ -28,14 +28,13 @@ export const scheduleTask = (task: Task) => {
  * @param b will be executed immediately to collect Facet changes
  */
 export const batch = (b: Batch) => {
+  // Starts a batch
   batchId += 1
 
   b()
 
-  batchId -= 1
-
-  // We are back at the root batch call
-  if (batchId === 0) {
+  // If this is the root batch, we start executing the tasks
+  if (batchId === 1) {
     if (process.env.NODE_ENV === 'development') {
       const taskCounterCopy = Array.from(taskCounter)
       taskCounter.clear()
@@ -46,13 +45,22 @@ export const batch = (b: Batch) => {
       }
     }
 
-    // Make a copy of the schedule
-    // As notifying can start other batch roots
-    const array = Array.from(scheduledTasks)
-    scheduledTasks.clear()
+    // Exhaust tasks
+    let hasTasks = true
+    while (hasTasks) {
+      // Make a copy of the schedule
+      // As notifying can start other batch roots
+      const array = Array.from(scheduledTasks)
+      scheduledTasks.clear()
 
-    for (const task of array) {
-      task()
+      hasTasks = array.length > 0
+
+      for (const task of array) {
+        task()
+      }
     }
   }
+
+  // Ends a batch
+  batchId -= 1
 }
