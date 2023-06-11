@@ -1,7 +1,7 @@
 import { Task, Batch } from './types'
 
 let batchId = 0
-const scheduledTasks = new Set<Task>()
+let taskQueue: Task[] = []
 const taskCounter = new Map<Task, number>()
 
 /**
@@ -20,8 +20,10 @@ export const scheduleTask = (task: Task) => {
     taskCounter.set(task, currentCount + 1)
   }
 
-  task.scheduled = true
-  scheduledTasks.add(task)
+  if (!task.scheduled) {
+    task.scheduled = true
+    taskQueue.push(task)
+  }
 }
 
 export const cancelScheduledTask = (task: Task) => {
@@ -54,15 +56,18 @@ export const batch = (b: Batch) => {
 
     do {
       // Make a copy of the schedule, as running a task can cause other tasks to be scheduled
-      const copiedScheduledTasks = Array.from(scheduledTasks)
-      scheduledTasks.clear()
+      const taskQueueCopy = taskQueue
+      taskQueue = []
 
-      for (const task of copiedScheduledTasks) {
-        if (task.scheduled) task()
+      for (const task of taskQueueCopy) {
+        if (task.scheduled) {
+          task.scheduled = false
+          task()
+        }
       }
 
       // Exhaust all tasks
-    } while (scheduledTasks.size > 0)
+    } while (taskQueue.length > 0)
   }
 
   // Ends a batch
