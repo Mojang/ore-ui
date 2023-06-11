@@ -2,7 +2,7 @@ import React from 'react'
 import { createFacet } from './facet'
 import { useFacetEffect, useFacetMap } from './hooks'
 import { mapFacetsLightweight } from './mapFacets'
-import { batch, scheduleTask } from './scheduler'
+import { batch, cancelScheduledTask, scheduleTask } from './scheduler'
 import { act, render } from '@react-facet/dom-fiber-testing-library'
 
 /**
@@ -97,6 +97,23 @@ describe('order of execution', () => {
     })
 
     expect(order).toEqual(['A', 'B', 'C'])
+  })
+
+  it('cancels tasks while executing prior tasks', () => {
+    const order: string[] = []
+
+    const taskB = jest.fn().mockImplementation(() => order.push('B'))
+    const taskA = jest.fn().mockImplementation(() => {
+      order.push('A')
+      cancelScheduledTask(taskB)
+    })
+
+    batch(() => {
+      scheduleTask(taskA)
+      scheduleTask(taskB)
+    })
+
+    expect(order).toEqual(['A'])
   })
 })
 

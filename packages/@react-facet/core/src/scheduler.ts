@@ -1,29 +1,30 @@
 import { Task, Batch } from './types'
 
 let batchId = 0
-const scheduledTasks = new Set<Task>()
-const taskCounter = new Map<Task, number>()
+let taskQueue: Task[] = []
 
 /**
  * Schedules a given task to be executed at the end of a current batch, or runs it immediately if no batch is active.
  * @param task
- * @returns
  */
 export const scheduleTask = (task: Task) => {
+  // Not currently within a batch, so we execute the task immediately.
   if (batchId === 0) {
     task()
     return
   }
 
-  if (process.env.NODE_ENV === 'development') {
-    const currentCount = taskCounter.get(task) ?? 0
-    taskCounter.set(task, currentCount + 1)
+  // Only schedules a task once within this batch execution.
+  if (!task.scheduled) {
+    task.scheduled = true
+    taskQueue.push(task)
   }
-
-  task.scheduled = true
-  scheduledTasks.add(task)
 }
 
+/**
+ * Cancels the scheduling of a previously scheduled task.
+ * @param task
+ */
 export const cancelScheduledTask = (task: Task) => {
   // Mark a task as canceled instead of removing it.
   // Its reference might already have been taken while processing the tasks.
@@ -42,27 +43,22 @@ export const batch = (b: Batch) => {
 
   // If this is the root batch, we start executing the tasks
   if (batchId === 1) {
-    if (process.env.NODE_ENV === 'development') {
-      const taskCounterCopy = Array.from(taskCounter)
-      taskCounter.clear()
-
-      const optimizedCount = taskCounterCopy.filter((pair) => pair[1] > 1).length
-      if (taskCounterCopy.length > 0) {
-        console.log(`⚒️ Total: ${taskCounterCopy.length}. Optimized: ${optimizedCount}`)
-      }
-    }
-
     do {
-      // Make a copy of the schedule, as running a task can cause other tasks to be scheduled
-      const copiedScheduledTasks = Array.from(scheduledTasks)
-      scheduledTasks.clear()
+      // Starts a new queue, as we work through the current one
+      const taskQueueCopy = taskQueue
+      taskQueue = []
 
-      for (const task of copiedScheduledTasks) {
-        if (task.scheduled) task()
+      for (let index = 0; index < taskQueueCopy.length; index++) {
+        const task = taskQueueCopy[index]
+
+        if (task.scheduled) {
+          task.scheduled = false
+          task()
+        }
       }
 
       // Exhaust all tasks
-    } while (scheduledTasks.size > 0)
+    } while (taskQueue.length > 0)
   }
 
   // Ends a batch
