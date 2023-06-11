@@ -59,7 +59,9 @@ export const batch = (b: Batch) => {
       const taskQueueCopy = taskQueue
       taskQueue = []
 
-      for (const task of taskQueueCopy) {
+      for (let index = 0; index < taskQueueCopy.length; index++) {
+        const task = taskQueueCopy[index]
+
         if (task.scheduled) {
           task.scheduled = false
           task()
