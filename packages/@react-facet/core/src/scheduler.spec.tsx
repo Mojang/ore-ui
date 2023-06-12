@@ -37,7 +37,14 @@ it('batches maps and effects', () => {
   }
 
   const scenario = <ComponentWithFacetEffect />
-  render(scenario)
+
+  // Guarantees that within a batch, we execute the effect task immediately (if the data is available on mount)
+  batch(() => {
+    render(scenario)
+    expect(effect).toHaveBeenCalledWith('Initial Name', 'Initial Login')
+    expect(effect).toHaveBeenCalledTimes(1)
+  })
+
   effect.mockClear()
   cleanup.mockClear()
 
@@ -115,6 +122,37 @@ describe('order of execution', () => {
 
     expect(order).toEqual(['A'])
   })
+
+  it('handles exceptions gracefully', () => {
+    let order: string[] = []
+
+    const taskC = jest.fn().mockImplementation(() => order.push('C'))
+    const taskB = jest.fn().mockImplementation(() => {
+      throw new Error('Task failed')
+    })
+    const taskA = jest.fn().mockImplementation(() => order.push('A'))
+
+    // Once a batch fails
+    expect(() => {
+      batch(() => {
+        scheduleTask(taskA)
+        scheduleTask(taskB)
+        scheduleTask(taskC)
+      })
+    }).toThrow()
+
+    // Validate that we have executed the tasks until the exception
+    expect(order).toEqual(['A'])
+
+    // And starting a new batch, should work just fine
+    order = []
+    batch(() => {
+      scheduleTask(taskA)
+      scheduleTask(taskC)
+    })
+
+    expect(order).toEqual(['A', 'C'])
+  })
 })
 
 describe('mapping an array of facets', () => {
@@ -137,6 +175,25 @@ describe('mapping an array of facets', () => {
 
     expect(observer).toHaveBeenCalledTimes(1)
     expect(observer).toHaveBeenCalledWith('a2 b2')
+  })
+
+  it('avoids scheduling (within a batch) if its the first event of a subscription', () => {
+    const facetA = createFacet<string>({ initialValue: 'a1' })
+    const facetB = createFacet<string>({ initialValue: 'b1' })
+    const facetAB = mapFacetsLightweight([facetA, facetB], (a, b) => `${a} ${b}`)
+
+    const observer = jest.fn()
+
+    batch(() => {
+      facetAB.observe(observer)
+
+      // It should fire immediately, and not after the batch
+      expect(observer).toHaveBeenCalledTimes(1)
+      expect(observer).toHaveBeenCalledWith('a1 b1')
+    })
+
+    // Didn't call again after the batch ended
+    expect(observer).toHaveBeenCalledTimes(1)
   })
 
   it('supports batching, but nested', () => {

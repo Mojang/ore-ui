@@ -50,7 +50,11 @@ export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayou
       facets.forEach((facet, index) => {
         unsubscribes[index] = facet.observe((value) => {
           values[index] = value
-          scheduleTask(task)
+          if (hasAllDependencies) {
+            scheduleTask(task)
+          } else {
+            task()
+          }
         })
       })
 

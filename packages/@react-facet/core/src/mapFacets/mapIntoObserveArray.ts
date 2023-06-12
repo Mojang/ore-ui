@@ -65,7 +65,11 @@ export function mapIntoObserveArray<M>(
     const subscriptions = facets.map((facet, index) => {
       return facet.observe((value) => {
         dependencyValues[index] = value
-        scheduleTask(task)
+        if (hasAllDependencies) {
+          scheduleTask(task)
+        } else {
+          task()
+        }
       })
     })
 

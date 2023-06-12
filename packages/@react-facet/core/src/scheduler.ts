@@ -39,28 +39,41 @@ export const batch = (b: Batch) => {
   // Starts a batch
   batchId += 1
 
-  b()
+  try {
+    b()
 
-  // If this is the root batch, we start executing the tasks
-  if (batchId === 1) {
-    do {
-      // Starts a new queue, as we work through the current one
-      const taskQueueCopy = taskQueue
-      taskQueue = []
+    // If this is the root batch, we start executing the tasks
+    if (batchId === 1) {
+      do {
+        // Starts a new queue, as we work through the current one
+        const taskQueueCopy = taskQueue
+        taskQueue = []
 
-      for (let index = 0; index < taskQueueCopy.length; index++) {
-        const task = taskQueueCopy[index]
+        try {
+          for (let index = 0; index < taskQueueCopy.length; index++) {
+            const task = taskQueueCopy[index]
 
-        if (task.scheduled) {
-          task.scheduled = false
-          task()
+            if (task.scheduled) {
+              task.scheduled = false
+              task()
+            }
+          }
+        } catch (e) {
+          // If something goes wrong, we unschedule all remaining tasks
+          for (let index = 0; index < taskQueueCopy.length; index++) {
+            const task = taskQueueCopy[index]
+            task.scheduled = false
+          }
+
+          taskQueue = []
+          throw e
         }
-      }
 
-      // Exhaust all tasks
-    } while (taskQueue.length > 0)
+        // Exhaust all tasks
+      } while (taskQueue.length > 0)
+    }
+  } finally {
+    // Ends a batch
+    batchId -= 1
   }
-
-  // Ends a batch
-  batchId -= 1
 }
