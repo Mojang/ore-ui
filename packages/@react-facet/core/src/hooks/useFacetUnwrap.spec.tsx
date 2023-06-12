@@ -217,3 +217,45 @@ it('does not trigger a re-render when changing a facet from undefined to undefin
 
   expect(renderedMock).toHaveBeenCalledTimes(0)
 })
+
+it('supports custom equality checks', () => {
+  const value = {}
+  const demoFacet = createFacet({ initialValue: value })
+
+  // Dummy equality check that always returns its not equal
+  const check = jest.fn().mockReturnValue(false)
+  const equalityCheck = jest.fn().mockReturnValue(check)
+
+  const renderedMock = jest.fn()
+
+  const ComponentWithFacetEffect = () => {
+    useFacetUnwrap(demoFacet, equalityCheck)
+    renderedMock()
+    return null
+  }
+
+  render(<ComponentWithFacetEffect />)
+
+  // initialize equality checks once
+  expect(equalityCheck).toHaveBeenCalledTimes(1)
+
+  // but check for it twice, once upon initialization, then another on the first observed value
+  expect(check).toHaveBeenCalledTimes(2)
+  expect(check).toHaveBeenNthCalledWith(1, value)
+  expect(check).toHaveBeenNthCalledWith(2, value)
+
+  // as the custom equality check always returns false, we render twice on mount
+  expect(renderedMock).toHaveBeenCalledTimes(2)
+
+  jest.clearAllMocks()
+
+  // If we update with the same object,
+  act(() => {
+    demoFacet.set(value)
+  })
+
+  expect(equalityCheck).toHaveBeenCalledTimes(0) // equality check was already initialized
+  expect(check).toHaveBeenCalledTimes(1) // but the check should be executed
+  expect(check).toHaveBeenCalledWith(value) // passing the value (which should be the same)
+  expect(renderedMock).toHaveBeenCalledTimes(1) // and since the equality check always returns "false", we have a render
+})
