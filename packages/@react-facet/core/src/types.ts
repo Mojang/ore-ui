@@ -72,6 +72,19 @@ export type NoValue = typeof NO_VALUE
 export type Option<T> = NoValue | T
 
 /**
+ * Unit of work that can be scheduled within a batch.
+ */
+export type Task = {
+  (): void
+  scheduled?: boolean
+}
+
+/**
+ * Function that when executed will have its Facet updates scheduled.
+ */
+export type Batch = () => void
+
+/**
  * CSSStyleDeclaration that has FacetDefinition as values and includes Gameface's extended number based properties
  * Based on Gameface's TypeScript definition: https://github.com/Mojang/Mojang_Cohtml/blob/master/src/Scripting/scripted/typescript/ScriptedCSSStyleDeclaration.d.ts
  */

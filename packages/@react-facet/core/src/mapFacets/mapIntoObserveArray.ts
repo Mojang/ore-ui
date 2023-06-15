@@ -1,3 +1,4 @@
+import { cancelScheduledTask, scheduleTask } from '../scheduler'
 import { defaultEqualityCheck } from '../equalityChecks'
 import { EqualityCheck, Listener, Option, NO_VALUE, Observe, Facet, NoValue } from '../types'
 
@@ -14,31 +15,22 @@ export function mapIntoObserveArray<M>(
     const dependencyValues: Option<unknown>[] = facets.map(() => NO_VALUE)
     let hasAllDependencies = false
 
-    const subscriptions = facets.map((facet, index) => {
-      // Most common scenario is not having any equality check
-      if (equalityCheck == null) {
-        return facet.observe((value) => {
-          dependencyValues[index] = value
+    const task =
+      checker == null
+        ? () => {
+            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
+            if (!hasAllDependencies) return
 
-          hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
-
-          if (hasAllDependencies) {
             const result = fn(...dependencyValues)
             if (result === NO_VALUE) return
 
             listener(result)
           }
-        })
-      }
+        : equalityCheck === defaultEqualityCheck
+        ? () => {
+            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
+            if (!hasAllDependencies) return
 
-      // Then we optimize for the second most common scenario of using the defaultEqualityCheck (by inline its implementation)
-      if (equalityCheck === defaultEqualityCheck) {
-        return facet.observe((value) => {
-          dependencyValues[index] = value
-
-          hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
-
-          if (hasAllDependencies) {
             const result = fn(...dependencyValues)
             if (result === NO_VALUE) return
 
@@ -59,29 +51,30 @@ export function mapIntoObserveArray<M>(
 
             listener(result)
           }
-        })
-      }
+        : () => {
+            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
+            if (!hasAllDependencies) return
 
-      // Just a type-check guard, it will never happen
-      if (checker == null) return () => {}
+            const result = fn(...dependencyValues)
+            if (result === NO_VALUE) return
+            if (checker(result)) return
 
-      // Finally we use the custom equality check
+            listener(result)
+          }
+
+    const subscriptions = facets.map((facet, index) => {
       return facet.observe((value) => {
         dependencyValues[index] = value
-
-        hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
-
         if (hasAllDependencies) {
-          const result = fn(...dependencyValues)
-          if (result === NO_VALUE) return
-          if (checker(result)) return
-
-          listener(result)
+          scheduleTask(task)
+        } else {
+          task()
         }
       })
     })
 
     return () => {
+      cancelScheduledTask(task)
       subscriptions.forEach((unsubscribe) => unsubscribe())
     }
   }
