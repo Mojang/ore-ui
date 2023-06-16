@@ -146,7 +146,7 @@ export const setupHostConfig = (): HostConfig<
       style = element.style
       styleUnsubscribers = new Map()
 
-      setupStyleUpdate(newProps.style, style, styleUnsubscribers)
+      setupStyleUpdate(newProps.style, style as unknown as Record<string, unknown>, styleUnsubscribers)
     }
 
     if (newProps.dangerouslySetInnerHTML != null) {
@@ -1051,7 +1051,7 @@ export const setupHostConfig = (): HostConfig<
     if (props.style != null) {
       setupStyleUpdate(
         props.style,
-        instance.style ?? instance.element.style,
+        (instance.style ?? instance.element.style) as unknown as Record<string, unknown>,
         instance.styleUnsubscribers as Map<string | number, Unsubscribe>,
       )
     } else {

@@ -3,7 +3,7 @@ import { Style } from './types'
 
 export const setupStyleUpdate = (
   styleProp: Style,
-  style: CSSStyleDeclaration,
+  style: Record<string, unknown>,
   styleUnsubscribers: Map<string | number, Unsubscribe>,
 ) => {
   for (const key in styleProp) {
