@@ -1,5 +1,6 @@
 import { defaultEqualityCheck } from '../equalityChecks'
 import { Cleanup, EqualityCheck, Listener, WritableFacet, StartSubscription, Option, NO_VALUE } from '../types'
+import { batch } from '../scheduler'
 
 export interface FacetOptions<V> {
   initialValue: Option<V>
@@ -42,11 +43,13 @@ export function createFacet<V>({
       }
     }
 
-    currentValue = newValue
+    batch(() => {
+      currentValue = newValue
 
-    for (const listener of listeners) {
-      listener(currentValue)
-    }
+      for (const listener of listeners) {
+        listener(currentValue)
+      }
+    })
   }
 
   /**
