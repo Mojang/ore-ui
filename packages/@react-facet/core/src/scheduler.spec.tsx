@@ -61,6 +61,64 @@ it('batches maps and effects', () => {
   expect(effect).toHaveBeenCalledTimes(1)
 })
 
+it('batches maps, memos and effects', () => {
+  type TestData = { name: string; login: string }
+  const friendsCountFacet = createFacet<number>({ initialValue: 42 })
+  const userFacet = createFacet<TestData>({ initialValue: { name: 'Initial Name', login: 'Initial Login' } })
+  const loginNumber = createFacet<number>({ initialValue: 1234 })
+
+  const cleanup = jest.fn()
+  const effect = jest.fn().mockReturnValue(cleanup)
+
+  // The useFacetMaps in the component below are within a single component,
+  // but more realistically you can think that they would be distributed across a React tree.
+  const ComponentWithFacetEffect = () => {
+    // Its not unusual to want to combine data from multiple Facet sources
+    const userWithFriends = useFacetMap(
+      (user, friendsCount) => ({ ...user, friendsCount }),
+      [],
+      [userFacet, friendsCountFacet],
+    )
+
+    // Another very common scenario with Facets is that we can map them into more specific values
+    const nameFacet = useFacetMap(({ name }) => name, [], [userWithFriends])
+    const loginFacet = useFacetMap(
+      ({ login }, loginNumber) => `${login}#${loginNumber}`,
+      [],
+      [userWithFriends, loginNumber],
+    )
+
+    // But then we might decide again on combining both on a single effect
+    useFacetEffect(effect, [], [nameFacet, loginFacet])
+
+    return null
+  }
+
+  const scenario = <ComponentWithFacetEffect />
+
+  // Guarantees that within a batch, we execute the effect task immediately (if the data is available on mount)
+  batch(() => {
+    render(scenario)
+    expect(effect).toHaveBeenCalledWith('Initial Name', 'Initial Login#1234')
+    expect(effect).toHaveBeenCalledTimes(1)
+  })
+
+  effect.mockClear()
+  cleanup.mockClear()
+
+  act(() => {
+    // On updating the facet, we should expect that the effect is called only once
+    // Without batching, it would have been called twice
+    batch(() => {
+      userFacet.set({ name: 'New Name', login: 'New Login' })
+    })
+  })
+
+  expect(cleanup).toHaveBeenCalledTimes(1)
+  expect(effect).toHaveBeenCalledWith('New Name', 'New Login#1234')
+  expect(effect).toHaveBeenCalledTimes(1)
+})
+
 describe('order of execution', () => {
   it('runs tasks within a batch in the correct order', () => {
     const order: string[] = []
