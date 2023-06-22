@@ -1,6 +1,6 @@
 import { Task, Batch } from './types'
 
-let batchId = 0
+let batchId = -1
 let taskQueue: Task[] = []
 let effectQueue: Task[] = []
 
@@ -10,7 +10,7 @@ let effectQueue: Task[] = []
  */
 export const scheduleTask = (task: Task, effect?: boolean) => {
   // Not currently within a batch, so we execute the task immediately.
-  if (batchId === 0) {
+  if (batchId === -1) {
     task()
     return
   }
@@ -51,17 +51,16 @@ export const batch = (b: Batch) => {
   try {
     b()
 
-    // If this is the root batch, we start executing the tasks
-    if (batchId === 1) {
+    // We only execute tasks at the root batch
+    if (batchId === 0) {
       do {
         do {
-          // Starts a new queue, as we work through the current one
-          const taskQueueCopy = taskQueue
+          const currentTaskQueue = taskQueue
           taskQueue = []
 
           try {
-            for (let index = 0; index < taskQueueCopy.length; index++) {
-              const task = taskQueueCopy[index]
+            for (let index = 0; index < currentTaskQueue.length; index++) {
+              const task = currentTaskQueue[index]
 
               if (task.scheduled) {
                 task.scheduled = false
@@ -69,23 +68,21 @@ export const batch = (b: Batch) => {
               }
             }
           } catch (e) {
-            // If something goes wrong, we unschedule all remaining tasks
-            for (let index = 0; index < taskQueueCopy.length; index++) {
-              const task = taskQueueCopy[index]
+            for (let index = 0; index < currentTaskQueue.length; index++) {
+              const task = currentTaskQueue[index]
               task.scheduled = false
             }
 
-            taskQueue = []
             throw e
           }
         } while (taskQueue.length > 0)
 
-        const effectQueueCopy = effectQueue
+        const currentEffectQueue = effectQueue
         effectQueue = []
 
         try {
-          for (let index = 0; index < effectQueueCopy.length; index++) {
-            const task = effectQueueCopy[index]
+          for (let index = 0; index < currentEffectQueue.length; index++) {
+            const task = currentEffectQueue[index]
 
             if (task.scheduled) {
               task.scheduled = false
@@ -94,12 +91,11 @@ export const batch = (b: Batch) => {
           }
         } catch (e) {
           // If something goes wrong, we unschedule all remaining tasks
-          for (let index = 0; index < effectQueueCopy.length; index++) {
-            const task = effectQueueCopy[index]
+          for (let index = 0; index < currentEffectQueue.length; index++) {
+            const task = currentEffectQueue[index]
             task.scheduled = false
           }
 
-          effectQueue = []
           throw e
         }
 

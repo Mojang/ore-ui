@@ -290,7 +290,9 @@ describe('mapping an array of facets', () => {
     expect(observer).toHaveBeenCalledWith('first a,second a')
 
     jest.clearAllMocks()
-    facet.set('b')
+    batch(() => {
+      facet.set('b')
+    })
 
     expect(observer).toHaveBeenCalledTimes(1)
     expect(observer).toHaveBeenCalledWith('first b,second b')
