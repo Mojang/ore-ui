@@ -77,6 +77,11 @@ describe('mount', () => {
       expect(root?.innerHTML ?? '').toBe('<input disabled="">')
     })
 
+    it('sets cohinline', () => {
+      render(<fast-p cohinline />)
+      expect(root?.innerHTML ?? '').toBe('<p cohinline=""></p>')
+    })
+
     it('sets maxlength', () => {
       render(<input type="text" maxLength={10} />)
       expect(root?.innerHTML ?? '').toBe('<input maxlength="10" type="text">')
@@ -368,6 +373,16 @@ describe('mount', () => {
 
       disabledFacet.set(false)
       expect(root?.innerHTML ?? '').toBe('<input>')
+    })
+
+    it('sets cohinline', () => {
+      const cohinlineFacet = createFacet({ initialValue: true })
+
+      render(<fast-p cohinline={cohinlineFacet} />)
+      expect(root?.innerHTML ?? '').toBe('<p cohinline=""></p>')
+
+      cohinlineFacet.set(false)
+      expect(root?.innerHTML ?? '').toBe('<p></p>')
     })
 
     it('sets maxlength', () => {
@@ -1132,6 +1147,27 @@ describe('update', () => {
     expect(root?.innerHTML ?? '').toBe('<input disabled="">')
     jest.advanceTimersByTime(1)
     expect(root?.innerHTML ?? '').toBe('<input>')
+  })
+
+  it('updates cohinline', () => {
+    const MockComponent = () => {
+      const [cohinline, setCohinline] = useState<boolean | undefined>(true)
+      useEffect(() => {
+        setTimeout(() => setCohinline(false), 1)
+        setTimeout(() => setCohinline(true), 2)
+        setTimeout(() => setCohinline(undefined), 3)
+      }, [])
+      return <fast-p cohinline={cohinline} />
+    }
+
+    render(<MockComponent />)
+    expect(root?.innerHTML ?? '').toBe('<p cohinline=""></p>')
+    jest.advanceTimersByTime(1)
+    expect(root?.innerHTML ?? '').toBe('<p></p>')
+    jest.advanceTimersByTime(1)
+    expect(root?.innerHTML ?? '').toBe('<p cohinline=""></p>')
+    jest.advanceTimersByTime(1)
+    expect(root?.innerHTML ?? '').toBe('<p></p>')
   })
 
   it('updates maxLength', () => {

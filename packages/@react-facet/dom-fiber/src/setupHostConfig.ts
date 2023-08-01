@@ -308,6 +308,9 @@ export const setupHostConfig = (): HostConfig<
         newProps['data-x-ray'] != null
           ? setupAttributeUpdate('data-x-ray', newProps['data-x-ray'], element)
           : undefined,
+
+      cohinline:
+        newProps.cohinline != null ? setupAttributeUpdate('cohinline', newProps.cohinline, element) : undefined,
     }
   },
 
@@ -878,6 +881,16 @@ export const setupHostConfig = (): HostConfig<
         textElement.removeAttribute('src')
       } else {
         instance.src = setupSrcUpdate(newProps.src, element)
+      }
+    }
+
+    if (newProps.cohinline !== oldProps.cohinline) {
+      instance.cohinline?.()
+
+      if (newProps.cohinline == null) {
+        element.removeAttribute('cohinline')
+      } else {
+        instance.cohinline = setupAttributeUpdate('cohinline', newProps.cohinline, element)
       }
     }
 
