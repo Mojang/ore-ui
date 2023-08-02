@@ -175,6 +175,12 @@ export type ElementProps<T> = PointerEvents &
     stopOpacity?: FacetProp<string | undefined>
     fontFamily?: FacetProp<string | undefined>
     fontSize?: FacetProp<string | undefined>
+
+    /**
+     * Support for Gameface's Experimental inline layout for paragraph elements
+     * More info: https://docs.coherent-labs.com/cpp-gameface/what_is_gfp/htmlfeaturesupport/#experimental-inline-layout-for-paragraph-elements
+     */
+    cohinline?: FacetProp<boolean | undefined>
   }
 
 export type TextProps = {
@@ -242,6 +248,7 @@ export type ElementContainer = {
   stopOpacity?: Unsubscribe
   fontFamily?: Unsubscribe
   fontSize?: Unsubscribe
+  cohinline?: Unsubscribe
 }
 
 export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {
