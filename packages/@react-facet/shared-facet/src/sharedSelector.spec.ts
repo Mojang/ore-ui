@@ -13,16 +13,16 @@ describe('single dependency', () => {
     const facet = sharedFacet<TestFacet>('my facet')
     const mySelector = sharedSelector((testFacet) => testFacet, [facet])
     const mock = jest.fn()
-    mySelector(sharedFacetDriver).observe(mock)
+    mySelector.initializer(sharedFacetDriver).observe(mock)
     expect(mock).toHaveBeenCalledTimes(0)
   })
 
   it('fires when set without default value', () => {
     const facet = sharedFacet<TestFacet>('my facet')
-    const writtableFacet = facet(sharedFacetDriver) as WritableFacet<TestFacet>
+    const writtableFacet = facet.initializer(sharedFacetDriver) as WritableFacet<TestFacet>
     const mySelector = sharedSelector((testFacet) => testFacet.values[0], [facet])
     const mock = jest.fn()
-    mySelector(sharedFacetDriver).observe(mock)
+    mySelector.initializer(sharedFacetDriver).observe(mock)
     expect(mock).toHaveBeenCalledTimes(0)
     writtableFacet.set({ values: ['new value'] })
     expect(mock).toHaveBeenCalledTimes(1)
@@ -34,7 +34,7 @@ describe('single dependency', () => {
     const facet = sharedFacet<TestFacet>('my facet', defaultValue)
     const mySelector = sharedSelector((testFacet) => testFacet.values[0], [facet])
     const mock = jest.fn()
-    mySelector(sharedFacetDriver).observe(mock)
+    mySelector.initializer(sharedFacetDriver).observe(mock)
     expect(mock).toHaveBeenCalledTimes(1)
     expect(mock).toHaveBeenCalledWith('default value')
   })
@@ -46,7 +46,7 @@ describe('array dependency', () => {
     const otherFacet = sharedFacet<TestFacet>('my other facet')
     const mySelector = sharedSelector((testFacet) => testFacet, [facet, otherFacet])
     const mock = jest.fn()
-    mySelector(sharedFacetDriver).observe(mock)
+    mySelector.initializer(sharedFacetDriver).observe(mock)
     expect(mock).toHaveBeenCalledTimes(0)
   })
 
@@ -55,18 +55,18 @@ describe('array dependency', () => {
     const otherFacet = sharedFacet<TestFacet>('my other facet', { values: ['default value'] })
     const mySelector = sharedSelector((testFacet) => testFacet, [facet, otherFacet])
     const mock = jest.fn()
-    mySelector(sharedFacetDriver).observe(mock)
+    mySelector.initializer(sharedFacetDriver).observe(mock)
     expect(mock).toHaveBeenCalledTimes(0)
   })
 
   it('does fire when triggered without default value', () => {
     const facet = sharedFacet<TestFacet>('my facet')
-    const writableFacet = facet(sharedFacetDriver) as WritableFacet<TestFacet>
+    const writableFacet = facet.initializer(sharedFacetDriver) as WritableFacet<TestFacet>
     const otherFacet = sharedFacet<TestFacet>('other facet')
-    const writableOtherFacet = otherFacet(sharedFacetDriver) as WritableFacet<TestFacet>
+    const writableOtherFacet = otherFacet.initializer(sharedFacetDriver) as WritableFacet<TestFacet>
     const mySelector = sharedSelector((testFacet) => testFacet.values[0], [facet, otherFacet])
     const mock = jest.fn()
-    mySelector(sharedFacetDriver).observe(mock)
+    mySelector.initializer(sharedFacetDriver).observe(mock)
     writableFacet.set({ values: ['new value'] })
     expect(mock).toHaveBeenCalledTimes(0)
     writableOtherFacet.set({ values: ['other new value'] })
@@ -81,7 +81,7 @@ describe('array dependency', () => {
     const otherFacet = sharedFacet<TestFacet>('my other facet', otherDefaultValue)
     const mySelector = sharedSelector((testFacet) => testFacet.values[0], [facet, otherFacet])
     const mock = jest.fn()
-    mySelector(sharedFacetDriver).observe(mock)
+    mySelector.initializer(sharedFacetDriver).observe(mock)
     expect(mock).toHaveBeenCalledTimes(1)
     expect(mock).toHaveBeenCalledWith('default value')
   })

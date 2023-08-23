@@ -1,10 +1,6 @@
-import { useFacetCallback, Value } from '@react-facet/core'
+import { useFacetCallback } from '@react-facet/core'
 import { useSharedFacet } from './context'
-import { SharedFacet } from './types'
-
-interface PropSetter<T extends Value, Prop extends keyof T> {
-  (value: T[Prop]): void
-}
+import { PropSetter, SharedFacet } from './types'
 
 /**
  * Hook that returns a setter function to a specific property of a given sharedFacet

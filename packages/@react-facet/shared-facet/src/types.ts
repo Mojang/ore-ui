@@ -1,4 +1,4 @@
-import { FACET_FACTORY, Facet, Update } from '@react-facet/core'
+import { FACET_FACTORY, Facet, Update, Value } from '@react-facet/core'
 
 export interface OnChange<V> {
   (value: V): void
@@ -24,4 +24,8 @@ export type SharedFacetDriver = {
 export type SharedFacet<T> = {
   initializer: (sharedFacetDriver: SharedFacetDriver) => Facet<T>
   factory: typeof FACET_FACTORY
+}
+
+export type PropSetter<T extends Value, Prop extends keyof T> = {
+  (value: T[Prop]): void
 }
