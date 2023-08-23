@@ -19,8 +19,8 @@ export type ExtractFacetValues<T extends ReadonlyArray<Facet<unknown>>> = {
 
 export const FACET_FACTORY = Symbol('facet-factory')
 
-export interface FacetFactory<T> {
-  (): Facet<T>
+export type FacetFactory<T> = {
+  initializer(): Facet<T>
   factory: typeof FACET_FACTORY
 }
 

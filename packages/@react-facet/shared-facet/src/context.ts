@@ -9,5 +9,5 @@ export const sharedFacetDriverContext = createContext<SharedFacetDriver>(dummyCo
 export const SharedFacetDriverProvider = sharedFacetDriverContext.Provider
 
 export const useSharedFacet = <T>(sharedFacet: SharedFacet<T>): Facet<T> => {
-  return sharedFacet(useContext(sharedFacetDriverContext))
+  return sharedFacet.initializer(useContext(sharedFacetDriverContext))
 }

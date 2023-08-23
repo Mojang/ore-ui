@@ -1,4 +1,4 @@
-import { Facet, FacetFactory } from '@react-facet/core'
+import { FACET_FACTORY, Facet, Update } from '@react-facet/core'
 
 export interface OnChange<V> {
   (value: V): void
@@ -16,11 +16,12 @@ export interface ErrorFn {
  *
  * It should return a "destructor" function that will be called when no component needs the data anymore.
  */
-export interface SharedFacetDriver {
+export type SharedFacetDriver = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (name: string, onChange: OnChange<any>, onError?: ErrorFn, fallback?: any): () => void
+  (name: string, onChange: Update<any>, onError?: (error: string) => void): () => void
 }
 
-export interface SharedFacet<T> extends FacetFactory<T> {
-  (sharedFacetDriver: SharedFacetDriver): Facet<T>
+export type SharedFacet<T> = {
+  initializer: (sharedFacetDriver: SharedFacetDriver) => Facet<T>
+  factory: typeof FACET_FACTORY
 }

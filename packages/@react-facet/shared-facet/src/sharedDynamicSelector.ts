@@ -10,7 +10,8 @@ import { sharedSelector } from './sharedSelector'
  * @param selectorFactory differently from a selector, this is a function that takes the parameter to return the selector
  * @param equalityCheck optional, has a default for immutable values
  */
-export function sharedDynamicSelector<V, P, Y extends readonly SharedFacet<unknown>[], T extends [...Y]>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function sharedDynamicSelector<V, P, Y extends readonly SharedFacet<any>[], T extends [...Y]>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectorFactory: (
     parameter: P,
@@ -20,13 +21,11 @@ export function sharedDynamicSelector<V, P, Y extends readonly SharedFacet<unkno
   return memoize((parameter: P) => {
     const [selector, facets] = selectorFactory(parameter)
 
-    const definition = memoize((sharedFacetDriver: SharedFacetDriver) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (sharedSelector as any)(selector, facets, equalityCheck)(sharedFacetDriver)
-    }) as unknown as SharedFacet<V>
-
-    definition.factory = FACET_FACTORY
-
-    return definition
+    return {
+      initializer: memoize((sharedFacetDriver: SharedFacetDriver) => {
+        return sharedSelector(selector, facets, equalityCheck).initializer(sharedFacetDriver)
+      }),
+      factory: FACET_FACTORY,
+    }
   })
 }

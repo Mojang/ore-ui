@@ -2,6 +2,10 @@ import memoize from './memoize'
 import { EqualityCheck, defaultEqualityCheck, mapFacetsCached, FACET_FACTORY, NoValue } from '@react-facet/core'
 import { SharedFacetDriver, SharedFacet } from './types'
 
+export type ExtractFacetValues<T extends ReadonlyArray<SharedFacet<unknown>>> = {
+  [K in keyof T]: T[K] extends SharedFacet<infer V> ? V : never
+}
+
 /**
  * Defines a selector to transform/map data from a facet
  *
@@ -20,21 +24,20 @@ import { SharedFacetDriver, SharedFacet } from './types'
  * @param selector a function to transform the data from the facets
  * @param equalityCheck optional, has a default for immutable values
  */
-export function sharedSelector<V, Y extends readonly SharedFacet<unknown>[], T extends [...Y]>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  selector: (...args: { [K in keyof T]: T[K] extends SharedFacet<infer V> ? V : never }) => V | NoValue,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function sharedSelector<V, Y extends SharedFacet<any>[], T extends [...Y]>(
+  selector: (...args: ExtractFacetValues<T>) => V | NoValue,
   facets: T,
   equalityCheck: EqualityCheck<V> = defaultEqualityCheck,
 ): SharedFacet<V> {
-  const definition = memoize((sharedFacetDriver: SharedFacetDriver) =>
-    mapFacetsCached(
-      facets.map((facet) => facet(sharedFacetDriver)),
-      selector as (...args: unknown[]) => ReturnType<typeof selector>,
-      equalityCheck,
+  return {
+    initializer: memoize((sharedFacetDriver: SharedFacetDriver) =>
+      mapFacetsCached(
+        facets.map((facet) => facet.initializer(sharedFacetDriver)),
+        selector as (...args: unknown[]) => ReturnType<typeof selector>,
+        equalityCheck,
+      ),
     ),
-  ) as unknown as SharedFacet<V>
-
-  definition.factory = FACET_FACTORY
-
-  return definition
+    factory: FACET_FACTORY,
+  }
 }

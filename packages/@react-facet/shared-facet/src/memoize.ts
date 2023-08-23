@@ -1,13 +1,9 @@
-interface MemoizableFunction<A, R> {
-  (argument: A): R
-}
-
 /**
  * Simple memoize implementation that supports a single argument
  *
  * TODO: handle cleaning up the cache.
  */
-export default function memoize<A, R>(fn: MemoizableFunction<A, R>): MemoizableFunction<A, R> {
+export default function memoize<A, R>(fn: (a: A) => R): (a: A) => R {
   const results = new Map<A, R>()
 
   return (argument: A): R => {

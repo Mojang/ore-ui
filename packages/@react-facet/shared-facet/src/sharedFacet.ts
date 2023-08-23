@@ -9,16 +9,15 @@ import { SharedFacetDriver, SharedFacet } from './types'
  * @param initialValue optional default value while constructor is not ready with the real value
  */
 export function sharedFacet<T>(name: string, initialValue: Option<T> = NO_VALUE): SharedFacet<T> {
-  const definition = memoize((sharedFacetDriver: SharedFacetDriver) =>
-    createFacet<T>({
-      initialValue,
-      startSubscription: (update) => {
-        return sharedFacetDriver(name, update)
-      },
+  return {
+    initializer: memoize((sharedFacetDriver: SharedFacetDriver) => {
+      return createFacet<T>({
+        initialValue,
+        startSubscription: (update) => {
+          return sharedFacetDriver(name, update)
+        },
+      })
     }),
-  ) as unknown as SharedFacet<T>
-
-  definition.factory = FACET_FACTORY
-
-  return definition
+    factory: FACET_FACTORY,
+  }
 }
