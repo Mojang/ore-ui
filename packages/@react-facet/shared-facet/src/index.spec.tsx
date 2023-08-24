@@ -2,9 +2,11 @@ import React, { useRef } from 'react'
 import { useFacetUnwrap, useFacetEffect, NO_VALUE } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber-testing-library'
 import { sharedDynamicSelector } from './sharedDynamicSelector'
+import { SharedFacetDriverProvider } from './components/SharedFacetDriverProvider'
 import { sharedFacet } from './sharedFacet'
 import { sharedSelector } from './sharedSelector'
-import { SharedFacetDriverProvider, useSharedFacet } from './context'
+import { useSharedFacet } from './hooks'
+import { SharedFacetDriver } from './types'
 
 const facetDestructor = jest.fn()
 
@@ -44,7 +46,7 @@ describe('rendering from facet', () => {
 
   it('constructs a facet, and destructs it on unmount', () => {
     const app = (
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <RenderingFacet />
       </SharedFacetDriverProvider>
     )
@@ -60,7 +62,7 @@ describe('rendering from facet', () => {
     facetDestructor.mockClear()
 
     rerender(
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <></>
       </SharedFacetDriverProvider>,
     )
@@ -71,7 +73,7 @@ describe('rendering from facet', () => {
 
   it('constructs a facet once, even on rendering multiple times', () => {
     const app = (
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <RenderingFacet />
         <RenderingFacet />
         <RenderingFacet />
@@ -84,6 +86,30 @@ describe('rendering from facet', () => {
     expect(sharedFacetDriver).toBeCalledTimes(1)
     expect(getAllByText('testing 123')).toHaveLength(4)
   })
+
+  describe('the facet is not available', () => {
+    it('does not mount the component below the SharedFacetsAvailable boundary', () => {
+      const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
+        onError?.('facet not available') // TODO find the right type for the error code
+
+        if (name !== 'foo') throw new Error(`Unexpected facet requested: ${name}`)
+
+        onChange({ bar: 'testing 123', values: ['a', 'b', 'c'] })
+
+        return () => {}
+      }
+
+      const app = (
+        <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
+          <RenderingFacet />
+        </SharedFacetDriverProvider>
+      )
+
+      const { getByText } = render(app)
+
+      expect(getByText('testing 123')).not.toBeDefined()
+    })
+  })
 })
 
 describe('rendering from a selector', () => {
@@ -94,7 +120,7 @@ describe('rendering from a selector', () => {
 
   it('constructs the root facet, and destructs it on unmount', () => {
     const app = (
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <RenderingSelector />
       </SharedFacetDriverProvider>
     )
@@ -110,7 +136,7 @@ describe('rendering from a selector', () => {
     facetDestructor.mockClear()
 
     rerender(
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <></>
       </SharedFacetDriverProvider>,
     )
@@ -133,7 +159,7 @@ describe('rendering from a selector', () => {
     }
 
     const app = (
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <NestedExample />
       </SharedFacetDriverProvider>
     )
@@ -145,7 +171,7 @@ describe('rendering from a selector', () => {
 
   it('constructs the root facet once, even on rendering multiple times', () => {
     const app = (
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <RenderingSelector />
         <RenderingSelector />
         <RenderingSelector />
@@ -168,7 +194,7 @@ describe('rendering from a dynamic selector', () => {
     }
 
     const { getByText, rerender } = render(
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <RenderingSelector index={2} />
         <RenderingSelector index={1} />
       </SharedFacetDriverProvider>,
@@ -187,7 +213,7 @@ describe('rendering from a dynamic selector', () => {
     facetDestructor.mockClear()
 
     rerender(
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <RenderingSelector index={2} />
         <RenderingSelector index={0} />
       </SharedFacetDriverProvider>,
@@ -206,7 +232,7 @@ describe('rendering from a dynamic selector', () => {
     facetDestructor.mockClear()
 
     rerender(
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <></>
       </SharedFacetDriverProvider>,
     )
@@ -238,7 +264,7 @@ describe('rendering with imperative calls from a selector', () => {
 
   it('correctly renders the value', () => {
     const app = (
-      <SharedFacetDriverProvider value={sharedFacetDriver}>
+      <SharedFacetDriverProvider driver={sharedFacetDriver}>
         <RenderingImperativeSelector callbackDependency="dependency" />
       </SharedFacetDriverProvider>
     )

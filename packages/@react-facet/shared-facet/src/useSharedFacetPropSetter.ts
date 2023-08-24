@@ -1,5 +1,5 @@
 import { useFacetCallback } from '@react-facet/core'
-import { useSharedFacet } from './context'
+import { useSharedFacet } from './hooks'
 import { PropSetter, SharedFacet } from './types'
 
 /**
