@@ -7,6 +7,7 @@ import { sharedFacet } from './sharedFacet'
 import { sharedSelector } from './sharedSelector'
 import { useSharedFacet } from './hooks'
 import { SharedFacetDriver } from './types'
+import { SharedFacetsAvailable } from './components/SharedFacetsAvailable'
 
 const facetDestructor = jest.fn()
 
@@ -110,6 +111,43 @@ describe('rendering from facet', () => {
       // TODO: find a way to test that this text isnt in screen without failing
       expect(queryByText('testing 123')).toBeNull()
     })
+  })
+
+  it('does not mount the component below the SharedFacetsAvailable boundary in a subtree', () => {
+    const barFacet = sharedFacet<Foo>('bar')
+
+    const RenderingFacet2 = () => {
+      const value = useFacetUnwrap(useSharedFacet(barFacet))
+      return <div>{value !== NO_VALUE ? value.bar : null}</div>
+    }
+
+    const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
+      if (name === 'bar') {
+        onError?.('facet not available') // TODO find the right type for the error code
+      }
+
+      onChange({ bar: 'testing 123', values: ['a', 'b', 'c'] })
+
+      return () => {}
+    }
+
+    const app = (
+      <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
+        <SharedFacetsAvailable>
+          {/* we expect this one to not fail */}
+          <RenderingFacet />
+        </SharedFacetsAvailable>
+        <SharedFacetsAvailable>
+          {/* we expect this one to fail */}
+          <RenderingFacet2 />
+        </SharedFacetsAvailable>
+      </SharedFacetDriverProvider>
+    )
+
+    const { queryByText } = render(app)
+
+    // TODO: find a way to test that this text isnt in screen without failing
+    expect(queryByText('testing 123')).toBeDefined()
   })
 })
 
