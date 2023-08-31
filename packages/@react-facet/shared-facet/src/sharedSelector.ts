@@ -1,10 +1,16 @@
-import memoize from './memoize'
-import { EqualityCheck, defaultEqualityCheck, mapFacetsCached, FACET_FACTORY, NoValue } from '@react-facet/core'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { EqualityCheck, defaultEqualityCheck, mapFacetsCached, FACET_FACTORY, NoValue, Facet } from '@react-facet/core'
 import { SharedFacetDriver, SharedFacet } from './types'
+import { functionCaching } from './functionCaching'
 
 export type ExtractFacetValues<T extends ReadonlyArray<SharedFacet<unknown>>> = {
   [K in keyof T]: T[K] extends SharedFacet<infer V> ? V : never
 }
+
+type SharedFacetarray = SharedFacet<any>[]
+type ArgumentsType = [SharedFacetDriver, () => void, (...args: any) => any | NoValue, ...SharedFacetarray]
+
+const { addToRef, removeFromRef, getFromRef } = functionCaching<ArgumentsType, Facet<any>>()
 
 /**
  * Defines a selector to transform/map data from a facet
@@ -24,20 +30,28 @@ export type ExtractFacetValues<T extends ReadonlyArray<SharedFacet<unknown>>> = 
  * @param selector a function to transform the data from the facets
  * @param equalityCheck optional, has a default for immutable values
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function sharedSelector<V, Y extends SharedFacet<any>[], T extends [...Y]>(
   selector: (...args: ExtractFacetValues<T>) => V | NoValue,
   facets: T,
   equalityCheck: EqualityCheck<V> = defaultEqualityCheck,
 ): SharedFacet<V> {
   return {
-    initializer: memoize((sharedFacetDriver: SharedFacetDriver) =>
-      mapFacetsCached(
-        facets.map((facet) => facet.initializer(sharedFacetDriver)),
+    initializer: (sharedFacetDriver, onError) => {
+      const cachedFacet = getFromRef([sharedFacetDriver, onError, selector, ...facets])
+      if (cachedFacet) return cachedFacet
+
+      const newFacet = mapFacetsCached(
+        facets.map((facet) => facet.initializer(sharedFacetDriver, onError)),
         selector as (...args: unknown[]) => ReturnType<typeof selector>,
         equalityCheck,
-      ),
-    ),
+        () => {
+          removeFromRef([sharedFacetDriver, onError, selector, ...facets])
+        },
+      )
+
+      addToRef([sharedFacetDriver, onError, selector, ...facets], newFacet)
+      return newFacet
+    },
     factory: FACET_FACTORY,
   }
 }

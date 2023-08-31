@@ -5,6 +5,7 @@ export function mapFacetArrayLightweight<M>(
   facets: Facet<unknown>[],
   fn: (...value: unknown[]) => M | NoValue,
   equalityCheck?: EqualityCheck<M>,
+  onCleanup?: () => void,
 ): Facet<M> {
   return {
     get: () => {
@@ -14,6 +15,6 @@ export function mapFacetArrayLightweight<M>(
 
       return fn(...values)
     },
-    observe: mapIntoObserveArray(facets, fn, equalityCheck),
+    observe: mapIntoObserveArray(facets, fn, equalityCheck, onCleanup),
   }
 }

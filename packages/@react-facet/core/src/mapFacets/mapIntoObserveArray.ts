@@ -7,6 +7,7 @@ export function mapIntoObserveArray<M>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn: (...value: any[]) => M | NoValue,
   equalityCheck?: EqualityCheck<M>,
+  onCleanup?: () => void,
 ): Observe<M> {
   return (listener: Listener<M>) => {
     let currentValue: Option<M> = NO_VALUE
@@ -76,6 +77,7 @@ export function mapIntoObserveArray<M>(
     return () => {
       cancelScheduledTask(task)
       subscriptions.forEach((unsubscribe) => unsubscribe())
+      onCleanup?.()
     }
   }
 }

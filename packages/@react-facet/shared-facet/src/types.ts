@@ -22,7 +22,7 @@ export type SharedFacetDriver = {
 }
 
 export type SharedFacet<T> = {
-  initializer: (sharedFacetDriver: SharedFacetDriver) => Facet<T>
+  initializer: (sharedFacetDriver: SharedFacetDriver, onError: () => void) => Facet<T>
   factory: typeof FACET_FACTORY
 }
 

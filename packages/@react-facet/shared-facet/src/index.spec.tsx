@@ -105,9 +105,10 @@ describe('rendering from facet', () => {
         </SharedFacetDriverProvider>
       )
 
-      const { getByText } = render(app)
+      const { queryByText } = render(app)
 
-      expect(getByText('testing 123')).not.toBeDefined()
+      // TODO: find a way to test that this text isnt in screen without failing
+      expect(queryByText('testing 123')).toBeNull()
     })
   })
 })

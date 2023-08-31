@@ -6,10 +6,11 @@ export function mapFacetArrayCached<M>(
   facets: Facet<unknown>[],
   fn: (...value: unknown[]) => M | NoValue,
   equalityCheck?: EqualityCheck<M>,
+  onCleanup?: () => void,
 ): Facet<M> {
   return createFacet<M>({
     // pass the equalityCheck to the mapIntoObserveArray to prevent even triggering the observable
-    startSubscription: mapIntoObserveArray(facets, fn, equalityCheck),
+    startSubscription: mapIntoObserveArray(facets, fn, equalityCheck, onCleanup),
     initialValue: NO_VALUE,
   })
 }

@@ -5,16 +5,21 @@ export function mapIntoObserveSingle<T, M>(
   facet: Facet<T>,
   fn: (value: T) => M | NoValue,
   equalityCheck?: EqualityCheck<M>,
+  onCleanup?: () => void,
 ): Observe<M> {
   // Most common scenario is not having any equality check
   if (equalityCheck == null) {
     return (listener: Listener<M>) => {
-      return facet.observe((value: T) => {
+      const unsubscribe = facet.observe((value: T) => {
         const result = fn(value)
         if (result === NO_VALUE) return
 
         listener(result)
       })
+      return () => {
+        unsubscribe()
+        onCleanup?.()
+      }
     }
   }
 
@@ -23,7 +28,7 @@ export function mapIntoObserveSingle<T, M>(
     return (listener: Listener<M>) => {
       let currentValue: M | typeof NO_VALUE = NO_VALUE
 
-      return facet.observe((value: T) => {
+      const unsubscribe = facet.observe((value: T) => {
         const result = fn(value)
         if (result === NO_VALUE) return
 
@@ -44,6 +49,10 @@ export function mapIntoObserveSingle<T, M>(
 
         listener(result)
       })
+      return () => {
+        unsubscribe()
+        onCleanup?.()
+      }
     }
   }
 
@@ -51,12 +60,16 @@ export function mapIntoObserveSingle<T, M>(
   return (listener: Listener<M>) => {
     const checker = equalityCheck()
 
-    return facet.observe((value: T) => {
+    const unsubscribe = facet.observe((value: T) => {
       const result = fn(value)
       if (result === NO_VALUE) return
       if (checker(result)) return
 
       listener(result)
     })
+    return () => {
+      unsubscribe()
+      onCleanup?.()
+    }
   }
 }

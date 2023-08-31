@@ -1,6 +1,6 @@
 import memoize from './memoize'
 import { defaultEqualityCheck, EqualityCheck, FACET_FACTORY, NoValue } from '@react-facet/core'
-import { SharedFacetDriver, SharedFacet } from './types'
+import { SharedFacet } from './types'
 import { sharedSelector } from './sharedSelector'
 
 /**
@@ -22,9 +22,9 @@ export function sharedDynamicSelector<V, P, Y extends readonly SharedFacet<any>[
     const [selector, facets] = selectorFactory(parameter)
 
     return {
-      initializer: memoize((sharedFacetDriver: SharedFacetDriver) => {
-        return sharedSelector(selector, facets, equalityCheck).initializer(sharedFacetDriver)
-      }),
+      initializer: (sharedFacetDriver, onError) => {
+        return sharedSelector(selector, facets, equalityCheck).initializer(sharedFacetDriver, onError)
+      },
       factory: FACET_FACTORY,
     }
   })
