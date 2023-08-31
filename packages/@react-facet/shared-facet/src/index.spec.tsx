@@ -1,8 +1,8 @@
 import React, { useRef } from 'react'
-import { useFacetUnwrap, useFacetEffect, NO_VALUE } from '@react-facet/core'
+import { useFacetUnwrap, useFacetEffect, NO_VALUE, useFacetState, Mount } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber-testing-library'
 import { sharedDynamicSelector } from './sharedDynamicSelector'
-import { SharedFacetDriverProvider } from './components/SharedFacetDriverProvider'
+import { SharedFacetDriverProvider, sharedFacetDriverContext } from './context/sharedFacetDriver'
 import { sharedFacet } from './sharedFacet'
 import { sharedSelector } from './sharedSelector'
 import { useSharedFacet } from './hooks'
@@ -20,6 +20,7 @@ const sharedFacetDriver = jest.fn().mockImplementation((name: string, onChange: 
   return facetDestructor
 })
 
+type ErrorType = { facetError: string; facetName: string }
 interface Foo {
   bar: number
   values: string[]
@@ -90,8 +91,8 @@ describe('rendering from facet', () => {
 
   describe('the facet is not available', () => {
     it('does not mount the component below the SharedFacetsAvailable boundary', () => {
-      const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
-        onError?.('facet not available') // TODO find the right type for the error code
+      const failingSharedFacetDriver: SharedFacetDriver<ErrorType> = (name, onChange, onError) => {
+        onError?.({ facetName: name, facetError: 'facet not available' }) // TODO find the right type for the error code
 
         if (name !== 'foo') throw new Error(`Unexpected facet requested: ${name}`)
 
@@ -100,9 +101,28 @@ describe('rendering from facet', () => {
         return () => {}
       }
 
+      const FacetAvailability = ({ children }) => {
+        const [unmount, setUnmount] = useFacetState(false)
+        return (
+          <SharedFacetsAvailable
+            onError={(error) => {
+              console.log(error)
+              setUnmount(true)
+            }}
+          >
+            {/* we expect this one to not fail */}
+            <Mount when={unmount} condition={false}>
+              {children}
+            </Mount>
+          </SharedFacetsAvailable>
+        )
+      }
+
       const app = (
         <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
-          <RenderingFacet />
+          <FacetAvailability>
+            <RenderingFacet />
+          </FacetAvailability>
         </SharedFacetDriverProvider>
       )
 
@@ -121,23 +141,23 @@ describe('rendering from facet', () => {
       return <div>{value !== NO_VALUE ? value.bar : null}</div>
     }
 
-    const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
+    const failingSharedFacetDriver: SharedFacetDriver<ErrorType> = (name, onChange, onError) => {
       if (name === 'bar') {
-        onError?.('facet not available') // TODO find the right type for the error code
+        onError?.({ facetName: 'bar', facetError: 'facetUnavailable' }) // TODO find the right type for the error code
+        return () => {}
       }
 
       onChange({ bar: 'testing 123', values: ['a', 'b', 'c'] })
-
       return () => {}
     }
 
     const app = (
       <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
-        <SharedFacetsAvailable>
+        <SharedFacetsAvailable onError={() => {}}>
           {/* we expect this one to not fail */}
           <RenderingFacet />
         </SharedFacetsAvailable>
-        <SharedFacetsAvailable>
+        <SharedFacetsAvailable onError={() => {}}>
           {/* we expect this one to fail */}
           <RenderingFacet2 />
         </SharedFacetsAvailable>
@@ -146,7 +166,7 @@ describe('rendering from facet', () => {
 
     const { queryByText } = render(app)
 
-    // TODO: find a way to test that this text isnt in screen without failing
+    // It should find testing 123 only once, if it doesnt exist or there's more than one the test will not succeed
     expect(queryByText('testing 123')).toBeDefined()
   })
 })

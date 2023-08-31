@@ -4,8 +4,8 @@ import { sharedFacetDriverContext } from '../context/sharedFacetDriver'
 import { SharedFacet } from '../types'
 import { sharedFacetsAvailableContext } from '../context'
 
-export const useSharedFacet = <T>(sharedFacet: SharedFacet<T>): Facet<T> => {
+export const useSharedFacet = <T, E>(sharedFacet: SharedFacet<T>, onErrorCallback?: (error: E) => void): Facet<T> => {
   const sharedFacetDriver = useContext(sharedFacetDriverContext)
-  const unmountChildrenCallback = useContext(sharedFacetsAvailableContext)
-  return sharedFacet.initializer(sharedFacetDriver, unmountChildrenCallback)
+  const onErrorWrapper = useContext(sharedFacetsAvailableContext)
+  return sharedFacet.initializer(sharedFacetDriver, onErrorCallback ?? onErrorWrapper)
 }

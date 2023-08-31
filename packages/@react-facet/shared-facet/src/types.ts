@@ -16,13 +16,13 @@ export interface ErrorFn {
  *
  * It should return a "destructor" function that will be called when no component needs the data anymore.
  */
-export type SharedFacetDriver = {
+export type SharedFacetDriver<E> = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (name: string, onChange: Update<any>, onError?: (error: string) => void): () => void
+  (name: string, onChange: Update<any>, onError?: (error: E) => void): () => void
 }
 
 export type SharedFacet<T> = {
-  initializer: (sharedFacetDriver: SharedFacetDriver, onError: () => void) => Facet<T>
+  initializer: <E>(sharedFacetDriver: SharedFacetDriver<E>, onError: (error: E) => void) => Facet<T>
   factory: typeof FACET_FACTORY
 }
 
