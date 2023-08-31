@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { EqualityCheck, defaultEqualityCheck, mapFacetsCached, FACET_FACTORY, NoValue, Facet } from '@react-facet/core'
-import { SharedFacetDriver, SharedFacet } from './types'
+import { SharedFacetDriver, SharedFacet, SharedFacetError } from './types'
 import { functionCaching } from './functionCaching'
 
 export type ExtractFacetValues<T extends ReadonlyArray<SharedFacet<unknown>>> = {
@@ -8,7 +8,12 @@ export type ExtractFacetValues<T extends ReadonlyArray<SharedFacet<unknown>>> = 
 }
 
 type SharedFacetarray = SharedFacet<any>[]
-type ArgumentsType = [SharedFacetDriver, () => void, (...args: any) => any | NoValue, ...SharedFacetarray]
+type ArgumentsType = [
+  SharedFacetDriver,
+  (error: SharedFacetError) => void,
+  (...args: any) => any | NoValue,
+  ...SharedFacetarray
+]
 
 const { addToRef, removeFromRef, getFromRef } = functionCaching<ArgumentsType, Facet<any>>()
 

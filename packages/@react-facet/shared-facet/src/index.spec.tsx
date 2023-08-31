@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { ReactElement, useRef } from 'react'
 import { useFacetUnwrap, useFacetEffect, NO_VALUE, useFacetState, Mount } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber-testing-library'
 import { sharedDynamicSelector } from './sharedDynamicSelector'
@@ -6,8 +6,17 @@ import { SharedFacetDriverProvider, sharedFacetDriverContext } from './context/s
 import { sharedFacet } from './sharedFacet'
 import { sharedSelector } from './sharedSelector'
 import { useSharedFacet } from './hooks'
-import { SharedFacetDriver } from './types'
 import { SharedFacetsAvailable } from './components/SharedFacetsAvailable'
+
+import { SharedFacetDriver } from './types'
+// This is how we've opted to allow users to extend the error type to their usecases, they re-declare the
+// interface for SharedErrorFacet with whatever extensions they want
+// the original type just has facetName as mandatory and we add ontop of that facetError as mandatory in our tests
+declare module './types' {
+  export interface SharedFacetError {
+    facetError: string
+  }
+}
 
 const facetDestructor = jest.fn()
 
@@ -20,7 +29,6 @@ const sharedFacetDriver = jest.fn().mockImplementation((name: string, onChange: 
   return facetDestructor
 })
 
-type ErrorType = { facetError: string; facetName: string }
 interface Foo {
   bar: number
   values: string[]
@@ -91,7 +99,7 @@ describe('rendering from facet', () => {
 
   describe('the facet is not available', () => {
     it('does not mount the component below the SharedFacetsAvailable boundary', () => {
-      const failingSharedFacetDriver: SharedFacetDriver<ErrorType> = (name, onChange, onError) => {
+      const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
         onError?.({ facetName: name, facetError: 'facet not available' }) // TODO find the right type for the error code
 
         if (name !== 'foo') throw new Error(`Unexpected facet requested: ${name}`)
@@ -101,7 +109,7 @@ describe('rendering from facet', () => {
         return () => {}
       }
 
-      const FacetAvailability = ({ children }) => {
+      const FacetAvailability = ({ children }: { children: ReactElement }) => {
         const [unmount, setUnmount] = useFacetState(false)
         return (
           <SharedFacetsAvailable
@@ -141,7 +149,7 @@ describe('rendering from facet', () => {
       return <div>{value !== NO_VALUE ? value.bar : null}</div>
     }
 
-    const failingSharedFacetDriver: SharedFacetDriver<ErrorType> = (name, onChange, onError) => {
+    const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
       if (name === 'bar') {
         onError?.({ facetName: 'bar', facetError: 'facetUnavailable' }) // TODO find the right type for the error code
         return () => {}

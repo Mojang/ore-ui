@@ -3,14 +3,14 @@ import { SharedFacetDriver } from '../types'
 
 const dummyConstructor = () => () => {}
 
-export type SharedFacetDriverProviderProps<E> = {
+export type SharedFacetDriverProviderProps = {
   children: ReactNode
-  driver: SharedFacetDriver<E>
+  driver: SharedFacetDriver
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const sharedFacetDriverContext = createContext<SharedFacetDriver<any>>(dummyConstructor)
+export const sharedFacetDriverContext = createContext<SharedFacetDriver>(dummyConstructor)
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const SharedFacetDriverProvider = ({ children, driver }: SharedFacetDriverProviderProps<any>) => {
+export const SharedFacetDriverProvider = ({ children, driver }: SharedFacetDriverProviderProps) => {
   return <sharedFacetDriverContext.Provider value={driver}>{children}</sharedFacetDriverContext.Provider>
 }

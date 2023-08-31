@@ -1,11 +1,11 @@
 import { createFacet, NO_VALUE, Option, FACET_FACTORY, Facet } from '@react-facet/core'
 import { functionCaching } from './functionCaching'
-import { SharedFacetDriver, SharedFacet } from './types'
+import { SharedFacetDriver, SharedFacet, SharedFacetError } from './types'
 
-type ArgumentsType<E> = [SharedFacetDriver<E>, (args: E) => void, string]
+type ArgumentsType = [SharedFacetDriver, (args: SharedFacetError) => void, string]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const { addToRef, removeFromRef, getFromRef } = functionCaching<ArgumentsType<any>, Facet<any>>()
+const { addToRef, removeFromRef, getFromRef } = functionCaching<ArgumentsType, Facet<any>>()
 const noop = () => {}
 /**
  * Defines a facet with shared data
