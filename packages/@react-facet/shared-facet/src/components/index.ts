@@ -1,1 +1,1 @@
-export * from './SharedFacetsAvailable'
+export * from './SharedFacetsErrorBoundary'

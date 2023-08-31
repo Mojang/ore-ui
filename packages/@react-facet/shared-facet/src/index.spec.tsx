@@ -6,7 +6,7 @@ import { SharedFacetDriverProvider, sharedFacetDriverContext } from './context/s
 import { sharedFacet } from './sharedFacet'
 import { sharedSelector } from './sharedSelector'
 import { useSharedFacet } from './hooks'
-import { SharedFacetsAvailable } from './components/SharedFacetsAvailable'
+import { SharedFacetsErrorBoundary } from './components/SharedFacetsErrorBoundary'
 
 import { SharedFacetDriver } from './types'
 // This is how we've opted to allow users to extend the error type to their usecases, they re-declare the
@@ -98,7 +98,7 @@ describe('rendering from facet', () => {
   })
 
   describe('the facet is not available', () => {
-    it('does not mount the component below the SharedFacetsAvailable boundary', () => {
+    it('does not mount the component below the SharedFacetsErrorBoundary', () => {
       const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
         onError?.({ facetName: name, facetError: 'facet not available' }) // TODO find the right type for the error code
 
@@ -112,7 +112,7 @@ describe('rendering from facet', () => {
       const FacetAvailability = ({ children }: { children: ReactElement }) => {
         const [unmount, setUnmount] = useFacetState(false)
         return (
-          <SharedFacetsAvailable
+          <SharedFacetsErrorBoundary
             onError={(error) => {
               console.log(error)
               setUnmount(true)
@@ -122,7 +122,7 @@ describe('rendering from facet', () => {
             <Mount when={unmount} condition={false}>
               {children}
             </Mount>
-          </SharedFacetsAvailable>
+          </SharedFacetsErrorBoundary>
         )
       }
 
@@ -141,7 +141,7 @@ describe('rendering from facet', () => {
     })
   })
 
-  it('does not mount the component below the SharedFacetsAvailable boundary in a subtree', () => {
+  it('does not mount the component below the SharedFacetsErrorBoundary in a subtree', () => {
     const barFacet = sharedFacet<Foo>('bar')
 
     const RenderingFacet2 = () => {
@@ -161,14 +161,14 @@ describe('rendering from facet', () => {
 
     const app = (
       <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
-        <SharedFacetsAvailable onError={() => {}}>
+        <SharedFacetsErrorBoundary onError={() => {}}>
           {/* we expect this one to not fail */}
           <RenderingFacet />
-        </SharedFacetsAvailable>
-        <SharedFacetsAvailable onError={() => {}}>
+        </SharedFacetsErrorBoundary>
+        <SharedFacetsErrorBoundary onError={() => {}}>
           {/* we expect this one to fail */}
           <RenderingFacet2 />
-        </SharedFacetsAvailable>
+        </SharedFacetsErrorBoundary>
       </SharedFacetDriverProvider>
     )
 

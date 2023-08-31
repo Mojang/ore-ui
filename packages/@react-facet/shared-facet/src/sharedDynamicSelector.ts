@@ -12,7 +12,6 @@ import { sharedSelector } from './sharedSelector'
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function sharedDynamicSelector<V, P, Y extends readonly SharedFacet<any>[], T extends [...Y]>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectorFactory: (
     parameter: P,
   ) => [(...args: { [K in keyof T]: T[K] extends SharedFacet<infer V> ? V : never }) => V | NoValue, T],
