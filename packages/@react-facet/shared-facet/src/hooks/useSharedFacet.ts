@@ -9,6 +9,6 @@ export const useSharedFacet = <T>(
   onErrorCallback?: (error: SharedFacetError) => void,
 ): Facet<T> => {
   const sharedFacetDriver = useContext(sharedFacetDriverContext)
-  const onErrorWrapper = useContext(sharedFacetsErrorBoundaryContext)
-  return sharedFacet.initializer(sharedFacetDriver, onErrorCallback ?? onErrorWrapper)
+  const onErrorWrapperCallback = useContext(sharedFacetsErrorBoundaryContext)
+  return sharedFacet.initializer(sharedFacetDriver, onErrorCallback ?? onErrorWrapperCallback)
 }

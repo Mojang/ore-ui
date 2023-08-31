@@ -1,6 +1,6 @@
-import React, { ReactElement, useRef } from 'react'
+import React, { ReactElement, useRef, useState } from 'react'
 import { useFacetUnwrap, useFacetEffect, NO_VALUE, useFacetState, Mount } from '@react-facet/core'
-import { render } from '@react-facet/dom-fiber-testing-library'
+import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { sharedDynamicSelector } from './sharedDynamicSelector'
 import { SharedFacetDriverProvider, sharedFacetDriverContext } from './context/sharedFacetDriver'
 import { sharedFacet } from './sharedFacet'
@@ -34,6 +34,8 @@ interface Foo {
   values: string[]
 }
 
+const globalErrorHandler = jest.fn()
+
 const fooFacet = sharedFacet<Foo>('foo')
 
 const barSelector = sharedSelector((foo) => foo.bar, [fooFacet])
@@ -46,7 +48,22 @@ const valueDynamicSelector = sharedDynamicSelector((index: number) => [
 beforeEach(() => {
   sharedFacetDriver.mockClear()
   facetDestructor.mockClear()
+  globalErrorHandler.mockClear()
 })
+
+const FacetAvailability = ({ children }: { children: ReactElement }) => {
+  const [mount, setMount] = useFacetState(true)
+  return (
+    <SharedFacetsErrorBoundary
+      onError={(error) => {
+        globalErrorHandler(error)
+        setMount(false)
+      }}
+    >
+      <Mount when={mount}>{children}</Mount>
+    </SharedFacetsErrorBoundary>
+  )
+}
 
 describe('rendering from facet', () => {
   const RenderingFacet = () => {
@@ -109,23 +126,6 @@ describe('rendering from facet', () => {
         return () => {}
       }
 
-      const FacetAvailability = ({ children }: { children: ReactElement }) => {
-        const [unmount, setUnmount] = useFacetState(false)
-        return (
-          <SharedFacetsErrorBoundary
-            onError={(error) => {
-              console.log(error)
-              setUnmount(true)
-            }}
-          >
-            {/* we expect this one to not fail */}
-            <Mount when={unmount} condition={false}>
-              {children}
-            </Mount>
-          </SharedFacetsErrorBoundary>
-        )
-      }
-
       const app = (
         <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
           <FacetAvailability>
@@ -161,14 +161,14 @@ describe('rendering from facet', () => {
 
     const app = (
       <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
-        <SharedFacetsErrorBoundary onError={() => {}}>
+        <FacetAvailability>
           {/* we expect this one to not fail */}
           <RenderingFacet />
-        </SharedFacetsErrorBoundary>
-        <SharedFacetsErrorBoundary onError={() => {}}>
+        </FacetAvailability>
+        <FacetAvailability>
           {/* we expect this one to fail */}
           <RenderingFacet2 />
-        </SharedFacetsErrorBoundary>
+        </FacetAvailability>
       </SharedFacetDriverProvider>
     )
 
@@ -176,6 +176,96 @@ describe('rendering from facet', () => {
 
     // It should find testing 123 only once, if it doesnt exist or there's more than one the test will not succeed
     expect(queryByText('testing 123')).toBeDefined()
+  })
+
+  it('it uses the local error handler over the context error boundary error handler', () => {
+    const barFacet = sharedFacet<Foo>('bar')
+    const RenderingFacet2 = () => {
+      const value = useFacetUnwrap(useSharedFacet(barFacet))
+      return <div>{value !== NO_VALUE ? value.bar : null}</div>
+    }
+
+    const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
+      if (name === 'bar') {
+        onError?.({ facetName: 'bar', facetError: 'facetUnavailable' }) // TODO find the right type for the error code
+        return () => {}
+      }
+      onChange({ bar: 'testing 123', values: ['a', 'b', 'c'] })
+      return () => {}
+    }
+
+    const app = (
+      <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
+        <FacetAvailability>
+          <>
+            {/* we expect this one to not fail */}
+            <RenderingFacet />
+
+            {/* we expect this one to fail */}
+            <RenderingFacet2 />
+          </>
+        </FacetAvailability>
+      </SharedFacetDriverProvider>
+    )
+
+    const { queryByText } = render(app)
+
+    // It should not find testing 123 because the wrapper error handler should unmount everything
+    expect(queryByText('testing 123')).toBeNull()
+
+    // It should call the FacetAvailability wrapper error handler
+    expect(globalErrorHandler).toBeCalledTimes(1)
+  })
+  it('it uses the conext error boundary error handler when no local one is provided', () => {
+    const barFacet = sharedFacet<Foo>('bar')
+    const errorHandlerMock = jest.fn()
+    const RenderingFacet2 = () => {
+      const [mountBar, setMountBar] = useFacetState(true)
+      const value = useFacetUnwrap(
+        useSharedFacet(barFacet, (error) => {
+          errorHandlerMock(error)
+          setMountBar(false)
+        }),
+      )
+      return (
+        <Mount when={mountBar}>
+          <div>{value !== NO_VALUE ? value.bar : null}</div>
+        </Mount>
+      )
+    }
+
+    const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
+      if (name === 'bar') {
+        onError?.({ facetName: 'bar', facetError: 'facetUnavailable' }) // TODO find the right type for the error code
+        return () => {}
+      }
+      onChange({ bar: 'testing 123', values: ['a', 'b', 'c'] })
+      return () => {}
+    }
+
+    const app = (
+      <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
+        <FacetAvailability>
+          <>
+            {/* we expect this one to not fail */}
+            <RenderingFacet />
+
+            {/* we expect this one to fail */}
+            <RenderingFacet2 />
+          </>
+        </FacetAvailability>
+      </SharedFacetDriverProvider>
+    )
+
+    const { queryByText } = render(app)
+
+    // It should find testing 123 only once, if it doesnt exist or there's more than one the test will not succeed
+    expect(queryByText('testing 123')).not.toBeEmptyDOMElement()
+    expect(queryByText('testing 123')).toHaveTextContent('testing 123')
+
+    // It should call local error handler over the FacetAvailability wrapper error handler
+    expect(errorHandlerMock).toBeCalledTimes(1)
+    expect(globalErrorHandler).toBeCalledTimes(0)
   })
 })
 
