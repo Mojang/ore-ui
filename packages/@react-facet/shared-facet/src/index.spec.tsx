@@ -179,45 +179,6 @@ describe('rendering from facet', () => {
 
     it('it uses the local error handler over the SharedFacetsErrorBoundary error handler', () => {
       const barFacet = sharedFacet<Foo>('bar')
-      const RenderingFacet2 = () => {
-        const value = useFacetUnwrap(useSharedFacet(barFacet))
-        return <div>{value !== NO_VALUE ? value.bar : null}</div>
-      }
-
-      const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
-        if (name === 'bar') {
-          onError?.({ facetName: 'bar', facetError: 'facetUnavailable' }) // TODO find the right type for the error code
-          return () => {}
-        }
-        onChange({ bar: 'testing 123', values: ['a', 'b', 'c'] })
-        return () => {}
-      }
-
-      const app = (
-        <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
-          <FacetAvailability>
-            <>
-              {/* we expect this one to not fail */}
-              <RenderingFacet />
-
-              {/* we expect this one to fail */}
-              <RenderingFacet2 />
-            </>
-          </FacetAvailability>
-        </SharedFacetDriverProvider>
-      )
-
-      const { queryByText } = render(app)
-
-      // It should not find testing 123 because the wrapper error handler should unmount everything
-      expect(queryByText('testing 123')).toBeNull()
-
-      // It should call the FacetAvailability wrapper error handler
-      expect(globalErrorHandler).toBeCalledTimes(1)
-    })
-
-    it('it uses the SharedFacetsErrorBoundary error handler when no local one is provided', () => {
-      const barFacet = sharedFacet<Foo>('bar')
       const errorHandlerMock = jest.fn()
       const RenderingFacet2 = () => {
         const [mountBar, setMountBar] = useFacetState(true)
@@ -266,6 +227,45 @@ describe('rendering from facet', () => {
       // It should call local error handler over the FacetAvailability wrapper error handler
       expect(errorHandlerMock).toBeCalledTimes(1)
       expect(globalErrorHandler).toBeCalledTimes(0)
+    })
+
+    it('it uses the SharedFacetsErrorBoundary error handler when no local one is provided', () => {
+      const barFacet = sharedFacet<Foo>('bar')
+      const RenderingFacet2 = () => {
+        const value = useFacetUnwrap(useSharedFacet(barFacet))
+        return <div>{value !== NO_VALUE ? value.bar : null}</div>
+      }
+
+      const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
+        if (name === 'bar') {
+          onError?.({ facetName: 'bar', facetError: 'facetUnavailable' }) // TODO find the right type for the error code
+          return () => {}
+        }
+        onChange({ bar: 'testing 123', values: ['a', 'b', 'c'] })
+        return () => {}
+      }
+
+      const app = (
+        <SharedFacetDriverProvider driver={failingSharedFacetDriver}>
+          <FacetAvailability>
+            <>
+              {/* we expect this one to not fail */}
+              <RenderingFacet />
+
+              {/* we expect this one to fail */}
+              <RenderingFacet2 />
+            </>
+          </FacetAvailability>
+        </SharedFacetDriverProvider>
+      )
+
+      const { queryByText } = render(app)
+
+      // It should not find testing 123 because the wrapper error handler should unmount everything
+      expect(queryByText('testing 123')).toBeNull()
+
+      // It should call the FacetAvailability wrapper error handler
+      expect(globalErrorHandler).toBeCalledTimes(1)
     })
   })
 })
