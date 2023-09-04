@@ -1,8 +1,8 @@
-import React, { ReactElement, useRef, useState } from 'react'
+import React, { ReactElement, useRef } from 'react'
 import { useFacetUnwrap, useFacetEffect, NO_VALUE, useFacetState, Mount } from '@react-facet/core'
-import { act, getByText, render } from '@react-facet/dom-fiber-testing-library'
+import { render } from '@react-facet/dom-fiber-testing-library'
 import { sharedDynamicSelector } from './sharedDynamicSelector'
-import { SharedFacetDriverProvider, sharedFacetDriverContext } from './context/sharedFacetDriver'
+import { SharedFacetDriverProvider } from './context/sharedFacetDriver'
 import { sharedFacet } from './sharedFacet'
 import { sharedSelector } from './sharedSelector'
 import { useSharedFacet } from './hooks'
@@ -218,7 +218,7 @@ describe('rendering from facet', () => {
         </SharedFacetDriverProvider>
       )
 
-      const { queryByText, getByText } = render(app)
+      const { getByText } = render(app)
 
       // It should find testing 123 only once, if it doesnt exist or there's more than one the test will not succeed
       expect(getByText('testing 123')).not.toBeEmptyDOMElement()
