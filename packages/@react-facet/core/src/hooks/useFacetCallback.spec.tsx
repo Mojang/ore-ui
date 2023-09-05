@@ -104,6 +104,7 @@ it('should work with uninitialized values', () => {
     useFacetEffect(
       () => {
         handler()
+        return undefined
       },
       [handler],
       [internalDemoFacet],

@@ -105,6 +105,7 @@ describe('multiple dependencies', () => {
       useFacetEffect(
         (value) => {
           mock(value.name)
+          return undefined
         },
         [],
         [adaptValue],
@@ -147,6 +148,7 @@ describe('multiple dependencies', () => {
       useFacetEffect(
         (value) => {
           mock(value)
+          return undefined
         },
         [],
         [adaptValue],
@@ -189,6 +191,7 @@ describe('multiple dependencies', () => {
       useFacetEffect(
         (value) => {
           mock(value)
+          return undefined
         },
         [],
         [adaptValue],
@@ -231,6 +234,7 @@ describe('multiple dependencies', () => {
       useFacetEffect(
         (value) => {
           mock(value)
+          return undefined
         },
         [],
         [adaptValue],
@@ -388,6 +392,7 @@ describe('single dependency', () => {
       useFacetEffect(
         (value) => {
           mock(value.name)
+          return undefined
         },
         [],
         [adaptValue],
@@ -429,6 +434,7 @@ describe('single dependency', () => {
       useFacetEffect(
         (value) => {
           mock(value)
+          return undefined
         },
         [],
         [adaptValue],
@@ -470,6 +476,7 @@ describe('single dependency', () => {
       useFacetEffect(
         (value) => {
           mock(value)
+          return undefined
         },
         [],
         [adaptValue],
@@ -511,6 +518,7 @@ describe('single dependency', () => {
       useFacetEffect(
         (value) => {
           mock(value)
+          return undefined
         },
         [],
         [adaptValue],
