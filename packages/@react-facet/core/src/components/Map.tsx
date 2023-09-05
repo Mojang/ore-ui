@@ -17,7 +17,7 @@ export const Map = <T,>({ array, children, equalityCheck }: MapProps<T>) => {
     <>
       {times(
         (index) =>
-          equalityCheck != null ? (
+          equalityCheck !== undefined ? (
             <MapChildMemo<T>
               key={index}
               arrayFacet={array}

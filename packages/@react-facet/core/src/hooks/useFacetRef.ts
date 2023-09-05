@@ -6,7 +6,7 @@ export function useFacetRef<T>(facet: Facet<T>): MutableRefObject<Option<T>>
 export function useFacetRef<T>(facet: Facet<T>, defaultValue: T): MutableRefObject<T>
 export function useFacetRef<T>(facet: Facet<T>, defaultValue?: T): MutableRefObject<T> {
   let value = facet.get()
-  if (value === NO_VALUE && defaultValue != undefined) {
+  if (value === NO_VALUE && defaultValue !== undefined) {
     value = defaultValue
   }
 
@@ -14,6 +14,7 @@ export function useFacetRef<T>(facet: Facet<T>, defaultValue?: T): MutableRefObj
   useFacetEffect(
     (value) => {
       ref.current = value
+      return undefined
     },
     [],
     [facet],

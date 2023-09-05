@@ -252,7 +252,7 @@ export type ElementContainer = {
 }
 
 export const isElementContainer = (value: ElementContainer | TextContainer): value is ElementContainer => {
-  return value != null && 'children' in value
+  return 'children' in value
 }
 
 export type TextContainer = {

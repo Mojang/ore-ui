@@ -17,12 +17,12 @@ export const Paragraph = ({ style, className, children, id, innerRef, ...handler
   const ref = innerRef ?? defaultRef
 
   useSetProp(className, (value) => {
-    if (ref.current == null) return
+    if (ref.current === null) return
     ref.current.className = value ?? ''
   })
 
   useSetProp(id, (value) => {
-    if (ref.current == null) return
+    if (ref.current === null) return
     ref.current.id = value ?? ''
   })
 
