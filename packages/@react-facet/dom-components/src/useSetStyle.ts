@@ -18,13 +18,13 @@ export function useSetStyle(style: FacetCSSStyleDeclaration | undefined, ref: Re
   const gamefaceStyleRef = useRef<CSSStyleDeclaration | null>(null)
 
   useLayoutEffect(() => {
-    if (style == null) return
+    if (style === undefined) return
 
     const element = ref.current
-    if (element == null) return
+    if (element === null) return
 
     gamefaceStyleRef.current = element.style
-    if (gamefaceStyleRef.current == null) return
+    if (gamefaceStyleRef.current === null) return
 
     // Casting elementStyle because of issues with matching the CSS Style type and the FacetCSSStyleDeclaration
     const elementStyle = gamefaceStyleRef.current as unknown as LocalStyle
@@ -32,9 +32,9 @@ export function useSetStyle(style: FacetCSSStyleDeclaration | undefined, ref: Re
     const unsubscribes = mapKeys(style, (key) => {
       let cache: string | number | null = null
       const value = style[key]
-      if (value == null) return
+      if (value === undefined) return
 
-      if (typeof value === 'string' || typeof value == 'number') {
+      if (typeof value === 'string' || typeof value === 'number') {
         if (cache !== value) {
           elementStyle[key] = value
           cache = value

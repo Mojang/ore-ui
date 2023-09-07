@@ -26,10 +26,10 @@ export function multiObserve<Y extends Facet<unknown>[], T extends [...Y]>(
   for (let i = 0; i < facets.length; i++) {
     unsubscribes[i] = facets[i].observe((value) => {
       values[i] = value
-      hasAllDependencies = hasAllDependencies || values.every((value) => value != NO_VALUE)
+      hasAllDependencies = hasAllDependencies || values.every((value) => value !== NO_VALUE)
 
       if (hasAllDependencies) {
-        if (cleanup != null) {
+        if (cleanup !== undefined) {
           cleanup()
         }
 
@@ -42,7 +42,7 @@ export function multiObserve<Y extends Facet<unknown>[], T extends [...Y]>(
     for (let index = 0; index < unsubscribes.length; index++) {
       unsubscribes[index]()
     }
-    if (cleanup != null) {
+    if (cleanup !== undefined) {
       cleanup()
     }
   }

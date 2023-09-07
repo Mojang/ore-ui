@@ -17,17 +17,17 @@ export const Img = ({ style, className, id, src, innerRef, ...handlers }: ImgPro
   const ref = innerRef ?? defaultRef
 
   useSetProp(className, (value) => {
-    if (ref.current == null) return
+    if (ref.current === null) return
     ref.current.className = value ?? ''
   })
 
   useSetProp(id, (value) => {
-    if (ref.current == null) return
+    if (ref.current === null) return
     ref.current.id = value ?? ''
   })
 
   useSetProp(src, (value) => {
-    if (ref.current == null) return
+    if (ref.current === null) return
     ref.current.setAttribute('src', value ?? '')
   })
 

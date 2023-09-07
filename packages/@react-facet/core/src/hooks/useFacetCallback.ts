@@ -70,7 +70,7 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
       const values = facets.map((facet) => facet.get())
 
       for (const value of values) {
-        if (value === NO_VALUE) return defaultReturnValue != null ? defaultReturnValue : NO_VALUE
+        if (value === NO_VALUE) return defaultReturnValue !== undefined ? defaultReturnValue : NO_VALUE
       }
 
       return callbackMemoized(...(values as ExtractFacetValues<T>))(...(args as K))

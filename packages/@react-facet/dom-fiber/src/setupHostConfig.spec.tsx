@@ -865,7 +865,7 @@ describe('mount', () => {
       )
 
       div = document.getElementsByClassName('testing')[0]
-      if (div == null) throw new Error('Root element not found')
+      if (div === undefined) throw new Error('Root element not found')
     })
 
     it('supports onClick', () => {
@@ -1649,7 +1649,7 @@ describe('update', () => {
       render(<TestComponent />)
 
       div = document.getElementsByClassName('testing')[0]
-      if (div == null) throw new Error('Root element not found')
+      if (div === undefined) throw new Error('Root element not found')
     })
 
     it('supports onClick', () => {

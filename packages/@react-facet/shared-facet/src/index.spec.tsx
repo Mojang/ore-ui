@@ -123,7 +123,7 @@ describe('rendering from a selector', () => {
     const NestedExample = () => {
       const value = useFacetUnwrap(useSharedFacet(fooFacet))
 
-      if (value == NO_VALUE) return null
+      if (value === NO_VALUE) return null
 
       return (
         <div>

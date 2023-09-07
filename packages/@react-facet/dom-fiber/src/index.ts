@@ -10,7 +10,7 @@ export * from './createReconciler'
  * Render the Facets as the root renderer
  */
 export function render(element: ReactElement, container: HTMLElement | null) {
-  if (container == null) return () => {}
+  if (container === null) return () => {}
 
   const reconcilerInstance = createReconciler()
 
