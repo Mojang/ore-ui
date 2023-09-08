@@ -52,7 +52,7 @@ describe('DeferredMountWithCallback', () => {
 
     const runRaf = () => {
       const cb = frames.pop()
-      if (cb != null) act(() => cb())
+      if (cb !== undefined) act(() => cb())
     }
 
     const MOUNT_COMPLETION_DELAY = 1000

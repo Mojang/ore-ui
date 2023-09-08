@@ -8,7 +8,7 @@ export function mapIntoObserveSingle<T, M>(
   onCleanup?: () => void,
 ): Observe<M> {
   // Most common scenario is not having any equality check
-  if (equalityCheck == null) {
+  if (equalityCheck === undefined) {
     return (listener: Listener<M>) => {
       const unsubscribe = facet.observe((value: T) => {
         const result = fn(value)

@@ -18,7 +18,7 @@ export const Performance = () => {
 
     const tick = () => {
       setDataFacet((data) => {
-        if (data == NO_VALUE) return []
+        if (data === NO_VALUE) return []
 
         data[0].health = data[0].health === 10 ? 5 : 10
         return data
@@ -50,6 +50,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
   useFacetEffect(
     (health) => {
       randomWork(health)
+      return undefined
     },
     [],
     [health],
@@ -58,6 +59,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
   useFacetEffect(
     (name) => {
       randomWork(name)
+      return undefined
     },
     [],
     [name],
@@ -66,6 +68,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
   useFacetEffect(
     (name) => {
       randomWork(name)
+      return undefined
     },
     [],
     [name],
@@ -74,6 +77,7 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
   useFacetEffect(
     (name) => {
       randomWork(name)
+      return undefined
     },
     [],
     [name],

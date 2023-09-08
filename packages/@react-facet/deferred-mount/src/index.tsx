@@ -174,7 +174,7 @@ interface DeferredMountProps {
  */
 export function DeferredMount({ children }: DeferredMountProps) {
   const pushDeferUpdateFunction = useContext(pushDeferUpdateContext)
-  const [deferred, setDeferred] = useState(pushDeferUpdateFunction != null)
+  const [deferred, setDeferred] = useState(pushDeferUpdateFunction !== undefined)
 
   useEffect(() => {
     if (pushDeferUpdateFunction) pushDeferUpdateFunction(setDeferred)
@@ -198,12 +198,12 @@ export const useNotifyMountComplete = () => useContext(NotifyMountComplete)
  */
 export function DeferredMountWithCallback({ children }: DeferredMountWithCallbackProps) {
   const pushDeferUpdateFunction = useContext(pushDeferUpdateContext)
-  const [deferred, setDeferred] = useState(pushDeferUpdateFunction != null)
+  const [deferred, setDeferred] = useState(pushDeferUpdateFunction !== undefined)
   const resolveMountComplete = useRef<(value: void | PromiseLike<void>) => void>()
   const mountCompleteBeforeInitialization = useRef(false)
 
   const onMountComplete = useCallback(() => {
-    if (resolveMountComplete.current != null) {
+    if (resolveMountComplete.current !== undefined) {
       resolveMountComplete.current()
     } else {
       mountCompleteBeforeInitialization.current = true

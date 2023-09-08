@@ -17,9 +17,9 @@ export function mapIntoObserveArray<M>(
     let hasAllDependencies = false
 
     const task =
-      checker == null
+      checker === undefined
         ? () => {
-            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
+            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value !== NO_VALUE)
             if (!hasAllDependencies) return
 
             const result = fn(...dependencyValues)
@@ -29,7 +29,7 @@ export function mapIntoObserveArray<M>(
           }
         : equalityCheck === defaultEqualityCheck
         ? () => {
-            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
+            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value !== NO_VALUE)
             if (!hasAllDependencies) return
 
             const result = fn(...dependencyValues)
@@ -53,7 +53,7 @@ export function mapIntoObserveArray<M>(
             listener(result)
           }
         : () => {
-            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value != NO_VALUE)
+            hasAllDependencies = hasAllDependencies || dependencyValues.every((value) => value !== NO_VALUE)
             if (!hasAllDependencies) return
 
             const result = fn(...dependencyValues)

@@ -22,7 +22,7 @@ export function useFacetPropSetter<T extends Record<string, any>, Prop extends k
 ): PropSetter<T, Prop> {
   return useMemo(
     () => (value: T[Prop]) => {
-      facet.setWithCallback((prev) => ({ ...(prev != NO_VALUE ? prev : {}), [prop]: value } as unknown as T))
+      facet.setWithCallback((prev) => ({ ...(prev !== NO_VALUE ? prev : {}), [prop]: value } as unknown as T))
     },
     [facet, prop],
   )

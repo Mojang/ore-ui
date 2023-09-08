@@ -32,25 +32,25 @@ export const TextArea = ({
   const ref = innerRef ?? defaultRef
 
   useSetProp(className, (value) => {
-    if (ref.current == null) return
+    if (ref.current === null) return
     ref.current.className = value ?? ''
   })
 
   useSetProp(id, (value) => {
-    if (ref.current == null) return
+    if (ref.current === null) return
     ref.current.id = value ?? ''
   })
 
   useSetProp(value, (value) => {
-    if (ref.current == null) return
+    if (ref.current === null) return
     const element = ref.current
     element.value = value ?? ''
     element.setAttribute('value', value ?? '')
   })
 
   useSetProp(disabled, (value) => {
-    if (ref.current == null) return
-    if (value == null && value === false) {
+    if (ref.current === null) return
+    if (value === undefined && value === false) {
       ref.current.removeAttribute('disabled')
     } else {
       ref.current.setAttribute('disabled', '')
@@ -58,9 +58,9 @@ export const TextArea = ({
   })
 
   useSetProp(maxLength, (value) => {
-    if (ref.current == null) return
+    if (ref.current === null) return
 
-    if (value != null) {
+    if (value !== undefined) {
       ref.current.maxLength = value
     } else {
       ref.current.removeAttribute('maxlength')
@@ -68,8 +68,8 @@ export const TextArea = ({
   })
 
   useSetProp(rows, (value) => {
-    if (ref.current == null) return
-    if (value != null) {
+    if (ref.current === null) return
+    if (value !== undefined) {
       ref.current.rows = value
     } else {
       ref.current.removeAttribute('rows')
