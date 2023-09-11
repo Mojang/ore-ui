@@ -14,7 +14,6 @@ export function useFacetRef<T>(facet: Facet<T>, defaultValue?: T): MutableRefObj
   useFacetEffect(
     (value) => {
       ref.current = value
-      return undefined
     },
     [],
     [facet],

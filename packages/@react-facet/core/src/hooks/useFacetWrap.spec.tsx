@@ -14,7 +14,6 @@ it('wraps a value, updating the facet when it changes', () => {
     useFacetEffect(
       (value) => {
         mock(value)
-        return undefined
       },
       [],
       [facetifiedValue],
@@ -39,7 +38,6 @@ it('wraps a value, with the default equality check (preventing unnecessary updat
     useFacetEffect(
       (value) => {
         mock(value)
-        return undefined
       },
       [],
       [facetifiedValue],
@@ -64,7 +62,6 @@ it('forwards a facet', () => {
     useFacetEffect(
       (value) => {
         mock(value)
-        return undefined
       },
       [],
       [facetifiedValue],
@@ -125,7 +122,6 @@ const testEffectUpdatesOnStaticValue = (value: FacetProp<Value>, expectUpdates: 
     useFacetEffect(
       () => {
         mock()
-        return undefined
       },
       [],
       [undefinedFacet],

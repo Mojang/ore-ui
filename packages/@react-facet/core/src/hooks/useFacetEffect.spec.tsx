@@ -42,7 +42,6 @@ it('triggers the effect when a dependency changes', () => {
     useFacetEffect(
       (value) => {
         callback(`${value} ${dependency}`)
-        return undefined
       },
       [dependency],
       [demoFacet],

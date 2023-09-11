@@ -50,7 +50,6 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
   useFacetEffect(
     (health) => {
       randomWork(health)
-      return undefined
     },
     [],
     [health],
@@ -59,7 +58,6 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
   useFacetEffect(
     (name) => {
       randomWork(name)
-      return undefined
     },
     [],
     [name],
@@ -68,7 +66,6 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
   useFacetEffect(
     (name) => {
       randomWork(name)
-      return undefined
     },
     [],
     [name],
@@ -77,7 +74,6 @@ const ListItem = ({ item }: { item: Facet<Data> }) => {
   useFacetEffect(
     (name) => {
       randomWork(name)
-      return undefined
     },
     [],
     [name],
