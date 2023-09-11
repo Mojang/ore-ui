@@ -4,7 +4,7 @@ import { cancelScheduledTask, scheduleTask } from '../scheduler'
 
 export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayoutEffect) => {
   return function <Y extends Facet<unknown>[], T extends [...Y]>(
-    effect: (...args: ExtractFacetValues<T>) => undefined | Cleanup,
+    effect: (...args: ExtractFacetValues<T>) => void | Cleanup,
     dependencies: unknown[],
     facets: T,
   ) {
@@ -12,7 +12,7 @@ export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayou
     const effectMemoized = useCallback(effect as (...args: unknown[]) => ReturnType<typeof effect>, dependencies)
 
     useHook(() => {
-      let cleanup: undefined | Cleanup
+      let cleanup: void | Cleanup
 
       if (facets.length === 1) {
         const unsubscribe = facets[0].observe((value) => {
