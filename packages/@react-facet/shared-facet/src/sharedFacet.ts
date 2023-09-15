@@ -12,8 +12,8 @@ export function sharedFacet<T>(name: string, initialValue: Option<T> = NO_VALUE)
   const definition = memoize((sharedFacetDriver: SharedFacetDriver) =>
     createFacet<T>({
       initialValue,
-      startSubscription: (update) => {
-        return sharedFacetDriver(name, update)
+      startSubscription: (update, onError) => {
+        return sharedFacetDriver(name, update, onError)
       },
     }),
   ) as unknown as SharedFacet<T>

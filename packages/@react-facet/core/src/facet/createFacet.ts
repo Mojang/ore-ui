@@ -16,6 +16,7 @@ export function createFacet<V>({
   equalityCheck = defaultEqualityCheck,
 }: FacetOptions<V>): WritableFacet<V> {
   const listeners: Set<Listener<V>> = new Set()
+  const errorListeners: Set<Listener<string>> = new Set()
   let currentValue = initialValue
   let cleanupSubscription: Cleanup | undefined
 
@@ -60,6 +61,12 @@ export function createFacet<V>({
     currentValue = NO_VALUE
   }
 
+  const handleError = (error: string) => {
+    for (const listener of errorListeners) {
+      listener(error)
+    }
+  }
+
   return {
     set: update,
 
@@ -83,7 +90,7 @@ export function createFacet<V>({
 
       // This is the first subscription, so we start subscribing to dependencies
       if (listeners.size === 1 && startSubscription) {
-        cleanupSubscription = startSubscription(update)
+        cleanupSubscription = startSubscription(update, handleError)
       }
 
       return () => {
@@ -94,6 +101,14 @@ export function createFacet<V>({
           currentValue = initialValue
           cleanupSubscription()
         }
+      }
+    },
+
+    onError: (listener) => {
+      errorListeners.add(listener)
+
+      return () => {
+        errorListeners.delete(listener)
       }
     },
   }

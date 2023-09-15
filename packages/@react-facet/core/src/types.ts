@@ -38,6 +38,7 @@ export type Observe<T> = (listener: Listener<T>) => Unsubscribe
 export interface Facet<T> {
   get: () => Option<T>
   observe: Observe<T>
+  onError: Observe<string>
 }
 
 export interface WritableFacet<T> extends Facet<T> {
@@ -53,7 +54,7 @@ export type Setter<V> = (callbackSetter: V | ((previousValue: Option<V>) => Opti
 
 export type Cleanup = Unsubscribe
 
-export type StartSubscription<V> = (update: Update<V>) => Cleanup
+export type StartSubscription<V> = (update: Update<V>, onError?: Update<string>) => Cleanup
 
 export const isFacet = <T>(value: Value | Facet<T>): value is Facet<T> => {
   return (

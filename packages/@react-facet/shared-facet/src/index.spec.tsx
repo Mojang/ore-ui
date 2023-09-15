@@ -1,10 +1,11 @@
-import React, { useRef } from 'react'
+import React, { useRef, Component } from 'react'
 import { useFacetUnwrap, useFacetEffect, NO_VALUE } from '@react-facet/core'
 import { render } from '@react-facet/dom-fiber-testing-library'
 import { sharedDynamicSelector } from './sharedDynamicSelector'
 import { sharedFacet } from './sharedFacet'
 import { sharedSelector } from './sharedSelector'
 import { SharedFacetDriverProvider, useSharedFacet } from './context'
+import { SharedFacetDriver } from './types'
 
 const facetDestructor = jest.fn()
 
@@ -83,6 +84,60 @@ describe('rendering from facet', () => {
 
     expect(sharedFacetDriver).toBeCalledTimes(1)
     expect(getAllByText('testing 123')).toHaveLength(4)
+  })
+
+  describe('the facet is not available or throws an error', () => {
+    interface ErrorCatcherProps {
+      children: React.ReactNode
+      onError(error: Error): void
+    }
+
+    class ErrorCatcher extends Component<ErrorCatcherProps, { hasError: boolean }> {
+      constructor(props) {
+        super(props)
+        this.state = { hasError: false }
+      }
+
+      componentDidCatch(error: Error) {
+        this.props.onError(error)
+      }
+
+      static getDerivedStateFromError() {
+        return { hasError: true }
+      }
+
+      render() {
+        if (this.state.hasError) {
+          console.log('HAS ERROR')
+          // You can render any custom fallback UI
+          return 'error'
+        }
+
+        return this.props.children
+      }
+    }
+
+    it('throws an error that can be caught by an ErrorBoundary', () => {
+      const failingSharedFacetDriver: SharedFacetDriver = (name, onChange, onError) => {
+        onError?.('facet not available') // TODO find the right type for the error code
+        return () => {}
+      }
+
+      const handleError = jest.fn()
+
+      const app = (
+        <SharedFacetDriverProvider value={failingSharedFacetDriver}>
+          <ErrorCatcher onError={handleError}>
+            <RenderingFacet />
+          </ErrorCatcher>
+        </SharedFacetDriverProvider>
+      )
+
+      const { container } = render(app)
+
+      expect(container).toContainHTML('error')
+      expect(handleError).toHaveBeenCalled()
+    })
   })
 })
 
