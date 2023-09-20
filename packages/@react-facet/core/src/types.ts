@@ -11,7 +11,7 @@ export interface EqualityCheck<T> {
  * Currently functions are not supported
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Value = string | number | boolean | undefined | null | [] | Record<string, any>
+export type Value = string | number | boolean | undefined | null | [] | Record<string, any> | bigint
 
 export type ExtractFacetValues<T extends ReadonlyArray<Facet<unknown>>> = {
   [K in keyof T]: T[K] extends Facet<infer V> ? V : never
