@@ -3,7 +3,7 @@ import { Facet, Unsubscribe, Cleanup, NO_VALUE, ExtractFacetValues } from '../ty
 import { cancelScheduledTask, scheduleTask } from '../scheduler'
 
 export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayoutEffect) => {
-  return function <Y extends Facet<unknown>[], T extends [...Y]>(
+  return function <Y extends[Facet<unknown>, ...Facet<unknown>[]], T extends [...Y]>(
     effect: (...args: ExtractFacetValues<T>) => void | Cleanup,
     dependencies: unknown[],
     facets: T,
