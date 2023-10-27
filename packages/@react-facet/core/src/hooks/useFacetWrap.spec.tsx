@@ -104,7 +104,7 @@ describe('regressions', () => {
 
     const TestingComponent = () => {
       const handlerFacet = useFacetWrap(mock)
-      useFacetEffect(() => {}, [], [handlerFacet])
+      useFacetEffect(() => undefined, [], [handlerFacet])
       return null
     }
 

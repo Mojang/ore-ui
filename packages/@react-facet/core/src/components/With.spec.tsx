@@ -1,9 +1,9 @@
 import React from 'react'
-import { render } from '@react-facet/dom-fiber-testing-library'
+import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { With } from '.'
 import { createFacet } from '../facet'
 import { Facet, NO_VALUE } from '../types'
-import { useFacetMap } from '../hooks'
+import { useFacetEffect, useFacetMap } from '../hooks'
 
 it('renders when not null, passing down the information', () => {
   const userFacet = createFacet({ initialValue: { user: 'Zelda' } })
@@ -64,4 +64,35 @@ it('does not render facet has no value', () => {
   render(scenario)
 
   expect(rendered).not.toHaveBeenCalled()
+})
+
+it('correctly handles unmounting', () => {
+  const mockFacet = createFacet<string | null>({ initialValue: 'abc' })
+
+  const Content = ({ data }: { data: Facet<string> }) => {
+    useFacetEffect(
+      (data) => {
+        if (data === null || data === undefined) {
+          throw new Error('data should not be null')
+        }
+      },
+      [],
+      [data],
+    )
+
+    return <>mounted</>
+  }
+
+  const Example = () => {
+    return <With data={mockFacet}>{(mock) => <Content data={mock} />}</With>
+  }
+  const scenario = <Example />
+
+  const result = render(scenario)
+
+  expect(result.container).toHaveTextContent('mounted')
+
+  act(() => mockFacet.set(null))
+
+  expect(result.container).not.toHaveTextContent('mounted')
 })

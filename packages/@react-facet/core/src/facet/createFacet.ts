@@ -22,7 +22,7 @@ export function createFacet<V>({
   const checker = equalityCheck?.()
 
   const update = (newValue: V) => {
-    if (equalityCheck != null) {
+    if (equalityCheck !== undefined) {
       // we optimize for the most common scenario of using the defaultEqualityCheck (by inline its implementation)
       if (equalityCheck === defaultEqualityCheck) {
         const typeofValue = typeof newValue
@@ -37,7 +37,7 @@ export function createFacet<V>({
           return
         }
       } else {
-        if (checker != null && checker(newValue)) {
+        if (checker !== undefined && checker(newValue)) {
           return
         }
       }

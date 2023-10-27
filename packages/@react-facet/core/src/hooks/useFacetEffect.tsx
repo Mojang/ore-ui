@@ -16,7 +16,7 @@ export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayou
 
       if (facets.length === 1) {
         const unsubscribe = facets[0].observe((value) => {
-          if (cleanup != null) {
+          if (cleanup !== undefined) {
             cleanup()
           }
 
@@ -25,7 +25,7 @@ export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayou
 
         return () => {
           unsubscribe()
-          if (cleanup != null) {
+          if (cleanup !== undefined) {
             cleanup()
           }
         }
@@ -36,10 +36,10 @@ export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayou
       const values: unknown[] = facets.map(() => NO_VALUE)
 
       const task = () => {
-        hasAllDependencies = hasAllDependencies || values.every((value) => value != NO_VALUE)
+        hasAllDependencies = hasAllDependencies || values.every((value) => value !== NO_VALUE)
 
         if (hasAllDependencies) {
-          if (cleanup != null) {
+          if (cleanup !== undefined) {
             cleanup()
           }
 
@@ -61,7 +61,7 @@ export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayou
       return () => {
         cancelScheduledTask(task)
         unsubscribes.forEach((unsubscribe) => unsubscribe())
-        if (cleanup != null) {
+        if (cleanup !== undefined) {
           cleanup()
         }
       }

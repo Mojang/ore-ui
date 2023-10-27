@@ -9,7 +9,7 @@ export const setupStyleUpdate = (
   for (const key in styleProp) {
     const value = styleProp[key]
 
-    if (value != null) {
+    if (value !== undefined) {
       if (isFacet(value)) {
         styleUnsubscribers.set(
           key,
@@ -28,20 +28,20 @@ export const setupClassUpdate = (className: FacetProp<string | undefined>, eleme
   const htmlElement = element as HTMLElement
   if (isFacet(className)) {
     return className.observe((className) => {
-      htmlElement.className = className != null ? className : ''
+      htmlElement.className = className !== undefined ? className : ''
     })
   } else {
-    htmlElement.className = className != null ? className : ''
+    htmlElement.className = className !== undefined ? className : ''
   }
 }
 
 export const setupIdUpdate = (id: FacetProp<string | undefined>, element: HTMLElement | SVGElement) => {
   if (isFacet(id)) {
     return id.observe((id) => {
-      element.id = id != null ? id : ''
+      element.id = id !== undefined ? id : ''
     })
   } else {
-    element.id = id != null ? id : ''
+    element.id = id !== undefined ? id : ''
   }
 }
 
@@ -49,11 +49,11 @@ export const setupMaxLengthUpdate = (maxLength: FacetProp<number | undefined>, e
   if (isFacet(maxLength)) {
     return maxLength.observe((maxLength) => {
       const textElement = element as HTMLTextAreaElement
-      textElement.maxLength = maxLength != null ? maxLength : Number.MAX_SAFE_INTEGER
+      textElement.maxLength = maxLength !== undefined ? maxLength : Number.MAX_SAFE_INTEGER
     })
   } else {
     const textElement = element as HTMLTextAreaElement
-    textElement.maxLength = maxLength != null ? maxLength : Number.MAX_SAFE_INTEGER
+    textElement.maxLength = maxLength !== undefined ? maxLength : Number.MAX_SAFE_INTEGER
   }
 }
 
@@ -61,11 +61,11 @@ export const setupRowsUpdate = (rows: FacetProp<number | undefined>, element: HT
   if (isFacet(rows)) {
     return rows.observe((rows) => {
       const textElement = element as HTMLTextAreaElement
-      textElement.rows = rows != null ? rows : Number.MAX_SAFE_INTEGER
+      textElement.rows = rows !== undefined ? rows : Number.MAX_SAFE_INTEGER
     })
   } else {
     const textElement = element as HTMLTextAreaElement
-    textElement.rows = rows != null ? rows : Number.MAX_SAFE_INTEGER
+    textElement.rows = rows !== undefined ? rows : Number.MAX_SAFE_INTEGER
   }
 }
 
@@ -82,7 +82,7 @@ const updateValue = (element: HTMLElement | SVGElement, value: string | undefine
   // Only accept numerical characters if the input type is number
   if (inputElement.type === 'number' && isNaN(Number(value))) return
 
-  if (value != null) {
+  if (value !== undefined) {
     inputElement.value = value
     inputElement.setAttribute('value', value)
   } else {
@@ -103,11 +103,11 @@ export const setupSrcUpdate = (src: FacetProp<string | undefined>, element: HTML
   if (isFacet(src)) {
     return src.observe((src) => {
       const textElement = element as HTMLImageElement
-      textElement.src = src != null ? src : ''
+      textElement.src = src !== undefined ? src : ''
     })
   } else {
     const textElement = element as HTMLImageElement
-    textElement.src = src != null ? src : ''
+    textElement.src = src !== undefined ? src : ''
   }
 }
 
@@ -115,11 +115,11 @@ export const setupTextUpdate = (text: FacetProp<string | number | undefined>, el
   if (isFacet(text)) {
     return text.observe((text) => {
       const textElement = element as Text
-      textElement.nodeValue = (text != null ? text : '') as string
+      textElement.nodeValue = (text !== undefined ? text : '') as string
     })
   } else {
     const textElement = element as Text
-    textElement.nodeValue = (text != null ? text : '') as string
+    textElement.nodeValue = (text !== undefined ? text : '') as string
   }
 }
 
@@ -130,14 +130,14 @@ export const setupTextUpdate = (text: FacetProp<string | number | undefined>, el
 export const setupViewBoxUpdate = (viewBox: FacetProp<string | undefined>, element: HTMLElement | SVGElement) => {
   if (isFacet(viewBox)) {
     return viewBox.observe((value) => {
-      if (value != null) {
+      if (value !== undefined) {
         element.setAttributeNS(null, 'viewBox', value)
       } else {
         element.removeAttributeNS(null, 'viewBox')
       }
     })
   } else {
-    if (viewBox != null) {
+    if (viewBox !== undefined) {
       element.setAttributeNS(null, 'viewBox', viewBox)
     } else {
       element.removeAttributeNS(null, 'viewBox')
@@ -156,7 +156,7 @@ export const setupAttributeUpdate = (
         element.setAttribute(attribute, '')
       } else if (value === false) {
         element.removeAttribute(attribute)
-      } else if (value != null) {
+      } else if (value !== undefined) {
         element.setAttribute(attribute, value)
       } else {
         element.removeAttribute(attribute)
@@ -167,7 +167,7 @@ export const setupAttributeUpdate = (
       element.setAttribute(attribute, '')
     } else if (value === false) {
       element.removeAttribute(attribute)
-    } else if (value != null) {
+    } else if (value !== undefined) {
       element.setAttribute(attribute, value)
     } else {
       element.removeAttribute(attribute)

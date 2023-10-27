@@ -25,7 +25,7 @@ export function useFacetWrap<T extends Value>(
     [is],
   )
 
-  if (inlineFacet == null) {
+  if (inlineFacet === undefined) {
     return prop as Facet<T>
   } else {
     inlineFacet.set(prop as T)

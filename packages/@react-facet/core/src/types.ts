@@ -11,7 +11,7 @@ export interface EqualityCheck<T> {
  * Currently functions are not supported
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Value = string | number | boolean | undefined | null | [] | Record<string, any>
+export type Value = string | number | boolean | undefined | null | [] | Record<string, any> | bigint
 
 export type ExtractFacetValues<T extends ReadonlyArray<Facet<unknown>>> = {
   [K in keyof T]: T[K] extends Facet<infer V> ? V : never
@@ -56,7 +56,12 @@ export type Cleanup = Unsubscribe
 export type StartSubscription<V> = (update: Update<V>) => Cleanup
 
 export const isFacet = <T>(value: Value | Facet<T>): value is Facet<T> => {
-  return value != null && (value as Facet<T>).observe != null && (value as Facet<T>).get != null
+  return (
+    value !== null &&
+    value !== undefined &&
+    (value as Facet<T>).observe !== undefined &&
+    (value as Facet<T>).get !== undefined
+  )
 }
 
 export type FacetProp<T extends Value> = Facet<T> | ExcludeFacetFactory<T>

@@ -19,10 +19,10 @@ export function useFacetSpring(targetFacet: Facet<number>, options?: UseFacetSpr
   useFacetEffect(
     (target) => {
       let frameID: number
-      let previousTimestamp: number
+      let previousTimestamp: number | undefined = undefined
 
       const tick = (now: number) => {
-        const secondsPerFrame = previousTimestamp == null ? 1 / 60 : (now - previousTimestamp) / 1000
+        const secondsPerFrame = previousTimestamp === undefined ? 1 / 60 : (now - previousTimestamp) / 1000
         previousTimestamp = now
 
         setState((currentState) => {

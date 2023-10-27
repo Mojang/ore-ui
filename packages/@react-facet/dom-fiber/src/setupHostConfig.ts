@@ -135,21 +135,21 @@ export const setupHostConfig = (): HostConfig<
     const typeHTML = fastTypeMapHTML[externalType as TypeHTML] ?? externalType
     const typeSVG = fastTypeMapSVG[externalType as TypeSVG]
     const element =
-      typeSVG != null
+      typeSVG !== undefined
         ? document.createElementNS('http://www.w3.org/2000/svg', typeSVG)
         : document.createElement(typeHTML)
 
     let style: CSSStyleDeclaration | undefined
     let styleUnsubscribers: Map<string | number, Unsubscribe> | undefined
 
-    if (newProps.style != null) {
+    if (newProps.style !== undefined) {
       style = element.style
       styleUnsubscribers = new Map()
 
       setupStyleUpdate(newProps.style, style as unknown as Record<string, unknown>, styleUnsubscribers)
     }
 
-    if (newProps.dangerouslySetInnerHTML != null) {
+    if (newProps.dangerouslySetInnerHTML !== undefined) {
       element.innerHTML = newProps.dangerouslySetInnerHTML.__html
     }
 
@@ -215,100 +215,114 @@ export const setupHostConfig = (): HostConfig<
       style,
       children: new Set(),
 
-      className: newProps.className != null ? setupClassUpdate(newProps.className, element) : undefined,
-      id: newProps.id != null ? setupIdUpdate(newProps.id, element) : undefined,
-      autoPlay: newProps.autoPlay != null ? setupAttributeUpdate('autoplay', newProps.autoPlay, element) : undefined,
-      loop: newProps.loop != null ? setupAttributeUpdate('loop', newProps.loop, element) : undefined,
-      href: newProps.href != null ? setupAttributeUpdate('href', newProps.href, element) : undefined,
-      target: newProps.target != null ? setupAttributeUpdate('target', newProps.target, element) : undefined,
-      disabled: newProps.disabled != null ? setupAttributeUpdate('disabled', newProps.disabled, element) : undefined,
-      maxLength: newProps.maxLength != null ? setupMaxLengthUpdate(newProps.maxLength, element) : undefined,
-      rows: newProps.rows != null ? setupRowsUpdate(newProps.rows, element) : undefined,
-      type: newProps.type != null ? setupAttributeUpdate('type', newProps.type, element) : undefined,
-      value: newProps.value != null ? setupValueUpdate(newProps.value, element) : undefined,
-      src: newProps.src != null ? setupSrcUpdate(newProps.src, element) : undefined,
+      className: newProps.className !== undefined ? setupClassUpdate(newProps.className, element) : undefined,
+      id: newProps.id !== undefined ? setupIdUpdate(newProps.id, element) : undefined,
+      autoPlay:
+        newProps.autoPlay !== undefined ? setupAttributeUpdate('autoplay', newProps.autoPlay, element) : undefined,
+      loop: newProps.loop !== undefined ? setupAttributeUpdate('loop', newProps.loop, element) : undefined,
+      href: newProps.href !== undefined ? setupAttributeUpdate('href', newProps.href, element) : undefined,
+      target: newProps.target !== undefined ? setupAttributeUpdate('target', newProps.target, element) : undefined,
+      disabled:
+        newProps.disabled !== undefined ? setupAttributeUpdate('disabled', newProps.disabled, element) : undefined,
+      maxLength: newProps.maxLength !== undefined ? setupMaxLengthUpdate(newProps.maxLength, element) : undefined,
+      rows: newProps.rows !== undefined ? setupRowsUpdate(newProps.rows, element) : undefined,
+      type: newProps.type !== undefined ? setupAttributeUpdate('type', newProps.type, element) : undefined,
+      value: newProps.value !== undefined ? setupValueUpdate(newProps.value, element) : undefined,
+      src: newProps.src !== undefined ? setupSrcUpdate(newProps.src, element) : undefined,
 
-      d: newProps.d != null ? setupAttributeUpdate('d', newProps.d, element) : undefined,
-      fill: newProps.fill != null ? setupAttributeUpdate('fill', newProps.fill, element) : undefined,
-      height: newProps.height != null ? setupAttributeUpdate('height', newProps.height, element) : undefined,
-      stroke: newProps.stroke != null ? setupAttributeUpdate('stroke', newProps.stroke, element) : undefined,
-      x: newProps.x != null ? setupAttributeUpdate('x', newProps.x, element) : undefined,
-      width: newProps.width != null ? setupAttributeUpdate('width', newProps.width, element) : undefined,
-      y: newProps.y != null ? setupAttributeUpdate('y', newProps.y, element) : undefined,
+      d: newProps.d !== undefined ? setupAttributeUpdate('d', newProps.d, element) : undefined,
+      fill: newProps.fill !== undefined ? setupAttributeUpdate('fill', newProps.fill, element) : undefined,
+      height: newProps.height !== undefined ? setupAttributeUpdate('height', newProps.height, element) : undefined,
+      stroke: newProps.stroke !== undefined ? setupAttributeUpdate('stroke', newProps.stroke, element) : undefined,
+      x: newProps.x !== undefined ? setupAttributeUpdate('x', newProps.x, element) : undefined,
+      width: newProps.width !== undefined ? setupAttributeUpdate('width', newProps.width, element) : undefined,
+      y: newProps.y !== undefined ? setupAttributeUpdate('y', newProps.y, element) : undefined,
 
-      cx: newProps.cx != null ? setupAttributeUpdate('cx', newProps.cx, element) : undefined,
-      cy: newProps.cy != null ? setupAttributeUpdate('cy', newProps.cy, element) : undefined,
-      r: newProps.r != null ? setupAttributeUpdate('r', newProps.r, element) : undefined,
-      rx: newProps.rx != null ? setupAttributeUpdate('rx', newProps.rx, element) : undefined,
-      ry: newProps.ry != null ? setupAttributeUpdate('ry', newProps.ry, element) : undefined,
+      cx: newProps.cx !== undefined ? setupAttributeUpdate('cx', newProps.cx, element) : undefined,
+      cy: newProps.cy !== undefined ? setupAttributeUpdate('cy', newProps.cy, element) : undefined,
+      r: newProps.r !== undefined ? setupAttributeUpdate('r', newProps.r, element) : undefined,
+      rx: newProps.rx !== undefined ? setupAttributeUpdate('rx', newProps.rx, element) : undefined,
+      ry: newProps.ry !== undefined ? setupAttributeUpdate('ry', newProps.ry, element) : undefined,
 
-      x1: newProps.x1 != null ? setupAttributeUpdate('x1', newProps.x1, element) : undefined,
-      x2: newProps.x2 != null ? setupAttributeUpdate('x2', newProps.x2, element) : undefined,
-      y1: newProps.y1 != null ? setupAttributeUpdate('y1', newProps.y1, element) : undefined,
-      y2: newProps.y2 != null ? setupAttributeUpdate('y2', newProps.y2, element) : undefined,
+      x1: newProps.x1 !== undefined ? setupAttributeUpdate('x1', newProps.x1, element) : undefined,
+      x2: newProps.x2 !== undefined ? setupAttributeUpdate('x2', newProps.x2, element) : undefined,
+      y1: newProps.y1 !== undefined ? setupAttributeUpdate('y1', newProps.y1, element) : undefined,
+      y2: newProps.y2 !== undefined ? setupAttributeUpdate('y2', newProps.y2, element) : undefined,
       strokeWidth:
-        newProps.strokeWidth != null ? setupAttributeUpdate('stroke-width', newProps.strokeWidth, element) : undefined,
-      viewBox: newProps.viewBox != null ? setupViewBoxUpdate(newProps.viewBox, element) : undefined,
+        newProps.strokeWidth !== undefined
+          ? setupAttributeUpdate('stroke-width', newProps.strokeWidth, element)
+          : undefined,
+      viewBox: newProps.viewBox !== undefined ? setupViewBoxUpdate(newProps.viewBox, element) : undefined,
       xLinkHref:
-        newProps.xLinkHref != null ? setupAttributeUpdate('xlink:href', newProps.xLinkHref, element) : undefined,
+        newProps.xLinkHref !== undefined ? setupAttributeUpdate('xlink:href', newProps.xLinkHref, element) : undefined,
       fillOpacity:
-        newProps.fillOpacity != null ? setupAttributeUpdate('fill-opacity', newProps.fillOpacity, element) : undefined,
+        newProps.fillOpacity !== undefined
+          ? setupAttributeUpdate('fill-opacity', newProps.fillOpacity, element)
+          : undefined,
       strokeOpacity:
-        newProps.strokeOpacity != null
+        newProps.strokeOpacity !== undefined
           ? setupAttributeUpdate('stroke-opacity', newProps.strokeOpacity, element)
           : undefined,
       strokeLinecap:
-        newProps.strokeLinecap != null
+        newProps.strokeLinecap !== undefined
           ? setupAttributeUpdate('stroke-linecap', newProps.strokeLinecap, element)
           : undefined,
       strokeLinejoin:
-        newProps.strokeLinejoin != null
+        newProps.strokeLinejoin !== undefined
           ? setupAttributeUpdate('stroke-linejoin', newProps.strokeLinejoin, element)
           : undefined,
-      points: newProps.points != null ? setupAttributeUpdate('points', newProps.points, element) : undefined,
-      offset: newProps.offset != null ? setupAttributeUpdate('offset', newProps.offset, element) : undefined,
+      points: newProps.points !== undefined ? setupAttributeUpdate('points', newProps.points, element) : undefined,
+      offset: newProps.offset !== undefined ? setupAttributeUpdate('offset', newProps.offset, element) : undefined,
       stopColor:
-        newProps.stopColor != null ? setupAttributeUpdate('stop-color', newProps.stopColor, element) : undefined,
+        newProps.stopColor !== undefined ? setupAttributeUpdate('stop-color', newProps.stopColor, element) : undefined,
       stopOpacity:
-        newProps.stopOpacity != null ? setupAttributeUpdate('stop-opacity', newProps.stopOpacity, element) : undefined,
+        newProps.stopOpacity !== undefined
+          ? setupAttributeUpdate('stop-opacity', newProps.stopOpacity, element)
+          : undefined,
       fontFamily:
-        newProps.fontFamily != null ? setupAttributeUpdate('font-family', newProps.fontFamily, element) : undefined,
-      fontSize: newProps.fontSize != null ? setupAttributeUpdate('font-size', newProps.fontSize, element) : undefined,
+        newProps.fontFamily !== undefined
+          ? setupAttributeUpdate('font-family', newProps.fontFamily, element)
+          : undefined,
+      fontSize:
+        newProps.fontSize !== undefined ? setupAttributeUpdate('font-size', newProps.fontSize, element) : undefined,
 
       ['data-droppable']:
-        newProps['data-droppable'] != null
+        newProps['data-droppable'] !== undefined
           ? setupAttributeUpdate('data-droppable', newProps['data-droppable'], element)
           : undefined,
 
       ['data-narrate']:
-        newProps['data-narrate'] != null
+        newProps['data-narrate'] !== undefined
           ? setupAttributeUpdate('data-narrate', newProps['data-narrate'], element)
           : undefined,
 
       ['data-narrate-as']:
-        newProps['data-narrate-as'] != null
+        newProps['data-narrate-as'] !== undefined
           ? setupAttributeUpdate('data-narrate-as', newProps['data-narrate-as'], element)
           : undefined,
 
       ['data-narrate-before']:
-        newProps['data-narrate-before'] != null
+        newProps['data-narrate-before'] !== undefined
           ? setupAttributeUpdate('data-narrate-before', newProps['data-narrate-before'], element)
           : undefined,
 
       ['data-narrate-after']:
-        newProps['data-narrate-after'] != null
+        newProps['data-narrate-after'] !== undefined
           ? setupAttributeUpdate('data-narrate-after', newProps['data-narrate-after'], element)
           : undefined,
 
       ['data-testid']:
-        newProps['data-testid'] != null
+        newProps['data-testid'] !== undefined
           ? setupAttributeUpdate('data-testid', newProps['data-testid'], element)
           : undefined,
 
       ['data-x-ray']:
-        newProps['data-x-ray'] != null
+        newProps['data-x-ray'] !== undefined
           ? setupAttributeUpdate('data-x-ray', newProps['data-x-ray'], element)
           : undefined,
+
+      cohinline:
+        newProps.cohinline !== undefined ? setupAttributeUpdate('cohinline', newProps.cohinline, element) : undefined,
     }
   },
 
@@ -355,12 +369,12 @@ export const setupHostConfig = (): HostConfig<
       const oldStyleProp = oldProps.style
       const newStyleProp = newProps.style
 
-      if (oldStyleProp != null) {
+      if (oldStyleProp !== undefined) {
         for (const key in oldStyleProp) {
           const oldValue = oldStyleProp[key]
           const newValue = newStyleProp?.[key]
 
-          if (oldValue !== newValue || newStyleProp == null) {
+          if (oldValue !== newValue || newStyleProp === undefined) {
             if (isFacet(oldValue)) {
               styleUnsubscribers.get(key)?.()
             }
@@ -368,12 +382,12 @@ export const setupHostConfig = (): HostConfig<
         }
       }
 
-      if (newStyleProp != null) {
+      if (newStyleProp !== undefined) {
         for (const key in newStyleProp) {
           const oldValue = oldStyleProp?.[key]
           const newValue = newStyleProp[key]
 
-          if (oldValue !== newValue || oldStyleProp == null) {
+          if (oldValue !== newValue || oldStyleProp === undefined) {
             if (isFacet(newValue)) {
               styleUnsubscribers.set(
                 key,
@@ -389,8 +403,8 @@ export const setupHostConfig = (): HostConfig<
       }
     }
 
-    if (newProps.dangerouslySetInnerHTML != oldProps.dangerouslySetInnerHTML) {
-      if (newProps.dangerouslySetInnerHTML != null) {
+    if (newProps.dangerouslySetInnerHTML !== oldProps.dangerouslySetInnerHTML) {
+      if (newProps.dangerouslySetInnerHTML !== undefined) {
         element.innerHTML = newProps.dangerouslySetInnerHTML.__html
       } else {
         element.innerHTML = ''
@@ -400,7 +414,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.autoPlay !== oldProps.autoPlay) {
       instance.autoPlay?.()
 
-      if (newProps.autoPlay == null) {
+      if (newProps.autoPlay === undefined) {
         element.removeAttribute('autoplay')
       } else {
         instance.autoPlay = setupAttributeUpdate('autoplay', newProps.autoPlay, element)
@@ -410,7 +424,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.className !== oldProps.className) {
       instance.className?.()
 
-      if (newProps.className == null) {
+      if (newProps.className === undefined) {
         element.className = ''
       } else {
         instance.className = setupClassUpdate(newProps.className, element)
@@ -420,7 +434,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.d !== oldProps.d) {
       instance.d?.()
 
-      if (newProps.d == null) {
+      if (newProps.d === undefined) {
         element.removeAttribute('d')
       } else {
         instance.d = setupAttributeUpdate('d', newProps.d, element)
@@ -430,7 +444,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps['data-droppable'] !== oldProps['data-droppable']) {
       instance['data-droppable']?.()
 
-      if (newProps['data-droppable'] == null) {
+      if (newProps['data-droppable'] === undefined) {
         element.removeAttribute('data-droppable')
       } else {
         instance['data-droppable'] = setupAttributeUpdate('data-droppable', newProps['data-droppable'], element)
@@ -440,7 +454,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps['data-narrate'] !== oldProps['data-narrate']) {
       instance['data-narrate']?.()
 
-      if (newProps['data-narrate'] == null) {
+      if (newProps['data-narrate'] === undefined) {
         element.removeAttribute('data-narrate')
       } else {
         instance['data-narrate'] = setupAttributeUpdate('data-narrate', newProps['data-narrate'], element)
@@ -450,7 +464,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps['data-narrate-as'] !== oldProps['data-narrate-as']) {
       instance['data-narrate-as']?.()
 
-      if (newProps['data-narrate-as'] == null) {
+      if (newProps['data-narrate-as'] === undefined) {
         element.removeAttribute('data-narrate-as')
       } else {
         instance['data-narrate-as'] = setupAttributeUpdate('data-narrate-as', newProps['data-narrate-as'], element)
@@ -460,7 +474,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps['data-narrate-after'] !== oldProps['data-narrate-after']) {
       instance['data-narrate-after']?.()
 
-      if (newProps['data-narrate-after'] == null) {
+      if (newProps['data-narrate-after'] === undefined) {
         element.removeAttribute('data-narrate-after')
       } else {
         instance['data-narrate-after'] = setupAttributeUpdate(
@@ -474,7 +488,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps['data-narrate-before'] !== oldProps['data-narrate-before']) {
       instance['data-narrate-before']?.()
 
-      if (newProps['data-narrate-before'] == null) {
+      if (newProps['data-narrate-before'] === undefined) {
         element.removeAttribute('data-narrate-before')
       } else {
         instance['data-narrate-before'] = setupAttributeUpdate(
@@ -488,7 +502,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps['data-testid'] !== oldProps['data-testid']) {
       instance['data-testid']?.()
 
-      if (newProps['data-testid'] == null) {
+      if (newProps['data-testid'] === undefined) {
         element.removeAttribute('data-testid')
       } else {
         instance['data-testid'] = setupAttributeUpdate('data-testid', newProps['data-testid'], element)
@@ -498,7 +512,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps['data-x-ray'] !== oldProps['data-x-ray']) {
       instance['data-x-ray']?.()
 
-      if (newProps['data-x-ray'] == null) {
+      if (newProps['data-x-ray'] === undefined) {
         element.removeAttribute('data-x-ray')
       } else {
         instance['data-x-ray'] = setupAttributeUpdate('data-x-ray', newProps['data-x-ray'], element)
@@ -508,7 +522,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.fill !== oldProps.fill) {
       instance.fill?.()
 
-      if (newProps.fill == null) {
+      if (newProps.fill === undefined) {
         element.removeAttribute('fill')
       } else {
         instance.fill = setupAttributeUpdate('fill', newProps.fill, element)
@@ -518,7 +532,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.id !== oldProps.id) {
       instance.id?.()
 
-      if (newProps.id == null) {
+      if (newProps.id === undefined) {
         element.id = ''
       } else {
         instance.id = setupIdUpdate(newProps.id, element)
@@ -528,7 +542,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.loop !== oldProps.loop) {
       instance.loop?.()
 
-      if (newProps.loop == null) {
+      if (newProps.loop === undefined) {
         element.removeAttribute('loop')
       } else {
         instance.loop = setupAttributeUpdate('loop', newProps.loop, element)
@@ -538,7 +552,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.href !== oldProps.href) {
       instance.href?.()
 
-      if (newProps.href == null) {
+      if (newProps.href === undefined) {
         element.removeAttribute('href')
       } else {
         instance.href = setupAttributeUpdate('href', newProps.href, element)
@@ -548,7 +562,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.target !== oldProps.target) {
       instance.target?.()
 
-      if (newProps.target == null) {
+      if (newProps.target === undefined) {
         element.removeAttribute('target')
       } else {
         instance.target = setupAttributeUpdate('target', newProps.target, element)
@@ -558,7 +572,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.disabled !== oldProps.disabled) {
       instance.disabled?.()
 
-      if (newProps.disabled == null) {
+      if (newProps.disabled === undefined) {
         element.removeAttribute('disabled')
       } else {
         instance.disabled = setupAttributeUpdate('disabled', newProps.disabled, element)
@@ -568,7 +582,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.height !== oldProps.height) {
       instance.height?.()
 
-      if (newProps.height == null) {
+      if (newProps.height === undefined) {
         element.removeAttribute('height')
       } else {
         instance.height = setupAttributeUpdate('height', newProps.height, element)
@@ -578,7 +592,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.maxLength !== oldProps.maxLength) {
       instance.maxLength?.()
 
-      if (newProps.maxLength == null) {
+      if (newProps.maxLength === undefined) {
         const textElement = element as HTMLTextAreaElement
         textElement.removeAttribute('maxlength')
       } else {
@@ -589,7 +603,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.rows !== oldProps.rows) {
       instance.rows?.()
 
-      if (newProps.rows == null) {
+      if (newProps.rows === undefined) {
         const textElement = element as HTMLTextAreaElement
         textElement.removeAttribute('rows')
       } else {
@@ -600,7 +614,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.stroke !== oldProps.stroke) {
       instance.stroke?.()
 
-      if (newProps.stroke == null) {
+      if (newProps.stroke === undefined) {
         element.removeAttribute('stroke')
       } else {
         instance.stroke = setupAttributeUpdate('stroke', newProps.stroke, element)
@@ -610,7 +624,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.type !== oldProps.type) {
       instance.type?.()
 
-      if (newProps.type == null) {
+      if (newProps.type === undefined) {
         const textElement = element as HTMLTextAreaElement
         textElement.removeAttribute('type')
       } else {
@@ -621,7 +635,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.value !== oldProps.value) {
       instance.value?.()
 
-      if (newProps.value == null) {
+      if (newProps.value === undefined) {
         const textElement = element as HTMLTextAreaElement
         textElement.removeAttribute('value')
       } else {
@@ -632,7 +646,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.x !== oldProps.x) {
       instance.x?.()
 
-      if (newProps.x == null) {
+      if (newProps.x === undefined) {
         element.removeAttribute('x')
       } else {
         instance.x = setupAttributeUpdate('x', newProps.x, element)
@@ -642,7 +656,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.width !== oldProps.width) {
       instance.width?.()
 
-      if (newProps.width == null) {
+      if (newProps.width === undefined) {
         element.removeAttribute('width')
       } else {
         instance.width = setupAttributeUpdate('width', newProps.width, element)
@@ -652,7 +666,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.y !== oldProps.y) {
       instance.y?.()
 
-      if (newProps.y == null) {
+      if (newProps.y === undefined) {
         element.removeAttribute('y')
       } else {
         instance.y = setupAttributeUpdate('y', newProps.y, element)
@@ -662,7 +676,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.cx !== oldProps.cx) {
       instance.cx?.()
 
-      if (newProps.cx == null) {
+      if (newProps.cx === undefined) {
         element.removeAttribute('cx')
       } else {
         instance.cx = setupAttributeUpdate('cx', newProps.cx, element)
@@ -672,7 +686,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.r !== oldProps.r) {
       instance.r?.()
 
-      if (newProps.r == null) {
+      if (newProps.r === undefined) {
         element.removeAttribute('r')
       } else {
         instance.r = setupAttributeUpdate('r', newProps.r, element)
@@ -682,7 +696,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.cy !== oldProps.cy) {
       instance.cy?.()
 
-      if (newProps.cy == null) {
+      if (newProps.cy === undefined) {
         element.removeAttribute('cy')
       } else {
         instance.cy = setupAttributeUpdate('cy', newProps.cy, element)
@@ -692,7 +706,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.rx !== oldProps.rx) {
       instance.rx?.()
 
-      if (newProps.rx == null) {
+      if (newProps.rx === undefined) {
         element.removeAttribute('rx')
       } else {
         instance.rx = setupAttributeUpdate('rx', newProps.rx, element)
@@ -702,7 +716,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.ry !== oldProps.ry) {
       instance.ry?.()
 
-      if (newProps.ry == null) {
+      if (newProps.ry === undefined) {
         element.removeAttribute('ry')
       } else {
         instance.ry = setupAttributeUpdate('ry', newProps.ry, element)
@@ -712,7 +726,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.x1 !== oldProps.x1) {
       instance.x1?.()
 
-      if (newProps.x1 == null) {
+      if (newProps.x1 === undefined) {
         element.removeAttribute('x1')
       } else {
         instance.x1 = setupAttributeUpdate('x1', newProps.x1, element)
@@ -722,7 +736,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.x2 !== oldProps.x2) {
       instance.x2?.()
 
-      if (newProps.x2 == null) {
+      if (newProps.x2 === undefined) {
         element.removeAttribute('x2')
       } else {
         instance.x2 = setupAttributeUpdate('x2', newProps.x2, element)
@@ -732,7 +746,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.y1 !== oldProps.y1) {
       instance.y1?.()
 
-      if (newProps.y1 == null) {
+      if (newProps.y1 === undefined) {
         element.removeAttribute('y1')
       } else {
         instance.y1 = setupAttributeUpdate('y1', newProps.y1, element)
@@ -742,7 +756,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.y2 !== oldProps.y2) {
       instance.y2?.()
 
-      if (newProps.y2 == null) {
+      if (newProps.y2 === undefined) {
         element.removeAttribute('y2')
       } else {
         instance.y2 = setupAttributeUpdate('y2', newProps.y2, element)
@@ -752,7 +766,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.strokeWidth !== oldProps.strokeWidth) {
       instance.strokeWidth?.()
 
-      if (newProps.strokeWidth == null) {
+      if (newProps.strokeWidth === undefined) {
         element.removeAttribute('strokeWidth')
       } else {
         instance.strokeWidth = setupAttributeUpdate('stroke-width', newProps.strokeWidth, element)
@@ -762,7 +776,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.viewBox !== oldProps.viewBox) {
       instance.viewBox?.()
 
-      if (newProps.viewBox == null) {
+      if (newProps.viewBox === undefined) {
         element.removeAttribute('viewBox')
       } else {
         instance.viewBox = setupViewBoxUpdate(newProps.viewBox, element)
@@ -772,7 +786,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.xLinkHref !== oldProps.xLinkHref) {
       instance.xLinkHref?.()
 
-      if (newProps.xLinkHref == null) {
+      if (newProps.xLinkHref === undefined) {
         element.removeAttribute('xlink:href')
       } else {
         instance.xLinkHref = setupAttributeUpdate('xlink:href', newProps.xLinkHref, element)
@@ -782,7 +796,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.fillOpacity !== oldProps.fillOpacity) {
       instance.fillOpacity?.()
 
-      if (newProps.fillOpacity == null) {
+      if (newProps.fillOpacity === undefined) {
         element.removeAttribute('fill-opacity')
       } else {
         instance.fillOpacity = setupAttributeUpdate('fill-opacity', newProps.fillOpacity, element)
@@ -792,7 +806,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.strokeOpacity !== oldProps.strokeOpacity) {
       instance.strokeOpacity?.()
 
-      if (newProps.strokeOpacity == null) {
+      if (newProps.strokeOpacity === undefined) {
         element.removeAttribute('stroke-opacity')
       } else {
         instance.strokeOpacity = setupAttributeUpdate('stroke-opacity', newProps.strokeOpacity, element)
@@ -802,7 +816,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.strokeLinecap !== oldProps.strokeLinecap) {
       instance.strokeLinecap?.()
 
-      if (newProps.strokeLinecap == null) {
+      if (newProps.strokeLinecap === undefined) {
         element.removeAttribute('stroke-linecap')
       } else {
         instance.strokeLinecap = setupAttributeUpdate('stroke-linecap', newProps.strokeLinecap, element)
@@ -812,7 +826,7 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.strokeLinejoin !== oldProps.strokeLinejoin) {
       instance.strokeLinejoin?.()
 
-      if (newProps.strokeLinejoin == null) {
+      if (newProps.strokeLinejoin === undefined) {
         element.removeAttribute('stroke-linejoin')
       } else {
         instance.strokeLinejoin = setupAttributeUpdate('stroke-linejoin', newProps.strokeLinejoin, element)
@@ -821,7 +835,7 @@ export const setupHostConfig = (): HostConfig<
 
     if (newProps.points !== oldProps.points) {
       instance.points?.()
-      if (newProps.points == null) {
+      if (newProps.points === undefined) {
         element.removeAttribute('points')
       } else {
         instance.points = setupAttributeUpdate('points', newProps.points, element)
@@ -830,7 +844,7 @@ export const setupHostConfig = (): HostConfig<
 
     if (newProps.offset !== oldProps.offset) {
       instance.offset?.()
-      if (newProps.offset == null) {
+      if (newProps.offset === undefined) {
         element.removeAttribute('offset')
       } else {
         instance.offset = setupAttributeUpdate('offset', newProps.offset, element)
@@ -839,7 +853,7 @@ export const setupHostConfig = (): HostConfig<
 
     if (newProps.stopColor !== oldProps.stopColor) {
       instance.stopColor?.()
-      if (newProps.stopColor == null) {
+      if (newProps.stopColor === undefined) {
         element.removeAttribute('stop-color')
       } else {
         instance.stopColor = setupAttributeUpdate('stop-color', newProps.stopColor, element)
@@ -848,7 +862,7 @@ export const setupHostConfig = (): HostConfig<
 
     if (newProps.stopOpacity !== oldProps.stopOpacity) {
       instance.stopOpacity?.()
-      if (newProps.stopOpacity == null) {
+      if (newProps.stopOpacity === undefined) {
         element.removeAttribute('stop-opacity')
       } else {
         instance.stopOpacity = setupAttributeUpdate('stop-opacity', newProps.stopOpacity, element)
@@ -857,7 +871,7 @@ export const setupHostConfig = (): HostConfig<
 
     if (newProps.fontFamily !== oldProps.fontFamily) {
       instance.fontFamily?.()
-      if (newProps.fontFamily == null) {
+      if (newProps.fontFamily === undefined) {
         element.removeAttribute('font-family')
       } else {
         instance.fontFamily = setupAttributeUpdate('font-family', newProps.fontFamily, element)
@@ -866,7 +880,7 @@ export const setupHostConfig = (): HostConfig<
 
     if (newProps.fontSize !== oldProps.fontSize) {
       instance.fontSize?.()
-      if (newProps.fontSize == null) {
+      if (newProps.fontSize === undefined) {
         element.removeAttribute('font-size')
       } else {
         instance.fontSize = setupAttributeUpdate('font-size', newProps.fontSize, element)
@@ -876,11 +890,21 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.src !== oldProps.src) {
       instance.src?.()
 
-      if (newProps.src == null) {
+      if (newProps.src === undefined) {
         const textElement = element as HTMLTextAreaElement
         textElement.removeAttribute('src')
       } else {
         instance.src = setupSrcUpdate(newProps.src, element)
+      }
+    }
+
+    if (newProps.cohinline !== oldProps.cohinline) {
+      instance.cohinline?.()
+
+      if (newProps.cohinline === undefined) {
+        element.removeAttribute('cohinline')
+      } else {
+        instance.cohinline = setupAttributeUpdate('cohinline', newProps.cohinline, element)
       }
     }
 

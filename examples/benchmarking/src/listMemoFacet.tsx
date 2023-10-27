@@ -18,7 +18,7 @@ export const Performance = () => {
 
     const tick = () => {
       setDataFacet((data) => {
-        if (data == NO_VALUE) return []
+        if (data === NO_VALUE) return []
 
         data[0].health = data[0].health === 10 ? 5 : 10
         return data

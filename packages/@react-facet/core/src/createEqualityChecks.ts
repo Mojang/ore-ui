@@ -10,8 +10,8 @@ export const createNullableEqualityCheck = <T>(comparator: EqualityCheck<T>) => 
   let previous: T | null | undefined | NoValue = NO_VALUE
 
   return (value: T | null | undefined) => {
-    if (value == null || previous == null) {
-      if (value != previous) {
+    if (value === undefined || value === null || previous === undefined || previous === null) {
+      if (value !== previous) {
         previous = value
         return false
       } else {
@@ -90,7 +90,7 @@ export const createUniformArrayEqualityCheck =
 
       let isEquals = true
       for (let i = 0; i < longestLength; i++) {
-        if (previous[i] == null) {
+        if (previous[i] === undefined) {
           previous[i] = comparator()
         }
         if (!previous[i](current[i])) {
@@ -158,7 +158,7 @@ export const createOptionalValueEqualityCheck =
     let initializedComparator = comparator()
 
     return (current: T | undefined | null) => {
-      if (current == null) {
+      if (current === undefined || current === null) {
         if (previousWasNullish) {
           return true
         }
