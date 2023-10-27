@@ -91,6 +91,7 @@ describe('regression testing preventing accidental removal of APIs', () => {
     expect(facet.useFacetMemo).toBeDefined()
     expect(facet.useFacetPropSetter).toBeDefined()
     expect(facet.useFacetReducer).toBeDefined()
+    expect(facet.useFacetRef).toBeDefined()
     expect(facet.useFacetState).toBeDefined()
     expect(facet.useFacetUnwrap).toBeDefined()
     expect(facet.useFacetWrap).toBeDefined()
