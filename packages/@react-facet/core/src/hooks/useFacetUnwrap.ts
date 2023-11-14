@@ -1,22 +1,18 @@
 import { useLayoutEffect, useState } from 'react'
-import { isFacet, Value, NO_VALUE, Option, FacetProp, EqualityCheck } from '../types'
-import { asPromise } from '../helpers'
+import { FacetProp, isFacet, Value, NoValue, EqualityCheck, NO_VALUE } from '../types'
 import { defaultEqualityCheck } from '../equalityChecks'
 
 /**
  * Hook that allows consuming values from a Facet
  * It acts as a regular react state, triggering a re-render of the component
  *
- * If the provided value is not a Facet, it will simply be forwarded untouched.
- *
  * @param facet
- * @returns value of the Facet
  */
 export function useFacetUnwrap<T extends Value>(
   prop: FacetProp<T>,
   equalityCheck: EqualityCheck<T> = defaultEqualityCheck,
-): T {
-  const [state, setState] = useState<{ value: Option<T> }>(() => {
+): T | NoValue {
+  const [state, setState] = useState<{ value: T | NoValue }>(() => {
     if (!isFacet(prop)) return { value: prop }
 
     return {
@@ -74,12 +70,5 @@ export function useFacetUnwrap<T extends Value>(
     }
   }, [prop, equalityCheck])
 
-  if (!isFacet(prop)) return prop
-
-  // If we don't have a value for the Facet yet, we can throw a Promise to trigger React's Suspense.
-  if (state.value === NO_VALUE) {
-    throw asPromise(prop)
-  }
-
-  return state.value
+  return isFacet(prop) ? state.value : prop
 }

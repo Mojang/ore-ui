@@ -1,9 +1,8 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { render, act } from '@react-facet/dom-fiber-testing-library'
 import { useFacetUnwrap } from './useFacetUnwrap'
 import { createFacet } from '../facet'
-import { asPromise } from '../helpers'
-import { NO_VALUE } from '../types'
+import { NO_VALUE } from '..'
 
 describe('when mounting facets with values', () => {
   it('renders only once for Immutable value of type string', () => {
@@ -133,6 +132,7 @@ it('re-renders when facet is mutated', () => {
 
   const ComponentWithFacetEffect = () => {
     const adaptValue = useFacetUnwrap(demoFacet)
+    if (adaptValue === NO_VALUE) return null
     return <span>{adaptValue.foo}</span>
   }
 
@@ -169,6 +169,7 @@ it('re-renders when facet is mutated to undefined', () => {
 
   const ComponentWithFacetEffect = () => {
     const adaptValue = useFacetUnwrap(demoFacet)
+    if (adaptValue === NO_VALUE) return null
     return <span>{adaptValue.foo}</span>
   }
 
@@ -215,35 +216,6 @@ it('does not trigger a re-render when changing a facet from undefined to undefin
   })
 
   expect(renderedMock).toHaveBeenCalledTimes(0)
-})
-
-describe('suspense', () => {
-  it('throws when a facet has NO_VALUE', async () => {
-    const demoFacet = createFacet<string>({ initialValue: NO_VALUE })
-    const renderedMock = jest.fn()
-
-    const ComponentWithFacetEffect = () => {
-      const adaptValue = useFacetUnwrap(demoFacet)
-      renderedMock()
-
-      return <span>{adaptValue}</span>
-    }
-
-    render(
-      <Suspense>
-        <ComponentWithFacetEffect />
-      </Suspense>,
-    )
-
-    expect(renderedMock).toHaveBeenCalledTimes(0)
-
-    await act(async () => {
-      demoFacet.set('updated value')
-      await asPromise(demoFacet)
-    })
-
-    expect(renderedMock).toHaveBeenCalledTimes(1)
-  })
 })
 
 it('supports custom equality checks', () => {
