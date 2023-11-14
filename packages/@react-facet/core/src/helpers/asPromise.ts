@@ -9,7 +9,7 @@ import { Facet, NO_VALUE } from '../types'
 export const asPromise = <T>(facet: Facet<T>) =>
   new Promise<T>((resolve) => {
     const value = facet.get()
-    if (value != NO_VALUE) {
+    if (value !== NO_VALUE) {
       resolve(value)
       return
     }

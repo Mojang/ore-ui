@@ -1072,7 +1072,7 @@ export const setupHostConfig = (): HostConfig<
       return
     }
 
-    if (props.style != null) {
+    if (props.style !== undefined) {
       setupStyleUpdate(
         props.style,
         (instance.style ?? instance.element.style) as unknown as Record<string, unknown>,
@@ -1085,7 +1085,7 @@ export const setupHostConfig = (): HostConfig<
 })
 
 export const isTextElement = (value: HTMLElement | SVGElement | Text): value is Text => {
-  return (value as HTMLElement).style == null
+  return (value as HTMLElement).style === null
 }
 
 const cleanupElementContainer = (parent: ElementContainer, instance: ElementContainer) => {

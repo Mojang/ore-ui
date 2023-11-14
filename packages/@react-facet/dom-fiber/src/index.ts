@@ -12,7 +12,7 @@ export type RootType = {
 }
 
 export function createRoot(container: HTMLElement | null): RootType {
-  if (container == null) throw new Error('HTML container cannot be null.')
+  if (container === null) throw new Error('HTML container cannot be null.')
 
   const reconcilerInstance = createReconciler()
 
@@ -41,7 +41,7 @@ export function createRoot(container: HTMLElement | null): RootType {
  * @deprecated use createRoot instead
  */
 export function render(element: ReactElement, container: HTMLElement | null) {
-  if (container == null) return () => {}
+  if (container === null) return () => {}
 
   const root = createRoot(container)
   root.render(element)

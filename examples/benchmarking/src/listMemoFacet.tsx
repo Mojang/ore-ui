@@ -104,7 +104,7 @@ const dataEqualityCheck = () => {
 
 document.body.innerHTML = '<div id="root"/>'
 const element = document.getElementById('root')
-if (element != null) {
+if (element !== null) {
   const root = createRoot(element)
   root.render(<Performance />)
 }

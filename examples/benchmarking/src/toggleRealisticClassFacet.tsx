@@ -60,7 +60,7 @@ document.body.innerHTML = `
 `
 
 const element = document.getElementById('root')
-if (element != null) {
+if (element !== null) {
   const root = createRoot(element)
   root.render(<Performance />)
 }
