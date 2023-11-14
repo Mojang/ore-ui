@@ -46,9 +46,7 @@ const compare = async (optionA: string, optionB: string, targetRelativePerforman
 
     const { traceEvents } = require(traceFile)
 
-    const events = traceEvents.filter(
-      (event: TraceEvent) => event.name === 'FireAnimationFrame' || event.name === 'MinorGC',
-    )
+    const events = traceEvents.filter((event: TraceEvent) => event.name === 'MinorGC' || event.name === 'FunctionCall')
     const sampledEvents = events.slice(OFFSET_FRAMES, SAMPLE_SIZE + OFFSET_FRAMES)
 
     const totalTime = sampledEvents.reduce((total: number, event: TraceEvent) => total + event.dur, 0)
