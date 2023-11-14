@@ -1170,11 +1170,17 @@ describe('update', () => {
 
     render(<MockComponent />)
     expect(root?.innerHTML ?? '').toBe('<p cohinline=""></p>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<p></p>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<p cohinline=""></p>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<p></p>')
   })
 
