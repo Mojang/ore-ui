@@ -29,7 +29,7 @@ export const Map = <T,>({ array, children, equalityCheck }: MapProps<T>) => {
           ) : (
             <MapChild<T> key={index} arrayFacet={array} index={index} children={children} />
           ),
-        countValue,
+        countValue !== NO_VALUE ? countValue : 0,
       )}
     </>
   )
