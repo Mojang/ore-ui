@@ -7,8 +7,9 @@ import React, {
   useRef,
   useEffect,
   ReactElement,
+  useTransition,
 } from 'react'
-import { createFacet, Facet, useFacetEffect, useFacetState } from '@react-facet/core'
+import { createFacet, Facet, useFacetEffect, useFacetState, useFacetWrap } from '@react-facet/core'
 
 type Config = {
   forceImmediateMount: boolean
@@ -16,6 +17,9 @@ type Config = {
 
 const DeferredMountConfig = createContext<Config>({ forceImmediateMount: false })
 
+/**
+ * @deprecated
+ */
 export function DeferredMountConfigProvider({ config, children }: { config: Config; children: React.ReactNode }) {
   return <DeferredMountConfig.Provider value={config}>{children}</DeferredMountConfig.Provider>
 }
@@ -24,25 +28,16 @@ function useConfig() {
   return useContext(DeferredMountConfig)
 }
 
-/**
- * Targeting around 60fps
- */
-const DEFAULT_FRAME_TIME_BUDGET = 16
-
 interface DeferredMountProviderProps {
   children: ReactNode
-
-  /**
-   * How many milliseconds we can spend mounting components.
-   */
-  frameTimeBudget?: number
 }
 
-export function InnerDeferredMountProvider({
-  children,
-  frameTimeBudget = DEFAULT_FRAME_TIME_BUDGET,
-}: DeferredMountProviderProps) {
-  const [isDeferring, setIsDeferring] = useFacetState(true)
+/**
+ * @deprecated
+ */
+export function InnerDeferredMountProvider({ children }: DeferredMountProviderProps) {
+  const [isDeferring, startTransition] = useTransition()
+  // const [isDeferring, setIsDeferring] = useFacetState(true)
   const [requestingToRun, setRequestingToRun] = useFacetState(false)
   const waitingForMountCallback = useRef(false)
 
@@ -78,7 +73,7 @@ export function InnerDeferredMountProvider({
       // work pending to be done. If there is... we still need to run this effect.
       if (!requestingToRun && deferredMountsRef.current.length === 0 && !waitingForMountCallback.current) return
 
-      const work = (startTimestamp: number) => {
+      const work = () => {
         const deferredMounts = deferredMountsRef.current
 
         // We need to request the new frame at the top
@@ -93,44 +88,31 @@ export function InnerDeferredMountProvider({
           frameId = -1
         }
 
-        let lastUpdateCost = 0
-        let now = startTimestamp
+        startTransition(() => {
+          while (deferredMounts.length > 0 && !waitingForMountCallback.current) {
+            const updateFn = deferredMounts.shift() as UpdateFn
+            const result = updateFn(false)
 
-        while (
-          deferredMounts.length > 0 &&
-          now - startTimestamp + lastUpdateCost < frameTimeBudget &&
-          !waitingForMountCallback.current
-        ) {
-          const before = now
+            // Can be a function that takes a callback if using DeferredMountWithCallback
+            const resultTakesCallback = typeof result === 'function'
 
-          const updateFn = deferredMounts.shift() as UpdateFn
-          const result = updateFn(false)
+            if (resultTakesCallback) {
+              waitingForMountCallback.current = true
 
-          const after = performance.now()
+              result(() => {
+                waitingForMountCallback.current = false
 
-          lastUpdateCost = after - before
-          now = after
-
-          // Can be a function that takes a callback if using DeferredMountWithCallback
-          const resultTakesCallback = typeof result === 'function'
-
-          if (resultTakesCallback) {
-            waitingForMountCallback.current = true
-
-            result(() => {
-              waitingForMountCallback.current = false
-
-              // If the requestAnimationFrame stops running while waiting for the
-              // callback we need to restart it to process the rest of the queue.
-              if (frameId === -1) {
-                frameId = window.requestAnimationFrame(work)
-              }
-            })
+                // If the requestAnimationFrame stops running while waiting for the
+                // callback we need to restart it to process the rest of the queue.
+                if (frameId === -1) {
+                  frameId = window.requestAnimationFrame(work)
+                }
+              })
+            }
           }
-        }
+        })
 
         if (deferredMounts.length === 0 && !waitingForMountCallback.current) {
-          setIsDeferring(false)
           setRequestingToRun(false)
         }
       }
@@ -141,12 +123,12 @@ export function InnerDeferredMountProvider({
         window.cancelAnimationFrame(frameId)
       }
     },
-    [frameTimeBudget, setIsDeferring, setRequestingToRun],
+    [setRequestingToRun, startTransition],
     [requestingToRun],
   )
 
   return (
-    <isDeferringContext.Provider value={isDeferring}>
+    <isDeferringContext.Provider value={useFacetWrap(isDeferring)}>
       <pushDeferUpdateContext.Provider value={pushDeferUpdateFunction}>{children}</pushDeferUpdateContext.Provider>
     </isDeferringContext.Provider>
   )
@@ -154,6 +136,7 @@ export function InnerDeferredMountProvider({
 
 /**
  * Provider that must wrap a tree with nodes being deferred
+ * @deprecated
  */
 export function DeferredMountProvider(props: DeferredMountProviderProps) {
   const config = useConfig()
@@ -171,6 +154,7 @@ interface DeferredMountProps {
 /**
  * Component that should wrap some mounting that must be deferred to a later frame
  * @param children component to be mounted deferred
+ * @deprecated
  */
 export function DeferredMount({ children }: DeferredMountProps) {
   const pushDeferUpdateFunction = useContext(pushDeferUpdateContext)
@@ -195,6 +179,7 @@ export const useNotifyMountComplete = () => useContext(NotifyMountComplete)
  * Component that should wrap some mounting that must be deferred to a later frame.
  * This will wait for a callback from the child component before marking itself as rendered.
  * @param children component to be mounted deferred
+ * @deprecated
  */
 export function DeferredMountWithCallback({ children }: DeferredMountWithCallbackProps) {
   const pushDeferUpdateFunction = useContext(pushDeferUpdateContext)
@@ -236,6 +221,7 @@ interface ImmediateMountProps {
 /**
  * Hook that informs if any mounting is currently being deferred
  * Can be used to show some loading indicator
+ * @deprecated
  */
 export function useIsDeferring() {
   return useContext(isDeferringContext)
@@ -244,6 +230,7 @@ export function useIsDeferring() {
 /**
  * Allow us to pause costly mounting (mounting) of components
  * So that transitions can occur
+ * @deprecated
  */
 export function useIsPaused() {
   return useContext(isPausedContext)
@@ -251,6 +238,7 @@ export function useIsPaused() {
 
 /**
  * API compatible component with DeferredMount, but renders immediately
+ * @deprecated
  */
 export function ImmediateMount({ children }: ImmediateMountProps) {
   return children
@@ -273,6 +261,7 @@ const isPausedContext = createContext<boolean>(false)
 /**
  * This pauses the mounting of children components.
  * Given it affects mounting, it should only happen the first time! Asking to pause again in the future is not possible
+ * @deprecated
  */
 export function PauseMountProvider({ paused, children }: { paused: boolean; children: ReactNode }) {
   const wasEverResumed = useRef(!paused)
