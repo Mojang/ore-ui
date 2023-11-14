@@ -1495,25 +1495,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/core@npm:0.4.3":
-  version: 0.4.3
-  resolution: "@react-facet/core@npm:0.4.3"
-  peerDependencies:
-    react: ^16.9.0
-  checksum: 2d90540baaf2ff646d9e1fd941dbb18db84c698cd51416668d141f4fa9705a9ec33c5df4816e30ac58e4766c6d31208e31efb2c5643a326ca0e98eb4c6b61ad5
-  languageName: node
-  linkType: hard
-
-"@react-facet/deferred-mount@npm:0.4.3":
-  version: 0.4.3
-  resolution: "@react-facet/deferred-mount@npm:0.4.3"
-  peerDependencies:
-    "@react-facet/core": 0.4.3
-    react: ^16.9.0
-  checksum: 9f2841b0f2b0c8a0cfcd2a0dd4ded3a2acfb910f77b46ae85dc5bf2d87aa12d879a6a56a7e77a499a6cbcc67b288eaee9882c82ddf97d7b301b30073355fc3fa
-  languageName: node
-  linkType: hard
-
 "@react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount":
   version: 0.0.0-use.local
   resolution: "@react-facet/deferred-mount@workspace:packages/@react-facet/deferred-mount"
@@ -1583,18 +1564,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber@npm:0.4.3":
-  version: 0.4.3
-  resolution: "@react-facet/dom-fiber@npm:0.4.3"
-  dependencies:
-    react-reconciler: ^0.24.0
-  peerDependencies:
-    "@react-facet/core": 0.4.3
-    react: ^16.9.0
-  checksum: 4014173e4089e6a40b25878653ab82720f4498a895388a6c9dc336c1ba67d1db2cc661b8c0c7128ea366d90f0448458551675d00fd4dcbdaf1670de2c4844d21
-  languageName: node
-  linkType: hard
-
 "@react-facet/eslint-config@workspace:packages/@react-facet/eslint-config":
   version: 0.0.0-use.local
   resolution: "@react-facet/eslint-config@workspace:packages/@react-facet/eslint-config"
@@ -1623,16 +1592,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/shared-facet@npm:0.4.3":
-  version: 0.4.3
-  resolution: "@react-facet/shared-facet@npm:0.4.3"
-  peerDependencies:
-    "@react-facet/core": 0.4.3
-    react: ^16.9.0
-  checksum: e321d19ba498fb5a455abace4b75233714136f9116c6ffc88967483b2530839c1f1bc9645901f84292b000442ddd0516520586b7508989ad0b110e1a811ee11e
-  languageName: node
-  linkType: hard
-
 "@react-facet/spring@0.5.3, @react-facet/spring@workspace:packages/@react-facet/spring":
   version: 0.0.0-use.local
   resolution: "@react-facet/spring@workspace:packages/@react-facet/spring"
@@ -1651,16 +1610,6 @@ __metadata:
     react: ^18.2.0
   languageName: unknown
   linkType: soft
-
-"@react-facet/spring@npm:0.4.3":
-  version: 0.4.3
-  resolution: "@react-facet/spring@npm:0.4.3"
-  peerDependencies:
-    "@react-facet/core": 0.4.3
-    react: ^16.9.0
-  checksum: ce11750732996922f55de6f29088e7adc1fbd03c4caa366b28d6adbdfff7fb552c3ae6c79d270a6da99c56dd7ce4134f0ce07426fd41b31332ed4ecad449f987
-  languageName: node
-  linkType: hard
 
 "@sinclair/typebox@npm:^0.24.1":
   version: 0.24.51
@@ -2013,15 +1962,6 @@ __metadata:
   dependencies:
     ts-toolbelt: ^6.15.1
   checksum: 524ca41dd99430e9fd86b402bf646e41aca5ba0db50c37f345d23894d5a109e3b76937de8c97027fa554cce366863f6f0257ae0992bedbf469c3fae9e1c41b0d
-  languageName: node
-  linkType: hard
-
-"@types/react-dom@npm:^18.0.5":
-  version: 18.0.5
-  resolution: "@types/react-dom@npm:18.0.5"
-  dependencies:
-    "@types/react": "*"
-  checksum: cd48b81950f499b52a3f0c08261f00046f9b7c96699fa249c9664e257e820daf6ecac815cd1028cebc9d105094adc39d047d1efd79214394b8b2d515574c0787
   languageName: node
   linkType: hard
 
@@ -3740,36 +3680,6 @@ __metadata:
   checksum: 902a9f5d8967a3e2faf138d5cb784b9979bad2e6db5357c5b21c568df4ebe62bcb15108af1b2253744844eb964fc023fbd9afbbbb6ddd0bcc204c6fb5b7bf3af
   languageName: node
   linkType: hard
-
-"concurrent@workspace:examples/concurrent":
-  version: 0.0.0-use.local
-  resolution: "concurrent@workspace:examples/concurrent"
-  dependencies:
-    "@react-facet/core": 0.4.3
-    "@react-facet/deferred-mount": 0.4.3
-    "@react-facet/dom-fiber": 0.4.3
-    "@react-facet/shared-facet": 0.4.3
-    "@react-facet/spring": 0.4.3
-    "@types/fs-extra": ^9.0.12
-    "@types/puppeteer": ^5.4.4
-    "@types/ramda": ^0
-    "@types/react": ^18.0.8
-    "@types/react-dom": ^18.0.5
-    fs-extra: ^10.0.0
-    html-webpack-plugin: ^5.3.2
-    http-server: ^13.0.2
-    puppeteer: ^10.4.0
-    ramda: ^0.27.1
-    react: 18.2.0
-    react-dom: ^18.2.0
-    ts-loader: ^9.2.5
-    ts-node: ^10.3.1
-    typescript: ^4.3.5
-    webpack: ^5.51.1
-    webpack-cli: ^4.8.0
-    webpack-dev-server: ^4.0.0
-  languageName: unknown
-  linkType: soft
 
 "connect-history-api-fallback@npm:^1.6.0":
   version: 1.6.0
@@ -8902,17 +8812,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.2":
-  version: 15.8.1
-  resolution: "prop-types@npm:15.8.1"
-  dependencies:
-    loose-envify: ^1.4.0
-    object-assign: ^4.1.1
-    react-is: ^16.13.1
-  checksum: c056d3f1c057cb7ff8344c645450e14f088a915d078dcda795041765047fa080d38e5d626560ccaac94a4e16e3aa15f3557c1a9a8d1174530955e992c675e459
-  languageName: node
-  linkType: hard
-
 "prop-types@npm:^15.7.2":
   version: 15.7.2
   resolution: "prop-types@npm:15.7.2"
@@ -9083,7 +8982,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.13.1, react-is@npm:^16.8.1":
+"react-is@npm:^16.8.1":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
@@ -9101,20 +9000,6 @@ __metadata:
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
-  languageName: node
-  linkType: hard
-
-"react-reconciler@npm:^0.24.0":
-  version: 0.24.0
-  resolution: "react-reconciler@npm:0.24.0"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    prop-types: ^15.6.2
-    scheduler: ^0.18.0
-  peerDependencies:
-    react: ^16.0.0
-  checksum: c9c74208325a940ca36e031b71499f6d8e62e96ee673d69e35cc9e6a661aa746a2b0750f2ffcd1bae0a29eaf3d127dc8197ab7e801e6a3a2ab7d45a71b464630
   languageName: node
   linkType: hard
 
@@ -9524,16 +9409,6 @@ resolve@^2.0.0-next.3:
   dependencies:
     xmlchars: ^2.2.0
   checksum: d3fa3e2aaf6c65ed52ee993aff1891fc47d5e47d515164b5449cbf5da2cbdc396137e55590472e64c5c436c14ae64a8a03c29b9e7389fc6f14035cf4e982ef3b
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.18.0":
-  version: 0.18.0
-  resolution: "scheduler@npm:0.18.0"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b6e0b9e0086b200b114f1ef7f9fcac966ad5d84cd3b1867174be0549d3ff713d1fd22d5574cb024b7d3eadf3307f2afc1cb5bfbf28b0d3bc34b200183800fcae
   languageName: node
   linkType: hard
 
@@ -10707,26 +10582,6 @@ typescript@^4.8.2:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 8286a5edcaf3d68e65c451aa1e7150ad1cf53ee0813c07ec35b7abdfdb10f355ecaa13c6a226a694ae7a67785fd7eeebf89f845da0b4f7e4a35561ddc459aba0
-  languageName: node
-  linkType: hard
-
-"typescript@npm:^4.3.5":
-  version: 4.9.3
-  resolution: "typescript@npm:4.9.3"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 17b8f816050b412403e38d48eef0e893deb6be522d6dc7caf105e54a72e34daf6835c447735fd2b28b66784e72bfbf87f627abb4818a8e43d1fa8106396128dc
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@^4.3.5#~builtin<compat/typescript>":
-  version: 4.9.3
-  resolution: "typescript@patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=701156"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: ef65c22622d864497d0a0c5db693523329b3284c15fe632e93ad9aa059e8dc38ef3bd767d6f26b1e5ecf9446f49bd0f6c4e5714a2eeaf352805dc002479843d1
   languageName: node
   linkType: hard
 
