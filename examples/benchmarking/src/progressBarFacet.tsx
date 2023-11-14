@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useFacetMap, Facet, useFacetState } from '@react-facet/core'
-import { render } from '@react-facet/dom-fiber'
+import { createRoot } from '@react-facet/dom-fiber'
 
 const ProgressBar = ({ progress }: { progress: Facet<number> }) => {
   const width = useFacetMap((progress) => `${progress * 20}px`, [], [progress])
@@ -18,7 +18,7 @@ const ProgressBar = ({ progress }: { progress: Facet<number> }) => {
   )
 }
 
-const App = () => {
+const Performance = () => {
   const [progress, setProgress] = useFacetState(0)
 
   useEffect(() => {
@@ -39,5 +39,9 @@ const App = () => {
   return <ProgressBar progress={progress} />
 }
 
-document.body.innerHTML = `<div id="root"></div>`
-render(<App />, document.getElementById('root'))
+document.body.innerHTML = '<div id="root"/>'
+const element = document.getElementById('root')
+if (element != null) {
+  const root = createRoot(element)
+  root.render(<Performance />)
+}

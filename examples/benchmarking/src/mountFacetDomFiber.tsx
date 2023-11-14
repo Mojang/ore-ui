@@ -1,4 +1,4 @@
-import { render } from '@react-facet/dom-fiber'
+import { createRoot } from '@react-facet/dom-fiber'
 import { times } from 'ramda'
 import React, { useEffect, useState } from 'react'
 
@@ -54,4 +54,8 @@ const ComplexComponent = ({ value }: { value: number }) => {
 }
 
 document.body.innerHTML = '<div id="root"/>'
-render(<Performance />, document.getElementById('root'))
+const element = document.getElementById('root')
+if (element != null) {
+  const root = createRoot(element)
+  root.render(<Performance />)
+}

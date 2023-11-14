@@ -1,5 +1,5 @@
 import { useFacetState, Facet, useFacetMap, useFacetEffect, NO_VALUE, Map } from '@react-facet/core'
-import { render } from '@react-facet/dom-fiber'
+import { createRoot } from '@react-facet/dom-fiber'
 import React, { useEffect } from 'react'
 
 interface Data {
@@ -103,4 +103,8 @@ const dataEqualityCheck = () => {
 }
 
 document.body.innerHTML = '<div id="root"/>'
-render(<Performance />, document.getElementById('root'))
+const element = document.getElementById('root')
+if (element != null) {
+  const root = createRoot(element)
+  root.render(<Performance />)
+}

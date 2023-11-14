@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 const ProgressBar = ({ progress }: { progress: number }) => {
   const width = `${progress * 20}px`
@@ -17,7 +17,7 @@ const ProgressBar = ({ progress }: { progress: number }) => {
   )
 }
 
-const App = () => {
+const Performance = () => {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
@@ -38,5 +38,9 @@ const App = () => {
   return <ProgressBar progress={progress} />
 }
 
-document.body.innerHTML = `<div id="root"></div>`
-render(<App />, document.getElementById('root'))
+document.body.innerHTML = '<div id="root"/>'
+const element = document.getElementById('root')
+if (element != null) {
+  const root = createRoot(element)
+  root.render(<Performance />)
+}

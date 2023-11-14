@@ -1,4 +1,4 @@
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import React, { useEffect, useState, memo } from 'react'
 
 interface Data {
@@ -65,4 +65,8 @@ const ListItem = memo(({ health, name }: Data) => {
 const randomWork = (name: string | number) => Math.random()
 
 document.body.innerHTML = '<div id="root"/>'
-render(<Performance />, document.getElementById('root'))
+const element = document.getElementById('root')
+if (element != null) {
+  const root = createRoot(element)
+  root.render(<Performance />)
+}
