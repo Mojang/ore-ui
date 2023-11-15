@@ -1,6 +1,6 @@
 import { FacetProp, Unsubscribe } from '@react-facet/core'
-import { FiberRoot, Reconciler } from 'react-reconciler'
-import { Key, MutableRefObject, ReactText } from 'react'
+import { FiberRoot, ReactPortal, Reconciler } from 'react-reconciler'
+import { Key, MutableRefObject, ReactText, ReactFragment } from 'react'
 
 export type FacetFiberRoot = FiberRoot
 
@@ -110,7 +110,7 @@ interface StrictReactElement<P = unknown, T extends string = string> {
  *
  * It prevents passing a function as a Node. This allow us to catch accidental passing of facets as children.
  */
-export type StrictReactNode = StrictReactElement | ReactText | Array<StrictReactNode> | boolean | null | undefined
+export type StrictReactNode = StrictReactElement | ReactText | ReactFragment | ReactPortal | boolean | null | undefined
 
 export type ElementProps<T> = PointerEvents &
   FocusEvents &
