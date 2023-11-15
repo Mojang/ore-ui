@@ -145,7 +145,7 @@ const testEffectUpdatesOnStaticValue = (value: FacetProp<Value>, expectUpdates: 
   }
 }
 
-describe('does not trigger effect updates on re-renders when the unchanged wrapped value is', () => {
+describe('does not trigger effect updates on re-renders for the same value', () => {
   it('string', () => {
     testEffectUpdatesOnStaticValue('', false)
     testEffectUpdatesOnStaticValue('test', false)
@@ -158,26 +158,22 @@ describe('does not trigger effect updates on re-renders when the unchanged wrapp
     testEffectUpdatesOnStaticValue(0, false)
     testEffectUpdatesOnStaticValue(1, false)
   })
-
   it('undefined', () => {
     testEffectUpdatesOnStaticValue(undefined, false)
   })
   it('null', () => {
     testEffectUpdatesOnStaticValue(null, false)
   })
-})
-
-describe('triggers effect updates on re-renders when the unchanged wrapped value is', () => {
   it('empty array', () => {
-    testEffectUpdatesOnStaticValue([], true)
+    testEffectUpdatesOnStaticValue([], false)
   })
   it('filled array', () => {
-    testEffectUpdatesOnStaticValue(['string', 1], true)
+    testEffectUpdatesOnStaticValue(['string', 1], false)
   })
   it('empty object', () => {
-    testEffectUpdatesOnStaticValue({}, true)
+    testEffectUpdatesOnStaticValue({}, false)
   })
   it('filled object', () => {
-    testEffectUpdatesOnStaticValue({ key: 'value' }, true)
+    testEffectUpdatesOnStaticValue({ key: 'value' }, false)
   })
 })

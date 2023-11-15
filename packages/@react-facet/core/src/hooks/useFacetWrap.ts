@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { defaultEqualityCheck } from '../equalityChecks'
 import { createFacet } from '../facet'
 import { Facet, FacetProp, isFacet, Value, EqualityCheck } from '../types'
@@ -25,10 +25,15 @@ export function useFacetWrap<T extends Value>(
     [is],
   )
 
+  useEffect(() => {
+    if (inlineFacet !== undefined) {
+      inlineFacet.set(prop as T)
+    }
+  }, [prop, inlineFacet])
+
   if (inlineFacet === undefined) {
     return prop as Facet<T>
   } else {
-    inlineFacet.set(prop as T)
     return inlineFacet
   }
 }
