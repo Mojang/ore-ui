@@ -4,9 +4,8 @@ import { useFacetWrap } from './useFacetWrap'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
 import { createFacet } from '../facet'
-import { FacetProp, Value } from '..'
 
-it('wraps a value, updating the facet when it changes', () => {
+it('wraps a value, creating a new facet when it changes', () => {
   const mock = jest.fn()
 
   const ComponentWithFacetEffect: React.FC<{ value: string }> = ({ value }) => {
@@ -30,7 +29,7 @@ it('wraps a value, updating the facet when it changes', () => {
   expect(mock).toHaveBeenCalledWith('changed')
 })
 
-it('wraps a value, with the default equality check (preventing unnecessary updates)', () => {
+it('wraps a value using memoization', () => {
   const mock = jest.fn()
 
   const ComponentWithFacetEffect: React.FC<{ value: string }> = ({ value }) => {
@@ -111,69 +110,5 @@ describe('regressions', () => {
     render(<TestingComponent />)
 
     expect(mock).toHaveBeenCalledTimes(0)
-  })
-})
-
-const testEffectUpdatesOnStaticValue = (value: FacetProp<Value>, expectUpdates: boolean) => {
-  const mock = jest.fn()
-
-  const TestingComponent = () => {
-    const undefinedFacet = useFacetWrap(value)
-    useFacetEffect(
-      () => {
-        mock()
-      },
-      [],
-      [undefinedFacet],
-    )
-    return null
-  }
-  const { rerender } = render(<TestingComponent />)
-  expect(mock).toHaveBeenCalledTimes(1)
-
-  rerender(<TestingComponent />)
-  if (expectUpdates) {
-    expect(mock).toHaveBeenCalledTimes(2)
-  } else {
-    expect(mock).toHaveBeenCalledTimes(1)
-  }
-  rerender(<TestingComponent />)
-  if (expectUpdates) {
-    expect(mock).toHaveBeenCalledTimes(3)
-  } else {
-    expect(mock).toHaveBeenCalledTimes(1)
-  }
-}
-
-describe('does not trigger effect updates on re-renders for the same value', () => {
-  it('string', () => {
-    testEffectUpdatesOnStaticValue('', false)
-    testEffectUpdatesOnStaticValue('test', false)
-  })
-  it('boolean', () => {
-    testEffectUpdatesOnStaticValue(false, false)
-    testEffectUpdatesOnStaticValue(true, false)
-  })
-  it('number', () => {
-    testEffectUpdatesOnStaticValue(0, false)
-    testEffectUpdatesOnStaticValue(1, false)
-  })
-  it('undefined', () => {
-    testEffectUpdatesOnStaticValue(undefined, false)
-  })
-  it('null', () => {
-    testEffectUpdatesOnStaticValue(null, false)
-  })
-  it('empty array', () => {
-    testEffectUpdatesOnStaticValue([], false)
-  })
-  it('filled array', () => {
-    testEffectUpdatesOnStaticValue(['string', 1], false)
-  })
-  it('empty object', () => {
-    testEffectUpdatesOnStaticValue({}, false)
-  })
-  it('filled object', () => {
-    testEffectUpdatesOnStaticValue({ key: 'value' }, false)
   })
 })

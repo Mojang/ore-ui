@@ -1,39 +1,11 @@
-import { useEffect, useMemo } from 'react'
-import { defaultEqualityCheck } from '../equalityChecks'
-import { createFacet } from '../facet'
-import { Facet, FacetProp, isFacet, Value, EqualityCheck } from '../types'
+import { useMemo } from 'react'
+import { createStaticFacet } from '../facet'
+import { Facet, FacetProp, isFacet, Value } from '../types'
 
 /**
  * Wraps a FacetProp as a Facet
  * @param value
  */
-export function useFacetWrap<T extends Value>(
-  prop: FacetProp<T>,
-  equalityCheck: EqualityCheck<T> = defaultEqualityCheck,
-): Facet<T> {
-  const is = isFacet(prop)
-
-  /**
-   * Inline facet that only created if the provided prop is not a facet.
-   *
-   * We ignore the dependency change of `prop` since we want to update the inline
-   * facet value via the setter below.
-   */
-  const inlineFacet = useMemo(
-    () => (is ? undefined : createFacet<T>({ initialValue: prop as T, equalityCheck })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [is],
-  )
-
-  useEffect(() => {
-    if (inlineFacet !== undefined) {
-      inlineFacet.set(prop as T)
-    }
-  }, [prop, inlineFacet])
-
-  if (inlineFacet === undefined) {
-    return prop as Facet<T>
-  } else {
-    return inlineFacet
-  }
+export function useFacetWrap<T extends Value>(prop: FacetProp<T>): Facet<T> {
+  return useMemo(() => (isFacet(prop) ? prop : createStaticFacet(prop)), [prop])
 }
