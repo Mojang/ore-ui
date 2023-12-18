@@ -58,14 +58,17 @@ export const setupHostConfig = (): HostConfig<
   supportsHydration: false,
 
   supportsMicrotask: true,
-  scheduleMicrotask: (callback) =>
-    Promise.resolve(null)
-      .then(callback)
-      .catch((error) => {
-        setTimeout(() => {
-          throw error
-        })
-      }),
+  scheduleMicrotask:
+    typeof queueMicrotask === 'function'
+      ? queueMicrotask
+      : (callback) =>
+          Promise.resolve(null)
+            .then(callback)
+            .catch((error) => {
+              setTimeout(() => {
+                throw error
+              })
+            }),
 
   getCurrentEventPriority: () => {
     return DefaultEventPriority
