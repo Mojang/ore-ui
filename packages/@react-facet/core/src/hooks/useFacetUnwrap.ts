@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FacetProp, isFacet, Value, NoValue, EqualityCheck, NO_VALUE } from '../types'
 import { defaultEqualityCheck } from '../equalityChecks'
 
@@ -20,7 +20,7 @@ export function useFacetUnwrap<T extends Value>(
     }
   })
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!isFacet(prop)) return
 
     // Initialize the equalityCheck
