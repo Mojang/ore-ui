@@ -4,7 +4,7 @@ import { useFacetWrapMemo } from './useFacetWrapMemo'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
 import { createFacet } from '../facet'
-import { FacetProp, Value } from '..'
+import { FacetProp, NO_VALUE, Value } from '../types'
 
 it('wraps a value, updating the facet when it changes', () => {
   const mock = jest.fn()
@@ -72,6 +72,32 @@ it('forwards a facet', () => {
   render(<ComponentWithFacetEffect />)
   expect(mock).toHaveBeenCalledTimes(1)
   expect(mock).toHaveBeenCalledWith('value')
+  mock.mockClear()
+  demoFacet.set('changed')
+  expect(mock).toHaveBeenCalledTimes(1)
+  expect(mock).toHaveBeenCalledWith('changed')
+})
+
+it('forwards a facet with NO_VAUE', () => {
+  const demoFacet = createFacet<string>({ initialValue: NO_VALUE })
+  const mock = jest.fn()
+
+  const ComponentWithFacetEffect: React.FC = () => {
+    const facetifiedValue = useFacetWrapMemo(demoFacet)
+    useFacetEffect(
+      (value) => {
+        mock(value)
+      },
+      [],
+      [facetifiedValue],
+    )
+    return <span />
+  }
+
+  // On first render, it should not call the effect, as the wrapped facet has no value
+  render(<ComponentWithFacetEffect />)
+  expect(mock).not.toHaveBeenCalled()
+
   mock.mockClear()
   demoFacet.set('changed')
   expect(mock).toHaveBeenCalledTimes(1)

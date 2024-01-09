@@ -18,7 +18,7 @@ export function useFacetWrapMemo<T extends Value>(
    * facet value via the setter below.
    */
   const inlineFacet = useMemo(
-    () => createFacet<T>({ initialValue: prop as T, equalityCheck }),
+    () => createFacet<T>({ initialValue: isFacet(prop) ? prop.get() : prop, equalityCheck }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
