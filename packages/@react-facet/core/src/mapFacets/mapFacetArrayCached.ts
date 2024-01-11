@@ -7,9 +7,11 @@ export function mapFacetArrayCached<M>(
   fn: (...value: unknown[]) => M | NoValue,
   equalityCheck?: EqualityCheck<M>,
 ): Facet<M> {
+  const initialValues = facets.map((facet) => facet.get())
+  const hasAllValues = initialValues.reduce<boolean>((prev, curr) => prev && curr !== NO_VALUE, true)
   return createFacet<M>({
     // pass the equalityCheck to the mapIntoObserveArray to prevent even triggering the observable
     startSubscription: mapIntoObserveArray(facets, fn, equalityCheck),
-    initialValue: NO_VALUE,
+    initialValue: hasAllValues ? fn(...initialValues) : NO_VALUE,
   })
 }
