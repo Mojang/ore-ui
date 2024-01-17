@@ -5,9 +5,6 @@ export * from './types'
 export * from './createPortal'
 export * from './createFiberRoot'
 export * from './createReconciler'
-import scheduler from 'scheduler'
-
-// scheduler.unstable_forceFrameRate(120)
 
 export type RootType = {
   render(children: ReactElement): void
