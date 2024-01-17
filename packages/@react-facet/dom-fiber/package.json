@@ -41,8 +41,7 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "react-reconciler": "^0.28.0",
-    "scheduler": "^0.22.0"
+    "react-reconciler": "^0.28.0"
   },
   "peerDependencies": {
     "@react-facet/core": "0.5.3",
