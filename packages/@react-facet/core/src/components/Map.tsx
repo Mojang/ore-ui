@@ -11,7 +11,8 @@ export type MapProps<T> = {
 }
 
 export const Map = <T,>({ array, children, equalityCheck }: MapProps<T>) => {
-  const countValue = useFacetUnwrap(useFacetMap((array) => array.length, [], [array])) ?? 0
+  // When mounting lists, we always want to defer
+  const countValue = useFacetUnwrap(useFacetMap((array) => array.length, [], [array]))
 
   return (
     <>

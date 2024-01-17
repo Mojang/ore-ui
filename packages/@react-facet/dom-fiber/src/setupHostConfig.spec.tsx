@@ -1,29 +1,9 @@
 import { createFacet, Facet } from '@react-facet/core'
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Fiber } from 'react-reconciler'
-import { createFiberRoot } from './createFiberRoot'
-import { createReconciler } from './createReconciler'
 import { setupHostConfig } from './setupHostConfig'
+import { act, render, root } from './testSetup'
 import { InputType, ElementContainer, ElementProps, Props } from './types'
-
-document.body.innerHTML = `<div id="root"></div>`
-
-const reconcilerInstance = createReconciler()
-const root = document.getElementById('root') as HTMLElement
-const fiberRoot = createFiberRoot(reconcilerInstance)(root)
-
-/**
- * Render function local to testing that shared the same instance of the reconciler.
- *
- * This is needed otherwise React complains that we are sharing a context across different renderers.
- */
-const render = function render(ui: ReactElement) {
-  reconcilerInstance.updateContainer(ui, fiberRoot, null, () => {})
-}
-
-afterEach(() => {
-  reconcilerInstance.updateContainer(null, fiberRoot, null, () => {})
-})
 
 jest.useFakeTimers()
 
@@ -957,7 +937,9 @@ describe('update', () => {
     render(<TestComponent />)
     expect(root).toContainHTML('<div id="root"><div>Goodbye World</div></div>')
 
-    jest.runAllTimers()
+    act(() => {
+      jest.runAllTimers()
+    })
     expect(root).toContainHTML('<div id="root"><div>Hello World</div></div>')
   })
 
@@ -977,7 +959,9 @@ describe('update', () => {
     render(<TestComponent />)
     expect(root).toContainHTML('<div id="root"><div class="goodbye">Hello World</div></div>')
 
-    jest.runAllTimers()
+    act(() => {
+      jest.runAllTimers()
+    })
     expect(root).toContainHTML('<div id="root"><div class="hello">Hello World</div></div>')
   })
 
@@ -997,7 +981,9 @@ describe('update', () => {
     render(<TestComponent />)
     expect(root).toContainHTML('<div id="root"><div id="goodbye">Hello World</div></div>')
 
-    jest.runAllTimers()
+    act(() => {
+      jest.runAllTimers()
+    })
     expect(root).toContainHTML('<div id="root"><div id="hello">Hello World</div></div>')
   })
 
@@ -1017,7 +1003,9 @@ describe('update', () => {
     render(<TestComponent />)
     expect(root).toContainHTML('<div id="root"><div style="background: yellow;">Hello World</div></div>')
 
-    jest.runAllTimers()
+    act(() => {
+      jest.runAllTimers()
+    })
     expect(root).toContainHTML('<div id="root"><div style="background: red;">Hello World</div></div>')
   })
 
@@ -1039,7 +1027,9 @@ describe('update', () => {
     // jsdom is adding the http://localhost
     expect(img && img.src).toEqual('http://localhost/frita.png')
 
-    jest.runAllTimers()
+    act(() => {
+      jest.runAllTimers()
+    })
     img = document.getElementsByClassName('image')[0] as HTMLImageElement | undefined
     // jsdom is adding the http://localhost
     expect(img && img.src).toEqual('http://localhost/banana.png')
@@ -1061,7 +1051,9 @@ describe('update', () => {
     render(<TestComponent />)
     expect(root?.innerHTML ?? '').toBe('<a href="old"></a>')
 
-    jest.runAllTimers()
+    act(() => {
+      jest.runAllTimers()
+    })
     expect(root?.innerHTML ?? '').toBe('<a href="new"></a>')
   })
 
@@ -1081,7 +1073,9 @@ describe('update', () => {
     render(<TestComponent />)
     expect(root?.innerHTML ?? '').toBe('<a target="old"></a>')
 
-    jest.runAllTimers()
+    act(() => {
+      jest.runAllTimers()
+    })
     expect(root?.innerHTML ?? '').toBe('<a target="new"></a>')
   })
 
@@ -1097,9 +1091,13 @@ describe('update', () => {
 
     render(<MockComponent />)
     expect(root?.innerHTML ?? '').toBe('<input value="foo">')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<input value="bar">')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<input>')
   })
 
@@ -1122,9 +1120,13 @@ describe('update', () => {
     }
     render(<MockComponent />)
     expect(root?.innerHTML ?? '').toBe('<input type="text"><input type="password"><input type="button">')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<input type="button"><input type="text"><input type="password">')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<input><input><input>')
   })
 
@@ -1141,11 +1143,17 @@ describe('update', () => {
 
     render(<MockComponent />)
     expect(root?.innerHTML ?? '').toBe('<input disabled="">')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<input>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<input disabled="">')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<input>')
   })
 
@@ -1162,11 +1170,17 @@ describe('update', () => {
 
     render(<MockComponent />)
     expect(root?.innerHTML ?? '').toBe('<p cohinline=""></p>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<p></p>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<p cohinline=""></p>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<p></p>')
   })
 
@@ -1183,11 +1197,17 @@ describe('update', () => {
 
     render(<MockComponent />)
     expect(root?.innerHTML ?? '').toBe('<input maxlength="1">')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<input>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<input maxlength="2">')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<input>')
   })
 
@@ -1204,11 +1224,17 @@ describe('update', () => {
 
     render(<MockComponent />)
     expect(root?.innerHTML ?? '').toBe('<div data-droppable=""></div>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<div></div>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<div data-droppable=""></div>')
-    jest.advanceTimersByTime(1)
+    act(() => {
+      jest.advanceTimersByTime(1)
+    })
     expect(root?.innerHTML ?? '').toBe('<div></div>')
   })
 
@@ -1226,11 +1252,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<path d="M0,10 L0,10 Z"></path>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<path></path>')
     })
 
@@ -1247,11 +1279,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<path fill="#00ff00"></path>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<path fill="#ff0000"></path>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<path></path>')
     })
 
@@ -1268,11 +1306,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<path stroke="#00ff00"></path>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<path stroke="#ff0000"></path>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<path></path>')
     })
 
@@ -1289,11 +1333,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<svg width="500"></svg>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<svg width="600"></svg>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<svg width="500"></svg>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<svg></svg>')
     })
 
@@ -1310,11 +1360,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<svg height="600"></svg>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<svg height="500"></svg>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<svg></svg>')
     })
 
@@ -1331,11 +1387,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<rect x="500"></rect>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<rect x="600"></rect>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<rect x="500"></rect>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<rect></rect>')
     })
 
@@ -1352,11 +1414,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<rect y="600"></rect>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<rect y="500"></rect>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<rect></rect>')
     })
 
@@ -1373,11 +1441,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<circle cx="500"></circle>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<circle cx="600"></circle>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<circle cx="500"></circle>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<circle></circle>')
     })
 
@@ -1394,11 +1468,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<circle cy="500"></circle>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<circle cy="600"></circle>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<circle cy="500"></circle>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<circle></circle>')
     })
 
@@ -1415,11 +1495,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<circle r="600"></circle>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<circle r="500"></circle>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<circle></circle>')
     })
 
@@ -1436,11 +1522,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<ellipse rx="500"></ellipse>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<ellipse rx="600"></ellipse>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<ellipse rx="500"></ellipse>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<ellipse></ellipse>')
     })
 
@@ -1457,11 +1549,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<ellipse ry="600"></ellipse>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<ellipse ry="500"></ellipse>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<ellipse></ellipse>')
     })
 
@@ -1478,11 +1576,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<line x1="500"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line x1="600"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line x1="500"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line></line>')
     })
 
@@ -1499,11 +1603,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<line x2="500"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line x2="600"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line x2="500"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line></line>')
     })
 
@@ -1520,11 +1630,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<line y1="500"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line y1="600"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line y1="500"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line></line>')
     })
 
@@ -1541,11 +1657,17 @@ describe('update', () => {
 
       render(<MockComponent />)
       expect(root?.innerHTML ?? '').toBe('<line y2="500"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line y2="600"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line y2="500"></line>')
-      jest.advanceTimersByTime(1)
+      act(() => {
+        jest.advanceTimersByTime(1)
+      })
       expect(root?.innerHTML ?? '').toBe('<line></line>')
     })
   })
@@ -1588,7 +1710,9 @@ describe('update', () => {
 
       useEffect(() => {
         setTimeout(() => {
-          setSecond(true)
+          act(() => {
+            setSecond(true)
+          })
         }, 1000)
       }, [])
 
@@ -1659,7 +1783,9 @@ describe('update', () => {
 
       firstOnClick.mockClear()
       secondOnClick.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('click'))
       expect(firstOnClick).not.toHaveBeenCalled()
@@ -1673,7 +1799,9 @@ describe('update', () => {
 
       firstOnFocus.mockClear()
       secondOnFocus.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('focus'))
       expect(firstOnFocus).not.toHaveBeenCalled()
@@ -1687,7 +1815,9 @@ describe('update', () => {
 
       firstOnBlur.mockClear()
       secondOnBlur.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('blur'))
       expect(firstOnBlur).not.toHaveBeenCalled()
@@ -1701,7 +1831,9 @@ describe('update', () => {
 
       firstOnMouseDown.mockClear()
       secondOnMouseDown.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('mousedown'))
       expect(firstOnMouseDown).not.toHaveBeenCalled()
@@ -1729,7 +1861,9 @@ describe('update', () => {
 
       firstOnMouseUp.mockClear()
       secondOnMouseUp.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('mouseup'))
       expect(firstOnMouseUp).not.toHaveBeenCalled()
@@ -1743,7 +1877,9 @@ describe('update', () => {
 
       firstOnTouchStart.mockClear()
       secondOnTouchStart.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('touchstart'))
       expect(firstOnTouchStart).not.toHaveBeenCalled()
@@ -1757,7 +1893,9 @@ describe('update', () => {
 
       firstOnTouchMove.mockClear()
       secondOnTouchMove.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('touchmove'))
       expect(firstOnTouchMove).not.toHaveBeenCalled()
@@ -1771,7 +1909,9 @@ describe('update', () => {
 
       firstOnTouchEnd.mockClear()
       secondOnTouchEnd.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('touchend'))
       expect(firstOnTouchEnd).not.toHaveBeenCalled()
@@ -1785,7 +1925,9 @@ describe('update', () => {
 
       firstOnMouseEnter.mockClear()
       secondOnMouseEnter.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('mouseenter'))
       expect(firstOnMouseEnter).not.toHaveBeenCalled()
@@ -1799,7 +1941,9 @@ describe('update', () => {
 
       firstOnMouseLeave.mockClear()
       secondOnMouseLeave.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('mouseleave'))
       expect(firstOnMouseLeave).not.toHaveBeenCalled()
@@ -1813,7 +1957,9 @@ describe('update', () => {
 
       firstOnKeyPress.mockClear()
       secondOnKeyPress.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('keypress'))
       expect(firstOnKeyPress).not.toHaveBeenCalled()
@@ -1827,7 +1973,9 @@ describe('update', () => {
 
       firstOnKeyDown.mockClear()
       secondOnKeyDown.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('keydown'))
       expect(firstOnKeyDown).not.toHaveBeenCalled()
@@ -1841,7 +1989,9 @@ describe('update', () => {
 
       firstOnKeyUp.mockClear()
       secondOnKeyUp.mockClear()
-      jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
 
       div.dispatchEvent(new Event('keyup'))
       expect(firstOnKeyUp).not.toHaveBeenCalled()

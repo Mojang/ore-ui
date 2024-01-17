@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
+import { createFiberRoot } from './createFiberRoot'
+import { createReconciler } from './createReconciler'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getGlobalThis(): any {
@@ -36,3 +38,27 @@ export const setupAct = (): Act => {
 export interface Act {
   (work: () => void): boolean
 }
+
+document.body.innerHTML = `<div id="root"></div><div id="portal"></div>`
+
+const reconcilerInstance = createReconciler()
+export const root = document.getElementById('root') as HTMLElement
+const fiberRoot = createFiberRoot(reconcilerInstance)(root)
+export const act = setupAct()
+
+/**
+ * Render function local to testing that shared the same instance of the reconciler.
+ *
+ * This is needed otherwise React complains that we are sharing a context across different renderers.
+ */
+export const render = function render(ui: ReactElement) {
+  act(() => {
+    reconcilerInstance.updateContainer(ui, fiberRoot, null, () => {})
+  })
+}
+
+afterEach(() => {
+  act(() => {
+    reconcilerInstance.updateContainer(null, fiberRoot, null, () => {})
+  })
+})
