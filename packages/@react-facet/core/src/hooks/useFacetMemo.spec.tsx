@@ -17,13 +17,18 @@ it('can cache the map for multiple consumers', () => {
       <div>
         <fast-text text={mappedValueFacet} />
         <fast-text text={mappedValueFacet} />
+        <fast-text text={mappedValueFacet} />
+        <fast-text text={mappedValueFacet} />
       </div>
     )
   }
 
   render(<TestComponent />)
 
-  expect(mapFn).toHaveBeenCalledTimes(1)
+  // Because valueFacet has a value, we expect this to be called twice:
+  //  - To get the initial value on mount
+  //  - On the first subscription
+  expect(mapFn).toHaveBeenCalledTimes(2)
 })
 
 describe('multiple dependencies', () => {

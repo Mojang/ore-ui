@@ -8,6 +8,9 @@ describe('mapFacetsCached WITHOUT an initial value', () => {
     const sourceFacet = createFacet<string>({ initialValue: NO_VALUE })
     const mapFacet = mapFacetsCached([sourceFacet], mapFunction)
 
+    // sourceFacet has no value, so mapFunction can't be called on setup
+    expect(mapFunction).not.toHaveBeenCalled()
+
     // observe twice
     mapFacet.observe(() => {})
     mapFacet.observe(() => {})
@@ -22,6 +25,9 @@ describe('mapFacetsCached WITHOUT an initial value', () => {
     const mapFunction = jest.fn().mockReturnValue('dummy')
     const sourceFacet = createFacet<string>({ initialValue: NO_VALUE })
     const mapFacet = mapFacetsCached([sourceFacet], mapFunction, () => () => false)
+
+    // sourceFacet has no value, so mapFunction can't be called on setup
+    expect(mapFunction).not.toHaveBeenCalled()
 
     // observe twice
     mapFacet.observe(() => {})
