@@ -128,6 +128,17 @@ describe('mount', () => {
     })
 
     describe('for svg', () => {
+      it('renders foreignObject and sets dimensions', () => {
+        render(
+          <svg>
+            <foreignObject x="50" y="100" width="150" height="200" />
+          </svg>,
+        )
+        expect(root?.innerHTML ?? '').toBe(
+          '<svg><foreignObject height="200" x="50" width="150" y="100"></foreignObject></svg>',
+        )
+      })
+
       it('sets the d', () => {
         render(<fast-path d="M0,0 L0,10 Z" />)
         expect(root?.innerHTML ?? '').toBe('<path d="M0,0 L0,10 Z"></path>')
@@ -517,6 +528,22 @@ describe('mount', () => {
     })
 
     describe('for svg', () => {
+      it('renders foreignObject and sets dimensions', () => {
+        const xFacet = createFacet({ initialValue: '50' })
+        const yFacet = createFacet({ initialValue: '100' })
+        const widthFacet = createFacet({ initialValue: '150' })
+        const heightFacet = createFacet({ initialValue: '200' })
+
+        render(
+          <svg>
+            <fast-foreignObject x={xFacet} y={yFacet} width={widthFacet} height={heightFacet} />
+          </svg>,
+        )
+        expect(root?.innerHTML ?? '').toBe(
+          '<svg><foreignObject height="200" x="50" width="150" y="100"></foreignObject></svg>',
+        )
+      })
+
       it('sets the d', () => {
         const dFacet = createFacet({ initialValue: 'M0,0 L0,10 Z' })
 
@@ -1213,6 +1240,48 @@ describe('update', () => {
   })
 
   describe('for svg', () => {
+    it('updates foreignObject dimensions', () => {
+      const MockComponent = () => {
+        const [xFacet, setXFacet] = useState<string | undefined>('50')
+        const [yFacet, setYFacet] = useState<string | undefined>('100')
+        const [widthFacet, setWidthFacet] = useState<string | undefined>('150')
+        const [heightFacet, setHeightFacet] = useState<string | undefined>('200')
+
+        useEffect(() => {
+          setTimeout(() => setXFacet('350'), 1)
+          setTimeout(() => setYFacet('400'), 2)
+          setTimeout(() => setWidthFacet('450'), 3)
+          setTimeout(() => setHeightFacet('500'), 4)
+        }, [])
+        return (
+          <svg>
+            <fast-foreignObject x={xFacet} y={yFacet} width={widthFacet} height={heightFacet} />
+          </svg>
+        )
+      }
+
+      render(<MockComponent />)
+      expect(root?.innerHTML ?? '').toBe(
+        '<svg><foreignObject height="200" x="50" width="150" y="100"></foreignObject></svg>',
+      )
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe(
+        '<svg><foreignObject height="200" x="350" width="150" y="100"></foreignObject></svg>',
+      )
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe(
+        '<svg><foreignObject height="200" x="350" width="150" y="400"></foreignObject></svg>',
+      )
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe(
+        '<svg><foreignObject height="200" x="350" width="450" y="400"></foreignObject></svg>',
+      )
+      jest.advanceTimersByTime(1)
+      expect(root?.innerHTML ?? '').toBe(
+        '<svg><foreignObject height="500" x="350" width="450" y="400"></foreignObject></svg>',
+      )
+    })
+
     it('updates d', () => {
       const MockComponent = () => {
         const [d, setD] = useState<string | undefined>('M0,0 L0,10 Z')

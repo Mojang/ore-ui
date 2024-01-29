@@ -28,6 +28,7 @@ export type TypeSVG =
   | 'fast-path'
   | 'fast-rect'
   | 'fast-svg'
+  | 'fast-foreignObject'
   | 'fast-use'
   | 'fast-polyline'
   | 'fast-polygon'
@@ -50,6 +51,7 @@ export type TypeSVG =
   | 'polygon'
   | 'linearGradient'
   | 'radialGradient'
+  | 'foreignObject'
   | 'stop'
   | 'text'
   | 'pattern'
@@ -289,6 +291,7 @@ export type FastPathProps = ElementProps<SVGPathElement>
 export type FastRectProps = ElementProps<SVGRectElement>
 export type FastSpanProps = ElementProps<HTMLSpanElement>
 export type FastSvgProps = ElementProps<SVGSVGElement>
+export type FastForeignOBjectProps = ElementProps<SVGForeignObjectElement>
 export type FastTextProps = TextProps
 export type FastUseProps = ElementProps<SVGUseElement>
 export type FastPolylineProps = ElementProps<SVGPolylineElement>
@@ -320,6 +323,7 @@ declare global {
       'fast-span': FastSpanProps
       'fast-text': FastTextProps
       'fast-svg': FastSvgProps
+      'fast-foreignObject': FastForeignOBjectProps
       'fast-use': FastUseProps
       'fast-polyline': FastPolylineProps
       'fast-polygon': FastPolyGonProps
