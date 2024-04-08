@@ -1015,6 +1015,10 @@ export const setupHostConfig = (): HostConfig<
   },
 
   insertBefore: function (parentInstance, child, beforeChild) {
+    if (isElementContainer(child)) {
+      parentInstance.children.add(child)
+    }
+
     parentInstance.element.insertBefore(child.element, beforeChild.element)
   },
 
@@ -1027,6 +1031,10 @@ export const setupHostConfig = (): HostConfig<
   },
 
   insertInContainerBefore: function (container, child, beforeChild) {
+    if (isElementContainer(child)) {
+      container.children.add(child)
+    }
+
     container.element.insertBefore(child.element, beforeChild.element)
   },
 
@@ -1061,6 +1069,9 @@ const cleanupElementContainer = (parent: ElementContainer, instance: ElementCont
   instance.children.clear()
 
   instance.className?.()
+  instance.cx?.()
+  instance.cy?.()
+  instance.d?.()
   instance['data-droppable']?.()
   instance['data-narrate']?.()
   instance['data-narrate-as']?.()
@@ -1068,18 +1079,45 @@ const cleanupElementContainer = (parent: ElementContainer, instance: ElementCont
   instance['data-narrate-before']?.()
   instance['data-testid']?.()
   instance['data-x-ray']?.()
+  instance.fill?.()
   instance.id?.()
   instance.src?.()
+  instance.height?.()
   instance.href?.()
   instance.target?.()
   instance.autoPlay?.()
   instance.loop?.()
   instance.disabled?.()
   instance.maxLength?.()
+  instance.r?.()
+  instance.rx?.()
+  instance.ry?.()
   instance.rows?.()
-  instance.value?.()
+  instance.stroke?.()
+  instance.strokeWidth?.()
   instance.type?.()
   instance.text?.()
+  instance.value?.()
+  instance.x?.()
+  instance.x1?.()
+  instance.x2?.()
+  instance.width?.()
+  instance.y?.()
+  instance.y1?.()
+  instance.y2?.()
+  instance.viewBox?.()
+  instance.xLinkHref?.()
+  instance.fillOpacity?.()
+  instance.strokeOpacity?.()
+  instance.strokeLinecap?.()
+  instance.strokeLinejoin?.()
+  instance.points?.()
+  instance.offset?.()
+  instance.stopColor?.()
+  instance.stopOpacity?.()
+  instance.fontFamily?.()
+  instance.fontSize?.()
+  instance.cohinline?.()
 }
 
 const noop = () => {}
