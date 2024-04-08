@@ -30,7 +30,7 @@
   "bugs": "https://github.com/Mojang/ore-ui/issues",
   "license": "MIT",
   "version": "0.5.4",
-  "main": "dist/index.tsx",
+  "main": "src/index.tsx",
   "publishConfig": {
     "main": "dist/index.js",
     "types": "dist/index.d.ts"
