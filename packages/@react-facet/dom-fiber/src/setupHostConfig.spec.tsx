@@ -2042,7 +2042,7 @@ describe('umnount', () => {
   })
 
   it('unsubscribes from a facet (via a fast-* component) inserted using insertBefore, when the parent is unmounted', () => {
-    it.only('unsubscribes from all facets when a elements are swapped', () => {
+    it('unsubscribes from all facets when a elements are swapped', () => {
       const unsubscribe = jest.fn()
 
       const facet: Facet<string> = {
