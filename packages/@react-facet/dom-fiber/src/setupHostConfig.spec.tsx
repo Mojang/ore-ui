@@ -2041,6 +2041,37 @@ describe('umnount', () => {
     expect(unsubscribe).toHaveBeenCalledTimes(1)
   })
 
+  it('unsubscribes from a facet (via a fast-* component) inserted using insertBefore, when the parent is unmounted', () => {
+    const unsubscribe = jest.fn()
+
+    const facet: Facet<string> = {
+      get: () => 'abc',
+      observe: jest.fn().mockReturnValue(unsubscribe),
+    }
+
+    const TestComponent = ({ show, facet }: { facet: Facet<string>; show?: boolean }) => (
+      <div>
+        {show ? <fast-text text={facet} /> : null}
+        <div />
+      </div>
+    )
+
+    render(<TestComponent facet={facet} />)
+
+    expect(facet.observe).toHaveBeenCalledTimes(0)
+    expect(unsubscribe).toHaveBeenCalledTimes(0)
+
+    render(<TestComponent facet={facet} show />)
+
+    expect(facet.observe).toHaveBeenCalledTimes(1)
+    expect(unsubscribe).toHaveBeenCalledTimes(0)
+
+    render(<></>)
+
+    expect(facet.observe).toHaveBeenCalledTimes(1)
+    expect(unsubscribe).toHaveBeenCalledTimes(1)
+  })
+
   it('keeps the subscription of facets when moving in a keyed list', () => {
     const unsubscribeA = jest.fn()
 
