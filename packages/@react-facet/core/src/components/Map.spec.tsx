@@ -103,9 +103,9 @@ it('updates only items that have changed', () => {
 
   const mock = jest.fn()
 
-  const ExampleContent = ({ item, count }: { item: Facet<Input>; count: number }) => {
+  const ExampleContent = ({ item }: { item: Facet<Input> }) => {
     useFacetEffect(mock, [], [item])
-    return <div data-testId={'count'}>{count}</div>
+    return null
   }
 
   const inputEqualityCheck = () => {
@@ -125,10 +125,14 @@ it('updates only items that have changed', () => {
   const Example = () => {
     return (
       <Map array={data} equalityCheck={inputEqualityCheck}>
-        {(item, count) => <ExampleContent item={item} count={count} />}
+        {(item) => <ExampleContent item={item} />}
       </Map>
     )
   }
+
+  const scenario = <Example />
+
+  render(scenario)
 
   expect(mock).toHaveBeenCalledTimes(5)
 
