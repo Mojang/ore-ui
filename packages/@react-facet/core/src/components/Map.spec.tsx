@@ -1,5 +1,5 @@
 import React from 'react'
-import { act, getByTestId, render } from '@react-facet/dom-fiber-testing-library'
+import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { createFacet } from '../facet'
 import { Facet } from '../types'
 import { useFacetEffect, useFacetMap } from '../hooks'
@@ -34,7 +34,7 @@ it('renders all items in a Facet of array', () => {
   const Example = () => {
     return (
       <Map array={data} equalityCheck={inputEqualityCheck}>
-        {(item, index, count) => <ExampleContent item={item} index={index} />}
+        {(item, index) => <ExampleContent item={item} index={index} />}
       </Map>
     )
   }
@@ -130,10 +130,6 @@ it('updates only items that have changed', () => {
     )
   }
 
-  const scenario = <Example />
-
-  const { getByTestId } = render(scenario)
-
   expect(mock).toHaveBeenCalledTimes(5)
 
   mock.mockClear()
@@ -150,8 +146,6 @@ it('count returns length of provided array', () => {
   const data = createFacet({
     initialValue: [{ a: '1' }, { a: '2' }, { a: '3' }],
   })
-
-  const mock = jest.fn()
 
   const ExampleContent = ({ index, count }: { index: number; count: number }) => {
     return <>{count === index + 1 && <div data-testid={'count'}>{count}</div>}</>
