@@ -60,7 +60,7 @@ export function useFacetUnwrap<T extends Value>(
             return { value }
           }
 
-          if (previousValue !== NO_VALUE && isEqual(previousValue)) {
+          if (previousValue !== NO_VALUE && isEqual(value)) {
             return previousState
           }
 
