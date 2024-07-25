@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { FacetProp, isFacet, Value, NoValue, EqualityCheck, NO_VALUE } from '../types'
 import { defaultEqualityCheck } from '../equalityChecks'
 
@@ -12,15 +12,12 @@ export function useFacetUnwrap<T extends Value>(
   prop: FacetProp<T>,
   equalityCheck: EqualityCheck<T> = defaultEqualityCheck,
 ): T | NoValue {
-  const previousStateRef = useRef<T | NoValue>(NO_VALUE)
-
   const [state, setState] = useState<{ value: T | NoValue }>(() => {
     if (!isFacet(prop)) return { value: prop }
 
-    const value = prop.get()
-    previousStateRef.current = value
-
-    return { value }
+    return {
+      value: prop.get(),
+    }
   })
 
   useLayoutEffect(() => {
@@ -33,42 +30,42 @@ export function useFacetUnwrap<T extends Value>(
       }
 
       return prop.observe((value) => {
-        const previousValue = previousStateRef.current
-        previousStateRef.current = value
+        setState((previousState) => {
+          const { value: previousValue } = previousState
 
-        /**
-         * Performs this equality check locally to prevent triggering two consecutive renderings
-         * for facets that have immutable values (unfortunately we can't handle mutable values).
-         *
-         * The two renderings might happen for the same state value if the Facet has a value on mount.
-         *
-         * The unwrap will get the value:
-         * - Once on initialization of the useState above
-         * - And another time on this observe initialization
-         */
-        if (equalityCheck === defaultEqualityCheck) {
-          const typeofValue = typeof previousValue
+          /**
+           * Performs this equality check locally to prevent triggering two consecutive renderings
+           * for facets that have immutable values (unfortunately we can't handle mutable values).
+           *
+           * The two renderings might happen for the same state value if the Facet has a value on mount.
+           *
+           * The unwrap will get the value:
+           * - Once on initialization of the useState above
+           * - And another time on this observe initialization
+           */
+          if (equalityCheck === defaultEqualityCheck) {
+            const typeofValue = typeof previousValue
 
-          if (
-            (typeofValue === 'number' ||
-              typeofValue === 'string' ||
-              typeofValue === 'boolean' ||
-              value === undefined ||
-              value === null) &&
-            value === previousValue
-          ) {
-            return
+            if (
+              (typeofValue === 'number' ||
+                typeofValue === 'string' ||
+                typeofValue === 'boolean' ||
+                value === undefined ||
+                value === null) &&
+              value === previousValue
+            ) {
+              return previousState
+            }
+
+            return { value }
           }
 
-          setState({ value })
-          return
-        }
+          if (previousValue !== NO_VALUE && isEqual(value)) {
+            return previousState
+          }
 
-        if (previousValue !== NO_VALUE && isEqual(value)) {
-          return
-        }
-
-        setState({ value })
+          return { value }
+        })
       })
     }
   }, [prop, equalityCheck])
