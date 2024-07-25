@@ -29,7 +29,7 @@
   "homepage": "https://react-facet.mojang.com/",
   "bugs": "https://github.com/Mojang/ore-ui/issues",
   "license": "MIT",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "main": "src/index.js",
   "sideEffects": false,
   "peerDependencies": {
