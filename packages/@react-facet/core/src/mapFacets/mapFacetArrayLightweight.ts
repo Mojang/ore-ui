@@ -8,11 +8,11 @@ export function mapFacetArrayLightweight<M>(
 ): Facet<M> {
   return {
     get: () => {
-      const values = facets.map((facet) => facet.get())
-      const hasAllValues = values.reduce<boolean>((acc, value) => acc && value !== NO_VALUE, true)
+      const dependencyValues = facets.map((facet) => facet.get())
+      const hasAllValues = dependencyValues.reduce<boolean>((acc, value) => acc && value !== NO_VALUE, true)
       if (!hasAllValues) return NO_VALUE
 
-      return fn(...values)
+      return fn(...dependencyValues)
     },
     observe: mapIntoObserveArray(facets, fn, equalityCheck),
   }
