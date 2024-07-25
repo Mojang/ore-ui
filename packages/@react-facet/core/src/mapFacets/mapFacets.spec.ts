@@ -63,7 +63,7 @@ describe('mapFacetsCached', () => {
     expect(mapFacet.get()).toBe('dummy')
   })
 
-  it('caches calls to the mapFunction though a get call before any subscription, given a single source', () => {
+  it('caches calls to the mapFunction through a get call before any subscription, given a single source', () => {
     const mapFunction = jest.fn().mockReturnValue('dummy')
     const sourceFacet = createFacet({ initialValue: 'initial value' })
     const mapFacet = mapFacetsCached([sourceFacet], mapFunction, () => () => false)
