@@ -6,12 +6,13 @@ import { EqualityCheck, Facet, NO_VALUE } from '../types'
 
 export type MapProps<T> = {
   array: Facet<T[]>
-  children: (item: Facet<T>, index: number) => ReactElement | null
+  children: (item: Facet<T>, index: number, length: number) => ReactElement | null
   equalityCheck?: EqualityCheck<T>
 }
 
 export const Map = <T,>({ array, children, equalityCheck }: MapProps<T>) => {
-  const countValue = useFacetUnwrap(useFacetMap((array) => array.length, [], [array])) ?? 0
+  const lengthValue = useFacetUnwrap(useFacetMap((array) => array.length, [], [array]))
+  const lengthNumber = lengthValue !== NO_VALUE ? lengthValue : 0
 
   return (
     <>
@@ -22,13 +23,14 @@ export const Map = <T,>({ array, children, equalityCheck }: MapProps<T>) => {
               key={index}
               arrayFacet={array}
               index={index}
+              length={lengthNumber}
               equalityCheck={equalityCheck}
               children={children}
             />
           ) : (
-            <MapChild<T> key={index} arrayFacet={array} index={index} children={children} />
+            <MapChild<T> key={index} arrayFacet={array} index={index} length={lengthNumber} children={children} />
           ),
-        countValue !== NO_VALUE ? countValue : 0,
+        lengthNumber,
       )}
     </>
   )
@@ -37,11 +39,12 @@ export const Map = <T,>({ array, children, equalityCheck }: MapProps<T>) => {
 type MapChildMemoProps<T> = {
   arrayFacet: Facet<T[]>
   index: number
-  children: (item: Facet<T>, index: number) => ReactElement | null
+  length: number
+  children: (item: Facet<T>, index: number, length: number) => ReactElement | null
   equalityCheck: EqualityCheck<T>
 }
 
-const MapChildMemo = <T,>({ arrayFacet, index, children, equalityCheck }: MapChildMemoProps<T>) => {
+const MapChildMemo = <T,>({ arrayFacet, index, length, children, equalityCheck }: MapChildMemoProps<T>) => {
   const childFacet = useFacetMemo(
     (array) => {
       if (index < array.length) return array[index]
@@ -51,16 +54,17 @@ const MapChildMemo = <T,>({ arrayFacet, index, children, equalityCheck }: MapChi
     [arrayFacet],
     equalityCheck,
   )
-  return children(childFacet, index)
+  return children(childFacet, index, length)
 }
 
 type MapChildProps<T> = {
   arrayFacet: Facet<T[]>
   index: number
-  children: (item: Facet<T>, index: number) => ReactElement | null
+  length: number
+  children: (item: Facet<T>, index: number, length: number) => ReactElement | null
 }
 
-const MapChild = <T,>({ arrayFacet, index, children }: MapChildProps<T>) => {
+const MapChild = <T,>({ arrayFacet, index, length, children }: MapChildProps<T>) => {
   const childFacet = useFacetMap(
     (array) => {
       if (index < array.length) return array[index]
@@ -70,7 +74,7 @@ const MapChild = <T,>({ arrayFacet, index, children }: MapChildProps<T>) => {
     [arrayFacet],
   )
 
-  return children(childFacet, index)
+  return children(childFacet, index, length)
 }
 
 interface TimesFn<T> {

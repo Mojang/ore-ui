@@ -145,3 +145,21 @@ it('updates only items that have changed', () => {
   expect(mock).toHaveBeenCalledTimes(1)
   expect(mock).toHaveBeenCalledWith({ a: '6' })
 })
+
+it('provides the length of the array', () => {
+  const data = createFacet({
+    initialValue: [{ a: '1' }, { a: '2' }, { a: '3' }],
+  })
+
+  const ExampleContent = ({ index, length }: { index: number; length: number }) => {
+    return <>{length === index + 1 && <div data-testid={'length'}>{length}</div>}</>
+  }
+
+  const Example = () => {
+    return <Map array={data}>{(_, index, length) => <ExampleContent index={index} length={length} />}</Map>
+  }
+
+  const { getByTestId } = render(<Example />)
+
+  expect(getByTestId('length')).toHaveTextContent('3')
+})
