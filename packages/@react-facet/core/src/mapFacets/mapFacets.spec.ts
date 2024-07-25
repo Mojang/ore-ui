@@ -29,21 +29,65 @@ describe('mapFacetsCached', () => {
     expect(mapFunction).toHaveBeenCalledTimes(1)
   })
 
-  it('gets NO_VALUE as a value from a single source before any subscription', () => {
+  it('gets NO_VALUE as a value from a single source if it also has NO_VALUE', () => {
     const mapFunction = jest.fn().mockReturnValue('dummy')
-    const sourceFacet = createFacet({ initialValue: 'initial value' })
+    const sourceFacet = createFacet({ initialValue: NO_VALUE })
     const mapFacet = mapFacetsCached([sourceFacet], mapFunction, () => () => false)
 
     expect(mapFacet.get()).toBe(NO_VALUE)
   })
 
-  it('gets NO_VALUE as a value from multiple sources before any subscription', () => {
+  it('gets NO_VALUE as a value from multiple sources if they also have NO_VALUE', () => {
+    const mapFunction = jest.fn().mockReturnValue('dummy')
+    const sourceAFacet = createFacet({ initialValue: 'initial value' })
+    const sourceBFacet = createFacet({ initialValue: NO_VALUE })
+    const mapFacet = mapFacetsCached([sourceAFacet, sourceBFacet], mapFunction, () => () => false)
+
+    expect(mapFacet.get()).toBe(NO_VALUE)
+  })
+
+  it('can get the mapped value from a single source before any subscription', () => {
+    const mapFunction = jest.fn().mockReturnValue('dummy')
+    const sourceFacet = createFacet({ initialValue: 'initial value' })
+    const mapFacet = mapFacetsCached([sourceFacet], mapFunction, () => () => false)
+
+    expect(mapFacet.get()).toBe('dummy')
+  })
+
+  it('can get the mapped value from multiple sources before any subscription', () => {
     const mapFunction = jest.fn().mockReturnValue('dummy')
     const sourceAFacet = createFacet({ initialValue: 'initial value' })
     const sourceBFacet = createFacet({ initialValue: 'initial value' })
     const mapFacet = mapFacetsCached([sourceAFacet, sourceBFacet], mapFunction, () => () => false)
 
-    expect(mapFacet.get()).toBe(NO_VALUE)
+    expect(mapFacet.get()).toBe('dummy')
+  })
+
+  it('caches calls to the mapFunction through a get call before any subscription, given a single source', () => {
+    const mapFunction = jest.fn().mockReturnValue('dummy')
+    const sourceFacet = createFacet({ initialValue: 'initial value' })
+    const mapFacet = mapFacetsCached([sourceFacet], mapFunction, () => () => false)
+
+    expect(mapFacet.get()).toBe('dummy')
+    expect(mapFunction).toHaveBeenCalledTimes(1)
+
+    mapFunction.mockClear()
+    expect(mapFacet.get()).toBe('dummy')
+    expect(mapFunction).not.toHaveBeenCalled()
+  })
+
+  it('caches calls to the mapFunction through a get call before any subscription, given multiple sources', () => {
+    const mapFunction = jest.fn().mockReturnValue('dummy')
+    const sourceAFacet = createFacet({ initialValue: 'initial value' })
+    const sourceBFacet = createFacet({ initialValue: 'initial value' })
+    const mapFacet = mapFacetsCached([sourceAFacet, sourceBFacet], mapFunction, () => () => false)
+
+    expect(mapFacet.get()).toBe('dummy')
+    expect(mapFunction).toHaveBeenCalledTimes(1)
+
+    mapFunction.mockClear()
+    expect(mapFacet.get()).toBe('dummy')
+    expect(mapFunction).not.toHaveBeenCalled()
   })
 })
 
