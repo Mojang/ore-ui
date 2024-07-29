@@ -16,7 +16,7 @@ import { EqualityCheck, Facet, NoValue, ExtractFacetValues } from '../types'
  *
  * @returns a new facet definition that can be consumed as a regular facet
  */
-export function useFacetMemo<M, Y extends Facet<unknown>[], T extends [...Y]>(
+export function useFacetMemo<M, Y extends[Facet<unknown>, ...Facet<unknown>[]], T extends [...Y]>(
   selector: (...args: ExtractFacetValues<T>) => M | NoValue,
   dependencies: unknown[],
   facets: T,
