@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, act } from '@testing-library/react'
+import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { fast } from '.'
 import { createFacet } from '@react-facet/core'
 

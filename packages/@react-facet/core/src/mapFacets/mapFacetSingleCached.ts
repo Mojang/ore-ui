@@ -7,10 +7,11 @@ export function mapFacetSingleCached<T, M>(
   fn: (value: T) => M | NoValue,
   equalityCheck?: EqualityCheck<M>,
 ): Facet<M> {
+  const initialValue = facet.get()
   const cachedFacet = createFacet<M>({
     // pass the equalityCheck to the mapIntoObserveSingle to prevent even triggering the observable
     startSubscription: mapIntoObserveSingle(facet, fn, equalityCheck),
-    initialValue: NO_VALUE,
+    initialValue: initialValue !== NO_VALUE ? fn(initialValue) : NO_VALUE,
   })
 
   return {

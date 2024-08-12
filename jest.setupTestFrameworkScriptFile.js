@@ -1,7 +1,10 @@
 /* eslint-disable import/no-named-as-default-member */
 // eslint-disable-next-line require-in-package/require-in-package
-import React from 'react'
-import '@testing-library/jest-dom/extend-expect'
+const React = require('react')
+
+const matchers = require('@testing-library/jest-dom/extend-expect')
+
+expect.extend(matchers)
 
 // Make useEffect run synchronously to make it easier to test
 // TODO: update this to an official solution once available

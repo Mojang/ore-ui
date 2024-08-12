@@ -1,4 +1,28 @@
-import { FacetProp, isFacet } from '@react-facet/core'
+import { FacetProp, isFacet, Unsubscribe } from '@react-facet/core'
+import { Style } from './types'
+
+export const setupStyleUpdate = (
+  styleProp: Style,
+  style: Record<string, unknown>,
+  styleUnsubscribers: Map<string | number, Unsubscribe>,
+) => {
+  for (const key in styleProp) {
+    const value = styleProp[key]
+
+    if (value !== undefined) {
+      if (isFacet(value)) {
+        styleUnsubscribers.set(
+          key,
+          value.observe((value) => {
+            style[key] = value
+          }),
+        )
+      } else {
+        style[key] = value
+      }
+    }
+  }
+}
 
 export const setupClassUpdate = (className: FacetProp<string | undefined>, element: HTMLElement | SVGElement) => {
   const htmlElement = element as HTMLElement
