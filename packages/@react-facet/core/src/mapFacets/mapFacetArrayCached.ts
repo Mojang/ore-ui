@@ -9,9 +9,25 @@ export function mapFacetArrayCached<M>(
 ): Facet<M> {
   const initialValues = facets.map((facet) => facet.get())
   const hasAllValues = initialValues.reduce<boolean>((prev, curr) => prev && curr !== NO_VALUE, true)
-  return createFacet<M>({
+  const cachedFacet = createFacet<M>({
     // pass the equalityCheck to the mapIntoObserveArray to prevent even triggering the observable
     startSubscription: mapIntoObserveArray(facets, fn, equalityCheck),
     initialValue: hasAllValues ? fn(...initialValues) : NO_VALUE,
   })
+
+  return {
+    get: () => {
+      const cachedValue = cachedFacet.get()
+      if (cachedValue !== NO_VALUE) return cachedValue
+
+      const dependencyValues = facets.map((facet) => facet.get())
+      const hasAllValues = dependencyValues.reduce<boolean>((acc, value) => acc && value !== NO_VALUE, true)
+      if (!hasAllValues) return NO_VALUE
+
+      const mappedValue = fn(...dependencyValues)
+      if (mappedValue !== NO_VALUE) cachedFacet.set(mappedValue)
+      return mappedValue
+    },
+    observe: cachedFacet.observe,
+  }
 }

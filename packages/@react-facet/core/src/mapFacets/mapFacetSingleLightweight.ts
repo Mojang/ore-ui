@@ -8,10 +8,10 @@ export function mapFacetSingleLightweight<T, M>(
 ): Facet<M> {
   return {
     get: () => {
-      const value = facet.get()
-      if (value === NO_VALUE) return NO_VALUE
+      const dependencyValue = facet.get()
+      if (dependencyValue === NO_VALUE) return NO_VALUE
 
-      return fn(value)
+      return fn(dependencyValue)
     },
 
     observe: mapIntoObserveSingle(facet, fn, equalityCheck),
