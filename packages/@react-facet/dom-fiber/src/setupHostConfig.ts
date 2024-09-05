@@ -56,8 +56,7 @@ export const setupHostConfig = (): HostConfig<
   supportsMutation: true,
   supportsPersistence: false,
   supportsHydration: false,
-
-  supportsMicrotask: true,
+  supportsMicrotasks: true,
   scheduleMicrotask:
     typeof queueMicrotask === 'function'
       ? queueMicrotask

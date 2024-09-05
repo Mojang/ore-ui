@@ -89,7 +89,7 @@ describe('rendering from facet', () => {
 describe('rendering from a selector', () => {
   const RenderingSelector = () => {
     const value = useFacetUnwrap(useSharedFacet(barSelector))
-    return <div>{value}</div>
+    return <div>{value !== NO_VALUE ? value : ''}</div>
   }
 
   it('constructs the root facet, and destructs it on unmount', () => {
@@ -164,7 +164,7 @@ describe('rendering from a dynamic selector', () => {
   it('correctly renders using the selector parameter', () => {
     const RenderingSelector = ({ index }: { index: number }) => {
       const value = useFacetUnwrap(useSharedFacet(valueDynamicSelector(index)))
-      return <div>Item: {value}</div>
+      return <div>Item: {value !== NO_VALUE ? value : ''}</div>
     }
 
     const { getByText, rerender } = render(
