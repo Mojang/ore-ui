@@ -239,3 +239,4 @@ export const act = environment.act
 export const render = environment.render
 export const cleanup = environment.cleanup
 export * from '@testing-library/dom'
+export const fireEvent = environment.fireEvent
