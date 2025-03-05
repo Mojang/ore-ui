@@ -234,9 +234,13 @@ export type RenderResult = {
 
 type ContainerRootFiberTuple = [HTMLElement, FacetFiberRoot]
 
+// Destructure all exports except `fireEvent`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { fireEvent: _, ...testingLibraryExcludingFireEvent } = testingLibrary
+export default testingLibraryExcludingFireEvent
+
 const environment = setup()
 export const act = environment.act
 export const render = environment.render
 export const cleanup = environment.cleanup
-export * from '@testing-library/dom'
 export const fireEvent = environment.fireEvent
