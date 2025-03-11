@@ -23,7 +23,9 @@ const compare = async (optionA: string, optionB: string, targetRelativePerforman
 
   // Puppeteer doesn't really have a `launch` named export.
   // eslint-disable-next-line import/no-named-as-default-member
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox'],
+  })
 
   interface TraceEvent {
     name: string
