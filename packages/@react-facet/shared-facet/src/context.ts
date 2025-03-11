@@ -8,6 +8,8 @@ export const sharedFacetDriverContext = createContext<SharedFacetDriver>(dummyCo
 
 export const SharedFacetDriverProvider = sharedFacetDriverContext.Provider
 
-export const useSharedFacet = <T>(sharedFacet: SharedFacet<T>): Facet<T> => {
-  return sharedFacet(useContext(sharedFacetDriverContext))
+type InferFacet<T> = T extends SharedFacet<infer U> ? Facet<U> : never
+
+export const useSharedFacet = <T extends SharedFacet<unknown>>(sharedFacet: T): InferFacet<T> => {
+  return sharedFacet(useContext(sharedFacetDriverContext)) as InferFacet<T>
 }
