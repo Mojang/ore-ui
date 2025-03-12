@@ -29,7 +29,7 @@
   "homepage": "https://react-facet.mojang.com/",
   "bugs": "https://github.com/Mojang/ore-ui/issues",
   "license": "MIT",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "main": "dist/index.js",
   "publishConfig": {
     "main": "dist/index.js",
@@ -41,11 +41,11 @@
     "prepublish": "yarn build"
   },
   "peerDependencies": {
-    "@react-facet/core": "0.6.1",
+    "@react-facet/core": "0.6.2",
     "react": "^16.9.0"
   },
   "devDependencies": {
-    "@react-facet/dom-fiber-testing-library": "0.6.1",
+    "@react-facet/dom-fiber-testing-library": "0.6.2",
     "react": "^16.9.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.8.2"
