@@ -10,7 +10,7 @@ import { Facet, Unsubscribe, Cleanup, NO_VALUE, ExtractFacetValues } from '../ty
  * We pass the dependencies of the callback as the second argument so we can leverage the eslint-plugin-react-hooks option for additionalHooks.
  * Having this as the second argument allows the linter to work.
  */
-export function multiObserve<Y extends Facet<unknown>[], T extends [...Y]>(
+export function multiObserve<Y extends[Facet<unknown>, ...Facet<unknown>[]], T extends [...Y]>(
   effect: (...args: ExtractFacetValues<T>) => void | Cleanup,
   facets: T,
 ) {

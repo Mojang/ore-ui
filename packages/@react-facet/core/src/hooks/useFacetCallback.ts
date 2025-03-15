@@ -13,7 +13,7 @@ import { Facet, NO_VALUE, ExtractFacetValues, NoValue } from '../types'
  * We pass the dependencies of the callback as the second argument so we can leverage the eslint-plugin-react-hooks option for additionalHooks.
  * Having this as the second argument allows the linter to work.
  */
-export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y], K extends [...unknown[]]>(
+export function useFacetCallback<M, Y extends[Facet<unknown>, ...Facet<unknown>[]], T extends [...Y], K extends [...unknown[]]>(
   callback: (...args: ExtractFacetValues<T>) => (...args: K) => M,
   dependencies: unknown[],
   facets: T,
@@ -31,13 +31,13 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
  * We pass the dependencies of the callback as the second argument so we can leverage the eslint-plugin-react-hooks option for additionalHooks.
  * Having this as the second argument allows the linter to work.
  */
-export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y], K extends [...unknown[]]>(
+export function useFacetCallback<M, Y extends[Facet<unknown>, ...Facet<unknown>[]], T extends [...Y], K extends [...unknown[]]>(
   callback: (...args: ExtractFacetValues<T>) => (...args: K) => M,
   dependencies: unknown[],
   facets: T,
 ): (...args: K) => M | NoValue
 
-export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y], K extends [...unknown[]]>(
+export function useFacetCallback<M, Y extends[Facet<unknown>, ...Facet<unknown>[]], T extends [...Y], K extends [...unknown[]]>(
   callback: (...args: ExtractFacetValues<T>) => (...args: K) => M,
   dependencies: unknown[],
   facets: T,
