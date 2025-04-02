@@ -240,4 +240,7 @@ const environment = setup()
 export const act = environment.act
 export const render = environment.render
 export const cleanup = environment.cleanup
+// eslint-disable-next-line import/export
 export * from '@testing-library/dom'
+// eslint-disable-next-line import/export
+export const fireEvent = environment.fireEvent
