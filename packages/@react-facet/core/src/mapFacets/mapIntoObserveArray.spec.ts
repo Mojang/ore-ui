@@ -2,6 +2,30 @@ import { defaultEqualityCheck } from '../equalityChecks'
 import { NO_VALUE } from '../types'
 import { mapIntoObserveArray } from './mapIntoObserveArray'
 
+it.only('only calls listener once if initial values are provided', () => {
+  const sourceA = { observe: jest.fn(), get: jest.fn() }
+  const sourceB = { observe: jest.fn(), get: jest.fn() }
+
+  const observe = mapIntoObserveArray<number>([sourceA, sourceB], (valueA: number, valueB: number) => {
+    return valueA + valueB
+  })
+  const listener = jest.fn()
+
+  observe(listener)
+
+  expect(sourceA.observe).toBeCalled()
+  expect(sourceB.observe).toBeCalled()
+
+  // trigger an update on one dependency and check it wasn't called
+  sourceA.observe.mock.calls[0][0](10)
+  expect(listener).not.toBeCalled()
+
+  // trigger an update on the other dependency and check it was called
+  listener.mockClear()
+  sourceB.observe.mock.calls[0][0](10)
+  expect(listener).toBeCalledTimes(1)
+})
+
 it('checks equality of primitives when passing defaultEqualityCheck', () => {
   const sourceA = { observe: jest.fn(), get: jest.fn() }
   const sourceB = { observe: jest.fn(), get: jest.fn() }

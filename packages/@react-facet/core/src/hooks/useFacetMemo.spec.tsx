@@ -265,6 +265,38 @@ describe('multiple dependencies', () => {
 
     expect(mock).not.toHaveBeenCalled()
   })
+
+  // This test will not pass, because the listener is called twice. This is due to
+  // `createFacet.observe` calls the listener twice: once when observe is run, and subsequently
+  // when the `startSubscription` call is made. Usually developers will not hit this issue as they
+  // will likely have an object equality check in place, but it could be nice to avoid this extra call regardless.
+  it.skip('only fires onces if both facets have initial values, and returned value is non-primitive', () => {
+    const facetA = createFacet({ initialValue: 4 })
+    const facetB = createFacet({ initialValue: 5 })
+    const facetC = createFacet({ initialValue: 6 })
+
+    const mock = jest.fn()
+
+    const ComponentWithFacetEffect = () => {
+      const adaptValue = useFacetMemo((a, b, c) => ({ foo: a + b + c }), [], [facetA, facetB, facetC])
+
+      useFacetEffect(
+        (value) => {
+          mock(value)
+        },
+        [],
+        [adaptValue],
+      )
+
+      return null
+    }
+
+    render(<ComponentWithFacetEffect />)
+    expect(mock).toHaveBeenCalledWith({ foo: 4 + 5 + 6 })
+    expect(mock).toHaveBeenCalledTimes(1)
+
+    mock.mockClear()
+  })
 })
 
 describe('single dependency', () => {
