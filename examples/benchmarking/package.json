@@ -9,10 +9,10 @@
     "compare": "ts-node compare.ts"
   },
   "dependencies": {
-    "@react-facet/core": "0.7.0-rc.1",
-    "@react-facet/dom-fiber": "0.7.0-rc.1",
-    "@react-facet/shared-facet": "0.7.0-rc.1",
-    "@react-facet/spring": "0.7.0-rc.1",
+    "@react-facet/core": "0.7.0-rc.2",
+    "@react-facet/dom-fiber": "0.7.0-rc.2",
+    "@react-facet/shared-facet": "0.7.0-rc.2",
+    "@react-facet/spring": "0.7.0-rc.2",
     "ramda": "^0.27.1",
     "react": "18.2.0",
     "react-dom": "^18.2.0"
