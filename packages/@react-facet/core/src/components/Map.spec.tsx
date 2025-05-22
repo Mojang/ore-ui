@@ -138,7 +138,7 @@ it('updates only items that have changed', () => {
 
   // This would ideally only be called 5 times.
   // There is a future fix planned: https://github.com/Mojang/ore-ui/commit/66bc36336322970c16f663eea0259dd53970621b
-  expect(mock).toHaveBeenCalledTimes(10)
+  expect(mock).toHaveBeenCalledTimes(5)
 
   mock.mockClear()
 

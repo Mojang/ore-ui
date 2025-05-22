@@ -21,6 +21,15 @@ export function createFacet<V>({
 
   const checker = equalityCheck?.()
 
+  // Run the checker once to initialize the known value
+  if (initialValue !== NO_VALUE) {
+    if (equalityCheck === defaultEqualityCheck) {
+      currentValue = initialValue
+    } else {
+      checker(initialValue)
+    }
+  }
+
   const update = (newValue: V) => {
     if (equalityCheck !== undefined) {
       // we optimize for the most common scenario of using the defaultEqualityCheck (by inline its implementation)
