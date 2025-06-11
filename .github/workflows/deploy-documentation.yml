@@ -3,9 +3,10 @@ name: GitHub Pages Deploy
 on:
   push:
     branches:
-      - documentation
-    path:
-      - 'react-facet/**'
+      # - documentation
+      - solve-deployment-issue
+    # path:
+    # - 'react-facet/**'
 
 permissions:
   contents: read
@@ -25,13 +26,11 @@ jobs:
         with:
           node-version: '20'
       - name: Install dependencies
-        run: |
-          cd react-facet
-          npm ci
+        run: yarn install --immutable
       - name: Build
         run: |
           cd react-facet
-          npm run build
+          yarn build
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
