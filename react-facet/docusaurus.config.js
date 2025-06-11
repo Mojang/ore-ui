@@ -3,8 +3,8 @@ module.exports = {
   title: '@react-facet',
   tagline: 'Observable-based state management for performant game UIs built in React',
 
-  url: 'https://jolly-stone-0d2f00e03.azurestaticapps.net',
-  baseUrl: '/',
+  url: 'https://mojang.github.io',
+  baseUrl: '/ore-ui',
   projectName: 'ore-ui',
   organizationName: 'Mojang',
 
