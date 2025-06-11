@@ -3,9 +3,9 @@ name: GitHub Pages Deploy
 on:
   push:
     branches:
-      # - documentation
-    # path:
-    # - 'react-facet/**'
+      - documentation
+    path:
+      - 'react-facet/**'
 
 permissions:
   contents: read
