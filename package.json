@@ -2,12 +2,10 @@
   "name": "ore-ui-meta-repo",
   "private": true,
   "workspaces": [
-    "ore-ui",
     "react-facet"
   ],
   "scripts": {
     "format": "prettier --write \"**/*.@(json|js|css|mdx|md|tsx|ts)\"",
-    "ore-ui": "yarn workspace ore-ui run start",
     "react-facet": "yarn workspace react-facet run start"
   },
   "devDependencies": {
