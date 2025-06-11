@@ -13,5 +13,5 @@
   "devDependencies": {
     "prettier": "^2.3.2"
   },
-  "packageManager": "yarn@3.0.2"
+  "packageManager": "yarn@3.2.4"
 }
