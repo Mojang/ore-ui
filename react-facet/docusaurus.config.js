@@ -4,7 +4,7 @@ module.exports = {
   tagline: 'Observable-based state management for performant game UIs built in React',
 
   url: 'https://mojang.github.io',
-  baseUrl: '/ore-ui',
+  baseUrl: '/',
   projectName: 'ore-ui',
   organizationName: 'Mojang',
 
