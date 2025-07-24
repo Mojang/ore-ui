@@ -1149,7 +1149,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-facet/core@0.6.1, @react-facet/core@workspace:packages/@react-facet/core":
+"@react-facet/core@npm:0.6.1":
+  version: 0.6.1
+  resolution: "@react-facet/core@npm:0.6.1"
+  peerDependencies:
+    react: ^16.9.0
+  checksum: 720979fd1c4da260612d4f251e7c2e06ca1ffeec29df97545eb011585343f823bb532c4cb4c60dc24d71485c766faa0d2a0877dec495b4aaa9a6606d40ee3a14
+  languageName: node
+  linkType: hard
+
+"@react-facet/core@workspace:packages/@react-facet/core":
   version: 0.0.0-use.local
   resolution: "@react-facet/core@workspace:packages/@react-facet/core"
   dependencies:
@@ -1186,7 +1195,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber-testing-library@0.6.1, @react-facet/dom-fiber-testing-library@workspace:^, @react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library":
+"@react-facet/dom-fiber-testing-library@npm:0.6.1":
+  version: 0.6.1
+  resolution: "@react-facet/dom-fiber-testing-library@npm:0.6.1"
+  dependencies:
+    "@testing-library/dom": ^8.0.0
+  peerDependencies:
+    "@react-facet/dom-fiber": 0.6.1
+    react: ^16.9.0
+  checksum: ff0850b4727bf200cd514b8e50aa5ce859a7930da2aa3cc8509f17bab78beb8b4fa3f0627c611e2b40689fba2add5558b20e8c18df792eb5267be41d6f4bdaed
+  languageName: node
+  linkType: hard
+
+"@react-facet/dom-fiber-testing-library@workspace:^, @react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library"
   dependencies:
@@ -1201,7 +1222,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber@0.6.1, @react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber":
+"@react-facet/dom-fiber@npm:0.6.1":
+  version: 0.6.1
+  resolution: "@react-facet/dom-fiber@npm:0.6.1"
+  dependencies:
+    react-reconciler: ^0.24.0
+  peerDependencies:
+    "@react-facet/core": 0.6.1
+    react: ^16.9.0
+  checksum: 7ecd1db41d02645084910c94121f17665fa096cc4f78c9d93b7cd049b844ecba71161399e7877cf65c7347b4f0e54f9b9f0cea746a4d41c104eb29103c9a8565
+  languageName: node
+  linkType: hard
+
+"@react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber"
   dependencies:
@@ -1231,7 +1264,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/shared-facet@0.6.1, @react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
+"@react-facet/shared-facet@npm:0.6.1":
+  version: 0.6.1
+  resolution: "@react-facet/shared-facet@npm:0.6.1"
+  peerDependencies:
+    "@react-facet/core": 0.6.1
+    react: ^16.9.0
+  checksum: e6a09621ab5c1b05512f2847f6e0bc5a4906a857ca6cd7e5c22f9c5e41117baf0fdb1d52829e4f35d081eb582336075d85e7f6e0f46aa1122b4f81cb8666d0b8
+  languageName: node
+  linkType: hard
+
+"@react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
   version: 0.0.0-use.local
   resolution: "@react-facet/shared-facet@workspace:packages/@react-facet/shared-facet"
   dependencies:
@@ -1249,7 +1292,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/spring@0.6.1, @react-facet/spring@workspace:packages/@react-facet/spring":
+"@react-facet/spring@npm:0.6.1":
+  version: 0.6.1
+  resolution: "@react-facet/spring@npm:0.6.1"
+  peerDependencies:
+    "@react-facet/core": 0.6.1
+    react: ^16.9.0
+  checksum: cb223c23423bd6f8d2f84c7f14af797ab69568367fb83397b8f8577ed6de5b747b10124db5354fe68a63dc066ac974d819c7b2f4608a575709f273463360055f
+  languageName: node
+  linkType: hard
+
+"@react-facet/spring@workspace:packages/@react-facet/spring":
   version: 0.0.0-use.local
   resolution: "@react-facet/spring@workspace:packages/@react-facet/spring"
   dependencies:
@@ -1293,7 +1346,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^8.20.0":
+"@testing-library/dom@npm:^8.0.0, @testing-library/dom@npm:^8.20.0":
   version: 8.20.1
   resolution: "@testing-library/dom@npm:8.20.1"
   dependencies:
@@ -8597,7 +8650,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -8799,6 +8852,20 @@ __metadata:
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: e20fe84c86ff172fc8d898251b7cc2c43645d108bf96d0b8edf39b98f9a2cae97b40520ee7ed8ee0085ccc94736c4886294456033304151c3f94978cec03df21
+  languageName: node
+  linkType: hard
+
+"react-reconciler@npm:^0.24.0":
+  version: 0.24.0
+  resolution: "react-reconciler@npm:0.24.0"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+    prop-types: ^15.6.2
+    scheduler: ^0.18.0
+  peerDependencies:
+    react: ^16.0.0
+  checksum: c9c74208325a940ca36e031b71499f6d8e62e96ee673d69e35cc9e6a661aa746a2b0750f2ffcd1bae0a29eaf3d127dc8197ab7e801e6a3a2ab7d45a71b464630
   languageName: node
   linkType: hard
 
@@ -9228,6 +9295,16 @@ __metadata:
   dependencies:
     xmlchars: ^2.2.0
   checksum: d3fa3e2aaf6c65ed52ee993aff1891fc47d5e47d515164b5449cbf5da2cbdc396137e55590472e64c5c436c14ae64a8a03c29b9e7389fc6f14035cf4e982ef3b
+  languageName: node
+  linkType: hard
+
+"scheduler@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "scheduler@npm:0.18.0"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+  checksum: b6e0b9e0086b200b114f1ef7f9fcac966ad5d84cd3b1867174be0549d3ff713d1fd22d5574cb024b7d3eadf3307f2afc1cb5bfbf28b0d3bc34b200183800fcae
   languageName: node
   linkType: hard
 
