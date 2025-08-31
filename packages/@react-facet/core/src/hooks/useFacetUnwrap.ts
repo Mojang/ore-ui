@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { FacetProp, isFacet, Value, NoValue, EqualityCheck, NO_VALUE } from '../types'
 import { defaultEqualityCheck } from '../equalityChecks'
 
@@ -25,6 +25,10 @@ export function useFacetUnwrap<T extends Value>(
     }
   })
 
+  // Creates a ref, and keep it updated (used for equality check within the effect)
+  const previousStateRef = useRef(state)
+  previousStateRef.current = state
+
   useLayoutEffect(() => {
     if (isFacet(prop)) {
       // Initialize the equalityCheck
@@ -35,42 +39,40 @@ export function useFacetUnwrap<T extends Value>(
       }
 
       const cleanup = prop.observe((value) => {
-        setState((previousState) => {
-          const { value: previousValue } = previousState
+        const { value: previousValue } = previousStateRef.current
 
-          /**
-           * Performs this equality check locally to prevent triggering two consecutive renderings
-           * for facets that have immutable values (unfortunately we can't handle mutable values).
-           *
-           * The two renderings might happen for the same state value if the Facet has a value on mount.
-           *
-           * The unwrap will get the value:
-           * - Once on initialization of the useState above
-           * - And another time on this observe initialization
-           */
-          if (equalityCheck === defaultEqualityCheck) {
-            const typeofValue = typeof previousValue
+        /**
+         * Performs this equality check locally to prevent triggering two consecutive renderings
+         * for facets that have immutable values (unfortunately we can't handle mutable values).
+         *
+         * The two renderings might happen for the same state value if the Facet has a value on mount.
+         *
+         * The unwrap will get the value:
+         * - Once on initialization of the useState above
+         * - And another time on this observe initialization
+         */
+        if (equalityCheck === defaultEqualityCheck) {
+          const typeofValue = typeof previousValue
 
-            if (
-              (typeofValue === 'number' ||
-                typeofValue === 'string' ||
-                typeofValue === 'boolean' ||
-                value === undefined ||
-                value === null) &&
-              value === previousValue
-            ) {
-              return previousState
-            }
-
-            return { value }
+          if (
+            (typeofValue === 'number' ||
+              typeofValue === 'string' ||
+              typeofValue === 'boolean' ||
+              value === undefined ||
+              value === null) &&
+            value === previousValue
+          ) {
+            return
           }
 
-          if (previousValue !== NO_VALUE && isEqual(value)) {
-            return previousState
-          }
+          return setState({ value })
+        }
 
-          return { value }
-        })
+        if (previousValue !== NO_VALUE && isEqual(value)) {
+          return
+        }
+
+        return setState({ value })
       })
 
       initializationCleanup()
