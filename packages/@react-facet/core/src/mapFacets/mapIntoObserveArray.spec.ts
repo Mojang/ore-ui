@@ -2,7 +2,7 @@ import { defaultEqualityCheck } from '../equalityChecks'
 import { NO_VALUE } from '../types'
 import { mapIntoObserveArray } from './mapIntoObserveArray'
 
-it.only('only calls listener once if initial values are provided', () => {
+it('only calls listener once if initial values are provided', () => {
   const sourceA = { observe: jest.fn(), get: jest.fn() }
   const sourceB = { observe: jest.fn(), get: jest.fn() }
 

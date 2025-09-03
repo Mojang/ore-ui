@@ -23,9 +23,7 @@ it('triggers the map once for each multiple consumers', () => {
 
   render(<TestComponent />)
 
-  // It will be called once on initialize for each consumer (as valueFacet has an initial value)
-  // and then another time for each consumer when the facet is observed and emits its initial value
-  expect(mapFn).toHaveBeenCalledTimes(4)
+  expect(mapFn).toHaveBeenCalledTimes(2)
 })
 
 describe('multiple dependencies', () => {

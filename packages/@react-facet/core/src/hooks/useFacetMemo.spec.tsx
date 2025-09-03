@@ -24,11 +24,7 @@ it('can cache the map for multiple consumers', () => {
   }
 
   render(<TestComponent />)
-
-  // Because valueFacet has a value, we expect this to be called twice:
-  //  - To get the initial value on mount
-  //  - On the first subscription
-  expect(mapFn).toHaveBeenCalledTimes(2)
+  expect(mapFn).toHaveBeenCalledTimes(1)
 })
 
 describe('multiple dependencies', () => {
@@ -266,11 +262,7 @@ describe('multiple dependencies', () => {
     expect(mock).not.toHaveBeenCalled()
   })
 
-  // This test will not pass, because the listener is called twice. This is due to
-  // `createFacet.observe` calls the listener twice: once when observe is run, and subsequently
-  // when the `startSubscription` call is made. Usually developers will not hit this issue as they
-  // will likely have an object equality check in place, but it could be nice to avoid this extra call regardless.
-  it.skip('only fires onces if both facets have initial values, and returned value is non-primitive', () => {
+  it('only fires onces if both facets have initial values, and returned value is non-primitive', () => {
     const facetA = createFacet({ initialValue: 4 })
     const facetB = createFacet({ initialValue: 5 })
     const facetC = createFacet({ initialValue: 6 })

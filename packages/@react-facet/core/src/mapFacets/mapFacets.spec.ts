@@ -58,15 +58,6 @@ describe('mapFacetsCached WITHOUT an initial value', () => {
 })
 
 describe('mapFacetsCached WITH an initial value', () => {
-  it('calls the map function ahead of subscription to make sure we have the initial value', () => {
-    const mapFunction = jest.fn().mockReturnValue('dummy')
-    const sourceFacet = createFacet({ initialValue: 'initial value' })
-    mapFacetsCached([sourceFacet], mapFunction)
-
-    // check that the map was called just once (to map the readily available initial value)
-    expect(mapFunction).toHaveBeenCalledTimes(1)
-  })
-
   it('gets the initial value mapped as a value from a single source before any subscription', () => {
     const mapFunction = jest.fn().mockReturnValue('dummy')
     const sourceFacet = createFacet({ initialValue: 'initial value' })
