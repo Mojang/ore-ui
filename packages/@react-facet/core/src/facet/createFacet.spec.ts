@@ -235,24 +235,3 @@ describe('setWithCallback', () => {
     expect(listenerMock).not.toHaveBeenCalled()
   })
 })
-
-describe('regressions', () => {
-  it.skip('only calls initial observer once for a facet with an initialValue and a startSubscription', () => {
-    const value = 'test-value'
-    const initialValue = 'initial-value'
-    const cleanup = jest.fn()
-    const startSubscription = jest.fn().mockImplementation((update) => {
-      update(value)
-      return cleanup
-    })
-
-    const mock = createFacet<string>({ startSubscription, initialValue })
-
-    const listener = jest.fn()
-
-    mock.observe(listener)
-
-    expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toHaveBeenLastCalledWith(value)
-  })
-})
