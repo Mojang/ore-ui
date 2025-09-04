@@ -282,3 +282,29 @@ it('supports custom equality checks', () => {
   expect(check).toHaveBeenCalledWith(newValue) // passing the new value
   expect(renderedMock).toHaveBeenCalledTimes(1) // and since the equality check always returns "false", we have a render
 })
+
+it('supports setting a facet multiple times in the same render', () => {
+  const demoFacet = createFacet({ initialValue: 'foo' })
+  const renderedMock = jest.fn()
+
+  const ComponentWithFacetEffect = () => {
+    const adaptValue = useFacetUnwrap(demoFacet)
+    renderedMock()
+
+    if (adaptValue === NO_VALUE) return null
+    return <span>{adaptValue}</span>
+  }
+
+  const result = render(<ComponentWithFacetEffect />)
+  expect(renderedMock).toHaveBeenCalledTimes(1)
+
+  renderedMock.mockClear()
+
+  act(() => {
+    demoFacet.set('bar')
+    demoFacet.set('foo')
+  })
+
+  expect(renderedMock).toHaveBeenCalledTimes(1)
+  expect(result.container.textContent).toBe('foo')
+})

@@ -65,6 +65,18 @@ export function useFacetUnwrap<T extends Value>(
             return
           }
 
+          // Even though we set the previous ref in the render (which should be triggered by
+          // the setState), the setState re-render is delayed until all of the .set changes are
+          // flushed. So we update the previous ref here to provide the correct value for subsequent
+          // runs.
+          // As an example:
+          //    useEffect(() => {
+          //      myFacet.set(true)
+          //      myFacet.set(false)
+          //    }, [])
+          // This would flush both sets before the setState below causes a re-render to update the ref.
+          // The line below fixes the above scenario.
+          previousStateRef.current = { value }
           return setState({ value })
         }
 
