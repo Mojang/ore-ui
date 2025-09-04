@@ -1,6 +1,6 @@
-import { ReactElement } from 'react'
-import * as testingLibrary from '@testing-library/dom'
+import React, { ReactElement } from 'react'
 import { setupAct } from './setupAct'
+import * as testingLibrary from '@testing-library/dom'
 import {
   Matcher,
   MatcherOptions,
@@ -25,7 +25,7 @@ const setup = () => {
 
   const mountedContainers = new Set<ContainerRootFiberTuple>()
 
-  const act = setupAct(reconcilerInstance)
+  const act = setupAct()
 
   function render(
     ui: ReactElement,
@@ -55,7 +55,9 @@ const setup = () => {
         })
       },
       rerender: (rerenderUi: ReactElement) => {
-        render(rerenderUi, baseElement, container, fiberRoot)
+        act(() => {
+          reconcilerInstance.updateContainer(rerenderUi, fiberRoot, null, () => {})
+        })
       },
       asFragment: () => {
         if (typeof document.createRange === 'function') {

@@ -4,6 +4,7 @@ import { Mount } from '.'
 import { createFacet } from '../facet'
 import { mapFacetsLightweight } from '../mapFacets'
 import { NO_VALUE } from '../types'
+import { asPromise } from '..'
 
 it('renders when true', () => {
   const display = createFacet({ initialValue: true })
@@ -54,7 +55,7 @@ it('does not render when false', () => {
   expect(rendered).not.toHaveBeenCalled()
 })
 
-it('can perform conditional rendering', () => {
+it('can perform conditional rendering', async () => {
   const itemsFacet = createFacet<Array<string>>({ initialValue: NO_VALUE })
   const hasItemsFacet = mapFacetsLightweight<boolean>([itemsFacet], (x) => Boolean((x as Array<string>).length))
 
@@ -77,15 +78,17 @@ it('can perform conditional rendering', () => {
   expect(screen.queryByText(componentText)).not.toBeInTheDocument()
   expect(Component).not.toHaveBeenCalled()
 
-  act(() => {
+  await act(async () => {
     itemsFacet.set([])
+    await asPromise(itemsFacet)
   })
 
   expect(screen.queryByText(componentText)).toBeInTheDocument()
   expect(Component).toHaveBeenCalledTimes(1)
 
-  act(() => {
+  await act(async () => {
     itemsFacet.set(['Lorem ipsum'])
+    await asPromise(itemsFacet)
   })
 
   expect(screen.queryByText(componentText)).not.toBeInTheDocument()

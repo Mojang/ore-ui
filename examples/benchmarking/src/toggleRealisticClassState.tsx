@@ -1,4 +1,4 @@
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import React, { useEffect, useState } from 'react'
 
 function Performance() {
@@ -58,4 +58,8 @@ document.body.innerHTML = `
 </style>
 `
 
-render(<Performance />, document.getElementById('root'))
+const element = document.getElementById('root')
+if (element !== null) {
+  const root = createRoot(element)
+  root.render(<Performance />)
+}

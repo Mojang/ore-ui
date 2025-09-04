@@ -1,6 +1,6 @@
 import { FacetProp, Unsubscribe } from '@react-facet/core'
 import { FiberRoot, Reconciler } from 'react-reconciler'
-import { Key, MutableRefObject, ReactText } from 'react'
+import { MutableRefObject, ReactNode, ReactPortal } from 'react'
 
 export type FacetFiberRoot = FiberRoot
 
@@ -104,7 +104,7 @@ export interface KeyboardEvents {
 interface StrictReactElement<P = unknown, T extends string = string> {
   type: T
   props: P
-  key: Key | null
+  key: string | null
 }
 
 /**
@@ -112,7 +112,15 @@ interface StrictReactElement<P = unknown, T extends string = string> {
  *
  * It prevents passing a function as a Node. This allow us to catch accidental passing of facets as children.
  */
-export type StrictReactNode = StrictReactElement | ReactText | Array<StrictReactNode> | boolean | null | undefined
+export type StrictReactNode =
+  | StrictReactElement
+  | string
+  | number
+  | Iterable<ReactNode>
+  | ReactPortal
+  | boolean
+  | null
+  | undefined
 
 export type ElementProps<T> = PointerEvents &
   FocusEvents &
@@ -265,9 +273,10 @@ export type Instance = ElementContainer
 export type Container = Instance
 export type TextInstance = TextContainer
 export type HydratableInstance = Instance
+export type SuspenseInstance = Instance
 export type PublicInstance = HTMLElement | SVGElement | Text
 
-export type ReactFacetReconciler = Reconciler<Instance, TextInstance, Container, PublicInstance> & {
+export type ReactFacetReconciler = Reconciler<Container, Instance, TextInstance, SuspenseInstance, PublicInstance> & {
   flushPassiveEffects: () => boolean
   IsThisRendererActing: MutableRefObject<boolean>
 }
@@ -291,7 +300,7 @@ export type FastPathProps = ElementProps<SVGPathElement>
 export type FastRectProps = ElementProps<SVGRectElement>
 export type FastSpanProps = ElementProps<HTMLSpanElement>
 export type FastSvgProps = ElementProps<SVGSVGElement>
-export type FastForeignOBjectProps = ElementProps<SVGForeignObjectElement>
+export type FastForeignObjectProps = ElementProps<SVGForeignObjectElement>
 export type FastTextProps = TextProps
 export type FastUseProps = ElementProps<SVGUseElement>
 export type FastPolylineProps = ElementProps<SVGPolylineElement>
@@ -323,7 +332,7 @@ declare global {
       'fast-span': FastSpanProps
       'fast-text': FastTextProps
       'fast-svg': FastSvgProps
-      'fast-foreignObject': FastForeignOBjectProps
+      'fast-foreignObject': FastForeignObjectProps
       'fast-use': FastUseProps
       'fast-polyline': FastPolylineProps
       'fast-polygon': FastPolyGonProps

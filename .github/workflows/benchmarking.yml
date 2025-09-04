@@ -8,76 +8,83 @@ jobs:
   listMemo:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
+          cache-dependency-path: yarn.lock
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare listMemoFacet listMemoState 70
 
   marker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
+          cache-dependency-path: yarn.lock
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare markerFacet markerState 88 19000
 
   mount:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
+          cache-dependency-path: yarn.lock
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare mountFacetDomFiber mountReactDom 91
 
   overhead:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
+          cache-dependency-path: yarn.lock
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare overheadFacet overheadState 53
 
   progressBar:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
+          cache-dependency-path: yarn.lock
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare progressBarFacet progressBarState 51
 
   toggleRealisticClass:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
+          cache-dependency-path: yarn.lock
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare toggleRealisticClassFacet toggleRealisticClassState 45
 
   toggleSimpleClass:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
+          cache-dependency-path: yarn.lock
       - run: yarn install --immutable
       - run: cd examples/benchmarking && yarn build && yarn compare toggleSimpleClassFacet toggleSimpleClassState 59

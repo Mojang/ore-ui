@@ -6,6 +6,7 @@ import {
   Instance,
   TextInstance,
   HydratableInstance,
+  SuspenseInstance,
   PublicInstance,
   HostContext,
   UpdatePayload,
@@ -15,6 +16,7 @@ import {
   TypeHTML,
 } from './types'
 import { HostConfig } from 'react-reconciler'
+import { DefaultEventPriority } from 'react-reconciler/constants'
 import { isFacet, Unsubscribe } from '@react-facet/core'
 import {
   setupClassUpdate,
@@ -26,6 +28,7 @@ import {
   setupValueUpdate,
   setupViewBoxUpdate,
   setupAttributeUpdate,
+  setupStyleUpdate,
 } from './setupAttributes'
 
 /**
@@ -40,6 +43,7 @@ export const setupHostConfig = (): HostConfig<
   Container,
   Instance,
   TextInstance,
+  SuspenseInstance,
   HydratableInstance,
   PublicInstance,
   HostContext,
@@ -52,14 +56,40 @@ export const setupHostConfig = (): HostConfig<
   supportsMutation: true,
   supportsPersistence: false,
   supportsHydration: false,
+  supportsMicrotasks: true,
+  scheduleMicrotask:
+    typeof queueMicrotask === 'function'
+      ? queueMicrotask
+      : (callback) =>
+          Promise.resolve(null)
+            .then(callback)
+            .catch((error) => {
+              setTimeout(() => {
+                throw error
+              })
+            }),
 
-  now: Date.now,
+  getCurrentEventPriority: () => {
+    return DefaultEventPriority
+  },
+
+  getInstanceFromNode: () => {
+    return null
+  },
+
+  beforeActiveInstanceBlur: () => {},
+  afterActiveInstanceBlur: () => {},
+  prepareScopeUpdate: () => {},
+  getInstanceFromScope: () => null,
+  detachDeletedInstance: () => {},
+
+  clearContainer: () => false,
 
   /**
    * We need to support setting up the host config in an environment where window is not available globally yet
    * Ex: screenshot testing
    */
-  setTimeout:
+  scheduleTimeout:
     typeof window !== 'undefined'
       ? window.setTimeout
       : (handler, timeout) => window.setTimeout(handler, timeout) as unknown as NodeJS.Timeout,
@@ -68,18 +98,12 @@ export const setupHostConfig = (): HostConfig<
    * We need to support setting up the host config in an environment where window is not available globally yet
    * Ex: screenshot testing
    */
-  clearTimeout:
+  cancelTimeout:
     typeof window !== 'undefined' ? window.clearTimeout : (id) => window.clearTimeout(id as unknown as NodeJS.Timeout),
 
   noTimeout: noop,
 
-  scheduleDeferredCallback: function (callback, options) {
-    return window.setTimeout(callback, options ? options.timeout : 0)
-  },
-
-  cancelDeferredCallback: function (id) {
-    return window.clearTimeout(id)
-  },
+  preparePortalMount: function () {},
 
   getRootHostContext: function () {
     return EMPTY
@@ -124,28 +148,7 @@ export const setupHostConfig = (): HostConfig<
       style = element.style
       styleUnsubscribers = new Map()
 
-      // We know for sure here that style will never be null (we created it above)
-      const notNullStyle = style as unknown as Record<string, unknown>
-      const notNullStyleUnsubscribers = styleUnsubscribers as unknown as Map<string | number, Unsubscribe>
-
-      const styleProp = newProps.style
-
-      for (const key in styleProp) {
-        const value = styleProp[key]
-
-        if (value !== undefined) {
-          if (isFacet(value)) {
-            notNullStyleUnsubscribers.set(
-              key,
-              value.observe((value) => {
-                notNullStyle[key] = value
-              }),
-            )
-          } else {
-            notNullStyle[key] = value
-          }
-        }
-      }
+      setupStyleUpdate(newProps.style, style as unknown as Record<string, unknown>, styleUnsubscribers)
     }
 
     if (newProps.dangerouslySetInnerHTML !== undefined) {
@@ -329,7 +332,9 @@ export const setupHostConfig = (): HostConfig<
     return false
   },
 
-  prepareForCommit: function () {},
+  prepareForCommit: function () {
+    return null
+  },
 
   resetAfterCommit: function () {},
 
@@ -1050,14 +1055,48 @@ export const setupHostConfig = (): HostConfig<
     instance.element.textContent = ''
   },
 
-  shouldDeprioritizeSubtree: function () {
-    return false
-  },
-
   getPublicInstance: function (instance) {
     return instance.element
   },
+  hideInstance(instance) {
+    if (isTextElement(instance.element)) {
+      // Stop listening for updates
+      if (instance.text) {
+        instance.text()
+      }
+
+      instance.element.nodeValue = ''
+      return
+    }
+
+    // Stop listening for style changes
+    instance.styleUnsubscribers?.forEach((unsubscribe) => unsubscribe())
+    instance.styleUnsubscribers?.clear()
+
+    // Hide
+    instance.element.style.display = 'none'
+  },
+  unhideInstance(instance, props) {
+    if (isTextElement(instance.element)) {
+      instance.text = setupTextUpdate(props.text, instance.element)
+      return
+    }
+
+    if (props.style !== undefined) {
+      setupStyleUpdate(
+        props.style,
+        (instance.style ?? instance.element.style) as unknown as Record<string, unknown>,
+        instance.styleUnsubscribers as Map<string | number, Unsubscribe>,
+      )
+    } else {
+      instance.element.style.display = ''
+    }
+  },
 })
+
+export const isTextElement = (value: HTMLElement | SVGElement | Text): value is Text => {
+  return (value as HTMLElement).style === null
+}
 
 const cleanupElementContainer = (parent: ElementContainer, instance: ElementContainer) => {
   parent.children.delete(instance)

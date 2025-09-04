@@ -8,7 +8,7 @@ export function mapFacetSingleCached<T, M>(
   equalityCheck?: EqualityCheck<M>,
 ): Facet<M> {
   const cachedFacet = createFacet<M>({
-    // pass the equalityCheck to the mapIntoObserveSingle to prevent even triggering the observable
+    // pass the equalityCheck to the mapIntoObserveArray to prevent triggering the observable in the cachedFacet (bail early)
     startSubscription: mapIntoObserveSingle(facet, fn, equalityCheck),
     initialValue: NO_VALUE,
   })

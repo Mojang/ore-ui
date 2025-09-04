@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { render } from '@react-facet/dom-fiber'
+import { createRoot } from '@react-facet/dom-fiber'
 import { useFacetState, Facet, useFacetMap, NO_VALUE, Map } from '@react-facet/core'
 import { times } from 'ramda'
 
@@ -63,4 +63,8 @@ function Performance() {
 }
 
 document.body.innerHTML = '<div id="root"/>'
-render(<Performance />, document.getElementById('root'))
+const element = document.getElementById('root')
+if (element !== null) {
+  const root = createRoot(element)
+  root.render(<Performance />)
+}

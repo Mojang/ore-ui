@@ -17,12 +17,13 @@ it('can cache the map for multiple consumers', () => {
       <div>
         <fast-text text={mappedValueFacet} />
         <fast-text text={mappedValueFacet} />
+        <fast-text text={mappedValueFacet} />
+        <fast-text text={mappedValueFacet} />
       </div>
     )
   }
 
   render(<TestComponent />)
-
   expect(mapFn).toHaveBeenCalledTimes(1)
 })
 
@@ -259,6 +260,34 @@ describe('multiple dependencies', () => {
     })
 
     expect(mock).not.toHaveBeenCalled()
+  })
+
+  it('only fires onces if both facets have initial values, and returned value is non-primitive', () => {
+    const facetA = createFacet({ initialValue: 4 })
+    const facetB = createFacet({ initialValue: 5 })
+    const facetC = createFacet({ initialValue: 6 })
+
+    const mock = jest.fn()
+
+    const ComponentWithFacetEffect = () => {
+      const adaptValue = useFacetMemo((a, b, c) => ({ foo: a + b + c }), [], [facetA, facetB, facetC])
+
+      useFacetEffect(
+        (value) => {
+          mock(value)
+        },
+        [],
+        [adaptValue],
+      )
+
+      return null
+    }
+
+    render(<ComponentWithFacetEffect />)
+    expect(mock).toHaveBeenCalledWith({ foo: 4 + 5 + 6 })
+    expect(mock).toHaveBeenCalledTimes(1)
+
+    mock.mockClear()
   })
 })
 

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { ReactNodeList } from 'react-reconciler'
+import { ReactPortal } from 'react-reconciler'
 
 // Extracted from React's codebase
 const REACT_PORTAL_TYPE = Symbol.for('react.portal')
@@ -8,10 +8,11 @@ const REACT_PORTAL_TYPE = Symbol.for('react.portal')
  * Creates a React Portal.
  * More info: https://reactjs.org/docs/portals.html
  */
-export function createPortal(children: ReactNodeList, container: HTMLElement, key?: string | null): ReactNode {
+export function createPortal(children: ReactNode, container: HTMLElement): ReactPortal {
   return {
     $$typeof: REACT_PORTAL_TYPE,
-    key,
+    key: null,
+    implementation: null,
     children,
     containerInfo: {
       children: new Set(),

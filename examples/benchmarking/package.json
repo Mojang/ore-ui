@@ -14,13 +14,14 @@
     "@react-facet/shared-facet": "0.6.4",
     "@react-facet/spring": "0.6.4",
     "ramda": "^0.27.1",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.12",
     "@types/puppeteer": "^5.4.4",
     "@types/ramda": "^0",
+    "@types/react-dom": "^18.2.0",
     "fs-extra": "^10.0.0",
     "html-webpack-plugin": "^5.3.2",
     "http-server": "^13.0.2",

@@ -2,7 +2,7 @@ import React from 'react'
 import { render, act } from '@react-facet/dom-fiber-testing-library'
 import { useFacetUnwrap } from './useFacetUnwrap'
 import { createFacet } from '../facet'
-import { NO_VALUE } from '..'
+import { defaultEqualityCheck, NO_VALUE } from '..'
 
 describe('when mounting facets with values', () => {
   it('renders only once for Immutable value of type string', () => {
@@ -13,6 +13,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
+      if (adaptValue === NO_VALUE) return null
       return <span>{adaptValue}</span>
     }
 
@@ -28,6 +29,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
+      if (adaptValue === NO_VALUE) return null
       return <span>{adaptValue}</span>
     }
 
@@ -43,6 +45,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
+      if (adaptValue === NO_VALUE) return null
       return <span>{adaptValue}</span>
     }
 
@@ -58,6 +61,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
+      if (adaptValue === NO_VALUE) return null
       return <span>{adaptValue}</span>
     }
 
@@ -73,6 +77,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
+      if (adaptValue === NO_VALUE) return null
       return <span>{adaptValue}</span>
     }
 
@@ -89,6 +94,7 @@ describe('when mounting facets with values', () => {
       const adaptValue = useFacetUnwrap(demoFacet)
       renderedMock()
 
+      if (adaptValue === NO_VALUE) return null
       return <span>{adaptValue}</span>
     }
 
@@ -103,6 +109,7 @@ it('triggers when there is a change in the facet', () => {
   const ComponentWithFacetEffect = () => {
     const adaptValue = useFacetUnwrap(demoFacet)
 
+    if (adaptValue === NO_VALUE) return null
     return <span>{adaptValue}</span>
   }
 
@@ -116,6 +123,7 @@ it('triggers when there is a change in the facet', () => {
 it('returns static values when given static values', () => {
   const ComponentWithFacetEffect = () => {
     const adaptValue = useFacetUnwrap('static string')
+    if (adaptValue === NO_VALUE) return null
     return <span>{adaptValue}</span>
   }
 
@@ -203,6 +211,7 @@ it('does not trigger a re-render when changing a facet from undefined to undefin
     const adaptValue = useFacetUnwrap(demoFacet)
     renderedMock()
 
+    if (adaptValue === NO_VALUE) return null
     return <span>{adaptValue}</span>
   }
 
@@ -272,4 +281,59 @@ it('supports custom equality checks', () => {
   expect(check).toHaveBeenCalledTimes(1) // but the check should be executed
   expect(check).toHaveBeenCalledWith(newValue) // passing the new value
   expect(renderedMock).toHaveBeenCalledTimes(1) // and since the equality check always returns "false", we have a render
+})
+
+it('supports setting a facet multiple times in the same render', () => {
+  const demoFacet = createFacet({ initialValue: 'foo' })
+  const renderedMock = jest.fn()
+
+  const ComponentWithFacetEffect = () => {
+    const adaptValue = useFacetUnwrap(demoFacet)
+    renderedMock()
+
+    if (adaptValue === NO_VALUE) return null
+    return <span>{adaptValue}</span>
+  }
+
+  const result = render(<ComponentWithFacetEffect />)
+  expect(renderedMock).toHaveBeenCalledTimes(1)
+
+  renderedMock.mockClear()
+
+  act(() => {
+    demoFacet.set('bar')
+    demoFacet.set('foo')
+  })
+
+  expect(renderedMock).toHaveBeenCalledTimes(1)
+  expect(result.container.textContent).toBe('foo')
+})
+
+it('supports setting a facet multiple times in the same render with custom equality check', () => {
+  const demoFacet = createFacet({ initialValue: 'foo' })
+  const renderedMock = jest.fn()
+
+  // This ensures we don't match the default equality check path
+  const customEqualityCheck = () => defaultEqualityCheck()
+
+  const ComponentWithFacetEffect = () => {
+    const adaptValue = useFacetUnwrap(demoFacet, customEqualityCheck)
+    renderedMock()
+
+    if (adaptValue === NO_VALUE) return null
+    return <span>{adaptValue}</span>
+  }
+
+  const result = render(<ComponentWithFacetEffect />)
+  expect(renderedMock).toHaveBeenCalledTimes(1)
+
+  renderedMock.mockClear()
+
+  act(() => {
+    demoFacet.set('bar')
+    demoFacet.set('foo')
+  })
+
+  expect(renderedMock).toHaveBeenCalledTimes(1)
+  expect(result.container.textContent).toBe('foo')
 })

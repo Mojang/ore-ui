@@ -5,8 +5,7 @@ import { mkdirpSync } from 'fs-extra'
 
 const ERROR = 10
 const ITERATIONS = 10
-const SAMPLE_SIZE = 500
-const OFFSET_FRAMES = 2
+const MINIMUM_SAMPLE_SIZE = 100
 
 mkdirpSync('./tmp')
 
@@ -38,7 +37,7 @@ const compare = async (optionA: string, optionB: string, targetRelativePerforman
     const filename = path.join(__dirname, './dist', `${example}.html`)
     await page.goto(`file://${filename}`)
 
-    await timeout(100)
+    await timeout(1000)
 
     await page.tracing.start({ path: traceFile })
 
@@ -48,15 +47,11 @@ const compare = async (optionA: string, optionB: string, targetRelativePerforman
 
     const { traceEvents } = require(traceFile)
 
-    const events = traceEvents.filter(
-      (event: TraceEvent) => event.name === 'FireAnimationFrame' || event.name === 'MinorGC',
-    )
-    const sampledEvents = events.slice(OFFSET_FRAMES, SAMPLE_SIZE + OFFSET_FRAMES)
+    const events = traceEvents.filter((event: TraceEvent) => event.name === 'FunctionCall')
+    const totalTime = events.reduce((total: number, event: TraceEvent) => total + (event.dur ?? 0), 0)
 
-    const totalTime = sampledEvents.reduce((total: number, event: TraceEvent) => total + event.dur, 0)
-
-    if (sampledEvents.length !== SAMPLE_SIZE) {
-      console.log(`Not enough samples. Measured "${events.length}" of target "${SAMPLE_SIZE}".`)
+    if (events.length < MINIMUM_SAMPLE_SIZE) {
+      console.log(`Not enough samples. Measured "${events.length}" of target "${MINIMUM_SAMPLE_SIZE}".`)
       process.exit(1)
     }
 

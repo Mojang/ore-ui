@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { Facet, NO_VALUE, ExtractFacetValues, NoValue } from '../types'
 
 /**
@@ -43,7 +43,7 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
   facets: T,
   defaultReturnValue?: M,
 ): (...args: K) => M | NoValue {
-  useLayoutEffect(() => {
+  useEffect(() => {
     // Make sure to start subscriptions, even though we are getting the values directly from them
     // We read the values using `.get` to make sure they are always up-to-date
     const unsubscribes = facets.map((facet) => facet.observe(() => {}))
