@@ -2,7 +2,7 @@ import React from 'react'
 import { render, act } from '@react-facet/dom-fiber-testing-library'
 import { useFacetUnwrap } from './useFacetUnwrap'
 import { createFacet } from '../facet'
-import { NO_VALUE } from '..'
+import { defaultEqualityCheck, NO_VALUE } from '..'
 
 describe('when mounting facets with values', () => {
   it('renders only once for Immutable value of type string', () => {
@@ -289,6 +289,35 @@ it('supports setting a facet multiple times in the same render', () => {
 
   const ComponentWithFacetEffect = () => {
     const adaptValue = useFacetUnwrap(demoFacet)
+    renderedMock()
+
+    if (adaptValue === NO_VALUE) return null
+    return <span>{adaptValue}</span>
+  }
+
+  const result = render(<ComponentWithFacetEffect />)
+  expect(renderedMock).toHaveBeenCalledTimes(1)
+
+  renderedMock.mockClear()
+
+  act(() => {
+    demoFacet.set('bar')
+    demoFacet.set('foo')
+  })
+
+  expect(renderedMock).toHaveBeenCalledTimes(1)
+  expect(result.container.textContent).toBe('foo')
+})
+
+it('supports setting a facet multiple times in the same render with custom equality check', () => {
+  const demoFacet = createFacet({ initialValue: 'foo' })
+  const renderedMock = jest.fn()
+
+  // This ensures we don't match the default equality check path
+  const customEqualityCheck = () => defaultEqualityCheck()
+
+  const ComponentWithFacetEffect = () => {
+    const adaptValue = useFacetUnwrap(demoFacet, customEqualityCheck)
     renderedMock()
 
     if (adaptValue === NO_VALUE) return null
