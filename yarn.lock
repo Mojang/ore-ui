@@ -2938,7 +2938,7 @@ __metadata:
     http-server: ^13.0.2
     puppeteer: ^24.4.0
     ramda: ^0.27.1
-    react: 18.2.0
+    react: ^18.2.0
     react-dom: ^18.2.0
     ts-loader: ^9.2.5
     ts-node: ^10.3.1
@@ -8791,15 +8791,6 @@ __metadata:
   peerDependencies:
     react: ^18.1.0
   checksum: 6421f9500827219556ead3d86cbdf0553c47d633ecda2144720bf235d404f5e4e1e585336c4dfa80e26a04f1a6117c455a60964917d5600c73a91d8374f0232f
-  languageName: node
-  linkType: hard
-
-"react@npm:18.2.0":
-  version: 18.2.0
-  resolution: "react@npm:18.2.0"
-  dependencies:
-    loose-envify: ^1.1.0
-  checksum: 88e38092da8839b830cda6feef2e8505dec8ace60579e46aa5490fc3dc9bba0bd50336507dc166f43e3afc1c42939c09fe33b25fae889d6f402721dcd78fca1b
   languageName: node
   linkType: hard
 

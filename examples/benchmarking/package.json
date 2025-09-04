@@ -14,7 +14,7 @@
     "@react-facet/shared-facet": "0.6.4",
     "@react-facet/spring": "0.6.4",
     "ramda": "^0.27.1",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
