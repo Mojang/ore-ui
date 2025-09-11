@@ -2,7 +2,7 @@ import React from 'react'
 import { createFacet } from './facet'
 import { useFacetEffect, useFacetMap } from './hooks'
 import { mapFacetsLightweight } from './mapFacets'
-import { batch, cancelScheduledTask, scheduleTask } from './scheduler'
+import { batch, batchTransition, cancelScheduledTask, scheduleTask } from './scheduler'
 import { act, render } from '@react-facet/dom-fiber-testing-library'
 
 /**
@@ -319,5 +319,86 @@ describe('effects with multiple facet dependencies', () => {
     // then we get a final cleanup, without the effect being fired
     expect(cleanup).toHaveBeenCalledTimes(1)
     expect(effect).not.toHaveBeenCalled()
+  })
+})
+
+describe('transitions', () => {
+  it('batches transitions', () => {
+    const order: string[] = []
+
+    const taskB = jest.fn().mockImplementation(() => order.push('B'))
+    const taskA = jest.fn().mockImplementation(() => order.push('A'))
+    const taskC = jest.fn().mockImplementation(() => order.push('C'))
+
+    batchTransition(() => {
+      scheduleTask(taskA)
+      scheduleTask(taskB)
+      scheduleTask(taskC)
+
+      expect(taskA).not.toHaveBeenCalled()
+      expect(taskB).not.toHaveBeenCalled()
+      expect(taskC).not.toHaveBeenCalled()
+    })
+
+    expect(taskA).toHaveBeenCalled()
+    expect(taskB).toHaveBeenCalled()
+    expect(taskC).toHaveBeenCalled()
+    expect(order).toEqual(['A', 'B', 'C'])
+  })
+
+  it("runs a batchTransition's tasks immediately after the call, even while nested within a regular batch", () => {
+    const order: string[] = []
+
+    const taskB = jest.fn().mockImplementation(() => order.push('B'))
+    const taskA = jest.fn().mockImplementation(() => order.push('A'))
+    const taskC = jest.fn().mockImplementation(() => order.push('C'))
+    const taskD = jest.fn().mockImplementation(() => order.push('D'))
+
+    batch(() => {
+      scheduleTask(taskA)
+      scheduleTask(taskB)
+      batchTransition(() => {
+        scheduleTask(taskC)
+        scheduleTask(taskD)
+
+        expect(taskA).not.toHaveBeenCalled()
+        expect(taskB).not.toHaveBeenCalled()
+        expect(taskC).not.toHaveBeenCalled()
+        expect(taskD).not.toHaveBeenCalled()
+      })
+
+      expect(taskA).not.toHaveBeenCalled()
+      expect(taskB).not.toHaveBeenCalled()
+      expect(taskC).toHaveBeenCalled()
+      expect(taskD).toHaveBeenCalled()
+    })
+
+    expect(order).toEqual(['C', 'D', 'A', 'B'])
+  })
+
+  it('nesting transitions is possible, but should still run at the root batchTransition', () => {
+    const order: string[] = []
+
+    const taskB = jest.fn().mockImplementation(() => order.push('B'))
+    const taskA = jest.fn().mockImplementation(() => order.push('A'))
+    const taskC = jest.fn().mockImplementation(() => order.push('C'))
+
+    batchTransition(() => {
+      scheduleTask(taskA)
+      scheduleTask(taskB)
+      batchTransition(() => {
+        scheduleTask(taskC)
+      })
+
+      expect(taskA).not.toHaveBeenCalled()
+      expect(taskB).not.toHaveBeenCalled()
+      expect(taskC).not.toHaveBeenCalled()
+    })
+
+    expect(taskA).toHaveBeenCalled()
+    expect(taskB).toHaveBeenCalled()
+    expect(taskC).toHaveBeenCalled()
+
+    expect(order).toEqual(['A', 'B', 'C'])
   })
 })
