@@ -5,10 +5,9 @@ import { batchTransition } from '../scheduler'
 export const useFacetTransition = (): [boolean, (fn: () => void) => void] => {
   const [isPending, reactStartTransition] = useTransition()
 
-  return [
-    isPending,
-    useCallback((fn: Batch) => {
-      reactStartTransition(() => batchTransition(fn))
-    }, []),
-  ]
+  const startTransition = useCallback((fn: Batch) => {
+    reactStartTransition(() => batchTransition(fn))
+  }, [])
+
+  return [isPending, startTransition]
 }
