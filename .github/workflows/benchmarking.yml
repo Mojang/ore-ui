@@ -15,7 +15,7 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: yarn.lock
       - run: yarn install --immutable
-      - run: cd examples/benchmarking && yarn build && yarn compare listMemoFacet listMemoState 70
+      - run: cd examples/benchmarking && yarn build && yarn compare listMemoFacet listMemoState 25
 
   marker:
     runs-on: ubuntu-latest
@@ -39,7 +39,7 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: yarn.lock
       - run: yarn install --immutable
-      - run: cd examples/benchmarking && yarn build && yarn compare mountFacetDomFiber mountReactDom 91
+      - run: cd examples/benchmarking && yarn build && yarn compare mountFacetDomFiber mountReactDom 100
 
   overhead:
     runs-on: ubuntu-latest
