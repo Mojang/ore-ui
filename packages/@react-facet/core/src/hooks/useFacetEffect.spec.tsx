@@ -183,3 +183,50 @@ it('supports multiple facets, only triggering the effect once all facets have a 
   expect(cleanup).toHaveBeenCalledTimes(1)
   expect(effect).not.toHaveBeenCalled()
 })
+
+describe('regressions', () => {
+  it('triggers the effect when dependencies and facets have changed multiple times', () => {
+    const demoFacet = createFacet({ initialValue: 'initial value' })
+
+    const callback = jest.fn()
+
+    const ComponentWithFacetEffect = ({ dependency }: { dependency: number }) => {
+      useFacetEffect(
+        (value) => {
+          callback(`${value} ${dependency}`)
+        },
+        [dependency],
+        [demoFacet],
+      )
+
+      return null
+    }
+
+    const { rerender } = render(<ComponentWithFacetEffect dependency={0} />)
+    expect(callback).toHaveBeenCalledWith('initial value 0')
+
+    rerender(<ComponentWithFacetEffect dependency={1} />)
+    expect(callback).toHaveBeenLastCalledWith('initial value 1')
+
+    rerender(<ComponentWithFacetEffect dependency={2} />)
+    expect(callback).toHaveBeenLastCalledWith('initial value 2')
+
+    rerender(<ComponentWithFacetEffect dependency={3} />)
+    expect(callback).toHaveBeenLastCalledWith('initial value 3')
+
+    rerender(<ComponentWithFacetEffect dependency={4} />)
+    expect(callback).toHaveBeenLastCalledWith('initial value 4')
+
+    rerender(<ComponentWithFacetEffect dependency={5} />)
+    expect(callback).toHaveBeenLastCalledWith('initial value 5')
+
+    rerender(<ComponentWithFacetEffect dependency={6} />)
+    expect(callback).toHaveBeenLastCalledWith('initial value 6')
+
+    demoFacet.set('another value')
+    expect(callback).toHaveBeenLastCalledWith('another value 6')
+
+    rerender(<ComponentWithFacetEffect dependency={7} />)
+    expect(callback).toHaveBeenLastCalledWith('another value 7')
+  })
+})
