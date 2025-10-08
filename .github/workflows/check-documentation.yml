@@ -1,0 +1,31 @@
+name: Check Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'docs/**'
+
+jobs:
+  check_docs:
+    runs-on: ubuntu-latest
+    name: Typecheck and Build Documentation
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: docs/yarn.lock
+      - name: Install dependencies
+        run: cd docs && yarn install --immutable
+      - name: Build documentation
+        run: cd docs && CI=true yarn build

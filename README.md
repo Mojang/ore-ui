@@ -28,7 +28,15 @@ Ore UI is based on:
 
 We currently only have one package that is open-source, and its documentation is available at https://react-facet.mojang.com/.
 
-The source of the documentation (for contributions) is available at the [documentation branch](https://github.com/Mojang/ore-ui/tree/documentation).
+The source of the documentation is available in the [`docs/`](docs/) directory. To contribute to the documentation:
+
+```bash
+# Install and start the documentation site
+yarn docs:install
+yarn docs:start
+```
+
+For more details, see the [documentation README](docs/README.md).
 
 ## Logo
 
