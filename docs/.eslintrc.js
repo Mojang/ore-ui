@@ -8,7 +8,12 @@ module.exports = {
   extends: ['plugin:prettier/recommended'],
   plugins: ['prettier'],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
     // Disable the require-in-package rule that's problematic for Docusaurus
     'require-in-package/require-in-package': 'off',
   },
@@ -24,7 +29,12 @@ module.exports = {
       rules: {
         'react/jsx-uses-react': 'error',
         'react/jsx-uses-vars': 'error',
-        'prettier/prettier': 'error',
+        'prettier/prettier': [
+          'error',
+          {
+            endOfLine: 'auto',
+          },
+        ],
         // Disable problematic import rules for Docusaurus
         'import/no-unresolved': 'off',
         'import/no-named-as-default': 'off',
