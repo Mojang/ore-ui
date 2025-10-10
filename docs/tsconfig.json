@@ -1,0 +1,23 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "allowJs": true
+  },
+  "include": [
+    "docs/**/*",
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    ".docusaurus"
+  ]
+}

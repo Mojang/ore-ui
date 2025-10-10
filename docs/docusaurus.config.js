@@ -114,12 +114,11 @@ module.exports = {
         },
       },
     ],
-    // Temporarily disabled due to TypeScript errors
-    // [
-    //   'docusaurus-preset-shiki-twoslash',
-    //   {
-    //     themes: ['material-palenight'],
-    //   },
-    // ],
+    [
+      'docusaurus-preset-shiki-twoslash',
+      {
+        themes: ['material-palenight'],
+      },
+    ],
   ],
 }
