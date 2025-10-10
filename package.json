@@ -13,10 +13,10 @@
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "lint": "eslint .",
     "package": "yarn workspaces foreach --topological --verbose pack --out=%s-%v.tgz && ts-node ./scripts/moveAllPackagedToArtifacts.ts",
-    "docs:install": "cd docs && yarn install",
-    "docs:start": "cd docs && yarn start",
-    "docs:build": "cd docs && yarn build",
-    "docs:serve": "cd docs && yarn serve"
+    "docs:install": "yarn ./docs install",
+    "docs:start": "yarn ./docs run start",
+    "docs:build": "yarn ./docs run build",
+    "docs:serve": "yarn ./docs run serve"
   },
   "devDependencies": {
     "@babel/core": "7.13.16",
