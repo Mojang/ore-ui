@@ -30,6 +30,12 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
  *
  * We pass the dependencies of the callback as the second argument so we can leverage the eslint-plugin-react-hooks option for additionalHooks.
  * Having this as the second argument allows the linter to work.
+ *
+ * **NOTE:** useFacetCallback does NOT change reference when it's facet dependencies change, so it will not trigger updates for
+ * any facet hook that depends on it. if you depend on a facet value in a useFacetCallback to re-trigger a downstream hook, that is a code smell
+ *
+ * Suggested solution is to turn the facet callback into a normal callback that accepts the values of the facets as parameters, then put
+ * the facets you depend on as parameters to your useFacet-Hook that is used further downstream.
  */
 export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y], K extends [...unknown[]]>(
   callback: (...args: ExtractFacetValues<T>) => (...args: K) => M,
