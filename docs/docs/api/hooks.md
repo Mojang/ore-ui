@@ -90,6 +90,46 @@ setItems((current) => (current !== NO_VALUE ? [...current, newItem] : [newItem])
 This is exactly the same requirement as [`useFacetUnwrap`](#usefacetunwrap) - anytime you access a facet's value (directly or through a callback), it might be `NO_VALUE`.
 :::
 
+### NO_VALUE Retention Behavior in Setters
+
+:::info Important: Returning NO_VALUE from Setter Retains Previous Value
+When a setter callback returns `NO_VALUE`, **the facet retains its previous value** rather than updating to `NO_VALUE`. The facet's internal value is set to `NO_VALUE`, but listeners are not notified, so subscribers continue seeing the last emitted value.
+
+This is useful for conditional updates where you want to prevent state changes under certain conditions:
+
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, NO_VALUE } from '@react-facet/core'
+
+const ConditionalCounter = () => {
+  const [countFacet, setCount] = useFacetState(0)
+
+  const incrementIfBelow5 = () => {
+    setCount((current) => {
+      if (current === NO_VALUE) return 1
+      if (current >= 5) return NO_VALUE // Prevent updates once we hit 5
+      return current + 1
+    })
+  }
+
+  // countFacet will update: 0 → 1 → 2 → 3 → 4 → 5 → (stays 5)
+  // Clicks after 5 don't trigger updates because we return NO_VALUE
+
+  return <button onClick={incrementIfBelow5}>Increment (max 5)</button>
+}
+```
+
+**Key points:**
+
+- Returning `NO_VALUE` from a setter callback **does not** propagate to subscribers
+- It prevents the facet from updating, keeping the last emitted value for all observers
+- The internal state becomes `NO_VALUE`, but listeners aren't called
+- Useful for implementing validation, conditional updates, or preventing unwanted state changes
+
+:::
+
+### Handling Previous Values with NO_VALUE
+
 When updating state based on the previous value, always check for `NO_VALUE`:
 
 ```tsx twoslash
@@ -466,6 +506,39 @@ const cachedFacet = useFacetMemo(expensiveFunc, [], [sourceFacet])
 
 The lightweight hook for deriving facets. Best for simple transformations and few subscribers.
 
+### NO_VALUE Retention Behavior
+
+:::info Important: Returning NO_VALUE Retains Previous Value
+When a mapping function returns `NO_VALUE`, **the facet retains its previous value** rather than updating to `NO_VALUE`. The observer does not notify listeners, so subscribers continue seeing the last emitted value.
+
+This is useful for conditional updates where you want to "freeze" a facet's value under certain conditions:
+
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, useFacetMap, NO_VALUE } from '@react-facet/core'
+
+const ClampedCounter = () => {
+  const [countFacet, setCount] = useFacetState(0)
+
+  // Once count reaches 5, the mapped facet stops updating and retains the value 5
+  const clampedFacet = useFacetMap((count) => (count < 5 ? count : NO_VALUE), [], [countFacet])
+
+  // clampedFacet will show: 0, 1, 2, 3, 4, 4, 4, 4... (stuck at 4)
+  // Even though countFacet continues: 0, 1, 2, 3, 4, 5, 6, 7...
+
+  return <button onClick={() => setCount((prev) => (prev === NO_VALUE ? 0 : prev + 1))}>Increment</button>
+}
+```
+
+**Key points:**
+
+- Returning `NO_VALUE` from a mapping function **does not** set the facet's value to `NO_VALUE`
+- It prevents the facet from updating, keeping the last successfully mapped value
+- This applies to both `useFacetMap` and `useFacetMemo`
+- Useful for implementing conditional updates, clamping, or filtering unwanted values
+
+:::
+
 ### Using useFacetMap
 
 Use this to combine React component props with facet data and prepare facets to be passed to `fast-*` components.
@@ -542,6 +615,10 @@ const WrapperComponent = () => {
 ## `useFacetMemo`
 
 The cached hook for deriving facets. Use when you have many subscribers or expensive computations.
+
+### NO_VALUE Retention Behavior
+
+Like `useFacetMap`, `useFacetMemo` retains the previous value when the mapping function returns `NO_VALUE`. See the [NO_VALUE Retention Behavior](#no_value-retention-behavior) section under `useFacetMap` for details and examples. This behavior is identical for both hooks.
 
 ### API
 
