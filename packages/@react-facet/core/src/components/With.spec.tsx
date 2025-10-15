@@ -96,3 +96,15 @@ it('correctly handles unmounting', () => {
 
   expect(result.container).not.toHaveTextContent('mounted')
 })
+
+it('foo', () => {
+  const Foo = () => {
+    return (
+      <fast-div>
+        <fast-text text="Hello World" />
+      </fast-div>
+    )
+  }
+
+  console.log(Foo)
+})

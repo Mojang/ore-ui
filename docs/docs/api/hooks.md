@@ -237,19 +237,13 @@ const SubComponent = ({ facets }: { facets: any }) => null
 
 import { shallowArrayEqualityCheck, useFacetState, useFacetMap } from '@react-facet/core'
 
-
 const WrapperComponent = () => {
-	const [facetA, setFacetA] = useFacetState('A')
-	const [facetB, setFacetB] = useFacetState('B')
+  const [facetA, setFacetA] = useFacetState('A')
+  const [facetB, setFacetB] = useFacetState('B')
 
-	const groupedFacet = useFacetMap(
-		(a, b) => [a, b],
-		[],
-		[facetA, facetB],
-		shallowArrayEqualityCheck
-	)
+  const groupedFacet = useFacetMap((a, b) => [a, b], [], [facetA, facetB], shallowArrayEqualityCheck)
 
-	return <SubComponent facets={groupedFacet} />
+  return <SubComponent facets={groupedFacet} />
 }
 ```
 
@@ -272,7 +266,7 @@ If the `Facet` is not yet initialized, the `Ref` will contain a `NO_VALUE`
 import { useEffect } from 'react'
 import { useFacetRef, Facet } from '@react-facet/core'
 
-const LogWhenRendered = ({ exampleFacet }: { exampleFacet: Facet<unknown>}) => {
+const LogWhenRendered = ({ exampleFacet }: { exampleFacet: Facet<unknown> }) => {
   const facetRef = useFacetRef(exampleFacet)
 
   useEffect(() => {
@@ -293,7 +287,7 @@ To simplify the use case in which a certain variable can hold either a value or 
 // @esModuleInterop
 import { render } from '@react-facet/dom-fiber'
 // ---cut---
-import { useFacetMap, useFacetState, useFacetWrap, FacetProp,  } from '@react-facet/core'
+import { useFacetMap, useFacetState, useFacetWrap, FacetProp } from '@react-facet/core'
 
 type ButtonProps = {
   isDisabled: FacetProp<boolean>
@@ -327,7 +321,7 @@ The `useFacetUnwrap` hook gives a way to access the value of a facet as a regula
 
 The upside is that it is backwards compatible, but the downside is that any updates to the facet will cause a re-render of the component where `useFacetUnwrap` is being used.
 
-For most scenarios, consider using the other hooks or the facet itself directly into a `fast.*` component instead. That approach removes all unnecessary React re-renders.
+For most scenarios, consider using the other hooks or the facet itself directly into a `fast-*` component instead. That approach removes all unnecessary React re-renders.
 
 ```tsx twoslash
 // @esModuleInterop

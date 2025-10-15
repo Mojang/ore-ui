@@ -1229,25 +1229,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/spring@18.1.0, @react-facet/spring@workspace:packages/@react-facet/spring":
-  version: 0.0.0-use.local
-  resolution: "@react-facet/spring@workspace:packages/@react-facet/spring"
-  dependencies:
-    "@react-facet/core": 18.1.0
-    "@testing-library/jest-dom": ^5.16.5
-    "@types/react": ^18.2.0
-    "@types/rimraf": ^3
-    cross-env: ^7.0.3
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    rimraf: ^3.0.2
-    typescript: ^4.8.2
-  peerDependencies:
-    "@react-facet/core": 18.1.0
-    react: ^18.2.0
-  languageName: unknown
-  linkType: soft
-
 "@sinclair/typebox@npm:^0.27.8":
   version: 0.27.8
   resolution: "@sinclair/typebox@npm:0.27.8"
@@ -2928,7 +2909,6 @@ __metadata:
     "@react-facet/core": 18.1.0
     "@react-facet/dom-fiber": 18.1.0
     "@react-facet/shared-facet": 18.1.0
-    "@react-facet/spring": 18.1.0
     "@types/fs-extra": ^9.0.12
     "@types/puppeteer": ^5.4.4
     "@types/ramda": ^0
