@@ -1,5 +1,3 @@
-// Copyright (c) Mojang AB. All rights reserved.
-
 import { render } from '@react-facet/dom-fiber-testing-library'
 import { createFacet } from '../facet'
 import React from 'react'

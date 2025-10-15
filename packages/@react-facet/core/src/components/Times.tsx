@@ -1,5 +1,3 @@
-// Copyright (c) Mojang AB. All rights reserved.
-
 import React, { ReactElement } from 'react'
 import { Facet } from '../types'
 import { Unwrap } from './Unwrap'

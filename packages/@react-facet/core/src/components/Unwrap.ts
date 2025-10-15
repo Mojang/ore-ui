@@ -1,5 +1,3 @@
-// Copyright (c) Mojang AB. All rights reserved.
-
 import { ReactElement } from 'react'
 import { useFacetUnwrap } from '../hooks'
 import { Facet, NO_VALUE, Value } from '../types'
