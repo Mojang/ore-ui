@@ -1,6 +1,6 @@
 import { FacetProp, Unsubscribe } from '@react-facet/core'
 import { FiberRoot, Reconciler } from 'react-reconciler'
-import { MutableRefObject, ReactNode, ReactPortal } from 'react'
+import { MutableRefObject, ReactElement, ReactNode, ReactPortal } from 'react'
 
 export type FacetFiberRoot = FiberRoot
 
@@ -107,6 +107,8 @@ interface StrictReactElement<P = unknown, T extends string = string> {
   key: string | null
 }
 
+export type FastTextElement = ReactElement<TextProps>
+
 /**
  * More strict type than default React.ReactNode
  *
@@ -121,6 +123,7 @@ export type StrictReactNode =
   | boolean
   | null
   | undefined
+  | FastTextElement
 
 export type ElementProps<T> = PointerEvents &
   FocusEvents &
