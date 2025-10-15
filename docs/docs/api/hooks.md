@@ -78,12 +78,26 @@ Like `useCallback`, `useFacetCallback` will update the reference if a value in t
 
 ### Signature
 
+The `useFacetCallback` hook has two overloads depending on whether a `defaultReturn` is provided:
+
+**With `defaultReturn` (guaranteed return value):**
+
 ```typescript
 useFacetCallback<M>(
   callback: (...facetValues) => (...args) => M,
   dependencies: unknown[],
   facets: Facet[],
-  defaultReturn?: M
+  defaultReturn: M
+): (...args) => M
+```
+
+**Without `defaultReturn` (may return NO_VALUE):**
+
+```typescript
+useFacetCallback<M>(
+  callback: (...facetValues) => (...args) => M,
+  dependencies: unknown[],
+  facets: Facet[]
 ): (...args) => M | NoValue
 ```
 
@@ -92,9 +106,12 @@ useFacetCallback<M>(
 - `callback`: Function that receives facet values and returns a callback function
 - `dependencies`: Non-facet dependencies (props, local variables)
 - `facets`: Array of facets whose values the callback depends on
-- `defaultReturn`: **(Optional)** Value to return if any facet is uninitialized (`NO_VALUE`). If not provided, the callback returns `NO_VALUE` when facets are not ready.
+- `defaultReturn`: **(Optional)** Value to return if any facet is uninitialized (`NO_VALUE`). When provided, the return type is guaranteed to be `M`. When omitted, the return type is `M | NoValue`.
 
-**Returns:** A memoized callback function that returns `M` (or `defaultReturn`) when facets are initialized, or `NO_VALUE` if not (and no `defaultReturn` is provided)
+**Returns:**
+
+- When `defaultReturn` is provided: A memoized callback function that returns `M`
+- When `defaultReturn` is omitted: A memoized callback function that returns `M | NoValue`
 
 ### Basic Usage
 

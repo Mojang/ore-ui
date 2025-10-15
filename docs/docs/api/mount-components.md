@@ -56,7 +56,7 @@ const Example = () => {
 }
 ```
 
-Additionally, the `Mount` component takes an optional prop called `conditional`. This will default to `true`. When set to `false`, it will mount its children when when the value contained within the `Facet` is `false`.
+Additionally, the `Mount` component takes an optional prop called `condition`. This will default to `true`. When set to `false`, it will mount its children when when the value contained within the `Facet` is `false`.
 
 ```tsx twoslash
 // @esModuleInterop
