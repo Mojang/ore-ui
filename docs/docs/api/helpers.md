@@ -4,6 +4,31 @@ sidebar_position: 11
 
 # Helpers
 
+## `startFacetTransition`
+
+A function API that works analogously to React's `startTransition`, ensuring that any React state changes resulting from facet updates are handled within a React transition.
+
+For detailed documentation and examples, see [`startFacetTransition`](./hooks#startfacettransition) in the Hooks documentation.
+
+**Quick example:**
+
+```ts twoslash
+import { startFacetTransition, useFacetState } from '@react-facet/core'
+
+const DataLoader = () => {
+  const [dataFacet, setData] = useFacetState<string[]>([])
+
+  const loadData = () => {
+    // Mark heavy update as low-priority transition
+    startFacetTransition(() => {
+      const newData = Array.from({ length: 10000 }, (_, i) => `Item ${i}`)
+      setData(newData)
+    })
+  }
+
+  return <button onClick={loadData}>Load Data</button>
+}
+```
 
 ## `multiObserve`
 
@@ -19,7 +44,7 @@ const unObserve = multiObserve(
   (userName, userLevel) => {
     console.log(`${userName} is now ${userLevel}`)
   },
-  [userNameFacet, userLevelFacet]
+  [userNameFacet, userLevelFacet],
 )
 // Logs "Jane is now maintainer"
 
@@ -44,7 +69,6 @@ hasDefinedValue(undefined) // false
 hasDefinedValue(NO_VALUE) // false
 hasDefinedValue(0) // true
 ```
-
 
 ## `areAllDefinedValues`
 
