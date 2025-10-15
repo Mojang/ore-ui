@@ -2671,36 +2671,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-facet/core@npm:^18.1.0":
-  version: 18.1.0
-  resolution: "@react-facet/core@npm:18.1.0"
+"@react-facet/core@portal:../packages/@react-facet/core::locator=ore-ui-docs%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@react-facet/core@portal:../packages/@react-facet/core::locator=ore-ui-docs%40workspace%3A."
   peerDependencies:
     react: ^18.2.0
-  checksum: 427a68549263ab3d029dbceb9765f234c6b378ff594ad3564b98ccd66765cfbf5e0cca1c0d52ca2f3475718edfa1692537f4ca696c802f45f2d332d5812e98d9
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@react-facet/dom-fiber@npm:^18.1.0":
-  version: 18.1.0
-  resolution: "@react-facet/dom-fiber@npm:18.1.0"
+"@react-facet/dom-fiber@portal:../packages/@react-facet/dom-fiber::locator=ore-ui-docs%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@react-facet/dom-fiber@portal:../packages/@react-facet/dom-fiber::locator=ore-ui-docs%40workspace%3A."
   dependencies:
     react-reconciler: ^0.28.0
   peerDependencies:
     "@react-facet/core": 18.1.0
     react: ^18.2.0
-  checksum: c42183a8727638c9791b1e3b846aeedec53aed39b2c481ae75f57832f2f360a1039a6f846a7fa0a2ebee5a4e2e617c348851a2fdc0f953e23fcc7a9dde722475
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@react-facet/shared-facet@npm:^18.1.0":
-  version: 18.1.0
-  resolution: "@react-facet/shared-facet@npm:18.1.0"
+"@react-facet/shared-facet@portal:../packages/@react-facet/shared-facet::locator=ore-ui-docs%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@react-facet/shared-facet@portal:../packages/@react-facet/shared-facet::locator=ore-ui-docs%40workspace%3A."
   peerDependencies:
     "@react-facet/core": 18.1.0
     react: ^18.2.0
-  checksum: d21ec699da2fb64bffb6393b6de5e7cca9833ad75bd575fde4d33945d7811997910993656e72b4a90814d46deb357a7b99ff1b1e19188a6d08111b1957066172
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@sideway/address@npm:^4.1.5":
   version: 4.1.5
@@ -8516,9 +8513,9 @@ fsevents@~2.3.2:
     "@docusaurus/preset-classic": 2.4.3
     "@docusaurus/theme-search-algolia": ^2.4.3
     "@mdx-js/react": ^1.6.22
-    "@react-facet/core": ^18.1.0
-    "@react-facet/dom-fiber": ^18.1.0
-    "@react-facet/shared-facet": ^18.1.0
+    "@react-facet/core": "portal:../packages/@react-facet/core"
+    "@react-facet/dom-fiber": "portal:../packages/@react-facet/dom-fiber"
+    "@react-facet/shared-facet": "portal:../packages/@react-facet/shared-facet"
     "@types/rimraf": ^3
     clsx: ^1.1.1
     cross-env: ^7.0.3
