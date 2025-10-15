@@ -4,17 +4,23 @@ sidebar_position: 2
 
 # Hooks
 
-The API of the hooks used to define, manipulate and consume facets is modelled after the API of the standard React Hooks; similarly named hooks have similar functionalities.
+React Facet provides a comprehensive set of hooks for working with facets. These hooks follow React's naming conventions where possible, making them familiar and easy to understand. All facet hooks support the dual dependency array pattern: the first array for non-facet dependencies (props, local variables) and the second array for facet dependencies.
 
-This is done to make it easier to understand the purpose of each hook, but it is also because they are very similar to the default React Hooks; they just happen to support `Facet`s as dependencies, alongside regular props.
+## Quick Reference
 
-There are only three hooks that have no equivalence in React:
+| Hook                                            | Purpose                                           | React Equivalent  |
+| ----------------------------------------------- | ------------------------------------------------- | ----------------- |
+| [`useFacetState`](#usefacetstate)               | Create local facet state                          | `useState`        |
+| [`useFacetMap`](#usefacetmap)                   | Derive facet (lightweight, default choice)        | `useMemo`         |
+| [`useFacetMemo`](#usefacetmemo)                 | Derive facet (cached, for expensive computations) | `useMemo`         |
+| [`useFacetCallback`](#usefacetcallback)         | Create callback that depends on facets            | `useCallback`     |
+| [`useFacetEffect`](#usefaceteffect)             | Perform side effects when facets change           | `useEffect`       |
+| [`useFacetLayoutEffect`](#usefacetlayouteffect) | Synchronous side effects when facets change       | `useLayoutEffect` |
+| [`useFacetRef`](#usefacetref)                   | Create ref that tracks facet value                | `useRef`          |
+| [`useFacetWrap`](#usefacetwrap)                 | Convert value or facet to facet                   | -                 |
+| [`useFacetUnwrap`](#usefacetunwrap)             | ⚠️ Extract plain value (causes re-renders)        | -                 |
 
-- [`useFacetMap`](#usefacetmap) is used to derive a `Facet` from another(s)
-- [`useFacetWrap`](#usefacetwrap) is used to encapsulate a regular value in a `Facet`
-- [`useFacetUnwrap`](#usefacetunwrap) is used to get the plain value from inside a `Facet`
-
-### `useFacetState`
+## `useFacetState`
 
 To define facets within React components, there is a main hook `useFacetState` that provides a very familiar API when compared with React's `useState`.
 
@@ -66,9 +72,31 @@ const Form = ({ onSubmit, initialValue }: Props) => {
 
 ## `useFacetCallback`
 
-The `useFacetCallback` hook is similar to React’s `useCallback` in that it allows you to create a memoized callback that will only be updated if some of the explicit dependencies change. On top of that, `useFacetCallback` allows you to pass one or more Facets and get the current values of those facets in the callback body.
+The `useFacetCallback` hook is similar to React's `useCallback` in that it allows you to create a memoized callback that will only be updated if some of the explicit dependencies change. On top of that, `useFacetCallback` allows you to pass one or more Facets and get the current values of those facets in the callback body.
 
 Like `useCallback`, `useFacetCallback` will update the reference if a value in the dependency array change. However, it will not update the reference if a Facet change.
+
+### Signature
+
+```typescript
+useFacetCallback<M>(
+  callback: (...facetValues) => (...args) => M,
+  dependencies: unknown[],
+  facets: Facet[],
+  defaultReturn?: M
+): (...args) => M | NoValue
+```
+
+**Parameters:**
+
+- `callback`: Function that receives facet values and returns a callback function
+- `dependencies`: Non-facet dependencies (props, local variables)
+- `facets`: Array of facets whose values the callback depends on
+- `defaultReturn`: **(Optional)** Value to return if any facet is uninitialized (`NO_VALUE`). If not provided, the callback returns `NO_VALUE` when facets are not ready.
+
+**Returns:** A memoized callback function that returns `M` (or `defaultReturn`) when facets are initialized, or `NO_VALUE` if not (and no `defaultReturn` is provided)
+
+### Basic Usage
 
 Say for example that you have a small form, and want to create a handler for the Submit action. You need to have access to the current value of a facet that stores the `value` of an input field in order to send that value back to the parent component when the `Submit` button of the form. `useFacetCallback` allows you to create such handler, which will always have access to the current value of the facet.
 
@@ -112,6 +140,79 @@ const Form = ({ onSubmit, initialValue }: Props) => {
   )
 }
 ```
+
+### Using defaultReturn
+
+The `defaultReturn` parameter allows you to specify a return value for the callback when facets are not yet initialized. This is the value that will be returned when the callback is invoked before all facets have values.
+
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, useFacetCallback } from '@react-facet/core'
+
+const ScoreDisplay = () => {
+  const [scoreFacet, setScore] = useFacetState(0)
+
+  // Calculate bonus points based on score
+  // Returns a number, so defaultReturn should be a number
+  const calculateBonus = useFacetCallback(
+    (score) => () => {
+      if (score > 100) return score * 0.1
+      if (score > 50) return score * 0.05
+      return 0
+    },
+    [],
+    [scoreFacet],
+    0, // Default return value when scoreFacet is not initialized
+  )
+
+  return (
+    <div>
+      <button
+        onClick={() => {
+          const bonus = calculateBonus()
+          console.log('Bonus points:', bonus)
+        }}
+      >
+        Calculate Bonus
+      </button>
+    </div>
+  )
+}
+```
+
+Another example with a different return type:
+
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, useFacetCallback } from '@react-facet/core'
+
+const UserGreeting = () => {
+  const [userFacet] = useFacetState({ name: 'Alice', isAdmin: false })
+
+  // Returns a string, so defaultReturn is a string
+  const getGreeting = useFacetCallback(
+    (user) => () => {
+      return user.isAdmin ? `Welcome back, Admin ${user.name}!` : `Hello, ${user.name}!`
+    },
+    [],
+    [userFacet],
+    'Welcome, Guest!', // Default greeting when userFacet is not initialized
+  )
+
+  return <div>{getGreeting()}</div>
+}
+```
+
+**When to use `defaultReturn`:**
+
+- ✅ When the callback is invoked immediately and facets might not be initialized yet
+- ✅ To provide a sensible fallback value that matches the expected return type
+- ✅ To avoid conditional logic checking for `NO_VALUE` in the calling code
+
+**When not needed:**
+
+- ❌ When facets are always initialized before the callback can be invoked
+- ❌ When you can handle `NO_VALUE` appropriately in the calling code
 
 ## `useFacetEffect`
 
@@ -168,15 +269,97 @@ const Logger = ({ shouldLog }: { shouldLog: boolean }) => {
 }
 ```
 
+### Cleanup Functions
+
+Like React's `useEffect`, `useFacetEffect` supports returning a cleanup function from the effect. This cleanup function is essential for avoiding memory leaks and properly managing resources.
+
+**When cleanup runs:**
+
+1. **Before the effect runs again** - When any facet value or dependency changes
+2. **When the component unmounts** - For final cleanup
+
+This matches React's `useEffect` behavior exactly, making it familiar and predictable.
+
+**Common cleanup use cases:**
+
+- Clearing timers and intervals
+- Removing event listeners
+- Canceling subscriptions
+- Aborting network requests
+- Cleaning up DOM references
+
+```tsx twoslash
+// @esModuleInterop
+import { useFacetEffect, useFacetState, Facet } from '@react-facet/core'
+
+// Example: Auto-refresh with cleanup
+const AutoRefresh = ({ intervalFacet }: { intervalFacet: Facet<number> }) => {
+  useFacetEffect(
+    (interval) => {
+      const intervalId = setInterval(() => {
+        console.log('Refreshing...')
+      }, interval)
+
+      // Cleanup runs before next effect or on unmount
+      return () => clearInterval(intervalId)
+    },
+    [],
+    [intervalFacet],
+  )
+
+  return <div>Auto-refreshing component</div>
+}
+```
+
 ## `useFacetLayoutEffect`
 
 Much like React offers a `useLayoutEffect` as a complement to `useEffect`, so too does `react-facet` offer a `useFacetLayoutEffect`. It takes the exact same input as `useFacetEffect` and has an identical implementation, the sole exception being that it uses React's underlying `useLayoutEffect` instead that fires synchronously after all DOM mutations.
 
+## Deriving Facets: `useFacetMap` and `useFacetMemo`
+
+Both `useFacetMap` and `useFacetMemo` derive new facets from one or more source facets. They have identical APIs but different performance characteristics, making each better suited for different scenarios.
+
+### When to Use Which Hook
+
+**Use `useFacetMap` (lightweight) - THE DEFAULT CHOICE:**
+
+- ✅ The derived facet has **few subscribers** (1-2 components)
+- ✅ The mapping function is **lightweight** (property access, string concatenation, simple math)
+- ✅ You want **fast initialization** (no overhead from internal facet creation)
+- ⚠️ Each subscriber recomputes the mapping function independently
+
+**Use `useFacetMemo` (cached) - FOR OPTIMIZATION:**
+
+- ✅ The derived facet has **many subscribers** (3+ components, or passed to a list)
+- ✅ The mapping function is **computationally expensive** (complex calculations, data processing)
+- ✅ You want to **cache results** across all subscribers (single computation shared by all)
+- ⚠️ Heavier to initialize (uses `createFacet` internally)
+
+**Rule of thumb:** Start with `useFacetMap` for everything. Switch to `useFacetMemo` only when profiling shows a performance issue or you know you'll have many subscribers to an expensive computation.
+
+### How They Differ Under the Hood
+
+**`useFacetMap`** creates a simple facet that recomputes the mapping function for each subscriber independently. It's fast to initialize but computation runs N times for N subscribers.
+
+**`useFacetMemo`** creates a full facet using `createFacet` internally. It's heavier to initialize but caches the result, so computation runs only once regardless of subscriber count.
+
+```typescript
+// Scenario: derived facet used by 5 components
+
+// useFacetMap: computation runs 5 times (once per subscriber)
+const lightweightFacet = useFacetMap(expensiveFunc, [], [sourceFacet])
+
+// useFacetMemo: computation runs 1 time (cached for all subscribers)
+const cachedFacet = useFacetMemo(expensiveFunc, [], [sourceFacet])
+```
+
 ## `useFacetMap`
 
-The `useFacetMap` hook allows you to do a sort of "inline selector" to narrow down the data from a facet inside a component’s body.
+The lightweight hook for deriving facets. Best for simple transformations and few subscribers.
 
-This is useful to be able to combine React component props with facet data and to prepare the facet to be passed down as a prop / style into a `fast-*` component.
+### Using useFacetMap
+
+Use this to combine React component props with facet data and prepare facets to be passed to `fast-*` components.
 
 ```tsx twoslash
 // @esModuleInterop
@@ -249,7 +432,124 @@ const WrapperComponent = () => {
 
 ## `useFacetMemo`
 
-TODO
+The cached hook for deriving facets. Use when you have many subscribers or expensive computations.
+
+### API
+
+The API is identical to `useFacetMap`:
+
+```typescript
+useFacetMemo<M>(
+  selector: (...args: FacetValues) => M,
+  dependencies: unknown[],     // Non-facet dependencies
+  facets: Facet[],            // Facet dependencies
+  equalityCheck?: EqualityCheck<M>
+): Facet<M>
+```
+
+### When to Use useFacetMemo
+
+Use `useFacetMemo` instead of `useFacetMap` when:
+
+1. **Many subscribers** - The derived facet is passed to multiple child components or used in a list
+2. **Expensive computation** - The mapping function does complex calculations or data processing
+3. **Profiling shows bottleneck** - You've measured that the repeated computation is a performance issue
+
+### Example: Caching for Multiple Subscribers
+
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useFacetState, useFacetMemo } from '@react-facet/core'
+
+const ExpensiveComponent = () => {
+  const [dataFacet] = useFacetState({ values: [1, 2, 3, 4, 5] })
+
+  // Expensive computation that we want to cache
+  const processedDataFacet = useFacetMemo(
+    (data) => {
+      // Imagine this is a heavy computation
+      return data.values.reduce((sum, val) => sum + val, 0)
+    },
+    [],
+    [dataFacet],
+  )
+
+  // Multiple components subscribe to the same cached result
+  // With useFacetMap, this would compute 3 times
+  // With useFacetMemo, this computes only once
+  return (
+    <fast-div>
+      <fast-text text={processedDataFacet} />
+      <fast-text text={processedDataFacet} />
+      <fast-text text={processedDataFacet} />
+    </fast-div>
+  )
+}
+```
+
+### Example: Combining Multiple Facets
+
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useFacetMemo, Facet } from '@react-facet/core'
+
+type Props = {
+  playerHealthFacet: Facet<number>
+  playerMaxHealthFacet: Facet<number>
+  playerManaFacet: Facet<number>
+  playerMaxManaFacet: Facet<number>
+}
+
+const PlayerStatsDisplay = ({
+  playerHealthFacet,
+  playerMaxHealthFacet,
+  playerManaFacet,
+  playerMaxManaFacet,
+}: Props) => {
+  // Complex computation combining multiple facets
+  const statsMessageFacet = useFacetMemo(
+    (health, maxHealth, mana, maxMana) => {
+      // Expensive formatting or computation
+      const healthPercent = Math.round((health / maxHealth) * 100)
+      const manaPercent = Math.round((mana / maxMana) * 100)
+      return `Health: ${healthPercent}% | Mana: ${manaPercent}%`
+    },
+    [],
+    [playerHealthFacet, playerMaxHealthFacet, playerManaFacet, playerMaxManaFacet],
+  )
+
+  // Result is cached and shared if used in multiple places
+  return <fast-text text={statsMessageFacet} />
+}
+```
+
+### Equality Checks
+
+Like `useFacetMap`, you can provide an equality check function to prevent unnecessary updates:
+
+```tsx twoslash
+// @esModuleInterop
+import { shallowObjectEqualityCheck, useFacetState, useFacetMemo } from '@react-facet/core'
+
+const DataAggregator = () => {
+  const [facetA, setFacetA] = useFacetState('A')
+  const [facetB, setFacetB] = useFacetState('B')
+
+  // Use equality check for object results
+  const combinedFacet = useFacetMemo(
+    (a, b) => ({ valueA: a, valueB: b }),
+    [],
+    [facetA, facetB],
+    shallowObjectEqualityCheck,
+  )
+
+  return <div>Combined data component</div>
+}
+```
 
 ## `useFacetRef`
 
@@ -554,7 +854,7 @@ const GoodForm = ({ onSubmit }: { onSubmit: (value: string) => void }) => {
 }
 ```
 
-### Equality Checks
+### Equality Checks with useFacetUnwrap
 
 For complex data types, provide an equality check function to prevent unnecessary re-renders:
 
@@ -648,22 +948,5 @@ const Component4 = ({ facet }: { facet: Facet<string[]> }) => {
   return <div>{items !== NO_VALUE && items.map((item, i) => <div key={i}>{item}</div>)}</div>
 }
 ```
-
-### Migration Strategy
-
-This hook exists primarily to ease migration of existing code. The recommended approach:
-
-1. **Immediate**: Use `useFacetUnwrap` to get existing components working with facets
-2. **Short-term**: Identify components that re-render frequently
-3. **Long-term**: Refactor high-frequency components to use `fast-*` components and other facet hooks
-4. **Goal**: Minimize or eliminate `useFacetUnwrap` usage in performance-critical paths
-
-### Performance Impact Summary
-
-| Pattern                        | Re-renders      | Performance  |
-| ------------------------------ | --------------- | ------------ |
-| `useFacetUnwrap` + regular DOM | ✅ Every update | ❌ Poor      |
-| `fast-*` components + facets   | ❌ None         | ✅ Excellent |
-| `Mount` / `With` components    | ✅ Scoped only  | ✅ Good      |
 
 **Remember:** The whole point of React Facet is to avoid React reconciliation. Every use of `useFacetUnwrap` is a step backwards from that goal.

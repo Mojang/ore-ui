@@ -21,6 +21,19 @@ const Example = () => (
 )
 ```
 
+## Quick Reference
+
+| Component       | Purpose                                         | HTML Equivalent       |
+| --------------- | ----------------------------------------------- | --------------------- |
+| `fast-div`      | Container element for layout and grouping       | `<div>`               |
+| `fast-text`     | Text content (renders as text node, no wrapper) | Text node             |
+| `fast-input`    | Text input field                                | `<input type="text">` |
+| `fast-textarea` | Multi-line text input                           | `<textarea>`          |
+| `fast-img`      | Images                                          | `<img>`               |
+| `fast-a`        | Links/anchors                                   | `<a>`                 |
+| `fast-span`     | Inline element                                  | `<span>`              |
+| `fast-p`        | Paragraph element                               | `<p>`                 |
+
 ## Available Components
 
 - `fast-div` - Container element (use for all containers, buttons, links, etc.)

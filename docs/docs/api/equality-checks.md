@@ -40,7 +40,6 @@ There is also a variant that supports "nullable values" (`undefined` and `null`)
 //@esModuleInterop
 import { shallowObjectEqualityCheck } from '@react-facet/core'
 
-
 const equalityCheck = shallowObjectEqualityCheck()
 
 equalityCheck({ name: 'Alex', height: 2 })
@@ -59,7 +58,6 @@ There is also a variant that supports "nullable values" (`undefined` and `null`)
 ```tsx twoslash
 //@esModuleInterop
 import { shallowObjectArrayEqualityCheck } from '@react-facet/core'
-
 
 const equalityCheck = shallowObjectArrayEqualityCheck()
 
@@ -249,3 +247,217 @@ console.log(equalityCheck(null)) // false
 
 console.log(equalityCheck(null)) // true
 ```
+
+## Creating Custom Equality Checks
+
+You can create your own custom equality checks to handle specific data structures or comparison logic. An equality check follows the `EqualityCheck<T>` interface:
+
+```typescript
+interface EqualityCheck<T> {
+  (): (current: T) => boolean
+}
+```
+
+### How Equality Checks Work
+
+Equality checks use a **two-function closure pattern**:
+
+1. **Initializer function** `() =>` - Called once to set up the checker and initialize state
+2. **Checker function** `(current: T) =>` - Called each time a value needs to be checked, maintains state across calls
+
+The checker function compares the current value with the previous value stored in the closure and returns `true` if they're equal.
+
+### Basic Custom Equality Check Example
+
+Here's a simple example of a custom equality check for case-insensitive string comparison:
+
+```tsx twoslash
+//@esModuleInterop
+import { EqualityCheck, Option, NO_VALUE } from '@react-facet/core'
+
+// Simple equality check without parameters
+export const caseInsensitiveStringCheck: EqualityCheck<string> = () => {
+  let previous: Option<string> = NO_VALUE
+
+  return (current: string) => {
+    const currentLower = current.toLowerCase()
+    const previousLower = previous === NO_VALUE ? NO_VALUE : previous.toLowerCase()
+
+    if (previousLower !== currentLower) {
+      previous = current
+      return false
+    }
+
+    return true
+  }
+}
+
+// Usage example
+const equalityCheck = caseInsensitiveStringCheck()
+
+console.log(equalityCheck('Hello')) // false (first call)
+console.log(equalityCheck('HELLO')) // true (case insensitive match)
+console.log(equalityCheck('hello')) // true (still matches)
+console.log(equalityCheck('World')) // false (different value)
+```
+
+### Advanced Custom Equality Check Examples
+
+#### Parameterized Equality Check
+
+For more flexibility, you can add an outer function to accept parameters:
+
+```tsx twoslash
+//@esModuleInterop
+import { EqualityCheck } from '@react-facet/core'
+
+// Custom equality check that treats numbers within a tolerance as equal
+export const tolerantNumberEqualityCheck = (tolerance: number = 0.01): EqualityCheck<number> => {
+  return () => {
+    let previousValue: number | undefined
+
+    return (currentValue: number) => {
+      if (previousValue === undefined) {
+        previousValue = currentValue
+        return false
+      }
+
+      const isEqual = Math.abs(currentValue - previousValue) < tolerance
+      previousValue = currentValue
+      return isEqual
+    }
+  }
+}
+
+// Usage example
+const equalityCheck = tolerantNumberEqualityCheck(0.5)()
+
+console.log(equalityCheck(1.0)) // false (first call)
+console.log(equalityCheck(1.4)) // true (within 0.5 tolerance)
+console.log(equalityCheck(2.0)) // false (outside tolerance)
+```
+
+#### Deep Object Equality Check
+
+For comparing objects with nested structures:
+
+```tsx twoslash
+//@esModuleInterop
+import { EqualityCheck } from '@react-facet/core'
+
+type DeepObject = Record<string, unknown>
+
+export const deepObjectEqualityCheck: EqualityCheck<DeepObject> = () => {
+  let previousValue: DeepObject | undefined
+
+  return (currentValue: DeepObject) => {
+    if (previousValue === undefined) {
+      previousValue = currentValue
+      return false
+    }
+
+    // Simple deep equality check (consider using a library like lodash for production)
+    const isEqual = JSON.stringify(previousValue) === JSON.stringify(currentValue)
+    previousValue = currentValue
+    return isEqual
+  }
+}
+```
+
+#### Custom Array Equality Check
+
+For arrays where you care about specific comparison logic:
+
+```tsx twoslash
+//@esModuleInterop
+import { EqualityCheck } from '@react-facet/core'
+
+type Item = { id: string; value: number }
+
+// Check if arrays have same items by ID, ignoring order
+export const arrayByIdEqualityCheck: EqualityCheck<Item[]> = () => {
+  let previousIds: Set<string> | undefined
+
+  return (currentValue: Item[]) => {
+    const currentIds = new Set(currentValue.map((item) => item.id))
+
+    if (previousIds === undefined) {
+      previousIds = currentIds
+      return false
+    }
+
+    // Check if sets are equal
+    if (previousIds.size !== currentIds.size) {
+      previousIds = currentIds
+      return false
+    }
+
+    for (const id of currentIds) {
+      if (!previousIds.has(id)) {
+        previousIds = currentIds
+        return false
+      }
+    }
+
+    previousIds = currentIds
+    return true
+  }
+}
+```
+
+### Using Custom Equality Checks with Facets
+
+Custom equality checks can be used with any facet hook that accepts an equality check parameter.
+
+:::info Important
+The equality check type must match the **return type** of the mapping function, not the input facet type. The equality check receives the value **returned** by the mapping function and compares it with the previous returned value.
+:::
+
+```tsx twoslash
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+//@esModuleInterop
+import { useFacetMap, useFacetState, EqualityCheck } from '@react-facet/core'
+
+// Custom equality check
+const tolerantNumberEqualityCheck = (tolerance: number = 0.01): EqualityCheck<number> => {
+  return () => {
+    let previousValue: number | undefined
+    return (currentValue: number) => {
+      if (previousValue === undefined) {
+        previousValue = currentValue
+        return false
+      }
+      const isEqual = Math.abs(currentValue - previousValue) < tolerance
+      previousValue = currentValue
+      return isEqual
+    }
+  }
+}
+
+const TemperatureMonitor = () => {
+  const [tempFacet] = useFacetState(20.0)
+
+  const roundedTemp = useFacetMap(
+    (temp) => Math.round(temp * 10) / 10, // Returns a number which is passed into the equality checker
+    [],
+    [tempFacet],
+    tolerantNumberEqualityCheck(0.5),
+  )
+
+  return (
+    <div>
+      <fast-text text={useFacetMap((t) => `${t}°C`, [], [roundedTemp])} />
+    </div>
+  )
+}
+```
+
+### Best Practices for Custom Equality Checks
+
+1. **Always store the previous value** - The pattern requires maintaining state across calls
+2. **Return `false` on first call** - The first comparison should indicate a change
+3. **Update previous value after comparison** - Always update the stored value, even when values are equal
+4. **Consider performance** - Complex comparisons run frequently; keep them efficient
+5. **Avoid side effects** - Equality checks should be pure functions
+6. **Handle edge cases** - Consider `undefined`, `null`, and empty values
