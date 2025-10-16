@@ -28,6 +28,12 @@ To define facets within React components, there is a main hook `useFacetState` t
 
 Returns a `[facet, setFacet]` pair. Like React’s `useState`, but with a Facet instead of a value.
 
+:::tip Facet Reference Stability
+**The facet returned by `useFacetState` maintains a stable reference across all re-renders.** Unlike `useFacetMap` or `useFacetWrap`, the facet instance never changes—only its internal value updates when you call the setter.
+
+This makes `useFacetState` perfect for creating persistent state that can be safely passed to child components without causing unnecessary re-renders from reference changes.
+:::
+
 This example illustrates how to use this hook in the common use case of having to store the temporary state of the input field until it is submitted.
 
 ```tsx twoslash
@@ -506,6 +512,35 @@ const cachedFacet = useFacetMemo(expensiveFunc, [], [sourceFacet])
 
 The lightweight hook for deriving facets. Best for simple transformations and few subscribers.
 
+:::info Facet Reference Stability
+**`useFacetMap` creates a new facet reference when any dependency changes.** This includes:
+
+- Changes to the `dependencies` array (non-facet dependencies like props or local variables)
+- Changes to the `facets` array (different facet instances)
+- Changes to the `equalityCheck` function
+
+When the returned facet reference changes, any component or hook that depends on it will re-run. This is expected behavior and mirrors how React's `useMemo` works.
+
+**Example:**
+
+```tsx
+const Component = ({ multiplier }: { multiplier: number }) => {
+  const [valueFacet] = useFacetState(10)
+
+  // derivedFacet is a NEW reference when multiplier changes
+  const derivedFacet = useFacetMap(
+    (val) => val * multiplier,
+    [multiplier], // ← When this changes, new facet is created
+    [valueFacet],
+  )
+
+  return <ChildComponent facet={derivedFacet} />
+}
+```
+
+This is usually fine, but be aware when passing derived facets to components that might be sensitive to prop reference changes.
+:::
+
 ### NO_VALUE Retention Behavior
 
 :::info Important: Returning NO_VALUE Retains Previous Value
@@ -615,6 +650,16 @@ const WrapperComponent = () => {
 ## `useFacetMemo`
 
 The cached hook for deriving facets. Use when you have many subscribers or expensive computations.
+
+:::info Facet Reference Stability
+**`useFacetMemo` creates a new facet reference when any dependency changes.** This behavior is identical to `useFacetMap`:
+
+- Changes to the `dependencies` array trigger a new facet
+- Changes to the `facets` array trigger a new facet
+- Changes to the `equalityCheck` function trigger a new facet
+
+See the [Facet Reference Stability](#facet-reference-stability) note under `useFacetMap` for more details and examples.
+:::
 
 ### NO_VALUE Retention Behavior
 
@@ -799,13 +844,31 @@ const Cancel = () => {
 }
 ```
 
-:::info Important: useFacetWrap Behavior
-**`useFacetWrap` creates a new facet instance whenever the wrapped value changes.** This is usually fine, but can cause issues when facet reference stability matters. If you need a stable facet reference that doesn't change when the value updates, use [`useFacetWrapMemo`](#usefacetwrapmemo) instead.
+:::info Facet Reference Stability
+**`useFacetWrap` creates a new facet reference whenever the wrapped value changes.** The facet is memoized on the `prop` parameter, so:
+
+- If the prop is already a facet, it returns that facet (stable reference)
+- If the prop is a value, it creates a `StaticFacet` wrapping that value
+- When the prop value changes, a new `StaticFacet` is created
+
+This is usually fine, but can cause issues when facet reference stability matters. If you need a stable facet reference that doesn't change when the value updates, use [`useFacetWrapMemo`](#usefacetwrapmemo) instead.
 
 **Quick comparison:**
 
 - `useFacetWrap` → new facet instance on value change (lighter, simpler)
 - `useFacetWrapMemo` → same facet instance, value updates internally (stable reference)
+
+**Example showing new facet on each change:**
+
+```tsx
+const Component = ({ label }: { label: string }) => {
+  // labelFacet is a NEW reference when label changes
+  const labelFacet = useFacetWrap(label)
+
+  return <ChildComponent facet={labelFacet} />
+  // ChildComponent will receive a new facet prop when label changes
+}
+```
 
 For most use cases, `useFacetWrap` is the right choice. Only use `useFacetWrapMemo` when you specifically need facet reference stability.
 :::
