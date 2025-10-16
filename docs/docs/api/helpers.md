@@ -12,7 +12,7 @@ For detailed documentation and examples, see [`startFacetTransition`](./hooks#st
 
 **Quick example:**
 
-```ts twoslash
+```tsx twoslash
 import { startFacetTransition, useFacetState } from '@react-facet/core'
 
 const DataLoader = () => {
