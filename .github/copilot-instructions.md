@@ -16,6 +16,86 @@ React Facet bypasses React reconciliation for leaf node updates (styles, text co
 
 ---
 
+## ⚠️ Top 3 Critical Errors to Avoid
+
+Before diving into the details, be aware of these critical mistakes that **defeat the entire purpose of React Facet**:
+
+### 1. 🚨 CRITICAL: Forgetting to Check for NO_VALUE
+
+**Problem**: `useFacetUnwrap` and setter callbacks return `T | NO_VALUE`, not just `T`. Using the value without checking causes TypeScript errors and runtime bugs.
+
+```typescript
+// ❌ WRONG - TypeScript ERROR!
+const value = useFacetUnwrap(numberFacet)
+const doubled = value * 2 // Error: NO_VALUE is not a number
+
+const [items, setItems] = useFacetState<string[]>([])
+setItems((current) => [...current, 'new']) // Error: NO_VALUE is not spreadable
+
+// ✅ CORRECT - Always check for NO_VALUE
+const value = useFacetUnwrap(numberFacet)
+if (value !== NO_VALUE) {
+  const doubled = value * 2 // ✓ Safe
+}
+
+setItems((current) => (current !== NO_VALUE ? [...current, 'new'] : ['new']))
+```
+
+**Remember**:
+
+- `useFacetUnwrap` → always returns `T | NO_VALUE`
+- Setter callbacks → always receive `T | NO_VALUE`
+- Check `!== NO_VALUE` before using the value
+
+### 2. 🚨 CRITICAL: Overusing useFacetUnwrap
+
+**Problem**: `useFacetUnwrap` causes React re-renders, defeating the entire performance benefit of facets.
+
+```typescript
+// ❌ WRONG - Causes re-renders, defeats facet purpose!
+const value = useFacetUnwrap(facet)
+return <div>{value}</div>
+
+// ✅ CORRECT - Use fast-text, no re-renders
+return <fast-text text={facet} />
+
+// ❌ WRONG - Unwrapping for conditional rendering
+const isVisible = useFacetUnwrap(isVisibleFacet)
+if (isVisible !== NO_VALUE && !isVisible) return null
+
+// ✅ CORRECT - Use Mount component
+<Mount when={isVisibleFacet}>
+  <ExpensiveComponent />
+</Mount>
+```
+
+**Rule**: Only use `useFacetUnwrap` as a **last resort** when interfacing with non-facet-aware third-party components. Otherwise, use `fast-*` components or facet-aware patterns.
+
+### 3. 🚨 CRITICAL: Missing Dependencies in First Array
+
+**Problem**: Facet hooks have TWO dependency arrays. Forgetting non-facet dependencies in the first array causes stale closures.
+
+```typescript
+// ❌ WRONG - Missing multiplier in first array
+const multiplier = props.multiplier
+const result = useFacetMap(
+  (value) => value * multiplier,
+  [], // ❌ Missing: [multiplier] - will use stale value!
+  [valueFacet],
+)
+
+// ✅ CORRECT - Include all non-facet dependencies
+const result = useFacetMap(
+  (value) => value * multiplier,
+  [multiplier], // ✅ Non-facet dependencies here
+  [valueFacet], // ✅ Facet dependencies here
+)
+```
+
+**Rule**: First array = non-facet deps (props, local vars, functions). Second array = facet deps.
+
+---
+
 ## Repository Structure
 
 This is a **yarn workspace monorepo** with the following organization:
@@ -73,15 +153,19 @@ import { useFacetState, useFacetMap, useFacetEffect, NO_VALUE, shallowObjectEqua
 **Renderer imports** (for fast-\* components):
 
 ```typescript
-import { render, createRoot } from '@react-facet/dom-fiber'
+import { createRoot } from '@react-facet/dom-fiber'
 // fast-div, fast-text, etc. are available globally when using dom-fiber
 ```
+
+> **⚠️ CRITICAL:** Use `createRoot` (not `render`) for all new code. The `render` method is deprecated.
 
 **Testing imports**:
 
 ```typescript
 import { render, act } from '@react-facet/dom-fiber-testing-library'
 ```
+
+> **Note:** In testing, `render` from the testing library is still used. The deprecated `render` is only from `@react-facet/dom-fiber` itself.
 
 **Gameface integration**:
 
@@ -111,8 +195,12 @@ interface Facet<T> {
 }
 
 interface WritableFacet<T> extends Facet<T> {
-  set: (value: T | ((prev: T) => T)) => void
+  set: (value: T) => void
+  setWithCallback: (callback: (previousValue: T | NoValue) => T | NoValue) => void
 }
+
+// useFacetState returns this setter type
+type Setter<V> = (value: V | ((previousValue: V | NoValue) => V | NoValue)) => void
 ```
 
 ### Key Characteristics
@@ -439,7 +527,55 @@ const handleSubmit = useFacetCallback(
 )
 ```
 
+**When NOT to use `useFacetCallback`:**
+
+If you only need to update a facet's state, use a regular callback instead. The setter from `useFacetState` gives you access to the current value:
+
+```typescript
+const [itemsFacet, setItems] = useFacetState<string[]>([])
+
+// ❌ Unnecessary - useFacetCallback not needed here
+const addItem = useFacetCallback(
+  (items) => (newItem: string) => {
+    setItems([...items, newItem])
+  },
+  [],
+  [itemsFacet],
+)
+
+// ✅ Better - regular callback with setter's callback form
+const addItem = (newItem: string) => {
+  setItems((current) => (current !== NO_VALUE ? [...current, newItem] : [newItem]))
+}
+```
+
+**When to use `useFacetCallback`:**
+
+- You need to **read** facet values to use in the callback logic (not just update them)
+- The callback needs to stay stable but depend on multiple facet values
+- You're passing the callback to child components and want to avoid re-renders
+
+**When to use regular callbacks:**
+
+- You only need to **update** facet state (use the setter's callback form)
+- You need to read props/local state (use regular `useCallback`)
+- Simple event handlers that don't depend on facet values
+
 ### 6. Conditional Rendering
+
+**CRITICAL: Always use `Mount` for conditional rendering, never `useFacetUnwrap`:**
+
+```typescript
+// ❌ WRONG - Causes re-renders, defeats facet purpose!
+const isVisible = useFacetUnwrap(isVisibleFacet)
+if (isVisible !== NO_VALUE && !isVisible) return null
+return <ExpensiveComponent />
+
+// ✅ CORRECT - Use Mount component
+<Mount when={isVisibleFacet}>
+  <ExpensiveComponent />
+</Mount>
+```
 
 **Use `Mount` component for conditional mounting:**
 
@@ -452,13 +588,17 @@ const handleSubmit = useFacetCallback(
 **Use `Map` component for lists:**
 
 ```typescript
-<Map array={itemsFacet}>
-  {(itemFacet, index) => (
-    <div key={index}>
-      <fast-text text={useFacetMap((item) => item.name, [], [itemFacet])} />
+;<Map array={itemsFacet}>{(itemFacet, index) => <ItemRow key={index} itemFacet={itemFacet} />}</Map>
+
+// In a separate component to follow Rules of Hooks
+const ItemRow = ({ itemFacet }: { itemFacet: Facet<Item> }) => {
+  const nameFacet = useFacetMap((item) => item.name, [], [itemFacet])
+  return (
+    <div>
+      <fast-text text={nameFacet} />
     </div>
-  )}
-</Map>
+  )
+}
 ```
 
 ### 7. Performance Optimization with Transitions
@@ -579,84 +719,14 @@ if (value !== NO_VALUE && value > 50) { ... }
    return <ThirdPartyComponent value={value} />
    ```
 
-2. **Conditional mounting** (though `Mount` or `With` components are better as they scope the re-render):
+2. **Conditional mounting** - **DON'T DO THIS!** Use `Mount` or `With` components instead:
 
    ```typescript
-   // ❌ Avoid - causes component re-render
+   // ❌ WRONG - causes component re-render, defeats facet purpose
    const isVisible = useFacetUnwrap(isVisibleFacet)
    if (isVisible !== NO_VALUE && !isVisible) return null
 
-   // ✅ Better - scopes re-render to Mount component
-   <Mount when={isVisibleFacet}>
-     <ExpensiveComponent />
-   </Mount>
-   ```
-
-**Common NO_VALUE handling patterns:**
-
-```typescript
-// Early return
-const value = useFacetUnwrap(facet)
-if (value === NO_VALUE) return null
-
-// Default value
-const value = useFacetUnwrap(facet)
-const safeValue = value === NO_VALUE ? defaultValue : value
-
-// Guard in JSX
-const items = useFacetUnwrap(arrayFacet)
-return items !== NO_VALUE && items.map(...)
-```
-
-**Performance Impact:**
-
-`useFacetUnwrap` defeats the primary benefit of facets by triggering React re-renders. Use it as a last resort, not as a standard pattern.
-
-### 8. Unwrapping (Use Sparingly!)
-
-**Use `useFacetUnwrap` only when absolutely necessary:**
-
-```typescript
-// ⚠️ WARNING: Creates real component state - causes re-renders!
-const plainValue = useFacetUnwrap(someFacet)
-```
-
-:::danger Critical: Always Check for NO_VALUE
-**`useFacetUnwrap` returns `T | NO_VALUE`, not just `T`!** You must always check for `NO_VALUE` before using the unwrapped value, otherwise you'll get TypeScript errors.
-
-```typescript
-const value = useFacetUnwrap(numberFacet)
-
-// ❌ WRONG - TypeScript error! value might be NO_VALUE
-if (value > 50) { ... }
-
-// ✅ CORRECT - Check for NO_VALUE first
-if (value !== NO_VALUE && value > 50) { ... }
-```
-
-:::
-
-**When to use `useFacetUnwrap`:**
-
-1. **Passing to non-facet-aware components** (though refactoring the component to accept facets is preferred):
-
-   ```typescript
-   const value = useFacetUnwrap(facet)
-
-   // Always check for NO_VALUE before using
-   if (value === NO_VALUE) return null
-
-   return <ThirdPartyComponent value={value} />
-   ```
-
-2. **Conditional mounting** (though `Mount` or `With` components are better as they scope the re-render):
-
-   ```typescript
-   // ❌ Avoid - causes component re-render
-   const isVisible = useFacetUnwrap(isVisibleFacet)
-   if (isVisible !== NO_VALUE && !isVisible) return null
-
-   // ✅ Better - scopes re-render to Mount component
+   // ✅ CORRECT - Use Mount component, no re-renders
    <Mount when={isVisibleFacet}>
      <ExpensiveComponent />
    </Mount>
@@ -816,11 +886,23 @@ if (value !== NO_VALUE) {
 **Other uses:**
 
 ```typescript
-// Direct facet access
+// ⚠️ Avoid in application code - use useFacetCallback instead
+// Direct facet.get() is primarily for testing scenarios
 const value = someFacet.get()
 if (value === NO_VALUE) {
   // Handle uninitialized state
 }
+
+// ✅ In application code, use facet hooks instead
+const handleClick = useFacetCallback(
+  (value) => () => {
+    if (value > 50) {
+      // Use value here
+    }
+  },
+  [],
+  [someFacet],
+)
 
 // In useFacetMap (facet mapping handles NO_VALUE automatically)
 const mappedFacet = useFacetMap(
@@ -1124,6 +1206,163 @@ const combined = useFacetMap((a, b) => ({ a, b }), [], [facetA, facetB])
 const combined = useFacetMap((a, b) => ({ a, b }), [], [facetA, facetB], shallowObjectEqualityCheck)
 ```
 
+### 7. Calling Hooks Inside Conditionals, Loops, or Nested Functions
+
+```typescript
+// ❌ WRONG - Hook inside Map callback (nested function)
+<Map array={itemsFacet}>
+  {(itemFacet, index) => (
+    <div key={index}>
+      <fast-text text={useFacetMap((item) => item.name, [], [itemFacet])} />
+    </div>
+  )}
+</Map>
+
+// ❌ WRONG - Hook inside conditional
+{Math.random() > 0.5 ? useFacetMap(...) : useFacetMap(...)}
+
+// ❌ WRONG - Hook inside loop
+{items.map(item => useFacetMap(...))}
+
+// ✅ CORRECT - Hook at top level (before return)
+const nameFacet = useFacetMap((item) => item.name, [], [itemFacet])
+return <fast-text text={nameFacet} />
+
+// ✅ ALSO CORRECT - Hook in JSX during render (not in conditional/loop/function)
+return <fast-text text={useFacetMap((item) => item.name, [], [itemFacet])} />
+
+// ✅ BEST PRACTICE - Separate component with hooks at top level
+const ItemRow = ({ itemFacet }: { itemFacet: Facet<Item> }) => {
+  const nameFacet = useFacetMap((item) => item.name, [], [itemFacet])
+  return <fast-text text={nameFacet} />
+}
+```
+
+**Rules of Hooks**: Hooks can be called at the component's top level OR directly in JSX during render, but **never** inside conditionals, loops, or nested functions (like Map callbacks). Best practice is to define derived facets at the top level for clarity and to avoid recreating them on each render.
+
+### 8. Using facet.get() in Application Code
+
+```typescript
+// ❌ WRONG - .get() breaks reactivity, causes stale closures
+const addItem = () => {
+  const name = newItemNameFacet.get()
+  if (name === NO_VALUE || name.trim() === '') return
+  // Process name...
+}
+
+const selectItem = (id: string) => {
+  const currentSelected = selectedIdFacet.get()
+  setSelectedId(currentSelected === id ? null : id)
+}
+
+// ✅ CORRECT - Use useFacetCallback to access facet values reactively
+const addItem = useFacetCallback(
+  (name) => () => {
+    if (name.trim() === '') return
+    // Process name...
+  },
+  [],
+  [newItemNameFacet],
+)
+
+const selectItem = useFacetCallback(
+  (currentSelected) => (id: string) => {
+    setSelectedId(currentSelected === id ? null : id)
+  },
+  [],
+  [selectedIdFacet],
+)
+```
+
+**Critical**: `facet.get()` is a low-level API intended for **testing and internal library use only**. In application code:
+
+- ❌ **Don't use** `.get()` in event handlers or regular functions
+- ✅ **Do use** `useFacetCallback` to access facet values in callbacks
+- ✅ **Do use** `useFacetMap` to derive new facets from existing ones
+- ✅ **Only exception**: `.get()` is acceptable in test files for asserting values
+
+**Why this matters**: Using `.get()` breaks the reactive chain. The value is read once and can become stale. Using `useFacetCallback` ensures the callback always has the latest facet values.
+
+### 9. Using fast-\* Components for Static Content
+
+```typescript
+// ❌ WRONG - fast-div used when className is a static string
+<fast-div className="item-header">
+  <fast-div className="item-name">
+    <fast-text text={nameFacet} />
+  </fast-div>
+</fast-div>
+
+// ❌ WRONG - fast-span used with no facet bindings
+<fast-span>Static label text</fast-span>
+
+// ✅ CORRECT - Regular HTML for static attributes, fast-text only for facet
+<div className="item-header">
+  <div className="item-name">
+    <fast-text text={nameFacet} />
+  </div>
+</div>
+
+// ✅ CORRECT - Regular span for static content
+<span>Static label text</span>
+
+// ✅ CORRECT - Use fast-div ONLY when binding a facet to an attribute
+<fast-div className={dynamicClassFacet}>
+  <fast-text text={contentFacet} />
+</fast-div>
+```
+
+**Rule**: Use `fast-*` components **only** when you need to bind a facet value to a DOM attribute. For static content, regular HTML elements are simpler, more idiomatic, and perfectly fine.
+
+**When to use each:**
+
+- `fast-div` → when `className`, `style`, or other attributes are facets
+- `<div>` → when all attributes are static strings
+- `fast-text` → when text content is a facet
+- Text nodes → when text content is static
+- `fast-input` → when `value` or other attributes are facets
+- `<input>` → NEVER (use `fast-input` instead, see next pitfall)
+
+### 10. Unwrapping Facets for Form Inputs When fast-\* Alternatives Exist
+
+```typescript
+// ❌ WRONG - Unwrapping causes component re-renders!
+const username = useFacetUnwrap(usernameFacet)
+const sortBy = useFacetUnwrap(sortByFacet)
+
+return (
+  <>
+    <input value={username !== NO_VALUE ? username : ''} onChange={(e) => setUsername(e.target.value)} />
+    <select value={sortBy !== NO_VALUE ? sortBy : 'name'} onChange={(e) => setSortBy(e.target.value)} />
+  </>
+)
+
+// ✅ CORRECT - Use fast-input and fast-select (if available), no re-renders
+return (
+  <>
+    <fast-input value={usernameFacet} onChange={(e) => setUsername(e.target.value)} />
+    {/* Note: fast-select may not exist, check available components */}
+    <select value={sortBy !== NO_VALUE ? sortBy : 'name'} onChange={(e) => setSortBy(e.target.value)} />
+  </>
+)
+```
+
+**Critical Performance Pattern**: Form inputs are a common place where developers unnecessarily use `useFacetUnwrap`, causing re-renders. Always prefer `fast-input`, `fast-textarea`, or other facet-aware form components.
+
+**Available facet-aware form components:**
+
+- `fast-input` - Text input (single-line)
+- `fast-textarea` - Text input (multi-line)
+- Check `@react-facet/dom-fiber` for other form components
+
+**When unwrapping IS necessary:**
+
+- Native `<select>` element (if `fast-select` doesn't exist)
+- Third-party form libraries
+- Complex form components that don't have facet equivalents
+
+**Best practice**: Only unwrap for form controls when no `fast-*` equivalent exists. Even then, consider wrapping the control in a separate component to limit the scope of re-renders.
+
 ---
 
 ## Development Workflow
@@ -1320,38 +1559,465 @@ type EqualityCheck<T>
 
 ---
 
+## Decision Trees & Quick Guides
+
+### Which Hook Should I Use?
+
+#### Creating Facets
+
+```
+Need to create a facet?
+├─ Local component state?
+│  └─ useFacetState(initialValue)
+│
+├─ Prop that might be value OR facet?
+│  ├─ Value changes frequently?
+│  │  └─ useFacetWrapMemo(prop)  // Stable reference
+│  └─ Otherwise
+│     └─ useFacetWrap(prop)       // Default choice
+│
+├─ Shared state from context/module?
+│  └─ useContext(FacetContext)
+│
+└─ Testing/mocking only?
+   └─ createFacet({ initialValue })
+```
+
+#### Deriving Facets
+
+```
+Need to derive from existing facets?
+├─ Simple transformation (map, format, calculate)?
+│  ├─ Few subscribers (1-2 components)?
+│  │  └─ useFacetMap(fn, deps, facets)     // Default choice
+│  └─ Many subscribers (3+) OR expensive computation?
+│     └─ useFacetMemo(fn, deps, facets)    // Cached
+│
+├─ Multiple facets combined?
+│  └─ useFacetMap(fn, [], [facetA, facetB, ...])
+│
+└─ With local variables/props?
+   └─ useFacetMap(fn, [localVar], [facet])
+      // ⚠️ Don't forget first array!
+```
+
+### When to Use fast-\* Components?
+
+```
+Rendering UI?
+├─ Binding a facet to a property?
+│  └─ ✅ Use fast-* component
+│     <fast-div className={classFacet}>
+│       <fast-text text={messageFacet} />
+│     </fast-div>
+│
+├─ Static content only?
+│  └─ ✅ Use regular HTML
+│     <div className="static">
+│       <p>Static text</p>
+│     </div>
+│
+└─ Mix of static and dynamic?
+   └─ ✅ Use both together
+      <div className="container">
+        <h1>Static Title</h1>
+        <fast-text text={dynamicFacet} />
+      </div>
+```
+
+### Handling NO_VALUE
+
+```
+Working with facet values?
+├─ Using useFacetUnwrap?
+│  └─ ⚠️ CRITICAL: Always check for NO_VALUE
+│     const value = useFacetUnwrap(facet)
+│     if (value !== NO_VALUE) {
+│       // Safe to use value here
+│     }
+│
+├─ Setter callback in useFacetState?
+│  └─ ⚠️ CRITICAL: Check before spreading/accessing
+│     setItems(current =>
+│       current !== NO_VALUE
+│         ? [...current, newItem]
+│         : [newItem]
+│     )
+│
+├─ Inside useFacetMap/useFacetMemo?
+│  └─ ✅ Automatic - callback receives T, not T | NO_VALUE
+│     useFacetMap(value => value * 2, [], [facet])
+│
+└─ Need value in event handler/callback?
+   └─ ✅ Use useFacetCallback
+      const handler = useFacetCallback(
+        (value) => () => { /* use value */ },
+        [], [facet]
+      )
+      // ⚠️ Avoid facet.get() - primarily for testing only
+```
+
+### Performance Optimization Decision
+
+```
+Performance issue identified?
+├─ Too many re-renders?
+│  ├─ Using useFacetUnwrap for rendering?
+│  │  └─ ❌ REPLACE with fast-text or fast-* component
+│  │
+│  ├─ Unwrapping for conditional render?
+│  │  └─ ❌ REPLACE with <Mount when={facet}>
+│  │
+│  └─ Missing equality check on objects/arrays?
+│     └─ ✅ ADD shallowObjectEqualityCheck or shallowArrayEqualityCheck
+│
+├─ Expensive computation running too often?
+│  ├─ Multiple subscribers to same derivation?
+│  │  └─ ✅ SWITCH useFacetMap → useFacetMemo
+│  │
+│  └─ Heavy updates blocking UI?
+│     └─ ✅ WRAP in useFacetTransition or startFacetTransition
+│
+└─ Missing dependencies causing stale values?
+   └─ ✅ ADD to first dependency array
+      useFacetMap(v => v * multiplier, [multiplier], [facet])
+```
+
+---
+
+## Full Component Examples
+
+### Example 1: Game Player Health Bar
+
+Complete component showing multiple concepts:
+
+```typescript
+import { useFacetState, useFacetMap, useFacetEffect, NO_VALUE } from '@react-facet/core'
+import { shallowObjectEqualityCheck } from '@react-facet/core'
+
+type PlayerData = {
+  health: number
+  maxHealth: number
+  name: string
+}
+
+export const PlayerHealthBar = () => {
+  // Local state - stable facet reference
+  const [playerFacet, setPlayer] = useFacetState<PlayerData>({
+    health: 100,
+    maxHealth: 100,
+    name: 'Steve',
+  })
+
+  // Derived facets - lightweight transformations
+  const healthPercentFacet = useFacetMap((player) => (player.health / player.maxHealth) * 100, [], [playerFacet])
+
+  const healthBarClassFacet = useFacetMap(
+    (percent) => {
+      if (percent > 66) return 'health-bar-high'
+      if (percent > 33) return 'health-bar-medium'
+      return 'health-bar-low'
+    },
+    [],
+    [healthPercentFacet],
+  )
+
+  const healthTextFacet = useFacetMap((player) => `${player.health}/${player.maxHealth}`, [], [playerFacet])
+
+  const playerNameFacet = useFacetMap((p) => p.name, [], [playerFacet])
+
+  // Side effect - play warning sound when low health
+  useFacetEffect(
+    (percent) => {
+      if (percent < 20) {
+        console.log('⚠️ Warning: Low health!')
+        // playWarningSound()
+      }
+    },
+    [],
+    [healthPercentFacet],
+  )
+
+  // Event handler with NO_VALUE check in setter
+  const takeDamage = (amount: number) => {
+    setPlayer((current) => {
+      if (current === NO_VALUE) return current
+      return {
+        ...current,
+        health: Math.max(0, current.health - amount),
+      }
+    })
+  }
+
+  const heal = (amount: number) => {
+    setPlayer((current) => {
+      if (current === NO_VALUE) return current
+      return {
+        ...current,
+        health: Math.min(current.maxHealth, current.health + amount),
+      }
+    })
+  }
+
+  return (
+    <div className="player-health-container">
+      {/* Static structure */}
+      <div className="player-info">
+        <h3>Player</h3>
+        {/* Dynamic name from facet */}
+        <fast-text text={playerNameFacet} />
+      </div>
+
+      {/* Health bar with dynamic class */}
+      <fast-div className={healthBarClassFacet}>
+        <fast-text text={healthTextFacet} />
+      </fast-div>
+
+      {/* Controls - regular HTML */}
+      <div className="controls">
+        <button onClick={() => takeDamage(10)}>Take Damage (-10)</button>
+        <button onClick={() => heal(10)}>Heal (+10)</button>
+      </div>
+    </div>
+  )
+}
+```
+
+### Example 2: Inventory List with Conditional Rendering
+
+Shows `Map`, `Mount`, and `With` components:
+
+```typescript
+import { useFacetState, useFacetMap, useFacetCallback, Facet, NO_VALUE } from '@react-facet/core'
+import { Map, Mount, With } from '@react-facet/core'
+import { shallowArrayEqualityCheck } from '@react-facet/core'
+
+type Item = {
+  id: string
+  name: string
+  quantity: number
+}
+
+export const Inventory = () => {
+  const [itemsFacet, setItems] = useFacetState<Item[]>([
+    { id: '1', name: 'Diamond', quantity: 5 },
+    { id: '2', name: 'Gold', quantity: 12 },
+  ])
+
+  const [selectedIdFacet, setSelectedId] = useFacetState<string | null>(null)
+
+  // Derived facet with equality check for arrays
+  const sortedItemsFacet = useFacetMap(
+    (items) => [...items].sort((a, b) => a.name.localeCompare(b.name)),
+    [],
+    [itemsFacet],
+    shallowArrayEqualityCheck,
+  )
+
+  const hasItemsFacet = useFacetMap((items) => items.length > 0, [], [itemsFacet])
+  const hasNoItemsFacet = useFacetMap((has) => !has, [], [hasItemsFacet])
+
+  // Regular callback - no need for useFacetCallback since setter gives us current value
+  const addItem = (name: string) => {
+    setItems((current) =>
+      current !== NO_VALUE
+        ? [...current, { id: Date.now().toString(), name, quantity: 1 }]
+        : [{ id: Date.now().toString(), name, quantity: 1 }],
+    )
+  }
+
+  return (
+    <div className="inventory">
+      <h2>Inventory</h2>
+
+      {/* Conditional rendering with Mount */}
+      <Mount when={hasItemsFacet}>
+        <div className="item-list">
+          {/* List rendering with Map */}
+          <Map array={sortedItemsFacet}>
+            {(itemFacet, index) => <InventoryItem key={index} itemFacet={itemFacet} />}
+          </Map>
+        </div>
+      </Mount>
+
+      {/* Show message when empty - opposite condition */}
+      <Mount when={hasNoItemsFacet}>
+        <p>No items in inventory</p>
+      </Mount>
+
+      {/* With component for conditional rendering with value access */}
+      <With facet={selectedIdFacet}>{(selectedId) => selectedId && <div>Selected: {selectedId}</div>}</With>
+
+      <button onClick={() => addItem('Iron')}>Add Iron</button>
+    </div>
+  )
+}
+
+// Separate component to use hooks properly (React Rules of Hooks)
+const InventoryItem = ({ itemFacet }: { itemFacet: Facet<Item> }) => {
+  const nameFacet = useFacetMap((item) => item.name, [], [itemFacet])
+  const quantityFacet = useFacetMap((item) => item.quantity, [], [itemFacet])
+
+  return (
+    <div className="item">
+      <fast-text text={nameFacet} />
+      <span> x </span>
+      <fast-text text={quantityFacet} />
+    </div>
+  )
+}
+```
+
+### Example 3: Form with Transitions
+
+Heavy computation during form submission:
+
+```typescript
+import { useFacetState, useFacetMap, useFacetCallback, useFacetTransition, NO_VALUE } from '@react-facet/core'
+import { shallowObjectEqualityCheck } from '@react-facet/core'
+
+type FormData = {
+  username: string
+  email: string
+}
+
+export const UserForm = () => {
+  const [formDataFacet, setFormData] = useFacetState<FormData>({
+    username: '',
+    email: '',
+  })
+
+  const [resultsFacet, setResults] = useFacetState<string[]>([])
+  const [isPending, startTransition] = useFacetTransition()
+
+  // Validation (runs immediately, high priority)
+  const isValidFacet = useFacetMap((data) => data.username.length >= 3 && data.email.includes('@'), [], [formDataFacet])
+
+  // Unwrap validation for use with regular button element
+  const isValid = useFacetUnwrap(isValidFacet)
+
+  const hasResultsFacet = useFacetMap((r) => r.length > 0, [], [resultsFacet])
+
+  // Update handlers with NO_VALUE checks
+  const updateUsername = (username: string) => {
+    setFormData((current) => (current !== NO_VALUE ? { ...current, username } : { username, email: '' }))
+  }
+
+  const updateEmail = (email: string) => {
+    setFormData((current) => (current !== NO_VALUE ? { ...current, email } : { username: '', email }))
+  }
+
+  // Heavy computation wrapped in transition
+  const handleSubmit = useFacetCallback(
+    (data) => () => {
+      startTransition(() => {
+        try {
+          // Simulate expensive validation/processing
+          const processed = heavyDataProcessing(data)
+          setResults(processed)
+        } catch (error) {
+          console.error('Submission failed:', error)
+          setResults(['Error processing form'])
+        }
+      })
+    },
+    [],
+    [formDataFacet],
+  )
+
+  return (
+    <div className="user-form">
+      <h2>User Registration</h2>
+
+      {/* Input fields - always responsive */}
+      <div className="form-field">
+        <label>Username:</label>
+        <input type="text" onChange={(e) => updateUsername(e.target.value)} placeholder="Enter username" />
+      </div>
+
+      <div className="form-field">
+        <label>Email:</label>
+        <input type="text" onChange={(e) => updateEmail(e.target.value)} placeholder="Enter email" />
+      </div>
+
+      {/* Submit button with validation - unwrap facet for non-facet-aware button */}
+      <button onClick={handleSubmit} disabled={isValid === NO_VALUE || !isValid}>
+        {isPending ? 'Processing...' : 'Submit'}
+      </button>
+
+      {/* Results rendered with facet */}
+      <Mount when={hasResultsFacet}>
+        <div className="results">
+          <Map array={resultsFacet}>
+            {(resultFacet, index) => (
+              <div key={index}>
+                <fast-text text={resultFacet} />
+              </div>
+            )}
+          </Map>
+        </div>
+      </Mount>
+    </div>
+  )
+}
+
+// Simulated expensive function
+function heavyDataProcessing(data: FormData): string[] {
+  // Expensive computation here
+  return [`Processed user: ${data.username}`, `Email verified: ${data.email}`]
+}
+```
+
+---
+
 ## Copilot-Specific Guidance
+
+### Critical Rules (Must Follow)
+
+**Before doing anything else, review the "⚠️ Top 3 Critical Errors to Avoid" section at the top of this document.** These are the most common mistakes that completely defeat the purpose of React Facet.
 
 When generating or modifying React Facet code:
 
-1. **Always use facet naming convention** (`*Facet` suffix for variables)
-2. **Use `useFacetState` or `useFacetWrap` for creating facets** - avoid `createFacet` in application code
-3. **Use `fast-*` components only when binding facets** - regular HTML (`<div>`, `<img>`, `<input>`, etc.) is fine for static content
-4. **Use TWO dependency arrays correctly**:
-   - First array: non-facet dependencies (props, local vars)
-   - Second array: facet dependencies
-5. **Default to `useFacetMap` for derivations** - only use `useFacetMemo` when you have many subscribers or expensive computations
-6. **Use `useFacetWrap` vs `useFacetWrapMemo` appropriately**:
-   - `useFacetWrap`: Default choice, creates new facet on value change
-   - `useFacetWrapMemo`: When you need stable facet references or wrap frequently changing props
-7. **Use transitions for heavy updates**:
-   - `useFacetTransition`: In components when you need pending state
-   - `startFacetTransition`: Outside components or when pending state not needed
-   - The `startTransition` callback from `useFacetTransition` is stable - don't include it in dependency arrays
-   - Always wrap risky computations in try-catch blocks within transitions
-8. **Add equality checks** for object/array derivations to prevent unnecessary updates
-9. **Handle `NO_VALUE`** in facet operations where appropriate
-10. **CRITICAL: Always check for `NO_VALUE` after `useFacetUnwrap`** - the return type is `T | NO_VALUE`, not `T`
-11. **CRITICAL: Always check for `NO_VALUE` in `useFacetState` setter callbacks** - the previous value is `Option<T>` (`T | NO_VALUE`), not just `T`
-12. **CRITICAL: Understand NO_VALUE retention behavior**:
+1. **CRITICAL: Always check for `NO_VALUE` after `useFacetUnwrap`** - the return type is `T | NO_VALUE`, not `T`
+2. **CRITICAL: Always check for `NO_VALUE` in `useFacetState` setter callbacks** - the previous value is `Option<T>` (`T | NO_VALUE`), not just `T`
+3. **CRITICAL: Avoid `useFacetUnwrap`** unless absolutely necessary (causes re-renders!)
+4. **CRITICAL: Use `Mount` for conditional rendering, NEVER `useFacetUnwrap`** - unwrapping defeats the entire purpose of facets
+5. **CRITICAL: Use `createRoot` (not `render`) for mounting** - `render` is deprecated
+6. **CRITICAL: NEVER use `facet.get()` in application code** - it's for testing only; use `useFacetCallback` instead
+7. **CRITICAL: Use `fast-input` instead of unwrapping for `<input>`** - unwrapping causes re-renders
+8. **CRITICAL: Use `fast-*` components ONLY when binding facets to attributes** - use regular HTML for static content
+9. **Always use facet naming convention** (`*Facet` suffix for variables)
+10. **Use `useFacetState` or `useFacetWrap` for creating facets** - avoid `createFacet` in application code
+11. **Use TWO dependency arrays correctly**:
+
+- First array: non-facet dependencies (props, local vars)
+- Second array: facet dependencies
+
+12. **Default to `useFacetMap` for derivations** - only use `useFacetMemo` when you have many subscribers or expensive computations
+13. **Use `useFacetWrap` vs `useFacetWrapMemo` appropriately**:
+
+- `useFacetWrap`: Default choice, creates new facet on value change
+- `useFacetWrapMemo`: When you need stable facet references or wrap frequently changing props
+
+14. **Use transitions for heavy updates**:
+
+- `useFacetTransition`: In components when you need pending state
+- `startFacetTransition`: Outside components or when pending state not needed
+- The `startTransition` callback from `useFacetTransition` is stable - don't include it in dependency arrays
+- Always wrap risky computations in try-catch blocks within transitions
+
+15. **Add equality checks** for object/array derivations to prevent unnecessary updates
+16. **Handle `NO_VALUE`** in facet operations where appropriate
+17. **Understand NO_VALUE retention behavior**:
     - When a mapping function (`useFacetMap`/`useFacetMemo`) returns `NO_VALUE`, the derived facet retains its previous value (doesn't notify listeners)
     - When a setter callback (`useFacetState`) returns `NO_VALUE`, the facet retains its previous value (doesn't notify listeners)
     - Useful for conditional updates, validation, and clamping values
-13. **Avoid `useFacetUnwrap`** unless absolutely necessary (causes re-renders!)
-14. **Use `type` instead of `interface`** for TypeScript definitions
-15. **Don't use `batch` in application code** - it's for internal library use
-16. **Test facet-based components** using `@react-facet/dom-fiber-testing-library`
-17. **Understand facet reference stability**:
+18. **Use `type` instead of `interface`** for TypeScript definitions
+19. **Don't use `batch` in application code** - it's for internal library use
+20. **Never call hooks inside conditionals, loops, or nested functions** (like Map callbacks) - violates Rules of Hooks
+21. **Best practice: Define derived facets at component top level** for clarity and stable references
+22. **Test facet-based components** using `@react-facet/dom-fiber-testing-library`
+23. **Understand facet reference stability**:
     - `useFacetState`: Facet reference is **stable** - never changes across re-renders
     - `useFacetMap`/`useFacetMemo`: Create **new facet reference** when dependencies change (non-facet deps, facets array, or equalityCheck)
     - `useFacetWrap`: Creates **new facet reference** when wrapped value changes
@@ -1359,18 +2025,25 @@ When generating or modifying React Facet code:
 
 When reviewing React Facet code, check for:
 
+- **Mount for conditional rendering**: NEVER use `useFacetUnwrap` for conditional rendering (CRITICAL)
+- **createRoot for mounting**: NEVER use deprecated `render` method (CRITICAL)
+- **NO `facet.get()` in application code**: CRITICAL - use `useFacetCallback` instead (CRITICAL)
+- **Use `fast-input` for form inputs**: NEVER unwrap facets for `<input>` when `fast-input` exists (CRITICAL)
+- **`fast-*` only for facet bindings**: NEVER use `fast-div`, `fast-span`, etc. with static attributes (CRITICAL)
 - **Dual dependency arrays**: First for non-facet deps, second for facet deps
 - **No missing dependencies** in the first array (props, local variables, functions)
 - **Appropriate equality checks** (objects/arrays need custom checks)
 - **Correct hook choice for wrapping**: `useFacetWrap` vs `useFacetWrapMemo` based on stability needs
 - **Transitions for heavy updates**: Using `useFacetTransition` or `startFacetTransition` for expensive operations
 - **Error handling in transitions**: Try-catch blocks wrapping risky computations
-- **Minimal use of `useFacetUnwrap`** (red flag if used frequently)
+- **Minimal use of `useFacetUnwrap`** (red flag if used frequently, especially for `<input>`)
 - **`NO_VALUE` checks after `useFacetUnwrap`** (CRITICAL - must check before using unwrapped values)
 - **`NO_VALUE` checks in `useFacetState` setter callbacks** (CRITICAL - must check before spreading/accessing properties)
 - **NO_VALUE retention awareness**: Understanding that returning `NO_VALUE` from mappers/setters retains previous value
-- **`fast-*` components only used when needed** (binding facets to props)
+- **Regular HTML for static content**: Use `<div>`, `<span>`, etc. when no facet bindings needed
 - **`createFacet` only in tests** - not in components
+- **Hooks not called inside conditionals, loops, or nested functions** (Rules of Hooks)
+- **Derived facets defined at top level** for clarity and stability (best practice)
 - **`type` over `interface`** in TypeScript definitions
 - **`useFacetMap` as default for derivations** - `useFacetMemo` only when needed for performance
 - **Stable callback awareness**: Not including `startTransition` from `useFacetTransition` in dependency arrays
@@ -1380,7 +2053,7 @@ When reviewing React Facet code, check for:
 
 ## Maintaining These Instructions
 
-> **Last Updated**: 16 October 2025
+> **Last Updated**: 17 October 2025
 
 To keep these instructions accurate as the project evolves:
 
@@ -1448,7 +2121,7 @@ When writing code examples in the documentation (`docs/docs/**/*.md`):
 ```tsx
 // ✅ CORRECT - Import renderer for any fast-* components
 // @esModuleInterop
-import { render } from '@react-facet/dom-fiber'
+import { createRoot } from '@react-facet/dom-fiber'
 // ---cut---
 import { useFacetState, useFacetMap } from '@react-facet/core'
 
@@ -1485,7 +2158,7 @@ const Example = () => {
 **The pattern:**
 
 - Add `// @esModuleInterop` at the top
-- Add `import { render } from '@react-facet/dom-fiber'`
+- Add `import { createRoot } from '@react-facet/dom-fiber'`
 - Add `// ---cut---` to hide the import from the rendered example
 - Then write your example code with any `fast-*` components
 
