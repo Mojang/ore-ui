@@ -43,6 +43,9 @@ export const cancelScheduledTask = (task: Task) => {
 /**
  * Starts a batch, scheduling Facet updates within the cb to be executed at the end of the batch.
  * @param b will be executed immediately to collect Facet changes
+ *
+ * Application code should not use this directly. For batching within transitions,
+ * use `startFacetTransition` or `useFacetTransition` instead.
  */
 export const batch = (b: Batch) => {
   // Starts a batch

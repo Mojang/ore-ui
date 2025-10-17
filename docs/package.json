@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "clear": "docusaurus clear",
-    "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids",
+    "docusaurus": "node --preserve-symlinks $(yarn bin docusaurus)",
+    "start": "node --preserve-symlinks $(yarn bin docusaurus) start",
+    "build": "node --preserve-symlinks $(yarn bin docusaurus) build",
+    "swizzle": "node --preserve-symlinks $(yarn bin docusaurus) swizzle",
+    "clear": "node --preserve-symlinks $(yarn bin docusaurus) clear",
+    "serve": "node --preserve-symlinks $(yarn bin docusaurus) serve",
+    "write-translations": "node --preserve-symlinks $(yarn bin docusaurus) write-translations",
+    "write-heading-ids": "node --preserve-symlinks $(yarn bin docusaurus) write-heading-ids",
     "format": "prettier --write \"**/*.@(json|js|css|mdx|md|tsx|ts)\""
   },
   "dependencies": {
@@ -18,14 +18,13 @@
     "@docusaurus/preset-classic": "2.4.3",
     "@docusaurus/theme-search-algolia": "^2.4.3",
     "@mdx-js/react": "^1.6.22",
-    "@react-facet/core": "^0.3.3",
-    "@react-facet/dom-components": "^0.3.3",
-    "@react-facet/dom-fiber": "^0.3.3",
-    "@react-facet/shared-facet": "^0.3.3",
+    "@react-facet/core": "portal:../packages/@react-facet/core",
+    "@react-facet/dom-fiber": "portal:../packages/@react-facet/dom-fiber",
+    "@react-facet/shared-facet": "portal:../packages/@react-facet/shared-facet",
     "clsx": "^1.1.1",
     "docusaurus-preset-shiki-twoslash": "^1.1.41",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "browserslist": {
     "production": [

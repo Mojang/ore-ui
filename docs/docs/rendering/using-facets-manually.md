@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Using Facets manually
 
-The recommended way to consume Facets in your React application is to either [use the custom renderer](using-the-custom-renderer) or [apply the DOM Components](../api/dom-components). That said, there might be reasons in which neither option makes sense (for example, when using React Native or some other non-DOM target). It is also sometimes possible to get even more performance by consuming the Facets manually and using their values to mutate DOM, instead of relying on components—although be warned that there are so many gotchas when attempting this that most likely performance will degrade instead of improve.
+The recommended way to consume Facets in your React application is to [use the custom renderer](using-the-custom-renderer). That said, there might be reasons in which this option doesn't make sense (for example, when using React Native or some other non-DOM target). It is also sometimes possible to get even more performance by consuming the Facets manually and using their values to mutate DOM, instead of relying on components—although be warned that there are so many gotchas when attempting this that most likely performance will degrade instead of improve.
 
 Consuming Facets manually means, in short, to listen to their changes to do DOM manipulations imperatively. For example:
 

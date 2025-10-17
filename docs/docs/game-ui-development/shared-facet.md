@@ -77,11 +77,7 @@ import { useSharedFacet } from '@react-facet/shared-facet'
 
 const UserData = () => {
   // This will print Jane
-  return (
-    <span>
-      <fast-text text={useSharedFacet(userNameFacet)} />
-    </span>
-  )
+  return <fast-text text={useSharedFacet(userNameFacet)} />
 }
 ```
 
@@ -174,11 +170,7 @@ const messageContentSelector = sharedDynamicSelector((index: number) => [
 // ---cut---
 const Message = ({ index }: { index: number }) => {
   // For index 0, this will be "Hello"
-  return (
-    <span>
-      <fast-text text={useSharedFacet(messageContentSelector(index))} />
-    </span>
-  )
+  return <fast-text text={useSharedFacet(messageContentSelector(index))} />
 }
 ```
 
@@ -206,14 +198,13 @@ import { sharedDynamicSelector } from '@react-facet/shared-facet'
 import { strictEqualityCheck } from '@react-facet/core'
 
 const messageContentSelector = sharedDynamicSelector(
-  (index: number) => [
-    ({ messages }) => messages[index].content,
-    [chatFacet],
-  ],
+  (index: number) => [({ messages }) => messages[index].content, [chatFacet]],
   strictEqualityCheck,
 )
 ```
 
-# Implementing facets in the game engine
+<!--
+## Implementing facets in the game engine
 
 TODO
+-->

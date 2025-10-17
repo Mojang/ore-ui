@@ -59,18 +59,16 @@ export const nullableShallowObjectEqualityCheck = () =>
  *
  * Supports nullable values
  */
-export const nullableShallowObjectArrayEqualityCheck = createNullableEqualityCheck(
-  createUniformArrayEqualityCheck<ObjectWithImmutables>(shallowObjectEqualityCheck),
-)
+export const nullableShallowObjectArrayEqualityCheck = () =>
+  createNullableEqualityCheck(createUniformArrayEqualityCheck<ObjectWithImmutables>(shallowObjectEqualityCheck))
 
 /**
  * Shallow equality check of primitives in an array
  *
  * Supports nullable values
  */
-export const nullableShallowArrayEqualityCheck = createNullableEqualityCheck(
-  createUniformArrayEqualityCheck<Immutable>(strictEqualityCheck),
-)
+export const nullableShallowArrayEqualityCheck = () =>
+  createNullableEqualityCheck(createUniformArrayEqualityCheck<Immutable>(strictEqualityCheck))
 
 /**
  * The default equality check that assumes data can be mutated.

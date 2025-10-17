@@ -2671,46 +2671,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-facet/core@npm:^0.3.3":
-  version: 0.3.3
-  resolution: "@react-facet/core@npm:0.3.3"
+"@react-facet/core@portal:../packages/@react-facet/core::locator=ore-ui-docs%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@react-facet/core@portal:../packages/@react-facet/core::locator=ore-ui-docs%40workspace%3A."
   peerDependencies:
-    react: ^16.9.0
-  checksum: 174f4c7345d15ca3eac5729c698eeace642f834a45a375f7517ef51808f5f26d2f11f46fe84d3e86d133f7063b0f60b3c0e02da86b79bebef2a599f39827bf9b
+    react: ^18.2.0
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@react-facet/dom-components@npm:^0.3.3":
-  version: 0.3.3
-  resolution: "@react-facet/dom-components@npm:0.3.3"
-  peerDependencies:
-    "@react-facet/core": 0.3.3
-    react: ^16.9.0
-  checksum: 8e4d865213a8613a2d15b773729ba02491ca59e87fcc856955a994247b56b762619519a66e54d72bec54f7be8a274bbd299ec7987ad6f3affd49a76eb8a7af4f
-  languageName: node
-  linkType: hard
-
-"@react-facet/dom-fiber@npm:^0.3.3":
-  version: 0.3.3
-  resolution: "@react-facet/dom-fiber@npm:0.3.3"
+"@react-facet/dom-fiber@portal:../packages/@react-facet/dom-fiber::locator=ore-ui-docs%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@react-facet/dom-fiber@portal:../packages/@react-facet/dom-fiber::locator=ore-ui-docs%40workspace%3A."
   dependencies:
-    react-reconciler: ^0.24.0
+    react-reconciler: ^0.28.0
   peerDependencies:
-    "@react-facet/core": 0.3.3
-    react: ^16.9.0
-  checksum: 5e57be2634041bde1d9242010e67c5a5a90449edba6195f6116de13a3e5f4393c23a01e3e73d9f701097c94fcf972bd933d9681ad662444d06a0193f754c5296
+    "@react-facet/core": 18.2.0
+    react: ^18.2.0
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@react-facet/shared-facet@npm:^0.3.3":
-  version: 0.3.3
-  resolution: "@react-facet/shared-facet@npm:0.3.3"
+"@react-facet/shared-facet@portal:../packages/@react-facet/shared-facet::locator=ore-ui-docs%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@react-facet/shared-facet@portal:../packages/@react-facet/shared-facet::locator=ore-ui-docs%40workspace%3A."
   peerDependencies:
-    "@react-facet/core": 0.3.3
-    react: ^16.9.0
-  checksum: cd4f3a0704641a343c28c6e6960f479c13c8387d65c74d632f95154bf770dd2ffb78172b4bca937903dd46aad704ea56a28be0d6f93b036a617241d3beb528d2
+    "@react-facet/core": 18.2.0
+    react: ^18.2.0
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@sideway/address@npm:^4.1.5":
   version: 4.1.5
@@ -8526,17 +8513,16 @@ fsevents@~2.3.2:
     "@docusaurus/preset-classic": 2.4.3
     "@docusaurus/theme-search-algolia": ^2.4.3
     "@mdx-js/react": ^1.6.22
-    "@react-facet/core": ^0.3.3
-    "@react-facet/dom-components": ^0.3.3
-    "@react-facet/dom-fiber": ^0.3.3
-    "@react-facet/shared-facet": ^0.3.3
+    "@react-facet/core": "portal:../packages/@react-facet/core"
+    "@react-facet/dom-fiber": "portal:../packages/@react-facet/dom-fiber"
+    "@react-facet/shared-facet": "portal:../packages/@react-facet/shared-facet"
     "@types/rimraf": ^3
     clsx: ^1.1.1
     cross-env: ^7.0.3
     docusaurus-preset-shiki-twoslash: ^1.1.41
     prettier: ^2.4.1
-    react: ^16.9.0
-    react-dom: ^16.9.0
+    react: ^18.2.0
+    react-dom: ^18.2.0
     rimraf: ^3.0.2
   languageName: unknown
   linkType: soft
@@ -9605,17 +9591,15 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^16.9.0":
-  version: 16.14.0
-  resolution: "react-dom@npm:16.14.0"
+"react-dom@npm:^18.2.0":
+  version: 18.3.1
+  resolution: "react-dom@npm:18.3.1"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    prop-types: ^15.6.2
-    scheduler: ^0.19.1
+    scheduler: ^0.23.2
   peerDependencies:
-    react: ^16.14.0
-  checksum: 5a5c49da0f106b2655a69f96c622c347febcd10532db391c262b26aec225b235357d9da1834103457683482ab1b229af7a50f6927a6b70e53150275e31785544
+    react: ^18.3.1
+  checksum: 298954ecd8f78288dcaece05e88b570014d8f6dce5db6f66e6ee91448debeb59dcd31561dddb354eee47e6c1bb234669459060deb238ed0213497146e555a0b9
   languageName: node
   linkType: hard
 
@@ -9703,17 +9687,15 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"react-reconciler@npm:^0.24.0":
-  version: 0.24.0
-  resolution: "react-reconciler@npm:0.24.0"
+"react-reconciler@npm:^0.28.0":
+  version: 0.28.0
+  resolution: "react-reconciler@npm:0.28.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    prop-types: ^15.6.2
-    scheduler: ^0.18.0
+    scheduler: ^0.22.0
   peerDependencies:
-    react: ^16.0.0
-  checksum: c9c74208325a940ca36e031b71499f6d8e62e96ee673d69e35cc9e6a661aa746a2b0750f2ffcd1bae0a29eaf3d127dc8197ab7e801e6a3a2ab7d45a71b464630
+    react: ^18.1.0
+  checksum: 6421f9500827219556ead3d86cbdf0553c47d633ecda2144720bf235d404f5e4e1e585336c4dfa80e26a04f1a6117c455a60964917d5600c73a91d8374f0232f
   languageName: node
   linkType: hard
 
@@ -9778,14 +9760,12 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"react@npm:^16.9.0":
-  version: 16.14.0
-  resolution: "react@npm:16.14.0"
+"react@npm:^18.2.0":
+  version: 18.3.1
+  resolution: "react@npm:18.3.1"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    prop-types: ^15.6.2
-  checksum: 8484f3ecb13414526f2a7412190575fc134da785c02695eb92bb6028c930bfe1c238d7be2a125088fec663cc7cda0a3623373c46807cf2c281f49c34b79881ac
+  checksum: a27bcfa8ff7c15a1e50244ad0d0c1cb2ad4375eeffefd266a64889beea6f6b64c4966c9b37d14ee32d6c9fcd5aa6ba183b6988167ab4d127d13e7cb5b386a376
   languageName: node
   linkType: hard
 
@@ -10198,23 +10178,21 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.18.0":
-  version: 0.18.0
-  resolution: "scheduler@npm:0.18.0"
+"scheduler@npm:^0.22.0":
+  version: 0.22.0
+  resolution: "scheduler@npm:0.22.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b6e0b9e0086b200b114f1ef7f9fcac966ad5d84cd3b1867174be0549d3ff713d1fd22d5574cb024b7d3eadf3307f2afc1cb5bfbf28b0d3bc34b200183800fcae
+  checksum: a8ef5cab769c020cd6382ad9ecc3f72dbde56a50a36639b3a42ad9c11f7724f03700bcad373044059b8067d4a6365154dc7c0ca8027ef20ff4900cf58a0fc2c5
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.19.1":
-  version: 0.19.1
-  resolution: "scheduler@npm:0.19.1"
+"scheduler@npm:^0.23.2":
+  version: 0.23.2
+  resolution: "scheduler@npm:0.23.2"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: 73e185a59e2ff5aa3609f5b9cb97ddd376f89e1610579d29939d952411ca6eb7a24907a4ea4556569dacb931467a1a4a56d94fe809ef713aa76748642cd96a6c
+  checksum: 3e82d1f419e240ef6219d794ff29c7ee415fbdc19e038f680a10c067108e06284f1847450a210b29bbaf97b9d8a97ced5f624c31c681248ac84c80d56ad5a2c4
   languageName: node
   linkType: hard
 

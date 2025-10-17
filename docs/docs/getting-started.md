@@ -6,30 +6,33 @@ sidebar_position: 2
 
 Here's a very simple example of how using `Facet`s for state management could look like:
 
+<!-- Note to docs devs ⚠️ Make sure the ^? below is using a non-breaking space to get the right whitespace count without being linted away -->
+
 ```tsx twoslash
 // @esModuleInterop
 import React, { useCallback } from 'react'
 import { useFacetState, NO_VALUE } from '@react-facet/core'
-import { render } from '@react-facet/dom-fiber'
+import { createRoot } from '@react-facet/dom-fiber'
 
 const Counter = () => {
   const [counter, setCounter] = useFacetState(0)
   const handleClick = useCallback(() => {
-    setCounter((counter) => counter !== NO_VALUE ?  counter + 1 : counter)
+    setCounter((counter) => (counter !== NO_VALUE ? counter + 1 : counter))
   }, [setCounter])
 
   return (
     <div>
       <p>
         Current count: <fast-text text={counter} />
-        //                                ^?
+        //                              ^?
       </p>
       <button onClick={handleClick}>Increment</button>
     </div>
   )
 }
 
-render(<Counter />, document.getElementById('root'))
+const root = createRoot(document.getElementById('root'))
+root.render(<Counter />)
 ```
 
 ## Installation
@@ -40,69 +43,34 @@ The packages of React Facet are grouped under the `@react-facet` scope on npm. T
 yarn add @react-facet/core @react-facet/dom-fiber
 ```
 
-Note that if you want to use other [packages](api/packages), such as the [DOM Components](api/dom-components), you will need to install them separately:
+Note that if you want to use other [packages](api/packages), you will need to install them separately.
 
-```sh
-yarn add @react-facet/dom-components
-```
+## Using `fast-*` Components
 
-…and so on for any other required package.
-
-### Fastest path
-
-Use the components provided in [`@react-facets/dom-components`](api/dom-components) wherever you need to render using `Facet`s. There are components that serve as drop-in replacements for most of the heavily used HTML elements.
-
-While this won't give you the full performance benefits of Facets, it provides an easier/less risky adoption path if you have a large codebase.
-
-> Note: since Gameface only supports a subset of HTML elements, we don't attempt to create components for every single HTML element.
-
-```tsx twoslash
-// @esModuleInterop
-import { useFacetState } from '@react-facet/core'
-import { fast } from '@react-facet/dom-components'
-
-const HelloWorld = () => {
-  const [className, setClassName] = useFacetState('root')
-  const [text, setText] = useFacetState('Hello World!')
-
-  return (
-    <fast.div className={className}>
-      <fast.text text={text} />
-    </fast.div>
-  )
-}
-```
-
-### Recommended path
+## Using the Custom Renderer
 
 We recommend using the custom Renderer provided with [`@react-facet/dom-fiber`](rendering/using-the-custom-renderer) to leverage the full power of `Facet`s.
 
-To render with the custom renderer, replace the `render` function from `react-dom` with the new one:
-
-```diff
-- import { render } from 'react-dom'
-+ import { render } from '@react-facet/dom-fiber'
-```
-
-From here, you can start using [`fast-*`](api/fast-components) elements anywhere you need to bind a `Facet` to the DOM:
+To render with the custom renderer, use `createRoot` from `@react-facet/dom-fiber`:
 
 ```tsx twoslash
 // @esModuleInterop
 import { useFacetState } from '@react-facet/core'
-import { render } from '@react-facet/dom-fiber'
+import { createRoot } from '@react-facet/dom-fiber'
 
 const HelloWorld = () => {
-	const [className, setClassName] = useFacetState('root')
-	const [helloWorld, setHelloWorld] = useFacetState('Hello World!')
+  const [className, setClassName] = useFacetState('root')
+  const [helloWorld, setHelloWorld] = useFacetState('Hello World!')
 
-	return (
-		<fast-div className={className}>
-			<fast-text text={helloWorld} />
-		</fast-div>
-	)
+  return (
+    <fast-div className={className}>
+      <fast-text text={helloWorld} />
+    </fast-div>
+  )
 }
 
-render(<HelloWorld />, document.getElementById('root'))
+const root = createRoot(document.getElementById('root'))
+root.render(<HelloWorld />)
 ```
 
 ## Creating Facets
@@ -182,7 +150,6 @@ const UpdateLogin = ({ onSubmit }: Props) => {
     </div>
   )
 }
-
 ```
 
 ## Interfacing with the game engine (Shared Facets)
@@ -204,7 +171,7 @@ const engine = {
 }
 // ---cut---
 import { SharedFacetDriverProvider, OnChange } from '@react-facet/shared-facet'
-const sharedFacetDriver = (facetName: string, update: OnChange<unknown> ) => {
+const sharedFacetDriver = (facetName: string, update: OnChange<unknown>) => {
   // register a listener
   engine.on(`facet:updated:${facetName}`, update)
 
@@ -232,19 +199,19 @@ import { render } from '@react-facet/dom-fiber'
 import { useSharedFacet, sharedFacet, sharedSelector } from '@react-facet/shared-facet'
 
 interface UserFacet {
-	username: string
-	signOut(): void
+  username: string
+  signOut(): void
 }
 
 const userFacet = sharedFacet<UserFacet>('data.user', {
-	username: 'Alex',
-	signOut() {},
+  username: 'Alex',
+  signOut() {},
 })
 
 const usernameSelector = sharedSelector((value) => value.username, [userFacet])
 
 export const CurrentUser = () => {
-	const username = useSharedFacet(usernameSelector)
-	return <fast-p><fast-text text={username} /></fast-p>
+  const username = useSharedFacet(usernameSelector)
+  return <fast-text text={username} />
 }
 ```
