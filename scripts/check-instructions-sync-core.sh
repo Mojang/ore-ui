@@ -287,7 +287,8 @@ if [ "$MODE" = "public-api" ]; then
   echo "📝 Checking code examples..."
 
   # Check that examples import from correct packages
-  if grep -q "```typescript" "$INSTRUCTIONS_FILE" || grep -q "```tsx" "$INSTRUCTIONS_FILE"; then
+  # Use single quotes to avoid shell command substitution from backticks
+  if grep -q '```typescript' "$INSTRUCTIONS_FILE" || grep -q '```tsx' "$INSTRUCTIONS_FILE"; then
     # Check for common mistakes in examples
     if grep -A 5 "fast-text" "$INSTRUCTIONS_FILE" | grep -q "import.*from '@react-facet/core'" | head -1; then
       # Verify dom-fiber is also imported when fast-* components are used

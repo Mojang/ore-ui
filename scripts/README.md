@@ -74,6 +74,10 @@ Validates `.github/copilot-instructions-public-api.md` (public API reference) ag
 - `0` - All checks passed
 - `1` - Custom instructions drift detected
 
+Note about code fence checks
+---------------------------
+When these scripts search for Markdown code fences like ```typescript the shell can accidentally interpret backticks (``) as command substitution if the pattern is double-quoted. The scripts therefore use single-quoted grep patterns (for example: grep -q '```typescript') to avoid this class of errors. If you modify the scripts, keep that in mind to prevent runtime failures.
+
 ---
 
 ## CI/CD Integration
