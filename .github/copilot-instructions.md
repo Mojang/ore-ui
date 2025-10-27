@@ -1,5 +1,9 @@
 # GitHub Copilot Instructions for Ore UI / React Facet
 
+> **Note**: This is the comprehensive internal guide for contributors. For a streamlined public API reference, see [`copilot-instructions-public-api.md`](./copilot-instructions-public-api.md).
+> 
+> **Maintenance**: When updating this file, also update the public API version if changes affect public APIs, usage patterns, or best practices. Run `./scripts/check-copilot-instructions-sync.sh` and `./scripts/check-public-api-instructions-sync.sh` to validate both files.
+
 ## Project Overview
 
 **Ore UI** is Mojang Studios' open-source collection of building blocks for constructing video game user interfaces using web standards. The flagship package is **React Facet** (`@react-facet`), an observable-based state management system designed for performant game UIs built in React.
@@ -560,6 +564,68 @@ const addItem = (newItem: string) => {
 - You only need to **update** facet state (use the setter's callback form)
 - You need to read props/local state (use regular `useCallback`)
 - Simple event handlers that don't depend on facet values
+
+### 5b. Advanced State Management
+
+**Note:** `useFacetReducer` and `useFacetPropSetter` are **not recommended** for general use. They are underused in practice and may be removed in the future. Prefer `useFacetState` with the setter's callback form instead.
+
+**`useFacetReducer` - NOT RECOMMENDED:**
+
+React Facet provides a parallel to React's `useReducer`, but returns a facet as the value. However, this hook is rarely needed in practice.
+
+```typescript
+// ⚠️ NOT RECOMMENDED - Use useFacetState instead
+type State = { count: number }
+type Action = { type: 'increment' } | { type: 'decrement' } | { type: 'reset' }
+
+const reducer = (state: Option<State>, action: Action): Option<State> => {
+  if (state === NO_VALUE) return { count: 0 }
+
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 }
+    case 'decrement':
+      return { count: state.count - 1 }
+    case 'reset':
+      return { count: 0 }
+  }
+}
+
+const [stateFacet, dispatch] = useFacetReducer(reducer, { count: 0 })
+
+// Usage
+dispatch({ type: 'increment' })
+```
+
+**`useFacetPropSetter` - NOT RECOMMENDED:**
+
+Returns a setter function for a specific property of a facet object. In practice, using the setter's callback form is more straightforward.
+
+```typescript
+// ⚠️ NOT RECOMMENDED - Use setter callback form instead
+type FormData = {
+  username: string
+  email: string
+}
+
+const [formFacet, setForm] = useFacetState<FormData>({
+  username: '',
+  email: '',
+})
+
+// Create setters for individual properties
+const setUsername = useFacetPropSetter(formFacet, 'username')
+const setEmail = useFacetPropSetter(formFacet, 'email')
+
+// Use in components
+<input onChange={(e) => setUsername(e.target.value)} />
+<input onChange={(e) => setEmail(e.target.value)} />
+
+// ✅ BETTER - Use setter callback form directly
+<input onChange={(e) => setForm(current =>
+  current !== NO_VALUE ? { ...current, username: e.target.value } : { username: e.target.value, email: '' }
+)} />
+```
 
 ### 6. Conditional Rendering
 
@@ -1490,6 +1556,10 @@ useFacetMemo<M>(fn, deps, facets, equalityCheck?): Facet<M>     // Cached, use f
 useFacetEffect(effect, deps, facets): void
 useFacetLayoutEffect(effect, deps, facets): void
 useFacetCallback<M>(callback, deps, facets, defaultReturn?): (...args) => M
+
+// Advanced State Management (NOT RECOMMENDED)
+useFacetReducer<S, A>(reducer, initialState, equalityCheck?): [Facet<S>, Dispatch<A>]  // Not recommended - use useFacetState instead
+useFacetPropSetter<T, Prop>(facet, prop): (value: T[Prop]) => void  // Not recommended - use setter callback form instead
 
 // Utilities
 useFacetWrap<T>(FacetProp<T>): Facet<T>                         // Creates new facet on value change

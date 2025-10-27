@@ -1,5 +1,7 @@
 # React Facet Public API Guide
 
+> **Note**: This is a streamlined public API reference for React Facet users. For the comprehensive internal guide (including repository structure, testing patterns, and contributor workflows), see [`copilot-instructions.md`](./copilot-instructions.md).
+
 ## Overview
 
 **React Facet** (`@react-facet`) is an observable-based state management system designed for performant game UIs built in React. It bypasses React reconciliation for leaf node updates (styles, text content, attributes) to achieve game-level performance while maintaining React's developer experience.
@@ -171,11 +173,7 @@ Transforms facet values. Lightweight, best for simple transformations.
 const doubled = useFacetMap((n) => n * 2, [], [numberFacet])
 
 // Multiple facets
-const fullName = useFacetMap(
-  (first, last) => `${first} ${last}`,
-  [],
-  [firstNameFacet, lastNameFacet],
-)
+const fullName = useFacetMap((first, last) => `${first} ${last}`, [], [firstNameFacet, lastNameFacet])
 
 // With local dependencies
 const scaled = useFacetMap(
@@ -185,12 +183,7 @@ const scaled = useFacetMap(
 )
 
 // With equality check for objects
-const combined = useFacetMap(
-  (a, b) => ({ a, b }),
-  [],
-  [facetA, facetB],
-  shallowObjectEqualityCheck,
-)
+const combined = useFacetMap((a, b) => ({ a, b }), [], [facetA, facetB], shallowObjectEqualityCheck)
 ```
 
 **`useFacetMemo<M>(fn, dependencies, facets, equalityCheck?): Facet<M>`**
@@ -199,11 +192,7 @@ Like `useFacetMap` but caches result across all subscribers. Use for expensive c
 
 ```typescript
 // Expensive computation cached for all subscribers
-const expensive = useFacetMemo(
-  (data) => heavyCalculation(data),
-  [],
-  [dataFacet],
-)
+const expensive = useFacetMemo((data) => heavyCalculation(data), [], [dataFacet])
 ```
 
 **When to use which:**
@@ -348,6 +337,64 @@ const countRef = useFacetRef(countFacet)
 // Access current value: countRef.current
 ```
 
+**`useFacetReducer<S, A>(reducer, initialState, equalityCheck?): [Facet<S>, Dispatch<A>]`** - **NOT RECOMMENDED**
+
+Parallel to React's `useReducer`, but returns a facet as the value. This hook is rarely needed in practice - prefer `useFacetState` with the setter's callback form instead.
+
+```typescript
+// ⚠️ NOT RECOMMENDED - Use useFacetState instead
+type State = { count: number }
+type Action = { type: 'increment' } | { type: 'decrement' } | { type: 'reset' }
+
+const reducer = (state: Option<State>, action: Action): Option<State> => {
+  if (state === NO_VALUE) return { count: 0 }
+
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 }
+    case 'decrement':
+      return { count: state.count - 1 }
+    case 'reset':
+      return { count: 0 }
+  }
+}
+
+const [stateFacet, dispatch] = useFacetReducer(reducer, { count: 0 })
+
+// Usage
+dispatch({ type: 'increment' })
+```
+
+**`useFacetPropSetter<T, Prop>(facet: WritableFacet<T>, prop: Prop): (value: T[Prop]) => void`** - **NOT RECOMMENDED**
+
+Returns a setter function for a specific property of a facet object. In practice, using the setter's callback form is more straightforward.
+
+```typescript
+// ⚠️ NOT RECOMMENDED - Use setter callback form instead
+type FormData = {
+  username: string
+  email: string
+}
+
+const [formFacet, setForm] = useFacetState<FormData>({
+  username: '',
+  email: '',
+})
+
+// Create setters for individual properties
+const setUsername = useFacetPropSetter(formFacet, 'username')
+const setEmail = useFacetPropSetter(formFacet, 'email')
+
+// Use in components
+<input onChange={(e) => setUsername(e.target.value)} />
+<input onChange={(e) => setEmail(e.target.value)} />
+
+// ✅ BETTER - Use setter callback form directly
+<input onChange={(e) => setForm(current =>
+  current !== NO_VALUE ? { ...current, username: e.target.value } : { username: e.target.value, email: '' }
+)} />
+```
+
 **`createFacetContext<T>(): Context<Facet<T>>`**
 
 Creates React context for facets.
@@ -406,9 +453,7 @@ Conditionally mount children based on facet value. **Use this instead of `useFac
 Renders list from array facet. Each item gets its own facet.
 
 ```typescript
-<Map array={itemsFacet}>
-  {(itemFacet, index) => <ItemRow key={index} itemFacet={itemFacet} />}
-</Map>
+;<Map array={itemsFacet}>{(itemFacet, index) => <ItemRow key={index} itemFacet={itemFacet} />}</Map>
 
 // Separate component to use hooks (Rules of Hooks)
 const ItemRow = ({ itemFacet }: { itemFacet: Facet<Item> }) => {
@@ -422,19 +467,17 @@ const ItemRow = ({ itemFacet }: { itemFacet: Facet<Item> }) => {
 Conditional rendering with access to unwrapped value.
 
 ```typescript
-<With facet={selectedIdFacet}>
-  {(selectedId) => selectedId && <div>Selected: {selectedId}</div>}
-</With>
+<With facet={selectedIdFacet}>{(selectedId) => selectedId && <div>Selected: {selectedId}</div>}</With>
 ```
 
 #### Equality Checks
 
 ```typescript
 import {
-  strictEqualityCheck,           // For primitives & functions (type-safe)
-  shallowObjectEqualityCheck,     // For objects with primitive values
-  shallowArrayEqualityCheck,      // For arrays of primitives
-  defaultEqualityCheck,           // Used automatically (performance optimized)
+  strictEqualityCheck, // For primitives & functions (type-safe)
+  shallowObjectEqualityCheck, // For objects with primitive values
+  shallowArrayEqualityCheck, // For arrays of primitives
+  defaultEqualityCheck, // Used automatically (performance optimized)
 } from '@react-facet/core'
 ```
 
@@ -449,20 +492,10 @@ import {
 
 ```typescript
 // Objects - always use equality check
-const obj = useFacetMap(
-  (a, b) => ({ a, b }),
-  [],
-  [facetA, facetB],
-  shallowObjectEqualityCheck,
-)
+const obj = useFacetMap((a, b) => ({ a, b }), [], [facetA, facetB], shallowObjectEqualityCheck)
 
 // Arrays - always use equality check
-const arr = useFacetMap(
-  (a, b) => [a, b],
-  [],
-  [facetA, facetB],
-  shallowArrayEqualityCheck,
-)
+const arr = useFacetMap((a, b) => [a, b], [], [facetA, facetB], shallowArrayEqualityCheck)
 
 // Primitives - no need (optimized by default)
 const doubled = useFacetMap((x) => x * 2, [], [xFacet])
@@ -486,11 +519,7 @@ When a mapping function or setter callback returns `NO_VALUE`, the facet **retai
 
 ```typescript
 // Clamping - stops updates at threshold
-const clamped = useFacetMap(
-  (count) => (count < 5 ? count : NO_VALUE),
-  [],
-  [countFacet],
-)
+const clamped = useFacetMap((count) => (count < 5 ? count : NO_VALUE), [], [countFacet])
 // Shows: 0, 1, 2, 3, 4, 4, 4... (stuck at 4)
 
 // Conditional updates - prevent state changes
@@ -559,9 +588,7 @@ Available components:
 Numeric CSS properties (faster than strings in Gameface):
 
 ```typescript
-<fast-div style={{ widthPX: 100, heightVH: 50 }}>
-  {/* Properties ending in PX, VH, VW accept numbers */}
-</fast-div>
+<fast-div style={{ widthPX: 100, heightVH: 50 }}>{/* Properties ending in PX, VH, VW accept numbers */}</fast-div>
 ```
 
 ---
@@ -602,25 +629,13 @@ const sharedFacet = useContext(DataContext)
 const upper = useFacetMap((s) => s.toUpperCase(), [], [stringFacet])
 
 // Multiple facets
-const full = useFacetMap(
-  (first, last) => `${first} ${last}`,
-  [],
-  [firstFacet, lastFacet],
-)
+const full = useFacetMap((first, last) => `${first} ${last}`, [], [firstFacet, lastFacet])
 
 // With local variables
-const scaled = useFacetMap(
-  (value) => value * multiplier,
-  [multiplier],
-  [valueFacet],
-)
+const scaled = useFacetMap((value) => value * multiplier, [multiplier], [valueFacet])
 
 // Expensive computation
-const result = useFacetMemo(
-  (data) => heavyCalculation(data),
-  [],
-  [dataFacet],
-)
+const result = useFacetMemo((data) => heavyCalculation(data), [], [dataFacet])
 ```
 
 ### Rendering
@@ -663,9 +678,7 @@ useFacetEffect(
 ```typescript
 // Regular callback with setter's callback form
 const addItem = (newItem: string) => {
-  setItems((current) => 
-    current !== NO_VALUE ? [...current, newItem] : [newItem]
-  )
+  setItems((current) => (current !== NO_VALUE ? [...current, newItem] : [newItem]))
 }
 
 // When you need to READ facet values (not just update)
@@ -699,9 +712,7 @@ if (value !== NO_VALUE) {
 setItems((current) => [...current, newItem])
 
 // ✅ CORRECT
-setItems((current) => 
-  current !== NO_VALUE ? [...current, newItem] : [newItem]
-)
+setItems((current) => (current !== NO_VALUE ? [...current, newItem] : [newItem]))
 ```
 
 ### 2. Overusing useFacetUnwrap
@@ -727,11 +738,7 @@ const result = useFacetMap(
 )
 
 // ✅ CORRECT
-const result = useFacetMap(
-  (value) => value * multiplier,
-  [multiplier],
-  [valueFacet],
-)
+const result = useFacetMap((value) => value * multiplier, [multiplier], [valueFacet])
 ```
 
 ### 4. Wrong Equality Checks
@@ -741,12 +748,7 @@ const result = useFacetMap(
 const obj = useFacetMap((a, b) => ({ a, b }), [], [facetA, facetB])
 
 // ✅ CORRECT
-const obj = useFacetMap(
-  (a, b) => ({ a, b }),
-  [],
-  [facetA, facetB],
-  shallowObjectEqualityCheck,
-)
+const obj = useFacetMap((a, b) => ({ a, b }), [], [facetA, facetB], shallowObjectEqualityCheck)
 ```
 
 ### 5. Using fast-\* for Static Content
@@ -772,21 +774,17 @@ const obj = useFacetMap(
 
 ```typescript
 // ❌ WRONG - Hook in Map callback
-<Map array={itemsFacet}>
-  {(itemFacet, index) => (
-    <fast-text text={useFacetMap(item => item.name, [], [itemFacet])} />
-  )}
+;<Map array={itemsFacet}>
+  {(itemFacet, index) => <fast-text text={useFacetMap((item) => item.name, [], [itemFacet])} />}
 </Map>
 
 // ✅ CORRECT - Separate component
 const ItemRow = ({ itemFacet }) => {
-  const nameFacet = useFacetMap(item => item.name, [], [itemFacet])
+  const nameFacet = useFacetMap((item) => item.name, [], [itemFacet])
   return <fast-text text={nameFacet} />
 }
 
-<Map array={itemsFacet}>
-  {(itemFacet, index) => <ItemRow key={index} itemFacet={itemFacet} />}
-</Map>
+;<Map array={itemsFacet}>{(itemFacet, index) => <ItemRow key={index} itemFacet={itemFacet} />}</Map>
 ```
 
 ---
@@ -881,6 +879,10 @@ useFacetCallback<M>(callback, deps, facets): (...args) => M
 useFacetUnwrap<T>(facet): T | NO_VALUE  // ⚠️ Use sparingly!
 useFacetRef<T>(facet): RefObject<T>
 
+// Advanced (NOT RECOMMENDED)
+useFacetReducer<S, A>(reducer, initialState, equalityCheck?): [Facet<S>, Dispatch<A>]  // Not recommended
+useFacetPropSetter<T, Prop>(facet, prop): (value: T[Prop]) => void  // Not recommended
+
 // Transitions
 useFacetTransition(): [boolean, (fn: () => void) => void]
 startFacetTransition(fn: () => void): void
@@ -917,27 +919,17 @@ import { createRoot } from '@react-facet/dom-fiber'
 
 const Counter = () => {
   const [countFacet, setCount] = useFacetState(0)
-  
-  const doubledFacet = useFacetMap(
-    (count) => count * 2,
-    [],
-    [countFacet],
-  )
-  
-  const statusFacet = useFacetMap(
-    (count) => count > 10 ? 'high' : 'low',
-    [],
-    [countFacet],
-  )
-  
+
+  const doubledFacet = useFacetMap((count) => count * 2, [], [countFacet])
+
+  const statusFacet = useFacetMap((count) => (count > 10 ? 'high' : 'low'), [], [countFacet])
+
   return (
     <fast-div>
       <fast-text text={countFacet} />
       <fast-text text={doubledFacet} />
       <fast-div className={statusFacet}>
-        <button onClick={() => setCount((c) => c !== NO_VALUE ? c + 1 : 1)}>
-          Increment
-        </button>
+        <button onClick={() => setCount((c) => (c !== NO_VALUE ? c + 1 : 1))}>Increment</button>
       </fast-div>
     </fast-div>
   )
@@ -963,21 +955,13 @@ const Form = () => {
     username: '',
     email: '',
   })
-  
-  const isValidFacet = useFacetMap(
-    (data) => data.username.length >= 3 && data.email.includes('@'),
-    [],
-    [formFacet],
-  )
-  
+
+  const isValidFacet = useFacetMap((data) => data.username.length >= 3 && data.email.includes('@'), [], [formFacet])
+
   const updateUsername = (username: string) => {
-    setForm((current) =>
-      current !== NO_VALUE
-        ? { ...current, username }
-        : { username, email: '' }
-    )
+    setForm((current) => (current !== NO_VALUE ? { ...current, username } : { username, email: '' }))
   }
-  
+
   const handleSubmit = useFacetCallback(
     (data) => () => {
       console.log('Submitting:', data)
@@ -985,20 +969,13 @@ const Form = () => {
     [],
     [formFacet],
   )
-  
+
   const isValid = useFacetUnwrap(isValidFacet)
-  
+
   return (
     <div>
-      <input
-        type="text"
-        onChange={(e) => updateUsername(e.target.value)}
-        placeholder="Username"
-      />
-      <button
-        onClick={handleSubmit}
-        disabled={isValid === NO_VALUE || !isValid}
-      >
+      <input type="text" onChange={(e) => updateUsername(e.target.value)} placeholder="Username" />
+      <button onClick={handleSubmit} disabled={isValid === NO_VALUE || !isValid}>
         Submit
       </button>
     </div>
@@ -1023,31 +1000,23 @@ const ItemList = () => {
     { id: '1', name: 'Item 1' },
     { id: '2', name: 'Item 2' },
   ])
-  
-  const hasItemsFacet = useFacetMap(
-    (items) => items.length > 0,
-    [],
-    [itemsFacet],
-  )
-  
+
+  const hasItemsFacet = useFacetMap((items) => items.length > 0, [], [itemsFacet])
+
   const addItem = () => {
     setItems((current) =>
       current !== NO_VALUE
         ? [...current, { id: Date.now().toString(), name: 'New Item' }]
-        : [{ id: Date.now().toString(), name: 'New Item' }]
+        : [{ id: Date.now().toString(), name: 'New Item' }],
     )
   }
-  
+
   return (
     <div>
       <button onClick={addItem}>Add Item</button>
-      
+
       <Mount when={hasItemsFacet}>
-        <Map array={itemsFacet}>
-          {(itemFacet, index) => (
-            <ItemRow key={index} itemFacet={itemFacet} />
-          )}
-        </Map>
+        <Map array={itemsFacet}>{(itemFacet, index) => <ItemRow key={index} itemFacet={itemFacet} />}</Map>
       </Mount>
     </div>
   )

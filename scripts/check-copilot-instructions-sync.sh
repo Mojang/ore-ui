@@ -41,18 +41,25 @@ done
 # ============================================================================
 echo ""
 echo "📋 Checking if code hooks are documented..."
-find packages/@react-facet/core/src/hooks -name "useFacet*.ts" -o -name "useFacet*.tsx" | while read -r file; do
-  # Extract the hook name from the file path (remove .spec and extension)
-  hook=$(basename "$file" | sed 's/\.spec\.tsx\?$//' | sed 's/\.tsx\?$//')
 
-  # Check if the hook name appears in the instructions
-  if ! grep -q "$hook" "$INSTRUCTIONS_FILE"; then
-    echo "⚠️  Hook '$hook' exists in code but not documented in instructions"
-    ERRORS=$((ERRORS + 1))
-  else
-    echo "✓ $hook"
-  fi
-done
+# Get all hooks from the core package's hooks index.ts (this lists all public hooks)
+if [ -f "packages/@react-facet/core/src/hooks/index.ts" ]; then
+  grep "export.*from" packages/@react-facet/core/src/hooks/index.ts | \
+    grep -o "'\.\/useFacet[A-Za-z]*'" | \
+    sed "s/'\.\/\(.*\)'/\1/" | \
+    sort -u | while read -r hook; do
+
+    if ! grep -q "$hook" "$INSTRUCTIONS_FILE"; then
+      echo "⚠️  Hook '$hook' exists in code but not documented in instructions"
+      ERRORS=$((ERRORS + 1))
+    else
+      echo "✓ $hook"
+    fi
+  done
+else
+  echo "⚠️  Cannot find hooks/index.ts to verify hooks"
+  ERRORS=$((ERRORS + 1))
+fi
 
 # ============================================================================
 # CHECK 3: Verify core components are documented
