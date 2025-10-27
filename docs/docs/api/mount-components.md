@@ -350,9 +350,3 @@ When to use
 
 - Use `Times` when you need to repeat a UI fragment a variable number of times determined by a numeric facet.
 - Use `Map` instead when you have an array of data and want each item wrapped in a `Facet` (for per-item updates without remounting the whole list when data changes but length stays the same).
-
-Related APIs
-
-- `Map` — for rendering lists from an array `Facet` (per-item facets)
-- `Unwrap` / `useFacetUnwrap` — when you need to work with plain values inside children
-- `Mount` / `With` — conditional mounting utilities
