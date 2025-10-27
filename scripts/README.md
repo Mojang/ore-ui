@@ -1,12 +1,30 @@
-# Documentation Sync Check Scripts
+# Copilot Custom Instructions Sync Check Scripts
 
-This directory contains automated validation scripts to ensure the copilot instruction documents stay synchronized with the codebase.
+This directory contains automated validation scripts to ensure the Copilot custom instruction files stay synchronized with the codebase.
+
+## Quick Start: VS Code Copilot Slash Command
+
+The easiest way to check and fix the custom instructions is using the Copilot slash command:
+
+```
+/fix-instructions
+```
+
+This will:
+
+1. Run both sync check scripts
+2. Identify all desyncs between code and custom instructions
+3. Automatically fix the issues in both instruction files
+4. Verify the fixes by re-running the checks
+5. Show you a summary of changes
+
+The command is configured in `.github/prompts/fix-instructions.prompt.md`.
 
 ## Available Scripts
 
 ### `check-copilot-instructions-sync.sh`
 
-Validates `.github/copilot-instructions.md` (full contributor guide) against the codebase.
+Validates `.github/copilot-instructions.md` (full internal guide) against the codebase.
 
 **Usage:**
 
@@ -16,8 +34,8 @@ Validates `.github/copilot-instructions.md` (full contributor guide) against the
 
 **What it checks:**
 
-- ✅ All hooks mentioned in instructions exist in code
-- ✅ All hooks in code are documented
+- ✅ All hooks mentioned in custom instructions exist in code
+- ✅ All hooks in code are documented in custom instructions
 - ✅ Core components (`Map`, `Mount`, `With`) are documented
 - ✅ All packages exist
 - ✅ Import paths are correct
@@ -25,13 +43,13 @@ Validates `.github/copilot-instructions.md` (full contributor guide) against the
 **Exit codes:**
 
 - `0` - All checks passed
-- `1` - Documentation drift detected
+- `1` - Custom instructions drift detected
 
 ---
 
 ### `check-public-api-instructions-sync.sh`
 
-Validates `.github/copilot-instructions-public-api.md` (public API guide) against the codebase.
+Validates `.github/copilot-instructions-public-api.md` (public API reference) against the codebase.
 
 **Usage:**
 
@@ -47,20 +65,20 @@ Validates `.github/copilot-instructions-public-api.md` (public API guide) agains
 - ✅ Package imports are correct
 - ✅ Critical concepts explained (NO_VALUE, dual dependencies)
 - ✅ Equality checks are documented
-- ✅ No internal/private APIs leaked to public docs
+- ✅ No internal/private APIs leaked to public instructions
 - ✅ Testing utilities not featured (they're internal)
 - ✅ Examples use correct imports
 
 **Exit codes:**
 
 - `0` - All checks passed
-- `1` - Documentation drift detected
+- `1` - Custom instructions drift detected
 
 ---
 
 ## CI/CD Integration
 
-Add both scripts to your continuous integration workflow to catch documentation drift automatically:
+Add both scripts to your continuous integration workflow to catch custom instructions drift automatically:
 
 ```yaml
 # .github/workflows/ci.yml
@@ -69,8 +87,8 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  docs-validation:
-    name: Validate Documentation
+  instructions-validation:
+    name: Validate Copilot Custom Instructions
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -100,23 +118,33 @@ Run these scripts whenever you:
 Always run both scripts as part of your release checklist:
 
 ```bash
-# Quick check both docs
+# Quick check both instruction files
 ./scripts/check-copilot-instructions-sync.sh && \
 ./scripts/check-public-api-instructions-sync.sh && \
-echo "✅ All documentation is in sync!"
+echo "✅ All custom instructions are in sync!"
 ```
 
 ### In Pull Requests
 
-Configure GitHub Actions to run these checks on every PR to prevent documentation drift from being merged.
+Configure GitHub Actions to run these checks on every PR to prevent custom instructions drift from being merged.
 
 ---
 
 ## Fixing Drift
 
-When a script reports errors, follow these steps:
+When a script reports errors, you can either use the `/fix-instructions` slash command or follow these manual steps:
 
-### 1. Identify the Issue
+### Using Slash Command (Recommended)
+
+```
+/fix-instructions
+```
+
+Copilot will automatically fix all desyncs and update both instruction files.
+
+### Manual Fix Steps
+
+#### 1. Identify the Issue
 
 The script output shows exactly what's missing or incorrect:
 
@@ -124,13 +152,13 @@ The script output shows exactly what's missing or incorrect:
 ⚠️  Hook 'useFacetNewFeature' exists in code but not documented in public API docs
 ```
 
-### 2. Update Documentation
+#### 2. Update Custom Instructions
 
 - For **new public APIs**: Add full documentation with examples
 - For **removed APIs**: Remove all references
 - For **changed APIs**: Update signatures and examples
 
-### 3. Update "Last Updated" Date
+#### 3. Update "Last Updated" Date
 
 In both instruction files, update the maintenance section:
 
@@ -138,15 +166,15 @@ In both instruction files, update the maintenance section:
 > **Last Updated**: DD Month YYYY
 ```
 
-### 4. Re-run Validation
+#### 4. Re-run Validation
 
 ```bash
 ./scripts/check-public-api-instructions-sync.sh
 ```
 
-### 5. Commit Changes
+#### 5. Commit Changes
 
-Include documentation updates in the same commit/PR as code changes when possible.
+Include custom instructions updates in the same commit/PR as code changes when possible.
 
 ---
 
@@ -182,7 +210,7 @@ chmod +x ./scripts/check-public-api-instructions-sync.sh
 
 ### False Positives
 
-If a hook legitimately shouldn't be in public docs (e.g., it's internal), ensure:
+If a hook legitimately shouldn't be in public instructions (e.g., it's internal), ensure:
 
 1. It's not exported from `packages/@react-facet/core/src/hooks/index.ts`
 2. Or, update the script's exclusion logic
@@ -199,19 +227,20 @@ Both scripts use `set -e` to fail fast. If a command fails unexpectedly, check:
 
 ## Related Files
 
-- `.github/copilot-instructions.md` - Full contributor guide (2,184 lines)
-- `.github/copilot-instructions-public-api.md` - Public API guide (1,200+ lines)
-- `.github/copilot-instructions-comparison.md` - Comparison and usage guide
+- `.github/copilot-instructions.md` - Full internal guide for contributors/Copilot
+- `.github/copilot-instructions-public-api.md` - Public API reference for users
+- `.github/prompts/fix-instructions.prompt.md` - Slash command configuration
+- `docs/` - User-facing documentation site (separate from custom instructions)
 
 ---
 
 ## Philosophy
 
-These scripts embody the principle: **Documentation should be treated as code**. Just like tests verify code correctness, these scripts verify documentation accuracy.
+These scripts embody the principle: **Custom instructions should be treated as code**. Just like tests verify code correctness, these scripts verify custom instructions accuracy.
 
-By automating documentation validation, we:
+By automating custom instructions validation, we:
 
-- ✅ Prevent stale documentation
+- ✅ Prevent stale custom instructions
 - ✅ Catch missing documentation early
-- ✅ Ensure consistency between code and docs
-- ✅ Make documentation a first-class citizen in the development process
+- ✅ Ensure consistency between code and custom instructions
+- ✅ Make custom instructions a first-class citizen in the development process

@@ -1,3 +1,7 @@
+# Contributing to Ore UI
+
+Thank you for your interest in contributing to Ore UI! This guide will help you get started.
+
 # Creating a new release
 
 Currently the process of updating the version of the packages is mostly manual. Before you start, first you need to make sure you have the permissions to publish the packages.
@@ -15,7 +19,7 @@ Currently the process of updating the version of the packages is mostly manual. 
 - Choose the tag and click the button "Auto-generate release notes"
 - Click "publish release" 🚀
 
-# Release candidate
+## Release candidate
 
 - Make sure that you are logged in into your `npm` account. Use the command `yarn npm login` on the project folder to do this.
 - Create a branch including the changes for the release candidate and name the branch to the same thing as the upcoming release, eg: `v0.4`.
@@ -26,3 +30,53 @@ Currently the process of updating the version of the packages is mostly manual. 
 - Push commit and the tag `git push --follow-tags`.
 - Publish the packages by running `yarn publish --tag rc` (it will also build the packages).
 - We are currently not doing release notes for release candidates so you are all done! 🎉
+
+# Copilot Custom Instructions Maintenance
+
+## Using Copilot Slash Command (Recommended)
+
+The easiest way to check and fix the Copilot custom instructions is using the slash command:
+
+```
+/fix-instructions
+```
+
+This will:
+
+1. Run both sync check scripts
+2. Identify desyncs between code and custom instructions
+3. Automatically fix issues in both instruction files
+4. Verify the fixes
+5. Show you a summary of changes
+
+## Using Scripts Directly
+
+You can also run the validation scripts directly:
+
+```bash
+# Check if custom instructions are in sync with code
+./scripts/check-copilot-instructions-sync.sh
+./scripts/check-public-api-instructions-sync.sh
+
+# Or check both at once
+./scripts/check-copilot-instructions-sync.sh && \
+./scripts/check-public-api-instructions-sync.sh
+```
+
+See [Scripts README](scripts/README.md) for more details.
+
+## When to Update Custom Instructions
+
+Update the Copilot custom instructions when you:
+
+- Add/remove/modify public APIs (hooks, components, utilities)
+- Update package structure or import paths
+- Add new best practices or patterns
+- Change how features work
+
+Both instruction files should be kept in sync with the codebase:
+
+- `.github/copilot-instructions.md` - Full internal guide for contributors/Copilot
+- `.github/copilot-instructions-public-api.md` - Public API reference for users
+
+**Note:** These are custom instructions for GitHub Copilot, not the user-facing documentation site (which is in `docs/`).

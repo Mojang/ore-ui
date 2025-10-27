@@ -1,7 +1,7 @@
 # GitHub Copilot Instructions for Ore UI / React Facet
 
 > **Note**: This is the comprehensive internal guide for contributors. For a streamlined public API reference, see [`copilot-instructions-public-api.md`](./copilot-instructions-public-api.md).
-> 
+>
 > **Maintenance**: When updating this file, also update the public API version if changes affect public APIs, usage patterns, or best practices. Run `./scripts/check-copilot-instructions-sync.sh` and `./scripts/check-public-api-instructions-sync.sh` to validate both files.
 
 ## Project Overview
