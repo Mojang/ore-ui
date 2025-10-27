@@ -667,6 +667,91 @@ const ItemRow = ({ itemFacet }: { itemFacet: Facet<Item> }) => {
 }
 ```
 
+**Use `Unwrap` component to extract plain values with controlled re-render scope:**
+
+The `Unwrap` component uses `useFacetUnwrap` internally but confines re-renders to its children instead of the entire component. Use it for:
+
+- Interfacing with third-party components that accept plain values
+- Multi-branch conditional rendering (better than multiple `Mount` components)
+- Limiting re-render scope when unwrapping is necessary
+
+```typescript
+// Basic usage - passes plain value to children
+<Unwrap data={nameFacet}>{(name) => <div>Hello, {name}!</div>}</Unwrap>
+
+// Multi-branch conditional - better than two opposing Mount components
+<Unwrap data={conditionFacet}>{(cond) => (cond ? <ComponentA /> : <ComponentB />)}</Unwrap>
+
+// Third-party component integration
+<Unwrap data={valueFacet}>{(value) => <ThirdPartyComponent value={value} />}</Unwrap>
+```
+
+**Key characteristics:**
+
+- Uses `useFacetUnwrap` internally (causes re-renders on value changes)
+- Re-render scope is limited to children, not entire parent component
+- Handles `NO_VALUE` automatically (returns `null` if facet has no value)
+- Better than multiple `Mount` components for mutually-exclusive branches
+
+**When to use:**
+
+- ✅ Interfacing with third-party components
+- ✅ Multi-branch conditionals (prefer over multiple `Mount`s)
+- ✅ When you need plain values but want controlled re-render scope
+
+**When NOT to use:**
+
+- ❌ For binding to DOM properties (use `fast-*` components instead)
+- ❌ For simple boolean mounting (use `Mount` instead)
+- ❌ When you can keep values as facets (maintain facet semantics)
+
+**Use `Times` component to repeat UI a dynamic number of times:**
+
+The `Times` component renders children a specified number of times based on a numeric facet.
+
+```typescript
+// Basic usage
+;<Times count={countFacet}>
+  {(index, total) => (
+    <div key={index}>
+      Row {index} of {total}
+    </div>
+  )}
+</Times>
+
+// Dynamic count
+const [countFacet, setCount] = useFacetState(3)
+return (
+  <div>
+    <Times count={countFacet}>{(index) => <div key={index}>Item {index}</div>}</Times>
+    <button onClick={() => setCount((c) => (c !== NO_VALUE ? c + 1 : 1))}>Add</button>
+  </div>
+)
+```
+
+**Key characteristics:**
+
+- Uses `Unwrap` internally (re-renders when count changes)
+- Children function receives `index` (0-based) and `count` as plain values
+- Mounts/unmounts children when count changes (can be expensive)
+
+**When to use:**
+
+- ✅ Repeating UI a variable number of times
+- ✅ Simple numeric iteration with dynamic count
+- ✅ When you don't have array data (just need N repetitions)
+
+**When NOT to use:**
+
+- ❌ For rendering lists from array data (use `Map` instead)
+- ❌ When you need per-item facets (use `Map` with array facet)
+- ❌ For static repetition (use regular array mapping)
+
+**See also:**
+
+- Public documentation: `docs/docs/api/mount-components.md#unwrap`
+- Public documentation: `docs/docs/api/mount-components.md#times`
+
 ### 7. Performance Optimization with Transitions
 
 **Use `useFacetTransition` for heavy updates in components:**
@@ -1583,6 +1668,12 @@ startFacetTransition(fn: () => void): void                      // Function API 
 
 // Conditional rendering with value
 <With facet={facet}>{(value) => <div>{value}</div>}</With>
+
+// Unwrap facet with controlled re-render scope
+<Unwrap data={facet}>{(value) => <ThirdPartyComponent value={value} />}</Unwrap>
+
+// Repeat UI N times based on numeric facet
+<Times count={countFacet}>{(index, total) => <div key={index}>Item {index}</div>}</Times>
 ```
 
 ### Facet Factories
@@ -2123,7 +2214,7 @@ When reviewing React Facet code, check for:
 
 ## Maintaining These Instructions
 
-> **Last Updated**: 17 October 2025
+> **Last Updated**: 27 October 2025
 
 To keep these instructions accurate as the project evolves:
 

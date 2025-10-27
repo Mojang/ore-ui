@@ -470,6 +470,69 @@ Conditional rendering with access to unwrapped value.
 <With facet={selectedIdFacet}>{(selectedId) => selectedId && <div>Selected: {selectedId}</div>}</With>
 ```
 
+**`<Unwrap data={facet}>{(value) => <Component value={value} />}</Unwrap>`**
+
+Extracts plain value from facet with controlled re-render scope. Uses `useFacetUnwrap` internally but limits re-renders to its children.
+
+```typescript
+// Basic usage - passes plain value to children
+<Unwrap data={nameFacet}>{(name) => <div>Hello, {name}!</div>}</Unwrap>
+
+// Multi-branch conditional - better than two opposing Mount components
+<Unwrap data={conditionFacet}>{(cond) => (cond ? <ComponentA /> : <ComponentB />)}</Unwrap>
+
+// Third-party component integration
+<Unwrap data={valueFacet}>{(value) => <ThirdPartyComponent value={value} />}</Unwrap>
+```
+
+**When to use:**
+
+- ✅ Interfacing with third-party components that accept plain values
+- ✅ Multi-branch conditionals (prefer over multiple `Mount`s)
+- ✅ When you need plain values but want controlled re-render scope
+
+**When NOT to use:**
+
+- ❌ For binding to DOM properties (use `fast-*` components instead)
+- ❌ For simple boolean mounting (use `Mount` instead)
+- ❌ When you can keep values as facets (maintain facet semantics)
+
+**`<Times count={countFacet}>{(index, total) => <Item />}</Times>`**
+
+Renders children a specified number of times based on numeric facet.
+
+```typescript
+// Basic usage
+;<Times count={countFacet}>
+  {(index, total) => (
+    <div key={index}>
+      Row {index} of {total}
+    </div>
+  )}
+</Times>
+
+// Dynamic count
+const [countFacet, setCount] = useFacetState(3)
+return (
+  <div>
+    <Times count={countFacet}>{(index) => <div key={index}>Item {index}</div>}</Times>
+    <button onClick={() => setCount((c) => (c !== NO_VALUE ? c + 1 : 1))}>Add</button>
+  </div>
+)
+```
+
+**When to use:**
+
+- ✅ Repeating UI a variable number of times
+- ✅ Simple numeric iteration with dynamic count
+- ✅ When you don't have array data (just need N repetitions)
+
+**When NOT to use:**
+
+- ❌ For rendering lists from array data (use `Map` instead)
+- ❌ When you need per-item facets (use `Map` with array facet)
+- ❌ For static repetition (use regular array mapping)
+
 #### Equality Checks
 
 ```typescript
@@ -894,6 +957,8 @@ startFacetTransition(fn: () => void): void
 <Mount when={facet}><Child /></Mount>
 <Map array={arrayFacet}>{(itemFacet, index) => <Item />}</Map>
 <With facet={facet}>{(value) => <div>{value}</div>}</With>
+<Unwrap data={facet}>{(value) => <ThirdPartyComponent value={value} />}</Unwrap>
+<Times count={countFacet}>{(index, total) => <div key={index}>Item {index}</div>}</Times>
 ```
 
 ### Equality Check Functions
