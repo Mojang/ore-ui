@@ -1149,11 +1149,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-facet/core@18.2.0, @react-facet/core@workspace:packages/@react-facet/core":
+"@react-facet/core@18.3.0, @react-facet/core@workspace:packages/@react-facet/core":
   version: 0.0.0-use.local
   resolution: "@react-facet/core@workspace:packages/@react-facet/core"
   dependencies:
-    "@react-facet/dom-fiber-testing-library": 18.2.0
+    "@react-facet/dom-fiber-testing-library": 18.3.0
     "@types/react": ^18.2.0
     "@types/react-reconciler": ^0.28.0
     "@types/rimraf": ^3
@@ -1166,26 +1166,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber-testing-library@18.2.0, @react-facet/dom-fiber-testing-library@workspace:^, @react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library":
+"@react-facet/dom-fiber-testing-library@18.3.0, @react-facet/dom-fiber-testing-library@workspace:^, @react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-fiber-testing-library@workspace:packages/@react-facet/dom-fiber-testing-library"
   dependencies:
-    "@react-facet/dom-fiber": 18.2.0
+    "@react-facet/dom-fiber": 18.3.0
     "@testing-library/dom": ^8.20.0
     react: ^18.2.0
     rimraf: ^3.0.2
     typescript: ^4.8.2
   peerDependencies:
-    "@react-facet/dom-fiber": 18.2.0
+    "@react-facet/dom-fiber": 18.3.0
     react: ^18.2.0
   languageName: unknown
   linkType: soft
 
-"@react-facet/dom-fiber@18.2.0, @react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber":
+"@react-facet/dom-fiber@18.3.0, @react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber":
   version: 0.0.0-use.local
   resolution: "@react-facet/dom-fiber@workspace:packages/@react-facet/dom-fiber"
   dependencies:
-    "@react-facet/core": 18.2.0
+    "@react-facet/core": 18.3.0
     "@react-facet/dom-fiber-testing-library": "workspace:^"
     "@types/react": ^18.2.0
     "@types/react-reconciler": ^0.28.0
@@ -1196,7 +1196,7 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.8.2
   peerDependencies:
-    "@react-facet/core": 18.2.0
+    "@react-facet/core": 18.3.0
     react: ^18.2.0
   languageName: unknown
   linkType: soft
@@ -1211,12 +1211,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-facet/shared-facet@18.2.0, @react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
+"@react-facet/shared-facet@18.3.0, @react-facet/shared-facet@workspace:packages/@react-facet/shared-facet":
   version: 0.0.0-use.local
   resolution: "@react-facet/shared-facet@workspace:packages/@react-facet/shared-facet"
   dependencies:
-    "@react-facet/core": 18.2.0
-    "@react-facet/dom-fiber-testing-library": 18.2.0
+    "@react-facet/core": 18.3.0
+    "@react-facet/dom-fiber-testing-library": 18.3.0
     "@types/react": ^18.2.0
     "@types/rimraf": ^3
     cross-env: ^7.0.3
@@ -1224,20 +1224,10 @@ __metadata:
     rimraf: ^3.0.2
     typescript: ^4.8.2
   peerDependencies:
-    "@react-facet/core": 18.2.0
+    "@react-facet/core": 18.3.0
     react: ^18.2.0
   languageName: unknown
   linkType: soft
-
-"@react-facet/spring@npm:18.2.0":
-  version: 18.2.0
-  resolution: "@react-facet/spring@npm:18.2.0"
-  peerDependencies:
-    "@react-facet/core": 18.2.0
-    react: ^18.2.0
-  checksum: 9a75070936a0a293d23015e98ca539a67cfd75b647d1ccb68308b9646b46919c8a3a148a60b6f16a312b4e34fd5297000c5d0d0160685cedd7dc725a36738755
-  languageName: node
-  linkType: hard
 
 "@sinclair/typebox@npm:^0.27.8":
   version: 0.27.8
@@ -2916,10 +2906,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmarking@workspace:examples/benchmarking"
   dependencies:
-    "@react-facet/core": 18.2.0
-    "@react-facet/dom-fiber": 18.2.0
-    "@react-facet/shared-facet": 18.2.0
-    "@react-facet/spring": 18.2.0
+    "@react-facet/core": 18.3.0
+    "@react-facet/dom-fiber": 18.3.0
+    "@react-facet/shared-facet": 18.3.0
     "@types/fs-extra": ^9.0.12
     "@types/puppeteer": ^5.4.4
     "@types/ramda": ^0
