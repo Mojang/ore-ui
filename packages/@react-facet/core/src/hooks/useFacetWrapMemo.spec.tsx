@@ -4,7 +4,7 @@ import { useFacetWrapMemo } from './useFacetWrapMemo'
 import { useFacetEffect } from './useFacetEffect'
 import { useFacetMap } from './useFacetMap'
 import { createFacet } from '../facet'
-import { FacetProp, NO_VALUE, Value } from '../types'
+import { EqualityCheck, FacetProp, NO_VALUE, Value } from '../types'
 
 it('wraps a value, updating the facet when it changes', () => {
   const mock = jest.fn()
@@ -202,4 +202,37 @@ describe('does not trigger effect updates on re-renders for the same value', () 
   it('filled object', () => {
     testEffectUpdatesOnStaticValue({ key: 'value' }, false)
   })
+})
+
+it('allows changing the equality check', () => {
+  const mock = jest.fn()
+
+  const ComponentWithFacetEffect: React.FC<{ value: string; equalityCheck?: EqualityCheck<string> }> = ({
+    value,
+    equalityCheck,
+  }) => {
+    const facetValue = useFacetWrapMemo(value, equalityCheck)
+
+    useFacetEffect(
+      (value) => {
+        mock(value)
+      },
+      [],
+      [facetValue],
+    )
+    return <span />
+  }
+
+  const alwaysFalse = () => () => false
+
+  const dom = render(<ComponentWithFacetEffect value="value" />)
+  expect(mock).toHaveBeenCalledTimes(1)
+  expect(mock).toHaveBeenCalledWith('value')
+
+  mock.mockClear()
+
+  // as we change the equality check, it should re-initialize the inline facet, causing an update
+  dom.rerender(<ComponentWithFacetEffect value="value" equalityCheck={alwaysFalse} />)
+  expect(mock).toHaveBeenCalledTimes(1)
+  expect(mock).toHaveBeenCalledWith('value')
 })
