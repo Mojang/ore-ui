@@ -235,3 +235,12 @@ describe('setWithCallback', () => {
     expect(listenerMock).not.toHaveBeenCalled()
   })
 })
+
+it('avoids triggering the listener if initialized with NO_VALUE', () => {
+  const update = jest.fn()
+  const initialValue = NO_VALUE
+  const mock = createFacet({ initialValue })
+
+  mock.observe(update)
+  expect(update).not.toHaveBeenCalled()
+})
