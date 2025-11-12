@@ -4,6 +4,25 @@ import { useFacetEffect } from './useFacetEffect'
 import { createFacet } from '../facet'
 import { NO_VALUE } from '../types'
 
+it('triggers the effect on mount, even if no facets are provided', () => {
+  const cleanup = jest.fn()
+  const callback = jest.fn().mockReturnValue(cleanup)
+
+  const ComponentWithFacetEffect = () => {
+    useFacetEffect(callback, [], [])
+    return null
+  }
+
+  const result = render(<ComponentWithFacetEffect />)
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(cleanup).not.toHaveBeenCalled()
+
+  callback.mockClear()
+  result.rerender(<></>)
+  expect(callback).not.toHaveBeenCalled()
+  expect(cleanup).toHaveBeenCalledTimes(1)
+})
+
 it('triggers the effect on mount with the initial value and on any update of the facet', () => {
   const demoFacet = createFacet({ initialValue: 'initial value' })
 
