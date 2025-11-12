@@ -14,6 +14,10 @@ export const createUseFacetEffect = (useHook: typeof useEffect | typeof useLayou
     useHook(() => {
       let cleanup: void | Cleanup
 
+      if (facets.length === 0) {
+        return effectMemoized()
+      }
+
       if (facets.length === 1) {
         const unsubscribe = facets[0].observe((value) => {
           if (cleanup !== undefined) {
