@@ -57,7 +57,7 @@ it('does not render when false', () => {
 
 it('can perform conditional rendering', async () => {
   const itemsFacet = createFacet<Array<string>>({ initialValue: NO_VALUE })
-  const hasItemsFacet = mapFacetsLightweight<boolean>([itemsFacet], (x) => Boolean((x as Array<string>).length))
+  const hasItemsFacet = mapFacetsLightweight([itemsFacet], (x) => Boolean((x as Array<string>).length))
 
   const componentText = 'The component passed the condition and is being rendered'
   const Component = jest.fn()
