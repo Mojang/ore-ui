@@ -345,3 +345,4 @@ const Component4 = ({ facet }: { facet: Facet<string[]> }) => {
 - [Mount](../mount-components#mount) - For conditional mounting without unwrapping
 - [useFacetCallback](./use-facet-callback) - For accessing facet values in callbacks
 - [Equality Checks](../equality-checks) - Available equality check functions
+- [Unwrap component](../mount-components#unwrap) - Component wrapper for unwrapping facet values in JSX

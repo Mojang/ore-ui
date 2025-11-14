@@ -1,0 +1,15 @@
+name: Validate Copilot Instructions
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check-copilot-instructions-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Check Copilot instructions sync with codebase
+        run: bash scripts/check-copilot-instructions-sync.sh
