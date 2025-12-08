@@ -221,3 +221,132 @@ const UserData = ({ name, middlename }: UserDataProps) => {
   )
 }
 ```
+
+## `Unwrap`
+
+The `Unwrap` component extracts the plain value from a `Facet` and renders children with that unwrapped value. Use it when you need to pass a plain value into JSX (for example to a third-party component), or when you want to limit the scope of a React re-render to a small subtree.
+
+Important: `Unwrap` uses `useFacetUnwrap` internally, which creates React state for the unwrapped value. However, `Unwrap` typically produces a smaller re-render scope than calling `useFacetUnwrap` at the top level of a component because it confines the stateful re-render to its children.
+
+Signature:
+
+```tsx
+<Unwrap data={someFacet}>{(value) => <SomeChild value={value} />}</Unwrap>
+```
+
+Basic example:
+
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, Unwrap } from '@react-facet/core'
+
+const Example = () => {
+  const [nameFacet] = useFacetState<string | undefined>('Alex')
+
+  return <Unwrap data={nameFacet}>{(name) => <div>Hello, {name}!</div>}</Unwrap>
+}
+```
+
+When to use:
+
+- Interfacing with third-party components that accept plain values (not facets).
+- Local rendering scenarios where a small, controlled re-render is acceptable.
+- Prefer `Unwrap` over calling `useFacetUnwrap` at the top level of your component: `Unwrap` limits the re-render to its children instead of making the entire component re-render on facet updates.
+
+Prefer `Unwrap` over multiple `Mount` components when you need to choose between mutually-exclusive branches. For example, instead of creating two `Mount`s for opposite conditions:
+
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, useFacetMap, Mount } from '@react-facet/core'
+const Foo = () => <div>Foo</div>
+const Bar = () => <div>Bar</div>
+
+const Bad = () => {
+  const [condFacet] = useFacetState<boolean | undefined>(true)
+
+  return (
+    <>
+      <Mount when={useFacetMap((c) => !!c, [], [condFacet])}>
+        <Foo />
+      </Mount>
+      <Mount when={useFacetMap((c) => !c, [], [condFacet])}>
+        <Bar />
+      </Mount>
+    </>
+  )
+}
+```
+
+Use a single `Unwrap` that renders one branch or the other:
+
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, Unwrap } from '@react-facet/core'
+const Foo = () => <div>Foo</div>
+const Bar = () => <div>Bar</div>
+
+const Good = () => {
+  const [condFacet] = useFacetState<boolean | undefined>(true)
+
+  return <Unwrap data={condFacet}>{(cond) => (cond ? <Foo /> : <Bar />)}</Unwrap>
+}
+
+// Note: Foo and Bar are declared in the previous example for brevity and re-use in this file.
+```
+
+Why this matters:
+
+- Each `Mount` internally manages mounting state; using two `Mount`s for opposite conditions can create more internal React state and may result in multiple re-renders for the same logical switch. A single `Unwrap` keeps the state and re-render scope smaller.
+- When opposing conditions change at slightly different times, multiple `Mount`s can briefly both mount or unmount, causing transient visual glitches. A single `Unwrap` evaluates the condition once and consistently renders the chosen branch.
+
+When NOT to use:
+
+- For binding dynamic values to the DOM — prefer `fast-*` components or facet-aware patterns instead.
+- For simple single-condition mounts where `Mount` or `With` are the clearer, more efficient choice. Use `Unwrap` when you need a concise multi-branch conditional rendered from a single facet.
+
+See also:
+
+- [useFacetUnwrap](./hooks/use-facet-unwrap) - The hook used internally (performance warning applies)
+
+## `Times`
+
+Renders a child-producing function a fixed number of times based on a `Facet<number>`.
+
+The `Times` component accepts a single required prop, `count`, which must be a `Facet<number>`. Its `children` prop is a function that will be called for each index from `0` to `count - 1` and should return a `ReactElement` or `null`.
+
+This component is useful when you want to repeat a piece of UI a dynamic number of times while keeping updates scoped to the repeated subtree.
+
+Signature:
+
+```tsx
+<Times count={countFacet}>{(index, count) => <Item key={index} index={index} total={count} />}</Times>
+```
+
+Basic example:
+
+```tsx twoslash
+// @esModuleInterop
+import { useFacetState, Times, NO_VALUE } from '@react-facet/core'
+
+const Example = () => {
+  const [countFacet, setCount] = useFacetState(3)
+
+  return (
+    <div>
+      <Times count={countFacet}>{(index) => <div key={index}>Row {index}</div>}</Times>
+      <button onClick={() => setCount((c) => (c !== NO_VALUE ? c + 1 : 1))}>Add</button>
+    </div>
+  )
+}
+```
+
+Performance considerations
+
+- `Times` subscribes to the provided `count` facet. When the numeric value changes, `Times` will re-evaluate how many children to render.
+- If the `count` increases or decreases, the component mounts or unmounts the corresponding child subtrees, which can be more expensive than updating existing children. Prefer keeping the array size stable when possible (e.g., reuse items) to avoid mounting churn.
+- The child function receives the `index` and the current `count` as plain values. If you need facet-aware children, use `Map` with an array facet instead.
+
+When to use
+
+- Use `Times` when you need to repeat a UI fragment a variable number of times determined by a numeric facet.
+- Use `Map` instead when you have an array of data and want each item wrapped in a `Facet` (for per-item updates without remounting the whole list when data changes but length stays the same).
