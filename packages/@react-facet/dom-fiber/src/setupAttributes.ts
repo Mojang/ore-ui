@@ -10,15 +10,33 @@ export const setupStyleUpdate = (
     const value = styleProp[key]
 
     if (value !== undefined) {
+      // CSS custom properties (variables) require setProperty
+      const isCSSVariable = key[0] === '-'
+
       if (isFacet(value)) {
-        styleUnsubscribers.set(
-          key,
-          value.observe((value) => {
-            style[key] = value
-          }),
-        )
+        if (isCSSVariable) {
+          const cssStyle = style as unknown as CSSStyleDeclaration
+          styleUnsubscribers.set(
+            key,
+            value.observe((value) => {
+              cssStyle.setProperty(key, value as string)
+            }),
+          )
+        } else {
+          styleUnsubscribers.set(
+            key,
+            value.observe((value) => {
+              style[key] = value
+            }),
+          )
+        }
       } else {
-        style[key] = value
+        if (isCSSVariable) {
+          const cssStyle = style as unknown as CSSStyleDeclaration
+          cssStyle.setProperty(key, value as string)
+        } else {
+          style[key] = value
+        }
       }
     }
   }
