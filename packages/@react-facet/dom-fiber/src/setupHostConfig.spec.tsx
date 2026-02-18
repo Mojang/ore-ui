@@ -818,6 +818,7 @@ describe('mount', () => {
 
   describe('setting listeners', () => {
     let onClick: jest.Mock
+    let onAuxClick: jest.Mock
     let onFocus: jest.Mock
     let onBlur: jest.Mock
     let onMouseDown: jest.Mock
@@ -835,6 +836,7 @@ describe('mount', () => {
 
     beforeEach(() => {
       onClick = jest.fn()
+      onAuxClick = jest.fn()
       onFocus = jest.fn()
       onBlur = jest.fn()
       onMouseDown = jest.fn()
@@ -853,6 +855,7 @@ describe('mount', () => {
         <div
           className="testing"
           onClick={onClick}
+          onAuxClick={onAuxClick}
           onFocus={onFocus}
           onBlur={onBlur}
           onMouseDown={onMouseDown}
@@ -878,6 +881,11 @@ describe('mount', () => {
     it('supports onClick', () => {
       div.dispatchEvent(new Event('click'))
       expect(onClick).toHaveBeenCalled()
+    })
+
+    it('supports onAuxClick', () => {
+      div.dispatchEvent(new Event('auxclick'))
+      expect(onAuxClick).toHaveBeenCalled()
     })
 
     it('supports onFocus', () => {
@@ -1751,6 +1759,7 @@ describe('update', () => {
 
   describe('setting listeners', () => {
     let firstOnClick: jest.Mock
+    let firstOnAuxClick: jest.Mock
     let firstOnFocus: jest.Mock
     let firstOnBlur: jest.Mock
     let firstOnMouseDown: jest.Mock
@@ -1766,6 +1775,7 @@ describe('update', () => {
     let firstOnKeyUp: jest.Mock
 
     let secondOnClick: jest.Mock
+    let secondOnAuxClick: jest.Mock
     let secondOnFocus: jest.Mock
     let secondOnBlur: jest.Mock
     let secondOnMouseDown: jest.Mock
@@ -1797,6 +1807,7 @@ describe('update', () => {
         <div
           className="testing"
           onClick={second ? secondOnClick : firstOnClick}
+          onAuxClick={second ? secondOnAuxClick : firstOnAuxClick}
           onFocus={second ? secondOnFocus : firstOnFocus}
           onBlur={second ? secondOnBlur : firstOnBlur}
           onMouseDown={second ? secondOnMouseDown : firstOnMouseDown}
@@ -1818,6 +1829,7 @@ describe('update', () => {
 
     beforeEach(() => {
       firstOnClick = jest.fn()
+      firstOnAuxClick = jest.fn()
       firstOnFocus = jest.fn()
       firstOnBlur = jest.fn()
       firstOnMouseDown = jest.fn()
@@ -1833,6 +1845,7 @@ describe('update', () => {
       firstOnKeyUp = jest.fn()
 
       secondOnClick = jest.fn()
+      secondOnAuxClick = jest.fn()
       secondOnFocus = jest.fn()
       secondOnBlur = jest.fn()
       secondOnMouseDown = jest.fn()
@@ -1867,6 +1880,22 @@ describe('update', () => {
       div.dispatchEvent(new Event('click'))
       expect(firstOnClick).not.toHaveBeenCalled()
       expect(secondOnClick).toHaveBeenCalled()
+    })
+
+    it('supports onAuxClick', () => {
+      div.dispatchEvent(new Event('auxclick'))
+      expect(firstOnAuxClick).toHaveBeenCalled()
+      expect(secondOnAuxClick).not.toHaveBeenCalled()
+
+      firstOnAuxClick.mockClear()
+      secondOnAuxClick.mockClear()
+      act(() => {
+        jest.runAllTimers()
+      })
+
+      div.dispatchEvent(new Event('auxclick'))
+      expect(firstOnAuxClick).not.toHaveBeenCalled()
+      expect(secondOnAuxClick).toHaveBeenCalled()
     })
 
     it('supports onFocus', () => {

@@ -159,6 +159,10 @@ export const setupHostConfig = (): HostConfig<
       element.addEventListener('click', newProps.onClick as EventListener)
     }
 
+    if (newProps.onAuxClick) {
+      element.addEventListener('auxclick', newProps.onAuxClick as EventListener)
+    }
+
     if (newProps.onFocus) {
       element.addEventListener('focus', newProps.onFocus as EventListener)
     }
@@ -913,6 +917,11 @@ export const setupHostConfig = (): HostConfig<
     if (newProps.onClick !== oldProps.onClick) {
       if (oldProps.onClick) element.removeEventListener('click', oldProps.onClick)
       if (newProps.onClick) element.addEventListener('click', newProps.onClick)
+    }
+
+    if (newProps.onAuxClick !== oldProps.onAuxClick) {
+      if (oldProps.onAuxClick) element.removeEventListener('auxclick', oldProps.onAuxClick)
+      if (newProps.onAuxClick) element.addEventListener('auxclick', newProps.onAuxClick)
     }
 
     if (newProps.onFocus !== oldProps.onFocus) {
