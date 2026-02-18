@@ -78,6 +78,7 @@ export type MouseCallback = (event: MouseEvent) => void
 
 export interface PointerEvents {
   onClick?: MouseCallback
+  onAuxClick?: MouseCallback
   onMouseDown?: MouseCallback
   onMouseMove?: MouseCallback
   onMouseUp?: MouseCallback
