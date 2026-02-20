@@ -29,6 +29,12 @@ describe('mount', () => {
       expect(root).toContainHTML('<div id="root"><div style="background: red;">Hello World</div></div>')
     })
 
+    it('sets CSS custom properties (variables)', () => {
+      render(<div style={{ '--my-color': 'blue' } as React.CSSProperties}>Hello World</div>)
+      const div = root?.querySelector('div')
+      expect(div?.style.getPropertyValue('--my-color')).toBe('blue')
+    })
+
     it('sets the src', () => {
       render(<img className="image" src="bananafrita.png" />)
       const img = document.getElementsByClassName('image')[0] as HTMLImageElement | undefined
@@ -305,6 +311,17 @@ describe('mount', () => {
 
       backgroundFacet.set('yellow')
       expect(root).toContainHTML('<div id="root"><div style="background: yellow;">Hello World</div></div>')
+    })
+
+    it('sets CSS custom properties (variables) with facets', () => {
+      const colorFacet = createFacet({ initialValue: 'blue' })
+
+      render(<fast-div style={{ '--my-color': colorFacet } as never}>Hello World</fast-div>)
+      const div = root?.querySelector('div')
+      expect(div?.style.getPropertyValue('--my-color')).toBe('blue')
+
+      colorFacet.set('green')
+      expect(div?.style.getPropertyValue('--my-color')).toBe('green')
     })
 
     it('sets the src', () => {

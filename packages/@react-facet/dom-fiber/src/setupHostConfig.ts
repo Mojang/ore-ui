@@ -394,15 +394,31 @@ export const setupHostConfig = (): HostConfig<
           const newValue = newStyleProp[key]
 
           if (oldValue !== newValue || oldStyleProp === undefined) {
+            // CSS custom properties (variables) require setProperty
+            const isCSSVariable = key[0] === '-'
+
             if (isFacet(newValue)) {
-              styleUnsubscribers.set(
-                key,
-                newValue.observe((value) => {
-                  notNullStyle[key] = value
-                }),
-              )
+              if (isCSSVariable) {
+                styleUnsubscribers.set(
+                  key,
+                  newValue.observe((value) => {
+                    style.setProperty(key, value as string)
+                  }),
+                )
+              } else {
+                styleUnsubscribers.set(
+                  key,
+                  newValue.observe((value) => {
+                    notNullStyle[key] = value
+                  }),
+                )
+              }
             } else {
-              notNullStyle[key] = newValue
+              if (isCSSVariable) {
+                style.setProperty(key, newValue as string)
+              } else {
+                notNullStyle[key] = newValue
+              }
             }
           }
         }
