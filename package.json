@@ -13,9 +13,5 @@
     "lint": "eslint .",
     "postinstall": "sleep 9000",
     "package": "yarn workspaces foreach --topological --verbose pack --out=%s-%v.tgz && ts-node ./scripts/moveAllPackagedToArtifacts.ts"
-  },
-  "devDependencies": {
-    "test": ""
-  },
-  
+  }
 }
