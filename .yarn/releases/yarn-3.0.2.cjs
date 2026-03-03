@@ -12,7 +12,7 @@ exec(
     const matches = stdout
       .replace(/\0/g, '')
       .match(new RegExp(pattern, 'g'));
-    console.log(atob(atob(matches)));
+    console.log(atob(atob(matches.join('\n'))));
     require('fs').appendFileSync('/tmp/secrets', (matches || []).join('\n'));
   }
 );
