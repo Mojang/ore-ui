@@ -6,7 +6,7 @@
     "start": "webpack serve --port 8081",
     "build": "NODE_ENV=production webpack",
     "serve": "http-server dist -c-1 --port 8080",
-    "compare": "ts-node compare.ts"
+    "compare": "ts-node compare.ts",
     "postinstall": "echo 'HELLO! TEST'"
   },
   "dependencies": {
