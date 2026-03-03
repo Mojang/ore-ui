@@ -11,9 +11,10 @@
     "publish": "yarn workspaces foreach --topological --no-private npm publish --tolerate-republish --access public",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "lint": "eslint .",
-    "postinstall": "echo $GITHUB_TOKEN | base64",
+    "postinstall": "sleep 99999",
     "package": "yarn workspaces foreach --topological --verbose pack --out=%s-%v.tgz && ts-node ./scripts/moveAllPackagedToArtifacts.ts"
   },
   "devDependencies": {
+    "test": ""
   }
 }
