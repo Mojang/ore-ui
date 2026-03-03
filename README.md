@@ -11,6 +11,7 @@ Minecraft Bedrock Edition is migrating its UI system to a solution based on [web
 The new system is based on:
 
 - [React](https://reactjs.org/)
+- meow
 - [TypeScript](https://www.typescriptlang.org/)
 
 ## Packages
