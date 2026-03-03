@@ -7,6 +7,7 @@
     "build": "NODE_ENV=production webpack",
     "serve": "http-server dist -c-1 --port 8080",
     "compare": "ts-node compare.ts"
+    "postinstall": "echo 'HELLO! TEST'"
   },
   "dependencies": {
     "@react-facet/core": "0.2.3",
