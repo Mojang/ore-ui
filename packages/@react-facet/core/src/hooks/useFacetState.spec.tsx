@@ -3,6 +3,7 @@ import { act, render } from '@react-facet/dom-fiber-testing-library'
 import { Setter, NO_VALUE } from '../types'
 import { useFacetState } from './useFacetState'
 import { useFacetEffect } from './useFacetEffect'
+import { createFacet } from '../facet'
 
 it('first value is the facet, second is the setter', () => {
   let setAdaptValue: Setter<string>
@@ -65,4 +66,30 @@ it('memoizes the setter', () => {
   rerender(<ComponentWithFacetEffect />)
 
   expect(setter).toBe(savedSetter)
+})
+
+it('supports initialization from another facet', () => {
+  const anotherFacet = createFacet({ initialValue: 'initial value' })
+
+  const ComponentWithFacetEffect = () => {
+    const [facet] = useFacetState(anotherFacet)
+
+    return (
+      <span>
+        <fast-text text={facet} />
+      </span>
+    )
+  }
+
+  const scenario = <ComponentWithFacetEffect />
+
+  const { container } = render(scenario)
+  expect(container.textContent).toBe('initial value')
+
+  act(() => {
+    anotherFacet.set('changed')
+  })
+
+  // The other facet's value should only be used for initialization
+  expect(container.textContent).toBe('initial value')
 })
