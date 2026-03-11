@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { defaultEqualityCheck } from '../equalityChecks'
 import { createFacet } from '../facet'
-import { EqualityCheck, Facet, Option, Setter } from '../types'
+import { EqualityCheck, Facet, isFacet, NO_VALUE, Option, Setter } from '../types'
 
 /**
  * Provides a parallel to React's useState, but instead returns a facet as the value
@@ -10,11 +10,28 @@ import { EqualityCheck, Facet, Option, Setter } from '../types'
  * @param equalityCheck optional (has a default checker)
  */
 export const useFacetState = <V>(
-  initialValue: Option<V>,
+  initialValue: Option<V> | Facet<V>,
   equalityCheck: EqualityCheck<V> = defaultEqualityCheck,
 ): [Facet<V>, Setter<V>] => {
   return useMemo(() => {
-    const inlineFacet = createFacet<V>({ initialValue, equalityCheck })
+    const inlineFacet = isFacet(initialValue)
+      ? createFacet<V>({
+          initialValue: initialValue.get(),
+          startSubscription: (update) => {
+            const cleanup = initialValue.observe(() => {})
+
+            const properInitialValue = initialValue.get()
+            if (properInitialValue !== NO_VALUE) {
+              update(properInitialValue)
+            }
+
+            cleanup()
+
+            return () => {}
+          },
+        })
+      : createFacet<V>({ initialValue, equalityCheck })
+
     const setter: Setter<V> = (setter) => {
       if (isSetterCallback(setter)) {
         inlineFacet.setWithCallback(setter)
