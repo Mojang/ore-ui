@@ -93,3 +93,33 @@ it('supports initialization from another facet', () => {
   // The other facet's value should only be used for initialization
   expect(container.textContent).toBe('initial value')
 })
+
+it('supports initialization from another facet that has a startSubscription', () => {
+  const subscribed = jest.fn()
+
+  const anotherFacet = createFacet<string>({
+    startSubscription: (update) => {
+      subscribed()
+      update('initial value')
+      return () => {}
+    },
+    initialValue: NO_VALUE,
+  })
+
+  const ComponentWithFacetEffect = ({ showText }: { showText?: boolean }) => {
+    const [facet] = useFacetState(anotherFacet)
+    return <span>{showText ? <fast-text text={facet} /> : null}</span>
+  }
+
+  // Initially, the state is not used, so the dependency should not be subscribed
+  // and no text should be shown
+  const { container, rerender } = render(<ComponentWithFacetEffect />)
+  expect(container.textContent).toBe('')
+  expect(subscribed).not.toHaveBeenCalled()
+
+  // But, once we depend on the state that should be initialized by the depending facet
+  // then the subscription is started, and the initial value is shown
+  rerender(<ComponentWithFacetEffect showText />)
+  expect(container.textContent).toBe('initial value')
+  expect(subscribed).toHaveBeenCalled()
+})
