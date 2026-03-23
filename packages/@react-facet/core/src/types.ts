@@ -55,7 +55,7 @@ export type Cleanup = Unsubscribe
 
 export type StartSubscription<V> = (update: Update<V>) => Cleanup
 
-export const isFacet = <T>(value: Value | Facet<T>): value is Facet<T> => {
+export const isFacet = <T>(value: T | Facet<T>): value is Facet<T> => {
   return (
     value !== null &&
     value !== undefined &&
