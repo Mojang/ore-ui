@@ -187,3 +187,48 @@ const Examples = () => {
   return <div>Examples</div>
 }
 ```
+
+## Initializing from Another Facet
+
+`useFacetState` can accept another facet as its initial value. The current value of the source facet is read once during initialization — subsequent changes to the source facet are **not** propagated to the new facet.
+
+This is useful when you need independent local state that starts with the same value as an existing facet:
+
+```tsx twoslash
+// @esModuleInterop
+import { render } from '@react-facet/dom-fiber'
+// ---cut---
+import { useFacetState, useFacetCallback, Facet } from '@react-facet/core'
+
+type Props = {
+  nameFacet: Facet<string>
+  onSave: (name: string) => void
+}
+
+const EditNameForm = ({ nameFacet, onSave }: Props) => {
+  // Initialize local state from the shared facet — edits stay local
+  const [localNameFacet, setLocalName] = useFacetState(nameFacet)
+
+  const handleSave = useFacetCallback(
+    (name) => () => {
+      onSave(name)
+    },
+    [onSave],
+    [localNameFacet],
+  )
+
+  return (
+    <fast-div>
+      <fast-input
+        value={localNameFacet}
+        onKeyUp={(e) => {
+          if (e.target instanceof HTMLInputElement) {
+            setLocalName(e.target.value)
+          }
+        }}
+      />
+      <fast-div onClick={handleSave}>Save</fast-div>
+    </fast-div>
+  )
+}
+```
