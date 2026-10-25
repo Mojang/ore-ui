@@ -6,7 +6,7 @@ import { Facet, NO_VALUE, ExtractFacetValues, NoValue } from '../types'
  * Very similar to `useCallback` from `React`
  *
  * @param callback function callback that receives the current facet values and the arguments passed to the callback
- * @param dependencies variable used by the callback that are available in scope (similar as dependencies of useCallback)
+ * @param dependencies variables used by the callback that are available in scope (similar as dependencies of useCallback)
  * @param facets facets that the callback listens to
  * @param defaultReturnValue a default value to be returned by the callback, if the facets don't have any value yet
  *
@@ -25,7 +25,7 @@ export function useFacetCallback<M, Y extends Facet<unknown>[], T extends [...Y]
  * Very similar to `useCallback` from `React`
  *
  * @param callback function callback that receives the current facet values and the arguments passed to the callback
- * @param dependencies variable used by the callback that are available in scope (similar as dependencies of useCallback)
+ * @param dependencies variables used by the callback that are available in scope (similar as dependencies of useCallback)
  * @param facets facets that the callback listens to
  *
  * We pass the dependencies of the callback as the second argument so we can leverage the eslint-plugin-react-hooks option for additionalHooks.

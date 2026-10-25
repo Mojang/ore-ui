@@ -63,7 +63,7 @@ export function createFacet<V>({
 
   /**
    * Simpler update implementation that only resets the value and runs all cleanup functions.
-   * Done as a separated function to not interfere with the usual "hot-path" of the update function.
+   * Done as a separate function to not interfere with the usual "hot-path" of the update function.
    */
   const updateToNoValue = () => {
     currentValue = NO_VALUE

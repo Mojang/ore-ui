@@ -7,7 +7,7 @@ import { EqualityCheck, Facet, NoValue, ExtractFacetValues } from '../types'
  * Helper hook that allows mapping a value from a facet with local variables/props in a React component
  *
  * @param selector function that takes value from provided facets and maps them to a new value
- * @param dependencies variable used by the selector that are available in scope (similar as dependencies of useEffect)
+ * @param dependencies variables used by the selector that are available in scope (similar as dependencies of useEffect)
  * @param facets facets that we will listen for its values to be mapped
  * @param equalityCheck optional, has a default for immutable values
  *

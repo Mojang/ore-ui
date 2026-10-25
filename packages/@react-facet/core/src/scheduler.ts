@@ -65,7 +65,7 @@ export const batch = (b: Batch) => {
 }
 
 /**
- * Special type of batch that ensures all tasks are ran at the end (unless nested on another transition)
+ * Special type of batch that ensures all tasks are run at the end (unless nested on another transition)
  * @param b will be executed immediately to collect Facet changes
  *
  * @private users should use startFacetTransition and useFacetTransition instead
@@ -73,7 +73,7 @@ export const batch = (b: Batch) => {
 export const batchTransition = (b: Batch) => {
   const isRootTransition = !isWithinTransition
 
-  // Starts a batch batch
+  // Starts a batch transition
   isWithinTransition = true
   batchId += 1
 
